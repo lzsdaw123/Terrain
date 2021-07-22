@@ -10,6 +10,13 @@ public class Shooting : MonoBehaviour
     public GameObject bullet;
     public Transform gun;
     public GameObject[] muzzle;
+    public GameObject GunAimR; //槍瞄準鏡上下位移矯正
+    public GameObject GunAimR_x;  //X軸瞄準晃動
+    private Vector3 GA_R;  //Z軸瞄準偏移修正
+    public float noise = 2f; //晃動頻率
+    public float noiseRotateX;  //X軸晃動偏移量
+    public float noiseRotateY;  //Y軸晃動偏移量
+
 
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
@@ -19,14 +26,14 @@ public class Shooting : MonoBehaviour
     public Animator Weapon;   //動畫控制器
     public int n, m; //武器種類
     public GameObject[] _Animator;
-    public Vector3 muzzlePOS;
+    public Vector3 muzzlePOS;  //槍口座標
 
     public bool BFire;
     public bool DontShooting = false;
     public bool LayDown = false;
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
-    public static int ammunition = 30, Total_ammunition = 150;  //彈藥量
+    public static int ammunition = 300, Total_ammunition = 150;  //彈藥量
     public static bool Reload = false;   //是否正在換彈
     bool AimIng;
     float FieldOfView;
@@ -80,17 +87,41 @@ public class Shooting : MonoBehaviour
         }
         muzzlePOS = muzzle[n].GetComponent<Transform>().position;
 
+        if (AimIng)  //瞄準
+        {
+            //Z軸準心偏移修正
+            GA_R.z += 0.2f;
+            if (GA_R.z >= 2.2f) { GA_R.z = 2.2f; }
+
+            float range = Random.Range(-1f, 1f);  //瞄準晃動範圍
+            noiseRotateY += (noise * (range / 2) * (Mathf.Cos(Time.time)) - noiseRotateY) / 100;
+            noiseRotateX += (noise * (range / 2) * (Mathf.Sin(Time.time)) - noiseRotateX) / 100;
+
+            transform.localEulerAngles += new Vector3(0.0f, noiseRotateY, 0.0f);
+            GunAimR_x.GetComponent<MouseLook>().rotationX += noiseRotateX;
+
+            //localEulerAngles跟localRotation的差別
+        }
+        else
+        {
+            GA_R.z -= 0.2f;
+            if (GA_R.z <= 0) { GA_R.z = 0; }
+        }
+        GunAimR.transform.localRotation = Quaternion.Euler(0f, -89.71f, GA_R.z);  //Z軸瞄準偏移修正
 
         if (coolDownTimer > coolDown) //若冷卻時間已到
         {
             //可以發射子彈了
-            if ((Input.GetButton("Fire1")) && (DontShooting == false) && (LayDown == false) && (ammunition != 0)) //若按下發射鍵
+            //若按下發射鍵
+            if ((Input.GetButton("Fire1")) && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
+                //CameraShake.ShakeFor(0.1f, 0.03f);
+
                 coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown差越小越快
                 ammunition--;
                 Weapon.SetBool("Fire", true);
                 Weapon.SetBool("Aim", false);
-                BFire = true;
+                BFire = true;  //生成子彈
             }
             else
             {
@@ -101,13 +132,13 @@ public class Shooting : MonoBehaviour
             {
                 if (AimIng == false)
                 {
-                    AimIng = true;
+                    AimIng = true; //瞄準
                     Weapon.SetTrigger("AimUP");
                 }
 
                 Weapon.SetBool("Aim", true);
                 ZoomIn();
-                if (Input.GetButton("Fire1") && ammunition != 0)
+                if (Input.GetButton("Fire1") && ammunition != 0 && DontShooting == false)
                 {
                     Weapon.SetBool("AimFire", true);
                 }
@@ -118,10 +149,10 @@ public class Shooting : MonoBehaviour
             }
             else
             {
+                Weapon.SetBool("AimFire", false);
+                Weapon.SetBool("Aim", false);
                 AimIng = false;
                 ZoomOut();
-                Weapon.SetBool("Aim", false);
-                Weapon.SetBool("AimFire", false);
             }
         }
         else //否則需要冷卻計時
@@ -196,7 +227,7 @@ public class Shooting : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (BFire)
+        if (BFire) //生成子彈
         {
             //建立子彈在鏡頭中心位置
             GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
