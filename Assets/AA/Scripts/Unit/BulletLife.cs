@@ -67,11 +67,11 @@ public class BulletLife : MonoBehaviour
 				var psHit = Hit_vfx.GetComponent<ParticleSystem>();
 				if (psHit != null)
                 {
-					//Destroy(hixVFX, psHit.main.duration);
+					Destroy(hixVFX, psHit.main.duration);
                 }
                 else
                 {
-					//var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+					var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
 					//Destroy(hixVFX, psChild.main.duration);
 				}
             }
@@ -86,7 +86,7 @@ public class BulletLife : MonoBehaviour
             if (hit.collider.tag == "Emeay")
             {
                 Debug.Log("Emeay");
-                //hit.transform.SendMessage("Damage", power);
+                hit.transform.SendMessage("Damage", power);
                 Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
           
             }
