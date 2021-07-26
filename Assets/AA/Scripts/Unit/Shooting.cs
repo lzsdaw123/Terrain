@@ -16,8 +16,10 @@ public class Shooting : MonoBehaviour
     public float noise = 2f; //晃動頻率
     public float noiseRotateX;  //X軸晃動偏移量
     public float noiseRotateY;  //Y軸晃動偏移量
-    public float AimFRotateX;  //Y軸晃動偏移量
-    public float FireRotateX;  //Y軸晃動偏移量
+    public float AimFRotateY;  //瞄準Y軸晃動偏移量
+    public float AimFRotateX;  //瞄準X軸晃動偏移量
+    public float FireRotateY;  //腰射X軸晃動偏移量
+    public float FireRotateX;  //腰射X軸晃動偏移量
     public float range;
 
 
@@ -89,20 +91,18 @@ public class Shooting : MonoBehaviour
             AniTime -= Time.deltaTime;
         }
         muzzlePOS = muzzle[n].GetComponent<Transform>().position;
-        if (AimIng != true && DontShooting !=true)
-        {
-            float oriRotateY = transform.rotation.y;
-            float oriRotateX = GunAimR_x.GetComponent<MouseLook>().rotationX;
+        //if (AimIng != true && DontShooting !=true)
+        //{
+        //    float oriRotateY = transform.rotation.y;
+        //    float oriRotateX = GunAimR_x.GetComponent<MouseLook>().rotationX;
 
-            range = Random.Range(-0.6f, 0.6f);  //晃動範圍
-            noiseRotateY += (noise * (range / 2) * (Mathf.Cos(Time.time)) - noiseRotateY) / 100;
-            noiseRotateX += (noise * (range / 2) * (Mathf.Sin(Time.time)) - noiseRotateX) / 100;
+        //    range = Random.Range(-0.6f, 0.6f);  //晃動範圍
+        //    noiseRotateY += (noise * (range / 2) * (Mathf.Cos(Time.time)) - noiseRotateY) / 100;
+        //    noiseRotateX += (noise * (range / 2) * (Mathf.Sin(Time.time)) - noiseRotateX) / 100;
            
-            transform.localEulerAngles += new Vector3(0.0f, noiseRotateY, 0.0f);
-            GunAimR_x.GetComponent<MouseLook>().rotationX += noiseRotateX;
-           
-        }
-        
+        //    transform.localEulerAngles += new Vector3(0.0f, noiseRotateY, 0.0f);
+        //    GunAimR_x.GetComponent<MouseLook>().rotationX += noiseRotateX;         
+        //}      
 
         if (AimIng)  //瞄準
         {
@@ -128,9 +128,12 @@ public class Shooting : MonoBehaviour
             if ((Input.GetButton("Fire1")) && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
                 float range = Random.Range(2f, 4f);  //射擊晃動範圍
+                float rangeY = Random.Range(-50f, 50f);  //射擊晃動範圍
+                FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
                 FireRotateX = (noise * range * (Mathf.Sin(Time.time)) - FireRotateX);
                 if (FireRotateX <= 0) { FireRotateX *= -1; }
 
+                transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
                 GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;
 
                 coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown差越小越快
@@ -157,9 +160,12 @@ public class Shooting : MonoBehaviour
                 if (Input.GetButton("Fire1") && ammunition != 0 && DontShooting == false)  //瞄準射擊
                 {
                     float range = Random.Range(1f, 2f);  //瞄準射擊晃動範圍
+                    float rangeY = Random.Range(-30f, 30f);  //瞄準射擊晃動範圍
+                    AimFRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - AimFRotateY)/100;
                     AimFRotateX = (noise * range * (Mathf.Sin(Time.time)) - AimFRotateX);
                     if (AimFRotateX <= 0){ AimFRotateX *= -1;}
 
+                    transform.localEulerAngles += new Vector3(0.0f, AimFRotateY, 0.0f);
                     GunAimR_x.GetComponent<MouseLook>().rotationX -= AimFRotateX * Time.deltaTime;
 
                     Weapon.SetBool("AimFire", true);
