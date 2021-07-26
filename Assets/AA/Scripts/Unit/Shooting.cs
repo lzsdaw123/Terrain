@@ -16,6 +16,9 @@ public class Shooting : MonoBehaviour
     public float noise = 2f; //晃動頻率
     public float noiseRotateX;  //X軸晃動偏移量
     public float noiseRotateY;  //Y軸晃動偏移量
+    public float AimFRotateX;  //Y軸晃動偏移量
+    public float FireRotateX;  //Y軸晃動偏移量
+    public float range;
 
 
     public float coolDown; //冷卻結束時間
@@ -86,6 +89,20 @@ public class Shooting : MonoBehaviour
             AniTime -= Time.deltaTime;
         }
         muzzlePOS = muzzle[n].GetComponent<Transform>().position;
+        if (AimIng != true && DontShooting !=true)
+        {
+            float oriRotateY = transform.rotation.y;
+            float oriRotateX = GunAimR_x.GetComponent<MouseLook>().rotationX;
+
+            range = Random.Range(-0.6f, 0.6f);  //晃動範圍
+            noiseRotateY += (noise * (range / 2) * (Mathf.Cos(Time.time)) - noiseRotateY) / 100;
+            noiseRotateX += (noise * (range / 2) * (Mathf.Sin(Time.time)) - noiseRotateX) / 100;
+           
+            transform.localEulerAngles += new Vector3(0.0f, noiseRotateY, 0.0f);
+            GunAimR_x.GetComponent<MouseLook>().rotationX += noiseRotateX;
+           
+        }
+        
 
         if (AimIng)  //瞄準
         {
@@ -93,12 +110,7 @@ public class Shooting : MonoBehaviour
             GA_R.z += 0.2f;
             if (GA_R.z >= 2.2f) { GA_R.z = 2.2f; }
 
-            float range = Random.Range(-1f, 1f);  //瞄準晃動範圍
-            noiseRotateY += (noise * (range / 2) * (Mathf.Cos(Time.time)) - noiseRotateY) / 100;
-            noiseRotateX += (noise * (range / 2) * (Mathf.Sin(Time.time)) - noiseRotateX) / 100;
-
-            transform.localEulerAngles += new Vector3(0.0f, noiseRotateY, 0.0f);
-            GunAimR_x.GetComponent<MouseLook>().rotationX += noiseRotateX;
+            //range = Random.Range(-0.05f, 0.05f);  //晃動範圍
 
             //localEulerAngles跟localRotation的差別
         }
@@ -115,7 +127,11 @@ public class Shooting : MonoBehaviour
             //若按下發射鍵
             if ((Input.GetButton("Fire1")) && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
-                //CameraShake.ShakeFor(0.1f, 0.03f);
+                float range = Random.Range(2f, 4f);  //射擊晃動範圍
+                FireRotateX = (noise * range * (Mathf.Sin(Time.time)) - FireRotateX);
+                if (FireRotateX <= 0) { FireRotateX *= -1; }
+
+                GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;
 
                 coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown差越小越快
                 ammunition--;
@@ -138,8 +154,14 @@ public class Shooting : MonoBehaviour
 
                 Weapon.SetBool("Aim", true);
                 ZoomIn();
-                if (Input.GetButton("Fire1") && ammunition != 0 && DontShooting == false)
+                if (Input.GetButton("Fire1") && ammunition != 0 && DontShooting == false)  //瞄準射擊
                 {
+                    float range = Random.Range(1f, 2f);  //瞄準射擊晃動範圍
+                    AimFRotateX = (noise * range * (Mathf.Sin(Time.time)) - AimFRotateX);
+                    if (AimFRotateX <= 0){ AimFRotateX *= -1;}
+
+                    GunAimR_x.GetComponent<MouseLook>().rotationX -= AimFRotateX * Time.deltaTime;
+
                     Weapon.SetBool("AimFire", true);
                 }
                 else
@@ -175,13 +197,13 @@ public class Shooting : MonoBehaviour
             Reload = false;
             if (LayDown == false)
             {
-                LayDown = true;
+                LayDown = true;          
                 Weapon.SetTrigger("LayDown0");
                 Weapon.SetBool("LayDown", true);
             }
             else
             {
-                LayDown = false;
+                LayDown = false;  
                 Weapon.SetBool("LayDown", false);
 
             }
@@ -206,7 +228,7 @@ public class Shooting : MonoBehaviour
     {
         if (FieldOfView > 20f)
         {
-            FieldOfView -= 105f * Time.deltaTime;
+            FieldOfView -= 120f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
     }
