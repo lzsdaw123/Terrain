@@ -48,28 +48,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ea1315600e0a348ac2f6856004a7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Muzzle_vfx: {fileID: 7867440506293988447, guid: e25bfb0e8b76cd54492bfc9299fe490a, type: 3}
-  Hit_vfx: {fileID: 953877935754959471, guid: 2ac4d0eac996c9d42be46b4866cf0a90, type: 3}
+  Muzzle_vfx: {fileID: 7867440506293988447, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+    type: 3}
+  Hit_vfx:
+  - {fileID: 953877935754959471, guid: 2ac4d0eac996c9d42be46b4866cf0a90, type: 3}
+  - {fileID: 953877935754959471, guid: 4a00e66db768dfa409aed347bad0de08, type: 3}
+  - {fileID: 953877935754959471, guid: bcb4a16e21feb1b48b5f366992582f13, type: 3}
+  HitType: 0
   target: {fileID: 0}
   speed: 300
   liftTime: 1
   facingRight: 1
-  collidLayers:
-    serializedVersion: 2
-    m_Bits: 0
   power: 1
   damageTags:
-  - Emeay
+  - 
   ignoreTags:
   - Player
   - Untagged
   rayLength: 100
   rayLength2: 1
-  Ground:
-    serializedVersion: 2
-    m_Bits: 512
   Monster:
     serializedVersion: 2
+    m_Bits: 1024
+  Wall:
+    serializedVersion: 2
+    m_Bits: 2048
+  Ground:
+  - serializedVersion: 2
+    m_Bits: 1024
+  - serializedVersion: 2
+    m_Bits: 2048
+  - serializedVersion: 2
     m_Bits: 1024
 --- !u!136 &9204926344011936254
 CapsuleCollider:
