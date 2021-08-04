@@ -64,28 +64,7 @@ public class BulletLife : MonoBehaviour
             HitType = 0;
             Debug.Log("白色0");
             Debug.DrawLine(transform.position, hit.point, Color.green, 0.7f, false);
-            //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)
-
-            //在到物體上產生彈孔
-            Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            Vector3 pos = hit.point;
-
-            if (Hit_vfx[HitType] != null) //彈孔類型
-            {
-                Debug.Log("彈孔" + HitType);
-
-                var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
-                var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
-                if (psHit != null)
-                {
-                    //Destroy(hixVFX, psHit.main.duration);
-                }
-                else
-                {
-                    //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                    //Destroy(hixVFX, psChild.main.duration);
-                }
-            }
+            //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)        
         }
         if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskWall)) //彈孔噴黑煙
         {
@@ -94,27 +73,7 @@ public class BulletLife : MonoBehaviour
                 HitType = 1;
                 Debug.Log("黑色1");
                 Debug.DrawLine(transform.position, hit.point, Color.black, 0.7f, false);
-            }        
-            //在到物體上產生彈孔
-            Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            Vector3 pos = hit.point;
-
-            if (Hit_vfx[HitType] != null) //彈孔類型
-            {
-                Debug.Log("彈孔" + HitType);
-
-                var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
-                var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
-                if (psHit != null)
-                {
-                    //Destroy(hixVFX, psHit.main.duration);
-                }
-                else
-                {
-                    //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                    //Destroy(hixVFX, psChild.main.duration);
-                }
-            }
+            }               
         }
         if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskMonster)) //彈孔噴血
         {
@@ -123,33 +82,35 @@ public class BulletLife : MonoBehaviour
                 HitType = 2;
                 Debug.Log("紅色2");
                 Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
+
+                hit.transform.SendMessage("Damage", power); //傷害
             }      
-            //在到物體上產生彈孔
-            Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            Vector3 pos = hit.point;
-
-            if (Hit_vfx[HitType] != null) //彈孔類型
-            {
-                Debug.Log("彈孔" + HitType);
-
-                var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
-                var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
-                if (psHit != null)
-                {
-                    //Destroy(hixVFX, psHit.main.duration);
-                }
-                else
-                {
-                    //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                    //Destroy(hixVFX, psChild.main.duration);
-                }
-            }
-
             if (hit.collider.tag == "Emeay")
             {
+                HitType = 3;
                 Debug.Log("Emeay");
                 //hit.transform.SendMessage("Damage", power);
                 Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
+            }
+        }
+        //在到物體上產生彈孔
+        Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+        Vector3 pos = hit.point;
+
+        if (Hit_vfx[HitType] != null) //彈孔類型
+        {
+            Debug.Log("彈孔" + HitType);
+
+            var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
+            var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
+            if (psHit != null)
+            {
+                //Destroy(hixVFX, psHit.main.duration);
+            }
+            else
+            {
+                //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+                //Destroy(hixVFX, psChild.main.duration);
             }
         }
 

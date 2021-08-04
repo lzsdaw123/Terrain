@@ -67,7 +67,7 @@ public class MonsterAI01 : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        ani = GetComponent<Animator>();
+        //ani = GetComponent<Animator>();
 
         agent.enabled = true;
 
@@ -82,10 +82,10 @@ public class MonsterAI01 : MonoBehaviour
         agent.destination = target; //設置尋徑目標點
         agent.speed = 0; //要用動畫去移動,因此尋徑的速度要設為 0
 
-        if (ani == null)
-        {
-            ani = GetComponent<Animator>(); //自動取得動畫控制器
-        }
+        //if (ani == null)
+        //{
+        //    ani = GetComponent<Animator>(); //自動取得動畫控制器
+        //}
 
     }
 
@@ -319,7 +319,7 @@ public class MonsterAI01 : MonoBehaviour
 
             }
         }
-        ani.SetFloat("Speed", speed); //設置動畫播放
+        //ani.SetFloat("Speed", speed); //設置動畫播放
 
         if (moving)   //若要移動，進行方向修正
         {
@@ -336,7 +336,7 @@ public class MonsterAI01 : MonoBehaviour
     {
         speed = 0;
         attacking = true;
-        ani.SetFloat("Speed", speed);
+        //ani.SetFloat("Speed", speed);
         ani.SetTrigger("Attack");
     }
     public void AttackCompletion()

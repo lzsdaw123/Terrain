@@ -8,7 +8,7 @@ public class PlayerMove : MonoBehaviour
 
     public CharacterController controller;
     private Rigidbody _rigidbody;
-    public float Speed=4f;
+    public float Speed=6.5f;
     public float gravity = -9.81f; //重力
     public float jumpHeigh; // 跳躍高度
 
@@ -83,7 +83,7 @@ public class PlayerMove : MonoBehaviour
 
             if (Input.GetButton("Squat"))  //蹲下
             {
-                Speed = 1.5f;
+                Speed = 3f;
                 Squat = true;
                 GetComponent<CharacterController>().height = 1.5f;
             }
@@ -102,9 +102,9 @@ public class PlayerMove : MonoBehaviour
             {
                 Speed = 10;
             }
-            else if (Speed <= 6 && Squat == false)
+            else if (Speed <= 6.5f && Squat == false)
             {
-                Speed = 6;
+                Speed = 6.5f;
             }
 
 
