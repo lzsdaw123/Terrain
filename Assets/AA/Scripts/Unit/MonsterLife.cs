@@ -10,13 +10,13 @@ public class MonsterLife : MonoBehaviour
 
     [SerializeField] Transform root;
 
-    private Animator ani;
+    public Animator ani;
     private Rigidbody rigid;
     private Collider cld;
 
     public float hpFull = 5; // 血量上限
     public float hp; // 血量
-    public Image hpImage;
+    //public Image hpImage;
 
     private NavMeshAgent agent;
     private MonsterAI01 monster01;
@@ -26,7 +26,7 @@ public class MonsterLife : MonoBehaviour
     {
         hp = hpFull; // 遊戲一開始先補滿血量
         RefreshLifebar(); // 更新血條
-        ani = GetComponent<Animator>();
+        //ani = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         cld = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
@@ -87,7 +87,7 @@ public class MonsterLife : MonoBehaviour
 
     void RefreshLifebar() // 更新血條 UI
     {
-        hpImage.fillAmount = hp / hpFull; //顯示血球
+        //hpImage.fillAmount = hp / hpFull; //顯示血球
     }
 
 

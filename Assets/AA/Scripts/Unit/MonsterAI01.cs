@@ -36,7 +36,7 @@ public class MonsterAI01 : MonoBehaviour
     private Transform attackTarget; // 搜尋到最近的攻擊目標
     private float targetDistance = 2000; // 與最近攻擊目標的距離
     [SerializeField] private float attackDistance = 6f; // 攻擊距離
-    private bool attacking = false;
+    public bool attacking = false;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
@@ -319,7 +319,7 @@ public class MonsterAI01 : MonoBehaviour
 
             }
         }
-        //ani.SetFloat("Speed", speed); //設置動畫播放
+        ani.SetFloat("Speed", speed); //設置動畫播放
 
         if (moving)   //若要移動，進行方向修正
         {
@@ -336,13 +336,13 @@ public class MonsterAI01 : MonoBehaviour
     {
         speed = 0;
         attacking = true;
-        //ani.SetFloat("Speed", speed);
+        ani.SetFloat("Speed", speed);
         ani.SetTrigger("Attack");
     }
-    public void AttackCompletion()
-    {
-        attacking = false;
-    }
+    //public void AttackCompletion()
+    //{
+    //    attacking = false;
+    //}
 
 
 }

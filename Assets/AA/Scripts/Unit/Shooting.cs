@@ -7,9 +7,9 @@ public class Shooting : MonoBehaviour
 {
     public Camera PlayCamera;
 
-    public GameObject bullet;
+    public GameObject bullet;  //子彈
     public Transform gun;
-    public GameObject[] muzzle;
+    public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR; //槍瞄準鏡上下位移矯正
     public GameObject GunAimR_x;  //X軸瞄準晃動
     private Vector3 GA_R;  //Z軸瞄準偏移修正
@@ -18,7 +18,7 @@ public class Shooting : MonoBehaviour
     public float noiseRotateY;  //Y軸晃動偏移量
     public float AimFRotateY;  //瞄準Y軸晃動偏移量
     public float AimFRotateX;  //瞄準X軸晃動偏移量
-    public float FireRotateY;  //腰射X軸晃動偏移量
+    public float FireRotateY;  //腰射Y軸晃動偏移量
     public float FireRotateX;  //腰射X軸晃動偏移量
     public float range;
 
@@ -33,7 +33,7 @@ public class Shooting : MonoBehaviour
     public GameObject[] _Animator;
     public Vector3 muzzlePOS;  //槍口座標
 
-    public bool BFire;
+    public bool BFire;  //生成子彈
     public bool DontShooting = false;
     public bool LayDown = false;
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
