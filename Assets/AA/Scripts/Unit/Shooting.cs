@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Shooting : MonoBehaviour
 {
-    public Camera PlayCamera;
+    public Camera PlayCamera,GunCamera;
 
     public GameObject bullet;  //子彈
     public Transform gun;
@@ -20,7 +20,7 @@ public class Shooting : MonoBehaviour
     public float AimFRotateX;  //瞄準X軸晃動偏移量
     public float FireRotateY;  //腰射Y軸晃動偏移量
     public float FireRotateX;  //腰射X軸晃動偏移量
-    public float range;
+    //public float range;
 
 
     public float coolDown; //冷卻結束時間
@@ -127,10 +127,10 @@ public class Shooting : MonoBehaviour
             //若按下發射鍵
             if ((Input.GetButton("Fire1")) && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
-                float range = Random.Range(2f, 4f);  //射擊晃動範圍
+                float rangeX = Random.Range(2f, 4f);  //射擊晃動範圍
                 float rangeY = Random.Range(-50f, 50f);  //射擊晃動範圍
                 FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
-                FireRotateX = (noise * range * (Mathf.Sin(Time.time)) - FireRotateX);
+                FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
                 if (FireRotateX <= 0) { FireRotateX *= -1; }
 
                 transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
@@ -147,6 +147,7 @@ public class Shooting : MonoBehaviour
                 Weapon.SetBool("Fire", false);
             }
             FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
+            FieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
             if (Input.GetButton("Fire2") && Reload != true)  //架槍瞄準
             {
                 if (AimIng == false)
@@ -159,10 +160,10 @@ public class Shooting : MonoBehaviour
                 ZoomIn();
                 if (Input.GetButton("Fire1") && ammunition != 0 && DontShooting == false)  //瞄準射擊
                 {
-                    float range = Random.Range(1f, 2f);  //瞄準射擊晃動範圍
+                    float rangeX = Random.Range(1f, 2f);  //瞄準射擊晃動範圍
                     float rangeY = Random.Range(-30f, 30f);  //瞄準射擊晃動範圍
                     AimFRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - AimFRotateY)/100;
-                    AimFRotateX = (noise * range * (Mathf.Sin(Time.time)) - AimFRotateX);
+                    AimFRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - AimFRotateX);
                     if (AimFRotateX <= 0){ AimFRotateX *= -1;}
 
                     transform.localEulerAngles += new Vector3(0.0f, AimFRotateY, 0.0f);
@@ -236,6 +237,7 @@ public class Shooting : MonoBehaviour
         {
             FieldOfView -= 120f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+            GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
     }
     void ZoomOut()
@@ -244,6 +246,7 @@ public class Shooting : MonoBehaviour
         {
             FieldOfView += 120f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+            GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
     }
     public static void ReLoad_E()

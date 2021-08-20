@@ -54,15 +54,21 @@ MonoBehaviour:
   Hit_vfx: []
   HitType: 0
   target: {fileID: 0}
+  OriTarger: {fileID: 0}
+  aTN: 0
+  Atarget: {x: 0, y: 0, z: 0}
   speed: 12
   liftTime: 5
   facingRight: 1
   power: 1
-  damageTags: []
+  damageTags:
+  - Player
   ignoreTags: []
   rayLength: 0.5
   rayLength2: 1
-  Ground: []
+  Ground:
+  - serializedVersion: 2
+    m_Bits: 8192
 --- !u!136 &9204926344011936254
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73,8 +79,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.007
-  m_Height: 0.06
+  m_Radius: 0.31
+  m_Height: 0.37
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: -0.003}
 --- !u!54 &2840697118088834591
@@ -453,7 +459,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.12549019, g: 1, b: 0, a: 0.50980395}
+      maxColor: {r: 0.24180019, g: 1, b: 0, a: 0.50980395}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -515,7 +521,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2

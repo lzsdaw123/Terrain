@@ -85,10 +85,10 @@ public class BulletLife : MonoBehaviour
 
                 hit.transform.SendMessage("Damage", power); //傷害
             }      
-            if (hit.collider.tag == "Emeay")
+            if (hit.collider.tag == "Enemy")
             {
                 HitType = 3;
-                Debug.Log("Emeay");
+                Debug.Log("Enemy");
                 //hit.transform.SendMessage("Damage", power);
                 Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
             }

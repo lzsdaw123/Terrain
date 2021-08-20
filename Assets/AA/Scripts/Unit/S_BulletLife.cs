@@ -7,9 +7,18 @@ public class S_BulletLife : MonoBehaviour
     public GameObject Muzzle_vfx;
     public GameObject[] Hit_vfx;  //彈孔類型
     public int HitType;
-    public GameObject target;
-    public float speed = 12f;//飛行速度
+    public Transform target;
+    public Transform OriTarger;
+    public int aTN;
+    public Vector3 Atarget;
+    public float AtargetY;
+    Rigidbody rigidbody;
+    public float speed = 20f;//飛行速度
     public float liftTime = 5f; //生命時間
+    bool Ay = true;  //子彈飛行軌跡
+    Vector3 ABPath;
+    Vector3 AAT;
+    float FlyDistance; //慣性飛行時間
     public bool facingRight = true; //是否面向右邊
     private Vector3 moveDir = Vector3.right;
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
@@ -31,7 +40,9 @@ public class S_BulletLife : MonoBehaviour
     }
     void Start()
     {
-       
+        speed = 60f; //飛行速度
+
+
         if (Muzzle_vfx != null)
         {
             var muzzleVFX = Instantiate(Muzzle_vfx, transform.position, Quaternion.identity);
@@ -65,50 +76,51 @@ public class S_BulletLife : MonoBehaviour
             Debug.DrawLine(transform.position, hit.point, Color.green, 0.7f, false);
             //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)        
         }
-        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskWall)) //彈孔噴黑煙
+        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskWall)) //彈孔噴綠
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
             {
-                HitType = 1;
+                HitType = 0;
                 Debug.DrawLine(transform.position, hit.point, Color.black, 0.7f, false);
-            }               
-        }
-        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskMonster)) //彈孔噴血
-        {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
-            {
-                HitType = 2;
-                Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
+                hit.transform.SendMessage("Damage", power); //傷害
 
+            }
+        }
+        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskMonster)) //彈孔噴綠
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+            {
+                HitType = 0;
+                Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
                 hit.transform.SendMessage("Damage", power); //傷害
             }      
-            if (hit.collider.tag == "Emeay")
-            {
-                HitType = 3;
-                //hit.transform.SendMessage("Damage", power);
-                Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
-            }
+            //if (hit.collider.tag == "Enemy")
+            //{
+            //    HitType = 3;
+            //    //hit.transform.SendMessage("Damage", power);
+            //    Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
+            //}
         }
         //在到物體上產生彈孔
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
         Vector3 pos = hit.point;
 
-        if (Hit_vfx[HitType] != null) //彈孔類型
-        {
-            Debug.Log("彈孔" + HitType);
+        //if (Hit_vfx[HitType] != null) //彈孔類型
+        //{
+        //    //Debug.Log("彈孔" + HitType);
 
-            var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
-            var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
-            if (psHit != null)
-            {
-                //Destroy(hixVFX, psHit.main.duration);
-            }
-            else
-            {
-                //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                //Destroy(hixVFX, psChild.main.duration);
-            }
-        }
+        //    var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
+        //    var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
+        //    if (psHit != null)
+        //    {
+        //        //Destroy(hixVFX, psHit.main.duration);
+        //    }
+        //    else
+        //    {
+        //        //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+        //        //Destroy(hixVFX, psChild.main.duration);
+        //    }
+        //}
 
         //射線長度測試
         //if (Physics.Raycast(transform.position, fwd, out hit, rayLength2, Ground))
@@ -122,11 +134,44 @@ public class S_BulletLife : MonoBehaviour
     void Update()
     {
         liftTime -= Time.deltaTime;
+        FlyDistance += Time.deltaTime;
         if (liftTime <= 0) { Destroy(gameObject); }
     }
     void FixedUpdate()
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        //target = MonsterAI02.attackTarget;
+        AAT = MonsterAI02.AAT;
+
+        //AtargetY = target.position.y + 0.7f;
+        //Atarget = new Vector3(target.position.x, AtargetY, target.position.z);
+        //ABPath = Atarget - transform.position;
+        //if (Ay)
+        //{
+        //    //aTN = MonsterAI02.aTN;
+
+
+        //    Ay = false;
+        //}
+        //else
+        //{
+        //    // transform.position += transform.forward * speed * Time.deltaTime;
+        //}
+
+        float step = speed * Time.deltaTime;
+        //transform.position += ABPath * speed * Time.deltaTime;
+
+        //Vector3.MoveTowards(當前位置.目標位置.速度)
+        transform.localPosition = Vector3.MoveTowards(transform.localPosition, AAT, step);
+
+
+        if (FlyDistance >= 0.08f)
+        {
+            //Ay = false;
+        }
+        //if (transform.position == Atarget)
+        //{          
+        //    GetComponent<Rigidbody>().useGravity = true;
+        //}
     }
 
     bool InLayerMask(int layer, LayerMask layerMask) //判斷物件圖層是否在LayerMask內
@@ -156,7 +201,7 @@ public class S_BulletLife : MonoBehaviour
         //}
 
         //若碰撞體在作用圖層內才進行運算
-        if (InLayerMask(collision.gameObject.layer, Ground[2]))
+        if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
             for (int i = 0; i < ignoreTags.Length; i++)
             {
@@ -183,7 +228,7 @@ public class S_BulletLife : MonoBehaviour
 
 
         //若碰撞體在作用圖層內才進行運算
-        if (InLayerMask(collision.gameObject.layer, Ground[2]))
+        if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
             for (int i = 0; i < ignoreTags.Length; i++)
             {

@@ -11,10 +11,10 @@ public class MonsterAI02 : MonoBehaviour
     private SpawnRay spawnRay;  //生怪后蟲
     private Vector3 target; // 尋徑目標點
     public GameObject MissionTarget;
-    Transform OriTarger;
+    public static Transform OriTarger;
 
     public Animator ani; //動畫控制器
-    public float arriveDistance = 0.5f; // 到達目的地的距離
+    public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
 
@@ -33,13 +33,18 @@ public class MonsterAI02 : MonoBehaviour
     public float heightOfTarget = 1f; // 敵物要掃描的高度
     public float lookDistance = 10f; // 看見玩家的距離
     [Range(0, 180)] public float lookAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
+    [Range(0, 180)] public float AttackAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
     public LayerMask actorLayer = 0; // 角色所在的圖層
     [TagSelector] public string[] playerTags = { "Player" };
-    private Transform attackTarget; // 搜尋到最近的攻擊目標
+    public static Transform attackTarget; // 搜尋到最近的攻擊目標
+    public static Vector3 AAT; // 搜尋到最近的攻擊目標
+    public static int aTN;
     private float targetDistance = 2000; // 與最近攻擊目標的距離
-    [SerializeField] private float attackDistance = 6f; // 攻擊距離
+    [SerializeField] private float attackDistance = 3f; // 攻擊距離
+    bool AttackAngleT=false;
     public static bool attacking;
     public static int buttleAttack;
+    //public bool isEnemy=false;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
@@ -60,13 +65,10 @@ public class MonsterAI02 : MonoBehaviour
         GizmosExtension.DrawSector(transform.position + eyeHi, lookDistance, lookAngle * 2, arcRotation);// 畫扇形 
 
          Vector3 weaponHi; // 武器高度
-        if (attackLv1.displayGizmos)
-      {
-          weaponHi = new Vector3(0, attackLv1.height, 0);
-            Gizmos.color = Color.red; // 設為紅色
-          arcRotation= Quaternion.Euler(transform.eulerAngles + new Vector3(0, -attackLv1.angle, 0));// 計算弧線的起始角度
-         GizmosExtension.DrawSector(transform.position + weaponHi,attackLv1.distance, attackLv1.angle * 2, arcRotation);// 畫扇形
-       }
+         Gizmos.color = Color.red; // 設為紅色
+        Quaternion AttackRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -AttackAngle, 0));// 計算弧線的起始角度
+        GizmosExtension.DrawSector(transform.position + eyeHi, attackDistance, AttackAngle * 2, AttackRotation);// 畫扇形 
+
     }
 #endif
 
@@ -86,24 +88,20 @@ public class MonsterAI02 : MonoBehaviour
         //agent.destination = target;  //把目標設到尋徑裡面
         target = transform.position; //先令目標點等於角色所在位置
         agent.destination = target; //設置尋徑目標點
-        agent.speed = 5; //要用動畫去移動,因此尋徑的速度要設為 0
+        agent.speed = 0; //要用動畫去移動,因此尋徑的速度要設為 0
 
         //if (ani == null)
         //{
         //    ani = GetComponent<Animator>(); //自動取得動畫控制器
         //}
 
-        OriTarger = MissionTarget.transform;
     }
 
     public void AttackLv1()
     {
         attackUtility.AttackTargets(attackLv1, transform, playerTags, actorLayer);
     }
-    //Vector3 GetOriTarget()
-    //{
-        
-    //}
+
 
     Vector3 GetNavTarget()
     {
@@ -210,7 +208,7 @@ public class MonsterAI02 : MonoBehaviour
             for (int pt = 0; pt < PlayerTags.Length; pt++) // 判斷該角色是否為玩家
             {
                 if (actors[i].tag == PlayerTags[pt])
-                {                 
+                {
                     isPlayer = true;
                     break;
                 }
@@ -231,6 +229,23 @@ public class MonsterAI02 : MonoBehaviour
                         {
                             nd = d;
                             player = actors[i].transform;
+                            //判斷在攻擊角度內
+                            if (GetXZAngle(transform.forward, transform.position,
+                            actors[i].transform.position, false) < AttackAngle)
+                            {
+                                //Debug.Log(actors[i].transform.position);
+                                AttackAngleT = true;
+                            }
+                            else
+                            {
+                                speed = 1f;
+                                ani.SetFloat("Speed", speed);
+                                AttackAngleT = false;
+                                //若不在攻擊角度內轉向目標
+                                Vector3 targetDir = actors[i].transform.position - transform.position;
+                                Quaternion rotate = Quaternion.LookRotation(targetDir);
+                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 4f * Time.deltaTime);
+                            }
                         }
                         fined = true;
                     }
@@ -240,8 +255,9 @@ public class MonsterAI02 : MonoBehaviour
         Player = player;
         Distance = nd;
         return fined;
+       
     }
-
+   
     // 用射線判斷眼睛到目標間是否有障礙物
     bool NoObstacle(Transform targetActor)
     {
@@ -280,83 +296,88 @@ public class MonsterAI02 : MonoBehaviour
         buttleAttack = AnimEvents.buttleAttack;
         if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
 
+        OriTarger = MissionTarget.transform;
+
 
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
-            //--actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
+            Debug.Log("測試1");
+            actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
             float d = Vector3.Distance(transform.position, attackTarget.position);
-
             if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
             {
-                Attack();
+
+                if (AttackAngleT)
+                {
+                    Attack();
+                }
             }
             else // 玩家距離大於攻擊距離,進行追踪
             {
                 TrackingPlayer();
             }
-
         }
         else
         {
-           //-- actionTimer += Time.deltaTime; //計時器
+            //aTN = 0;
+            //actionTimer += Time.deltaTime; //計時器
 
-            //取得角色與目標的距離
-            float d = Vector3.Distance(transform.position, OriTarger.position);
+            ////取得角色與目標的距離
+            //float d = Vector3.Distance(transform.position, OriTarger.position);
+            //moving = true;
+            //if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+            //{
+            //    if (AttackAngleT)
+            //    {
+            //        Attack();
+            //    }
+            //}
+            //else // 玩家距離大於攻擊距離,進行追踪
+            //{
+            //    TrackingPlayer();
+            //}
 
-            // if (d < arriveDistance || actionTimer > nextActionTime)  //若距離小於停止距離或時間超過下次行為時間
-
-            moving = true;
-            //OriTarger = GetOriTarget();  //取得新的移動目標
-            agent.destination = OriTarger.position;  //設尋徑為新的目標
-            speed = 5f;
-
-            if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
-            {
-                Attack();
-            }
-            else // 玩家距離大於攻擊距離,進行追踪
-            {
-                //TrackingPlayer();
-            }
-
-            //-- actionTimer = 0; //計時器歸０
-            nextActionTime = Random.Range(changeActionMin, changeActionMax); //重新取得下次更換動作時間
-       
+            //if (d < arriveDistance || actionTimer > nextActionTime)  //若距離小於停止距離或時間超過下次行為時間
+            //{
+            //    actionTimer = 0; //計時器歸０
+            //    nextActionTime = Random.Range(changeActionMin, changeActionMax); //重新取得下次更換動作時間
+            //}
         }
-        ani.SetFloat("Speed", speed); //設置動畫播放
 
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        
+        ani.SetFloat("Speed", speed); //設置動畫播放
+        //AAT = attackTarget.position;
+        Debug.Log("V3"+AAT);
     }
     void FixedUpdate()
     {
         if (buttleAttack>=1)
         {
-            GameObject obj = Instantiate(bullet, muzzlePOS, OriTarger.rotation);
+            GameObject obj = Instantiate(bullet, muzzlePOS, transform.rotation);
             buttleAttack = 0;
         }
     }
     private void TrackingPlayer()
     {
+        agent.speed = 5;
         agent.destination = attackTarget.position; // 設為尋徑目標
-        speed = 5;// 跑向目標
+        speed = 1;// 跑向目標
         attacking = false; // 追踪玩家,不在攻擊狀態
     }
     private void Attack()
-    {       
+    {
+        AttackAngleT = false;
+        agent.speed = 0;
         speed = 0;
         attacking = true;
         ani.SetFloat("Speed", speed);
         ani.SetTrigger("Attack");
     }
-    //public void AttackCompletion()
-    //{
-    //    attacking = false;
-    //}
+
 
 
 }
