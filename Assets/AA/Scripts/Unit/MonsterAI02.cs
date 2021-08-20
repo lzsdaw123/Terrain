@@ -194,9 +194,8 @@ public class MonsterAI02 : MonoBehaviour
     /// <param name="Player">回傳搜尋到的玩家 transform</param>
     /// <param name="Distance">回傳該玩家的距離</param>
     /// <returns></returns>
-    bool FindNearestPlayer(string[] PlayerTags, out Transform Player, out float Distance)
+    bool FindNearestPlayer(string[] PlayerTags, out float Distance)
     {
-        Transform player = null;
         float nd = 10000f;
         bool fined = false;
 
@@ -228,7 +227,7 @@ public class MonsterAI02 : MonoBehaviour
                         if (d < nd)
                         {
                             nd = d;
-                            player = actors[i].transform;
+                            attackTarget = actors[i].transform;
                             //判斷在攻擊角度內
                             if (GetXZAngle(transform.forward, transform.position,
                             actors[i].transform.position, false) < AttackAngle)
@@ -252,7 +251,6 @@ public class MonsterAI02 : MonoBehaviour
                 }
             }
         }
-        Player = player;
         Distance = nd;
         return fined;
        
@@ -272,6 +270,9 @@ public class MonsterAI02 : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         float distance = Vector3.Distance(transform.position,
        targetActor.position);
+
+        int maskMonster = 1 << LayerMask.NameToLayer("Monster");
+
         if (Physics.Raycast(ray, out hit, distance, 0xFFFF - actorLayer)) //若有障礙物
         {
 
@@ -279,10 +280,15 @@ public class MonsterAI02 : MonoBehaviour
             Debug.DrawRay(origin, hit.point - origin, Color.yellow);
 
 #endif
+            if (Physics.Raycast(ray, out hit, distance, maskMonster))
+            {
 
-            // 射線有打到東西表示角色間有帳礙物
-            ret = false;
-
+            }
+            else
+            {
+                // 射線有打到東西表示角色間有帳礙物
+                ret = false;
+            }
         }
 
         return ret;
@@ -299,7 +305,7 @@ public class MonsterAI02 : MonoBehaviour
         OriTarger = MissionTarget.transform;
 
 
-        if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
+        if (FindNearestPlayer(playerTags, out targetDistance))// 若有掃描到玩家
         {
             Debug.Log("測試1");
             actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
@@ -307,7 +313,6 @@ public class MonsterAI02 : MonoBehaviour
             float d = Vector3.Distance(transform.position, attackTarget.position);
             if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
             {
-
                 if (AttackAngleT)
                 {
                     Attack();
@@ -350,7 +355,7 @@ public class MonsterAI02 : MonoBehaviour
             transform.rotation = GetNavRotation(true, agent);
         }
         ani.SetFloat("Speed", speed); //設置動畫播放
-        //AAT = attackTarget.position;
+        if(attackTarget)AAT = attackTarget.position; 
         Debug.Log("V3"+AAT);
     }
     void FixedUpdate()
