@@ -12,11 +12,10 @@ public class S_BulletLife : MonoBehaviour
     public int aTN;
     public Vector3 Atarget;
     public float AtargetY;
-    Rigidbody rigidbody;
     public float speed = 20f;//飛行速度
     public float liftTime = 5f; //生命時間
     bool Ay = true;  //子彈飛行軌跡
-    Vector3 ABPath;
+    public Vector3 ABPath;
     Vector3 AAT;
     float FlyDistance; //慣性飛行時間
     public bool facingRight = true; //是否面向右邊
@@ -40,7 +39,7 @@ public class S_BulletLife : MonoBehaviour
     }
     void Start()
     {
-        speed = 60f; //飛行速度
+        speed = 30f; //飛行速度
 
 
         if (Muzzle_vfx != null)
@@ -142,26 +141,26 @@ public class S_BulletLife : MonoBehaviour
         //target = MonsterAI02.attackTarget;
         AAT = MonsterAI02.AAT;
 
-        //AtargetY = target.position.y + 0.7f;
-        //Atarget = new Vector3(target.position.x, AtargetY, target.position.z);
-        //ABPath = Atarget - transform.position;
-        //if (Ay)
-        //{
-        //    //aTN = MonsterAI02.aTN;
+      
+        if (Ay)
+        {
+            AtargetY = AAT.y + 1.2f;
+            Atarget = new Vector3(AAT.x, AtargetY, AAT.z);
+            ABPath = Atarget - transform.position;
+            ABPath = ABPath / 10;
 
-
-        //    Ay = false;
-        //}
-        //else
-        //{
-        //    // transform.position += transform.forward * speed * Time.deltaTime;
-        //}
+            Ay = false;
+        }
+        else
+        {
+            // transform.position += transform.forward * speed * Time.deltaTime;
+        }
 
         float step = speed * Time.deltaTime;
-        //transform.position += ABPath * speed * Time.deltaTime;
+        transform.localPosition += ABPath * speed * Time.deltaTime ;
 
         //Vector3.MoveTowards(當前位置.目標位置.速度)
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition, AAT, step);
+        //transform.localPosition = Vector3.MoveTowards(transform.localPosition, AAT, step);
 
 
         if (FlyDistance >= 0.08f)

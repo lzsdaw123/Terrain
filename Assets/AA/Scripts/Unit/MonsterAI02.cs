@@ -12,6 +12,8 @@ public class MonsterAI02 : MonoBehaviour
     private Vector3 target; // 尋徑目標點
     public GameObject MissionTarget;
     public static Transform OriTarger;
+    GameObject tagObject;
+
 
     public Animator ani; //動畫控制器
     public float arriveDistance = 4f; // 到達目的地的距離
@@ -44,14 +46,14 @@ public class MonsterAI02 : MonoBehaviour
     bool AttackAngleT=false;
     public static bool attacking;
     public static int buttleAttack;
-    //public bool isEnemy=false;
+    public bool isEnemy=false;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
     public GameObject muzzle;
     public Vector3 muzzlePOS;  //槍口座標
-
+    public float targetHP;
 
 
     private AttackUtility attackUtility = new AttackUtility();
@@ -64,7 +66,7 @@ public class MonsterAI02 : MonoBehaviour
         Quaternion arcRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -lookAngle, 0));// 計算弧線的起始角度
         GizmosExtension.DrawSector(transform.position + eyeHi, lookDistance, lookAngle * 2, arcRotation);// 畫扇形 
 
-         Vector3 weaponHi; // 武器高度
+         //Vector3 weaponHi; // 武器高度
          Gizmos.color = Color.red; // 設為紅色
         Quaternion AttackRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -AttackAngle, 0));// 計算弧線的起始角度
         GizmosExtension.DrawSector(transform.position + eyeHi, attackDistance, AttackAngle * 2, AttackRotation);// 畫扇形 
@@ -194,11 +196,13 @@ public class MonsterAI02 : MonoBehaviour
     /// <param name="Player">回傳搜尋到的玩家 transform</param>
     /// <param name="Distance">回傳該玩家的距離</param>
     /// <returns></returns>
-    bool FindNearestPlayer(string[] PlayerTags, out float Distance)
+    bool FindNearestPlayer(string[] PlayerTags, out Transform Player, out float Distance)
     {
+        Transform player = null;
         float nd = 10000f;
         bool fined = false;
 
+       
         // 取得範圍內所有角色
         Collider[] actors = Physics.OverlapSphere(transform.position, lookDistance, actorLayer);
         for (int i = 0; i < actors.Length; i++)
@@ -212,7 +216,7 @@ public class MonsterAI02 : MonoBehaviour
                     break;
                 }
             }
-
+ 
             if (isPlayer) // 若角色是玩家
             {
                 // 若在視線角度內
@@ -225,14 +229,21 @@ public class MonsterAI02 : MonoBehaviour
                         float d = Vector3.Distance(transform.position,
                        actors[i].transform.position);
                         if (d < nd)
-                        {
+                        {                         
                             nd = d;
-                            attackTarget = actors[i].transform;
+                            player = actors[i].transform;
+                            //attackTarget = actors[i].transform;
+                            isEnemy = true;
+
+                        }
+                        if (isEnemy)
+                        {
+                            tagObject = player.gameObject;
+                            isEnemy = false;
                             //判斷在攻擊角度內
                             if (GetXZAngle(transform.forward, transform.position,
-                            actors[i].transform.position, false) < AttackAngle)
+                            tagObject.transform.position, false) < AttackAngle)
                             {
-                                //Debug.Log(actors[i].transform.position);
                                 AttackAngleT = true;
                             }
                             else
@@ -241,7 +252,7 @@ public class MonsterAI02 : MonoBehaviour
                                 ani.SetFloat("Speed", speed);
                                 AttackAngleT = false;
                                 //若不在攻擊角度內轉向目標
-                                Vector3 targetDir = actors[i].transform.position - transform.position;
+                                Vector3 targetDir = tagObject.transform.position - transform.position;
                                 Quaternion rotate = Quaternion.LookRotation(targetDir);
                                 transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 4f * Time.deltaTime);
                             }
@@ -251,11 +262,10 @@ public class MonsterAI02 : MonoBehaviour
                 }
             }
         }
+        Player = player;
         Distance = nd;
-        return fined;
-       
+        return fined;     
     }
-   
     // 用射線判斷眼睛到目標間是否有障礙物
     bool NoObstacle(Transform targetActor)
     {
@@ -280,7 +290,7 @@ public class MonsterAI02 : MonoBehaviour
             Debug.DrawRay(origin, hit.point - origin, Color.yellow);
 
 #endif
-            if (Physics.Raycast(ray, out hit, distance, maskMonster))
+            if (Physics.Raycast(ray, out hit, distance, maskMonster))  //無視Monster圖層
             {
 
             }
@@ -305,9 +315,8 @@ public class MonsterAI02 : MonoBehaviour
         OriTarger = MissionTarget.transform;
 
 
-        if (FindNearestPlayer(playerTags, out targetDistance))// 若有掃描到玩家
+        if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
-            Debug.Log("測試1");
             actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
             float d = Vector3.Distance(transform.position, attackTarget.position);
@@ -354,9 +363,10 @@ public class MonsterAI02 : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
+
         ani.SetFloat("Speed", speed); //設置動畫播放
         if(attackTarget)AAT = attackTarget.position; 
-        Debug.Log("V3"+AAT);
+        //Debug.Log("V3"+AAT);
     }
     void FixedUpdate()
     {

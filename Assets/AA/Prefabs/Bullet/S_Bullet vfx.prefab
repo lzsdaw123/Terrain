@@ -57,8 +57,10 @@ MonoBehaviour:
   OriTarger: {fileID: 0}
   aTN: 0
   Atarget: {x: 0, y: 0, z: 0}
+  AtargetY: 0
   speed: 12
   liftTime: 5
+  ABPath: {x: 0, y: 0, z: 0}
   facingRight: 1
   power: 1
   damageTags:
@@ -79,10 +81,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.31
-  m_Height: 0.37
+  m_Radius: 0.82
+  m_Height: 0.34
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: -0.003}
+  m_Center: {x: 0, y: 0, z: -0.45}
 --- !u!54 &2840697118088834591
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -521,7 +523,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5271,7 +5273,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 0.94509804, g: 0.8079869, b: 0, a: 1}
-      maxColor: {r: 0.10593552, g: 0.5188679, b: 0, a: 1}
+      maxColor: {r: 0.4799923, g: 0.7169812, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5333,7 +5335,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 1.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9887,7 +9889,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7436001069808812227}
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.113}
   m_LocalScale: {x: 0.25522, y: 0.25522, z: 0.37045}
   m_Children: []
   m_Father: {fileID: 251314215627210433}
@@ -10467,7 +10469,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -10521,7 +10523,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 15
+    angle: 30
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
