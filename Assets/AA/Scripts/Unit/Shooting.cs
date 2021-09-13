@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour
     public Camera PlayCamera,GunCamera;
 
     public GameObject bullet;  //子彈
-    public Transform gun;
+    //public Transform gun;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR; //槍瞄準鏡上下位移矯正
     public GameObject GunAimR_x;  //X軸瞄準晃動
@@ -90,7 +90,6 @@ public class Shooting : MonoBehaviour
         {
             AniTime -= Time.deltaTime;
         }
-        muzzlePOS = muzzle[n].GetComponent<Transform>().position;
         //if (AimIng != true && DontShooting !=true)
         //{
         //    float oriRotateY = transform.rotation.y;
@@ -260,6 +259,8 @@ public class Shooting : MonoBehaviour
     {
         if (BFire) //生成子彈
         {
+            muzzlePOS = muzzle[n].GetComponent<Transform>().position;
+
             //建立子彈在鏡頭中心位置
             GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
             BFire = false;

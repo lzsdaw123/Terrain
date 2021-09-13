@@ -62,7 +62,7 @@ public class BulletLife : MonoBehaviour
         if(Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskGround))
         {
             HitType = 0;
-            Debug.Log("白色0");
+            //Debug.Log("白色0");
             Debug.DrawLine(transform.position, hit.point, Color.green, 0.7f, false);
             //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)        
         }
@@ -71,7 +71,7 @@ public class BulletLife : MonoBehaviour
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
             {
                 HitType = 1;
-                Debug.Log("黑色1");
+                //Debug.Log("黑色1");
                 Debug.DrawLine(transform.position, hit.point, Color.black, 0.7f, false);
             }               
         }
@@ -80,7 +80,7 @@ public class BulletLife : MonoBehaviour
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
             {
                 HitType = 2;
-                Debug.Log("紅色2");
+                //Debug.Log("紅色2");
                 Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
 
                 hit.transform.SendMessage("Damage", power); //傷害
@@ -88,7 +88,7 @@ public class BulletLife : MonoBehaviour
             if (hit.collider.tag == "Enemy")
             {
                 HitType = 3;
-                Debug.Log("Enemy");
+                //Debug.Log("Enemy");
                 //hit.transform.SendMessage("Damage", power);
                 Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
             }
