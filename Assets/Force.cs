@@ -7,7 +7,7 @@ public class Force : MonoBehaviour
     public bool 破門 = false;
     Rigidbody[] rigidbodies = null;
     [Range(0, 50)]
-    public float 破門力道 = 5;
+    public float 破門力道 = 8;
     void Start()
     {
         rigidbodies = GetComponentsInChildren<Rigidbody>();
@@ -25,6 +25,10 @@ public class Force : MonoBehaviour
                 r.isKinematic = false;
                 r.AddForce(new Vector3((Random.value*2-1)* 破門力道,0, (Random.value * 2 - 1)* 破門力道),ForceMode.Impulse);
             }
+        }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            破門 = true;
         }
     }
 }

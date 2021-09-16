@@ -18,7 +18,7 @@ public class PlayerMove : MonoBehaviour
 
     public Transform groundCheck;      //地面檢查
     public GameObject AgroundCheck;
-    public float groundDistance = 0.4f;  //球體半徑
+    public float groundDistance = 1f;  //球體半徑
     public LayerMask Ground;       //地面圖層
     public float margin = 0.1f;
 
@@ -45,8 +45,9 @@ public class PlayerMove : MonoBehaviour
         isGrounded = true;
         jumpHeigh = 2f;
         _rigidbody = GetComponent<Rigidbody>();
-        WalkSource = gameObject.AddComponent<AudioSource>();
+        WalkSource = gameObject.transform.GetChild(3).gameObject.AddComponent<AudioSource>();
         WalkSource.clip = WalkClip;
+        WalkSource.maxDistance = 2;
         WalkSource.loop = true;
     }
     void Jump()
@@ -211,7 +212,7 @@ public class PlayerMove : MonoBehaviour
             }
         }      
     }
-    void OnTriggerEnter(Collider col)
+    void OnTriggerEnter(Collider col)  //觸碰梯子
     {
         if (col.gameObject.tag == "Ladder")
         {           
@@ -221,9 +222,7 @@ public class PlayerMove : MonoBehaviour
             _rigidbody.isKinematic = true;
         }
     }
-    
-
-    void OnTriggerExit(Collider col)
+    void OnTriggerExit(Collider col)  //離開梯子
     {
         if (col.gameObject.tag == "Ladder")
         {
