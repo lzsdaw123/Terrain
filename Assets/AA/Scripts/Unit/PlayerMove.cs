@@ -33,6 +33,9 @@ public class PlayerMove : MonoBehaviour
     bool Squat = false;
     float SquatHeigh;
 
+    public AudioClip WalkClip; 
+     AudioSource WalkSource;
+
     public Vector3 velocity;
     public bool isGrounded;
 
@@ -42,6 +45,9 @@ public class PlayerMove : MonoBehaviour
         isGrounded = true;
         jumpHeigh = 2f;
         _rigidbody = GetComponent<Rigidbody>();
+        WalkSource = gameObject.AddComponent<AudioSource>();
+        WalkSource.clip = WalkClip;
+        WalkSource.loop = true;
     }
     void Jump()
     {
@@ -56,6 +62,7 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()  //Input用
     {
+     
         rotationX = PlayCamera.GetComponent<MouseLook>().rotationX;
 
         if (inside == false)
@@ -112,14 +119,16 @@ public class PlayerMove : MonoBehaviour
             {
 
                 Weapon.SetBool("Move", true);
+                WalkSource.pitch = 0.8f;
+                WalkSource.Play();  //走路聲音
 
                 if (Input.GetButton("Run") && v > 0.5f)    //人物移動
                 {
                     Speed += 0.2f;
+                    WalkSource.pitch = 1.2f;
 
                     controller.Move(move * Speed * Time.deltaTime);
                     Weapon.SetFloat("Speed", Speed);
-
                 }
                 else if (Input.GetButton("Fire2"))
                 {
@@ -152,7 +161,6 @@ public class PlayerMove : MonoBehaviour
                 insideTimer = -1;
             }
         }
-        
     }
     void FixedUpdate()  //移動用 固定偵數
     {
