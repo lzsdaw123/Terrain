@@ -33,9 +33,6 @@ public class PlayerMove : MonoBehaviour
     bool Squat = false;
     float SquatHeigh;
 
-    public AudioClip WalkClip; 
-     AudioSource WalkSource;
-
     public Vector3 velocity;
     public bool isGrounded;
 
@@ -45,10 +42,7 @@ public class PlayerMove : MonoBehaviour
         isGrounded = true;
         jumpHeigh = 2f;
         _rigidbody = GetComponent<Rigidbody>();
-        WalkSource = gameObject.transform.GetChild(3).gameObject.AddComponent<AudioSource>();
-        WalkSource.clip = WalkClip;
-        WalkSource.maxDistance = 2;
-        WalkSource.loop = true;
+        
     }
     void Jump()
     {
@@ -118,16 +112,10 @@ public class PlayerMove : MonoBehaviour
 
             if ((v != 0) || (h != 0))
             {
-
                 Weapon.SetBool("Move", true);
-                WalkSource.pitch = 0.8f;
-                WalkSource.Play();  //走路聲音
-
                 if (Input.GetButton("Run") && v > 0.5f)    //人物移動
                 {
                     Speed += 0.2f;
-                    WalkSource.pitch = 1.2f;
-
                     controller.Move(move * Speed * Time.deltaTime);
                     Weapon.SetFloat("Speed", Speed);
                 }
@@ -137,7 +125,6 @@ public class PlayerMove : MonoBehaviour
                     controller.Move(move * Speed * Time.deltaTime);
                     Weapon.SetBool("Move", false);
                     Weapon.SetBool("AimMove", true);
-
                 }
                 else
                 {
@@ -145,7 +132,7 @@ public class PlayerMove : MonoBehaviour
                     controller.Move(move * Speed * Time.deltaTime);
                     Weapon.SetFloat("Speed", Speed);
                     Weapon.SetBool("AimMove", false);
-                }
+                }              
             }
             else
             {
@@ -161,8 +148,10 @@ public class PlayerMove : MonoBehaviour
                 _rigidbody.isKinematic = false;
                 insideTimer = -1;
             }
-        }
+        }     
     }
+
+
     void FixedUpdate()  //移動用 固定偵數
     {
         //物理.球體檢查(地面檢查.位置,球體半徑,地面圖層)

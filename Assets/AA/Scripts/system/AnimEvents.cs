@@ -48,4 +48,12 @@ public class AnimEvents : MonoBehaviour
     {
         attacking = false;
     }
+    public void WalkAudio()
+    {
+        AudioManager.PlayFootstepAudio();
+    }
+    void WalkCilpRight()
+    {
+
+    }
 }
