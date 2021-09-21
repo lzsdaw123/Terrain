@@ -146,6 +146,7 @@ public class PlayerMove : MonoBehaviour
             if (insideTimer >= 0.8f)
             {
                 _rigidbody.isKinematic = false;
+                _rigidbody.useGravity = true;
                 insideTimer = -1;
             }
         }     
@@ -204,11 +205,12 @@ public class PlayerMove : MonoBehaviour
     void OnTriggerEnter(Collider col)  //觸碰梯子
     {
         if (col.gameObject.tag == "Ladder")
-        {           
+        {
+            _rigidbody.isKinematic = true;
+            _rigidbody.useGravity = false;
             inside = true;
             insideTimer = -1;
             //transform.position += Vector3.up/2;
-            _rigidbody.isKinematic = true;
         }
     }
     void OnTriggerExit(Collider col)  //離開梯子
