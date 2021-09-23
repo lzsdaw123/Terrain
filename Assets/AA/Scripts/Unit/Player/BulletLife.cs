@@ -99,7 +99,7 @@ public class BulletLife : MonoBehaviour
 
         if (Hit_vfx[HitType] != null) //彈孔類型
         {
-            Debug.Log("彈孔" + HitType);
+            //Debug.Log("彈孔" + HitType);
 
             var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
             var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
