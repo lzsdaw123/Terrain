@@ -123,14 +123,45 @@ public class Shooting : MonoBehaviour
         if (coolDownTimer > coolDown) //若冷卻時間已到
         {
             //可以發射子彈了
-            //若按下發射鍵
-            if ((Input.GetButton("Fire1")) && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
+            FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
+            FieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
+            //若按下滑鼠右鍵瞄準
+            if (Input.GetButton("Fire2") && Reload != true)  //架槍瞄準
             {
-                float rangeX = Random.Range(2f, 4f);  //射擊晃動範圍
-                float rangeY = Random.Range(-50f, 50f);  //射擊晃動範圍
+                if (AimIng == false)
+                {
+                    AimIng = true; //瞄準
+                    Weapon.SetTrigger("AimUP");
+                }
+                Weapon.SetBool("Aim", true);
+                ZoomIn();
+                //瞄準射擊
+                if (Input.GetButton("Fire1")) {Weapon.SetBool("AimFire", true); }
+                else {Weapon.SetBool("AimFire", false); }
+            }
+            else
+            {
+                Weapon.SetBool("AimFire", false);
+                Weapon.SetBool("Aim", false);
+                AimIng = false;
+                ZoomOut();
+            }
+            //若按下滑鼠左鍵開火
+            if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
+            {
+                float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
+                float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
+
                 FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
                 FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
-                if (FireRotateX <= 0) { FireRotateX *= -1; }
+                if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
+                Debug.Log("原本的" + " / " + FireRotateX);
+
+                if (Input.GetButton("Fire2")) {
+                    FireRotateY /= 2;
+                    FireRotateX /= 2;
+                }              
+                Debug.Log("後" + " / " + FireRotateX);
 
                 transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
                 GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;
@@ -145,43 +176,7 @@ public class Shooting : MonoBehaviour
             {
                 Weapon.SetBool("Fire", false);
             }
-            FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
-            FieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
-            if (Input.GetButton("Fire2") && Reload != true)  //架槍瞄準
-            {
-                if (AimIng == false)
-                {
-                    AimIng = true; //瞄準
-                    Weapon.SetTrigger("AimUP");
-                }
-
-                Weapon.SetBool("Aim", true);
-                ZoomIn();
-                if (Input.GetButton("Fire1") && ammunition != 0 && DontShooting == false)  //瞄準射擊
-                {
-                    float rangeX = Random.Range(1f, 2f);  //瞄準射擊晃動範圍
-                    float rangeY = Random.Range(-30f, 30f);  //瞄準射擊晃動範圍
-                    AimFRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - AimFRotateY)/100;
-                    AimFRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - AimFRotateX);
-                    if (AimFRotateX <= 0){ AimFRotateX *= -1;}
-
-                    transform.localEulerAngles += new Vector3(0.0f, AimFRotateY, 0.0f);
-                    GunAimR_x.GetComponent<MouseLook>().rotationX -= AimFRotateX * Time.deltaTime;
-
-                    Weapon.SetBool("AimFire", true);
-                }
-                else
-                {
-                    Weapon.SetBool("AimFire", false);
-                }
-            }
-            else
-            {
-                Weapon.SetBool("AimFire", false);
-                Weapon.SetBool("Aim", false);
-                AimIng = false;
-                ZoomOut();
-            }
+            
         }
         else //否則需要冷卻計時
         {

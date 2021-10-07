@@ -378,7 +378,7 @@ public class MonsterAI02 : MonoBehaviour
     }
     private void TrackingPlayer()
     {
-        agent.speed = 5;
+        agent.speed = 8;  //移動速度
         agent.destination = attackTarget.position; // 設為尋徑目標
         speed = 1;// 跑向目標
         attacking = false; // 追踪玩家,不在攻擊狀態
