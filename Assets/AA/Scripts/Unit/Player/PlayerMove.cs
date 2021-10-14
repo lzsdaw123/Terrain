@@ -15,11 +15,13 @@ public class PlayerMove : MonoBehaviour
     public Animator Weapon;   //動畫控制器
     public GameObject[] _Animator;
     public int n, m; //武器種類
+    public GameObject Gun;
 
     public Transform groundCheck;      //地面檢查
-    public GameObject AgroundCheck;
-    public float groundDistance = 1f;  //球體半徑
-    public LayerMask Ground;       //地面圖層
+    public Transform SquatCheck;      //蹲下檢查
+    public float groundDistance = 0.6f;  //地面判定球體半徑
+    public float SquatDistance = 0.5f;  //頭頂判定球體半徑
+    public LayerMask Ground, Ceiling;       //地面圖層
     public float margin = 0.1f;
 
     public float rotationX;
@@ -31,10 +33,10 @@ public class PlayerMove : MonoBehaviour
     public Vector3 move;
     public float h,v;
     bool Squat = false;
-    float SquatHeigh;
 
     public Vector3 velocity;
-    public bool isGrounded;
+    public bool isGrounded;  //在地面上
+    public bool isSquat; //正在蹲下
 
     void Start()
     {
@@ -87,12 +89,21 @@ public class PlayerMove : MonoBehaviour
             {
                 Speed = 3f;
                 Squat = true;
-                GetComponent<CharacterController>().height = 1.5f;
+                GetComponent<CharacterController>().height = 1.6f;
+                Gun.transform.localPosition = new Vector3(0,2.29f,0.089f);  //Gun的本地座標修正
+            }
+            else if(isSquat)  //判斷頭頂是否有障礙物
+            {
+                Speed = 3f;
+                Squat = true;
+                GetComponent<CharacterController>().height = 1.6f;
+                Gun.transform.localPosition = new Vector3(0, 2.29f, 0.089f);
             }
             else
             {
                 Squat = false;
-                GetComponent<CharacterController>().height += 0.1f;
+                Gun.transform.localPosition = new Vector3(0, 2.865f, 0.089f);
+                GetComponent<CharacterController>().height += 0.2f;
                 if (GetComponent<CharacterController>().height >= 3.1f)
                 {
                     GetComponent<CharacterController>().height = 3.1f;
@@ -157,6 +168,7 @@ public class PlayerMove : MonoBehaviour
     {
         //物理.球體檢查(地面檢查.位置,球體半徑,地面圖層)
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
+        isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);
 
         if (inside == false)  //是否接觸梯子
         {

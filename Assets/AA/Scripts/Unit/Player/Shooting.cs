@@ -229,7 +229,7 @@ public class Shooting : MonoBehaviour
     {
         if (FieldOfView > 20f)
         {
-            FieldOfView -= 120f * Time.deltaTime;
+            FieldOfView -= 160f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
@@ -238,7 +238,7 @@ public class Shooting : MonoBehaviour
     {
         if (FieldOfView < 60f)
         {
-            FieldOfView += 120f * Time.deltaTime;
+            FieldOfView += 160f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
@@ -258,7 +258,12 @@ public class Shooting : MonoBehaviour
 
             //建立子彈在鏡頭中心位置
             GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
+            GunshotsAudio();
             BFire = false;
         }
+    }
+    void GunshotsAudio()
+    {
+        AudioManager.PlayGunshotsAudio();
     }
 }

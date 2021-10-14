@@ -10,6 +10,12 @@ public class MouseLook : MonoBehaviour
     float camY = 2.865f;
     float camZ = 0.089f;
     public Vector3 m_camRot;
+    public Transform CameraPos;
+    public Camera GunCamera;
+    public float GR;  //槍支攝影機的Rotation
+    Vector3 oldPos;  //上一幀
+    Vector3 newPos; //當前幀
+    float cha;  //兩幀的螢幕座標差值結果
 
     public float mouseX, mouseY;
 
@@ -20,15 +26,51 @@ public class MouseLook : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
 
-        m_transform = this.transform;
-        // 設置攝像機初始位置
-    }
+        m_transform = this.transform;        // 設置攝像機初始位置
 
+        oldPos = CameraPos.rotation.eulerAngles; //上一幀攝影機的歐拉角
+    }
     void LateUpdate()
     {
         // 獲得鼠標當前位置的X和Y                                
         mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
         mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime;
+        newPos = CameraPos.rotation.eulerAngles; //當前幀攝影機的歐拉角
+
+        if (newPos.y == oldPos.y)  //攝影機是否轉動
+        {
+            if (GR > 0)
+            {
+                GR -= 2;
+            }else if (GR < 0)
+            {
+                GR += 2;
+            }
+        }
+        else
+        {
+            cha = newPos.y - oldPos.y;
+            
+            if (cha > 0.8f)
+            {
+                GR += 2;
+                if (GR >= 8)
+                {
+                    GR = 8;
+                }
+            }
+            else if (cha < -0.8f)
+            {
+                GR -= 2;
+                if (GR <= -8)
+                {
+                    GR = -8;
+                }
+            }
+        }
+        oldPos = newPos;
+
+        GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GR);
 
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -85f, 80f);
