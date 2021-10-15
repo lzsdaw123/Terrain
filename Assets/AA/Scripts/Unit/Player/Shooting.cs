@@ -13,11 +13,9 @@ public class Shooting : MonoBehaviour
     public GameObject GunAimR; //槍瞄準鏡上下位移矯正
     public GameObject GunAimR_x;  //X軸瞄準晃動
     private Vector3 GA_R;  //Z軸瞄準偏移修正
-    public float noise = 2f; //晃動頻率
+    public float noise = 1f; //晃動頻率
     public float noiseRotateX;  //X軸晃動偏移量
     public float noiseRotateY;  //Y軸晃動偏移量
-    public float AimFRotateY;  //瞄準Y軸晃動偏移量
-    public float AimFRotateX;  //瞄準X軸晃動偏移量
     public float FireRotateY;  //腰射Y軸晃動偏移量
     public float FireRotateX;  //腰射X軸晃動偏移量
     //public float range;
@@ -153,21 +151,21 @@ public class Shooting : MonoBehaviour
             if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
                 float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
-                float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
-
+               // float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
+                float rangeX = Random.Range(9f, 15f);  //射擊垂直晃動範圍
                 FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
-                FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
+                //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
+                FireRotateX = rangeX;
                 if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
-               // Debug.Log("原本的" + " / " + FireRotateX);
-
-                if (Input.GetButton("Fire2")) {
+                //Debug.Log("原本的" + " / " + FireRotateX);
+                if (AimIng == true) {
                     FireRotateY /= 2;
-                    FireRotateX /= 2;
+                    FireRotateX /= 3;
                 }              
                // Debug.Log("後" + " / " + FireRotateX);
 
                 transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
-                GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;
+                GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.smoothDeltaTime;
 
                 coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown差越小越快
                 ammunition--;

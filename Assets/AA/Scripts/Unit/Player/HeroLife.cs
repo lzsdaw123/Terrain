@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class HeroLife : MonoBehaviour
 {
-    public float fullHp,hp;  //滿血時數值,實際
-    public Image hpImage; //血球的UI物件
+    public static float fullHp,hp, hp_R;  //滿血時數值,實際
+    public Image HP_W, HP_R; //血球的UI物件
     public static bool Dead;
-
+    public float time=0;
 
     void Start()
     {
-        hp = fullHp=8; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 8; //遊戲一開始時先填滿血
         Dead = false;
     }
 
@@ -22,14 +22,30 @@ public class HeroLife : MonoBehaviour
         if (hp <= 0)
         {
             hp = 0; // 不要扣到負值
-            Debug.Log("死");
+            //Debug.Log("死");
             Dead = true;
         }      
     }
-
-
     void Update()
     {
-        hpImage.fillAmount = hp / fullHp; //顯示血球
+        HP_W.fillAmount = hp / fullHp; //顯示血球
+        HP_R.fillAmount = hp_R / fullHp; //顯示血球
+
+        if (hp != hp_R)
+        {
+            time +=4* Time.deltaTime;
+            if (time >= 2)
+            {
+                time = 2;
+                hp_R -= 0.5f * Time.deltaTime;
+            }
+        }
+        if(hp_R <=hp)
+        {
+            hp_R = hp;
+            time = 0;
+        }
+
+
     }
 }
