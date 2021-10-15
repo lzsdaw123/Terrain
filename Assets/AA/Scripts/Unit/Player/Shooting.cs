@@ -38,7 +38,7 @@ public class Shooting : MonoBehaviour
     public bool LayDown = false;
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
-    public static int ammunition = 30, Total_ammunition = 150;  //彈藥量
+    public static int ammunition = 30, Total_ammunition = 300;  //彈藥量
     public static bool Reload = false;   //是否正在換彈
     bool AimIng;
     float FieldOfView;
@@ -136,7 +136,10 @@ public class Shooting : MonoBehaviour
                 Weapon.SetBool("Aim", true);
                 ZoomIn();
                 //瞄準射擊
-                if (Input.GetButton("Fire1")) {Weapon.SetBool("AimFire", true); }
+                if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
+                {
+                    Weapon.SetBool("AimFire", true);
+                }
                 else {Weapon.SetBool("AimFire", false); }
             }
             else
@@ -155,13 +158,13 @@ public class Shooting : MonoBehaviour
                 FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
                 FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
                 if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
-                Debug.Log("原本的" + " / " + FireRotateX);
+               // Debug.Log("原本的" + " / " + FireRotateX);
 
                 if (Input.GetButton("Fire2")) {
                     FireRotateY /= 2;
                     FireRotateX /= 2;
                 }              
-                Debug.Log("後" + " / " + FireRotateX);
+               // Debug.Log("後" + " / " + FireRotateX);
 
                 transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
                 GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;

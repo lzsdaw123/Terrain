@@ -41,30 +41,39 @@ public class MouseLook : MonoBehaviour
         {
             if (GR > 0)
             {
-                GR -= 2;
-            }else if (GR < 0)
+                GR -= 20 * Time.smoothDeltaTime;
+                if (GR < 0)
+                {
+                    GR = 0;
+                }
+            }
+            else if (GR < 0)
             {
-                GR += 2;
+                GR += 20 * Time.smoothDeltaTime;
+                if (GR > 0)
+                {
+                    GR = 0;
+                }
             }
         }
         else
         {
             cha = newPos.y - oldPos.y;
             
-            if (cha > 0.8f)
+            if (cha > 1.5f)
             {
-                GR += 2;
-                if (GR >= 8)
+                GR += 20 * Time.smoothDeltaTime;
+                if (GR >= 4)
                 {
-                    GR = 8;
+                    GR = 4;
                 }
             }
-            else if (cha < -0.8f)
+            else if (cha < -1.5f)
             {
-                GR -= 2;
-                if (GR <= -8)
+                GR -= 20 * Time.smoothDeltaTime;
+                if (GR <= -4)
                 {
-                    GR = -8;
+                    GR = -4;
                 }
             }
         }
