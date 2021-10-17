@@ -7,6 +7,7 @@ public class Shooting : MonoBehaviour
 {
     public Camera PlayCamera,GunCamera;
 
+    public ObjectPool pool;
     public GameObject bullet;  //子彈
     //public Transform gun;
     public GameObject[] muzzle;  //槍口類型
@@ -258,7 +259,8 @@ public class Shooting : MonoBehaviour
             muzzlePOS = muzzle[n].GetComponent<Transform>().position;
 
             //建立子彈在鏡頭中心位置
-            GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
+            //GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
+            pool.ReUse(muzzlePOS, PlayCamera.transform.rotation);
             GunshotsAudio();
             BFire = false;
         }

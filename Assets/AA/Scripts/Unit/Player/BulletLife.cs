@@ -26,7 +26,7 @@ public class BulletLife : MonoBehaviour
         facingRight = FacingRight;
 
 
-        Destroy(gameObject, liftTime); //設置生命時間到自動刪除
+        //Destroy(gameObject, liftTime); //設置生命時間到自動刪除
 
     }
     void Start()
@@ -126,7 +126,15 @@ public class BulletLife : MonoBehaviour
     void Update()
     {
         liftTime -= Time.deltaTime;
-        if (liftTime <= 0) { Destroy(gameObject); }
+        if (liftTime <= 0) {
+            DestroyGameObject();
+
+        }
+    }
+    void DestroyGameObject()
+    {
+        //回收物件
+        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().Recovery(gameObject);
     }
     void FixedUpdate()
     {
@@ -178,7 +186,8 @@ public class BulletLife : MonoBehaviour
                     break; //結束迴圈
                 }
             }
-            Destroy(gameObject); //把子彈消失
+            DestroyGameObject();
+
         }
     }
 
@@ -205,7 +214,8 @@ public class BulletLife : MonoBehaviour
                     break; //結束迴圈
                 }
             }
-            Destroy(gameObject); //把子彈消失
+            DestroyGameObject();
+
         }
     }
 }
