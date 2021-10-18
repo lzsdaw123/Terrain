@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class BulletLife : MonoBehaviour
 {
+    public ObjectPool pool_Hit;
     public GameObject Muzzle_vfx;
-    public GameObject[] Hit_vfx;  //彈孔類型
-    public int HitType;
+    public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
+    public int HitType;  //彈孔類型變數
     public GameObject target;
     public float speed = 12f;//飛行速度
-    public float liftTime = 5f; //生命時間
+    public float liftTime; //生命時間
     public bool facingRight = true; //是否面向右邊
     private Vector3 moveDir = Vector3.right;
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
@@ -20,6 +21,13 @@ public class BulletLife : MonoBehaviour
     public float rayLength = 0.5f;  //1大約x:105-人物到槍口???射線長度??
     public float rayLength2 = 1f;
     public LayerMask[] Ground;  //射線偵測圖層
+    public bool HitTarget = false;
+    public Vector3 muzzlePOS;  //槍口座標
+
+    public GameObject Tail;
+    Quaternion rot;
+    Vector3 pos;
+    bool YesHit;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -29,9 +37,22 @@ public class BulletLife : MonoBehaviour
         //Destroy(gameObject, liftTime); //設置生命時間到自動刪除
 
     }
+    void Awake()
+    {
+        for (int i = 0; i < Hit_vfx.transform.childCount; i++)
+        {
+            Hit_vfx_S = Hit_vfx.transform.GetChild(i).gameObject;
+            Hit_vfx_S.SetActive(false);
+        }
+    }
     void Start()
     {
-       
+        Tail = gameObject.transform.GetChild(2).gameObject;
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+        Tail.SetActive(false);
+        liftTime = 1f;
+        Hit_vfx_S = null;
+
         if (Muzzle_vfx != null)
         {
             var muzzleVFX = Instantiate(Muzzle_vfx, transform.position, Quaternion.identity);
@@ -47,72 +68,8 @@ public class BulletLife : MonoBehaviour
                 Destroy(muzzleVFX, psChild.main.duration);
             }
         }
-        int maskGround = 1 << LayerMask.NameToLayer("Ground");
-        int maskMonster = 1 << LayerMask.NameToLayer("Monster");
-        int maskWall = 1 << LayerMask.NameToLayer("Wall");
-
-       // mask |= 1 << LayerMask.NameToLayer("Wall");
-        //射線初始位置,射線方向
-        Ray ray = new Ray(transform.position, transform.forward); //*********改****子彈位置到滑鼠點擊位置
-        RaycastHit hit; //射線擊中資訊
-
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        //偵測射線判斷，由 自身座標 的 前方 射出，以rayLength為長度，並且只偵測Ground圖層(記得改圖層
-        //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
-        if(Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskGround))
-        {
-            HitType = 0;
-            //Debug.Log("白色0");
-            Debug.DrawLine(transform.position, hit.point, Color.green, 0.7f, false);
-            //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)        
-        }
-        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskWall)) //彈孔噴黑煙
-        {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            {
-                HitType = 1;
-                //Debug.Log("黑色1");
-                Debug.DrawLine(transform.position, hit.point, Color.black, 0.7f, false);
-            }               
-        }
-        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskMonster)) //彈孔噴血
-        {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))
-            {
-                HitType = 2;
-                //Debug.Log("紅色2");
-                Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
-
-                hit.transform.SendMessage("Damage", power); //傷害
-            }      
-            if (hit.collider.tag == "Enemy")
-            {
-                HitType = 3;
-                //Debug.Log("Enemy");
-                //hit.transform.SendMessage("Damage", power);
-                Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
-            }
-        }
-        //在到物體上產生彈孔
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-        Vector3 pos = hit.point;
-
-        if (Hit_vfx[HitType] != null) //彈孔類型
-        {
-            //Debug.Log("彈孔" + HitType);
-
-            var hixVFX = Instantiate(Hit_vfx[HitType], pos, rot);
-            var psHit = Hit_vfx[HitType].GetComponent<ParticleSystem>();
-            if (psHit != null)
-            {
-                //Destroy(hixVFX, psHit.main.duration);
-            }
-            else
-            {
-                //var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                //Destroy(hixVFX, psChild.main.duration);
-            }
-        }
+       
+        YesHit = true;
 
         //射線長度測試
         //if (Physics.Raycast(transform.position, fwd, out hit, rayLength2, Ground))
@@ -120,16 +77,78 @@ public class BulletLife : MonoBehaviour
         //    Debug.Log("白色0");
         //    Debug.DrawLine(transform.position, hit.point, Color.red, 0.5f, false);      
         //}
-
-
     }
     void Update()
     {
         liftTime -= Time.deltaTime;
-        if (liftTime <= 0) {
-            DestroyGameObject();
-
+        if (liftTime <= 0.8f)
+        {
+            Tail.SetActive(true);
         }
+        if (liftTime <= 0) {
+            liftTime = 1f;
+            HitTarget = false;
+            DestroyGameObject();
+            Tail.SetActive(false);
+        }     
+        if (gameObject.activeSelf)
+        {
+            if (YesHit == true)
+            {
+                YesHit = false;
+                //判斷圖層
+                int maskGround = 1 << LayerMask.NameToLayer("Ground");
+                int maskMonster = 1 << LayerMask.NameToLayer("Monster");
+                int maskWall = 1 << LayerMask.NameToLayer("Wall");
+
+                // mask |= 1 << LayerMask.NameToLayer("Wall");
+                //射線初始位置,射線方向
+                Ray ray = new Ray(transform.position, transform.forward); //*********改****子彈位置到滑鼠點擊位置
+                RaycastHit hit; //射線擊中資訊
+
+                Vector3 fwd = transform.TransformDirection(Vector3.forward);
+                //偵測射線判斷，由 自身座標 的 前方 射出，以rayLength為長度，並且只偵測Ground圖層(記得改圖層
+                //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
+                if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskGround))
+                {
+                    //HitType = 0;
+                    Debug.DrawLine(transform.position, hit.point, Color.green, 0.7f, false);
+                    //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)        
+                }
+                if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskWall)) //彈孔噴黑煙
+                {
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                    {
+                        HitType = 0;
+                        Debug.DrawLine(transform.position, hit.point, Color.black, 0.7f, false);
+                    }
+                }
+                if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskMonster)) //彈孔噴血
+                {
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //紅血
+                    {
+                        HitType = 1;
+                        Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
+
+                        hit.transform.SendMessage("Damage", power); //傷害
+                    }
+                    if (hit.collider.tag == "Enemy")  //綠血
+                    {
+                        HitType = 2;
+                        //hit.transform.SendMessage("Damage", power);
+                        Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
+                    }
+                }
+                //在到物體上產生彈孔
+                rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                pos = hit.point;
+                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔          
+            }         
+        }
+    }
+    void OnDisable()
+    {
+        YesHit = true;
     }
     void DestroyGameObject()
     {
@@ -148,28 +167,10 @@ public class BulletLife : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //ContactPoint contact = collision.contacts[0];      //在到物體上產生彈痕
-        //Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        //Vector3 pos = contact.point;
-
-        //if (Hit_vfx != null)
-        //{
-        //    var hixVFX = Instantiate(Hit_vfx, pos, rot);
-        //    var psHit = Hit_vfx.GetComponent<ParticleSystem>();
-        //    if (psHit != null)
-        //    {
-        //        Destroy(hixVFX, psHit.main.duration);
-        //    }
-        //    else
-        //    {
-        //        var psChild = hixVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-        //        Destroy(hixVFX, psChild.main.duration);
-        //    }
-        //}
-
         //若碰撞體在作用圖層內才進行運算
-        if (InLayerMask(collision.gameObject.layer, Ground[2]))
+        if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
+            //DestroyGameObject();        
             for (int i = 0; i < ignoreTags.Length; i++)
             {
                 if (collision.gameObject.tag == ignoreTags[i])
@@ -177,7 +178,6 @@ public class BulletLife : MonoBehaviour
                     return; //若對象在忽略Tag，則直接返回不做任何處理
                 }
             }
-
             for (int i = 0; i < damageTags.Length; i++)
             {
                 if (collision.gameObject.tag == damageTags[i])
@@ -185,37 +185,34 @@ public class BulletLife : MonoBehaviour
                     collision.gameObject.SendMessage("Damage", power); //傷害
                     break; //結束迴圈
                 }
-            }
-            DestroyGameObject();
-
+            }          
         }
     }
-
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider collider)
     {
-
-
         //若碰撞體在作用圖層內才進行運算
-        if (InLayerMask(collision.gameObject.layer, Ground[2]))
+        if (InLayerMask(collider.gameObject.layer, Ground[0]))
         {
+            if (HitTarget == false)
+            {
+                liftTime = 0.02f;
+                HitTarget = true;
+            }
             for (int i = 0; i < ignoreTags.Length; i++)
             {
-                if (collision.gameObject.tag == ignoreTags[i])
+                if (collider.gameObject.tag == ignoreTags[i])
                 {
                     return; //若對象在忽略Tag，則直接返回不做任何處理
                 }
             }
-
             for (int i = 0; i < damageTags.Length; i++)
             {
-                if (collision.gameObject.tag == damageTags[i])
+                if (collider.gameObject.tag == damageTags[i])
                 {
-                    collision.gameObject.SendMessage("Damage", power); //傷害
+                    collider.gameObject.SendMessage("Damage", power); //傷害
                     break; //結束迴圈
                 }
-            }
-            DestroyGameObject();
-
+            }        
         }
     }
 }

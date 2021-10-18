@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class BulletHole : MonoBehaviour
 {
-    public float BulletHoleTime = 5f;  //彈孔持續時間
+    public float BulletHoleTime;  //彈孔持續時間
+    public ObjectPool pool_Hit;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        BulletHoleTime = 5f;
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+
     }
 
     // Update is called once per frame
@@ -18,7 +22,8 @@ public class BulletHole : MonoBehaviour
         BulletHoleTime -= Time.deltaTime;
         if (BulletHoleTime <= 0)
         {
-            Destroy(gameObject);
+            pool_Hit.RecoveryHit(gameObject);
+            BulletHoleTime = 5f;
         }
     }
 }

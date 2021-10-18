@@ -19,8 +19,6 @@ public class Shooting : MonoBehaviour
     public float noiseRotateY;  //Y軸晃動偏移量
     public float FireRotateY;  //腰射Y軸晃動偏移量
     public float FireRotateX;  //腰射X軸晃動偏移量
-    //public float range;
-
 
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
