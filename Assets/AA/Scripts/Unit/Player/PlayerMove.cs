@@ -77,7 +77,7 @@ public class PlayerMove : MonoBehaviour
             v = Input.GetAxis("Vertical");    //取得輸入縱軸            
 
 
-            if (Input.GetButtonDown("Jump") && (isGrounded == true))   //按下跳躍
+            if (Input.GetButtonDown("Jump") && isGrounded == true && Shooting.Reload==false)   //按下跳躍
             {
                 Jump();
             }
@@ -110,7 +110,6 @@ public class PlayerMove : MonoBehaviour
                 }
             }
 
-
             if (Speed >= 10)
             {
                 Speed = 10;
@@ -120,30 +119,37 @@ public class PlayerMove : MonoBehaviour
                 Speed = 6.5f;
             }
 
-
             if ((v != 0) || (h != 0))
             {
-                Weapon.SetBool("Move", true);
-                if (Input.GetButton("Run") && v > 0.5f)    //人物移動
-                {
-                    Speed += 0.2f;
-                    controller.Move(move * Speed * Time.deltaTime);
-                    Weapon.SetFloat("Speed", Speed);
-                }
-                else if (Input.GetButton("Fire2"))
-                {
-                    Speed -= 0.2f;
-                    controller.Move(move * Speed * Time.deltaTime);
-                    Weapon.SetBool("Move", false);
-                    Weapon.SetBool("AimMove", true);
-                }
+                Weapon.SetBool("Move", true);             
+                if (Input.GetButton("Run"))    //人物跑動
+                {                   
+                    if (Input.GetButton("Fire2"))
+                    {
+                        Weapon.SetBool("AimMove", true);
+                        Speed -= 0.2f;
+                    }
+                    else
+                    {
+                        Weapon.SetBool("AimMove", false);
+                        Speed += 0.2f;
+                    }                                
+                }            
                 else
                 {
+                    if (Input.GetButton("Fire2"))
+                    {
+                        Weapon.SetBool("AimMove", true);
+                    }
+                    else
+                    {
+                        Weapon.SetBool("AimMove", false);
+                    }
                     Speed -= 0.2f;
-                    controller.Move(move * Speed * Time.deltaTime);
-                    Weapon.SetFloat("Speed", Speed);
-                    Weapon.SetBool("AimMove", false);
-                }              
+                }             
+                Weapon.SetFloat("Speed", Speed);
+                controller.Move(move * Speed * Time.deltaTime);
+                //AudioManager.PlayFootstepAudio();
             }
             else
             {

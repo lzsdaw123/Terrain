@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour
     public Camera PlayCamera,GunCamera;
 
     public ObjectPool pool;
-    public GameObject bullet;  //子彈
+    public GameObject bullet, Muzzle_vfx;  //子彈,槍口火光  
     //public Transform gun;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR; //槍瞄準鏡上下位移矯正
@@ -56,10 +56,18 @@ public class Shooting : MonoBehaviour
         n = 0;
         m = 1;
 
+        Muzzle_vfx.SetActive(false);
     }
     void Update()
     {
-        Weapon.SetBool("C", false);
+        if (Input.GetButton("Fire2"))  //右鍵縮放鏡頭
+        {
+            ZoomIn();
+        }
+        else
+        {
+            ZoomOut();
+        }
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
 
         if ((Input.GetKeyDown(KeyCode.Q)) && (AniTime >= 2))
@@ -115,15 +123,15 @@ public class Shooting : MonoBehaviour
             GA_R.z -= 0.2f;
             if (GA_R.z <= 0) { GA_R.z = 0; }
         }
-        GunAimR.transform.localRotation = Quaternion.Euler(0f, -89.71f, GA_R.z);  //Z軸瞄準偏移修正
-
+        GunAimR.transform.localRotation = Quaternion.Euler(0f, -89.71f, GA_R.z);  //Z軸瞄準偏移修正      
         if (coolDownTimer > coolDown) //若冷卻時間已到
         {
+            Muzzle_vfx.SetActive(false); //關閉火光
             //可以發射子彈了
             FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
             FieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
             //若按下滑鼠右鍵瞄準
-            if (Input.GetButton("Fire2") && Reload != true)  //架槍瞄準
+            if (Input.GetButton("Fire2") && Reload != true && LayDown == false)  //架槍瞄準
             {
                 if (AimIng == false)
                 {
@@ -131,7 +139,7 @@ public class Shooting : MonoBehaviour
                     Weapon.SetTrigger("AimUP");
                 }
                 Weapon.SetBool("Aim", true);
-                ZoomIn();
+                //ZoomIn();
                 //瞄準射擊
                 if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
                 {
@@ -144,7 +152,7 @@ public class Shooting : MonoBehaviour
                 Weapon.SetBool("AimFire", false);
                 Weapon.SetBool("Aim", false);
                 AimIng = false;
-                ZoomOut();
+                //ZoomOut();
             }
             //若按下滑鼠左鍵開火
             if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
@@ -175,15 +183,14 @@ public class Shooting : MonoBehaviour
             else
             {
                 Weapon.SetBool("Fire", false);
-            }
-            
+            }       
         }
         else //否則需要冷卻計時
         {
             coolDownTimer += Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && (LayDown == false) && (Total_ammunition != 0))       //換彈藥
+        if (Input.GetKeyDown(KeyCode.R) && LayDown == false && Total_ammunition != 0)    //換彈藥
         {
             if (Reload == false)
             {
@@ -191,27 +198,24 @@ public class Shooting : MonoBehaviour
                 Weapon.SetTrigger("Reload");
             }
         }
-
-
         if (Input.GetKeyDown(KeyCode.T))       //收槍
         {
             Reload = false;
             if (LayDown == false)
             {
                 LayDown = true;          
-                Weapon.SetTrigger("LayDown0");
-                Weapon.SetBool("LayDown", true);
+                Weapon.SetTrigger("LayDownT");
+                Weapon.SetBool("LayDown", true);            
             }
             else
             {
                 LayDown = false;  
                 Weapon.SetBool("LayDown", false);
-
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.C))  //看槍
+            }         
+        }      
+        if (Input.GetKeyDown(KeyCode.C) && Reload != true && LayDown == false)  //看槍
         {
-            Weapon.SetBool("C", true);
+            Weapon.SetTrigger("Cherk");
         }
 
         if (ammunition <= 0)
@@ -221,10 +225,8 @@ public class Shooting : MonoBehaviour
         if (Total_ammunition <= 0)
         {
             Total_ammunition = 0;
-        }
-
+        }       
     }
-
     void ZoomIn()
     {
         if (FieldOfView > 20f)
@@ -259,6 +261,9 @@ public class Shooting : MonoBehaviour
             //建立子彈在鏡頭中心位置
             //GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
             pool.ReUse(muzzlePOS, PlayCamera.transform.rotation);
+            Muzzle_vfx.transform.position = muzzlePOS;
+            Muzzle_vfx.transform.rotation = PlayCamera.transform.rotation;
+            Muzzle_vfx.SetActive(true);         
             GunshotsAudio();
             BFire = false;
         }

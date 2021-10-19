@@ -5,7 +5,6 @@ using UnityEngine;
 public class BulletLife : MonoBehaviour
 {
     public ObjectPool pool_Hit;
-    public GameObject Muzzle_vfx;
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public int HitType;  //彈孔類型變數
     public GameObject target;
@@ -52,29 +51,23 @@ public class BulletLife : MonoBehaviour
         Tail.SetActive(false);
         liftTime = 1f;
         Hit_vfx_S = null;
-
-        if (Muzzle_vfx != null)
-        {
-            var muzzleVFX = Instantiate(Muzzle_vfx, transform.position, Quaternion.identity);
-            muzzleVFX.transform.forward = gameObject.transform.forward;
-            var psMuzzle = Muzzle_vfx.GetComponent<ParticleSystem>();
-            if (psMuzzle != null)
-            {
-                Destroy(muzzleVFX, psMuzzle.main.duration);
-            }
-            else
-            {
-                var psChild = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                Destroy(muzzleVFX, psChild.main.duration);
-            }
-        }
-       
         YesHit = true;
 
+        //if (Muzzle_vfx != null)
+        //{
+        //    var muzzleVFX = Instantiate(Muzzle_vfx, transform.position, Quaternion.identity);
+        //    muzzleVFX.transform.forward = gameObject.transform.forward;
+        //    var psMuzzle = Muzzle_vfx.GetComponent<ParticleSystem>();
+        //    if (psMuzzle != null) {Destroy(muzzleVFX, psMuzzle.main.duration);}
+        //    else
+        //    {
+        //        var psChild = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+        //        Destroy(muzzleVFX, psChild.main.duration);
+        //    }
+        //}
         //射線長度測試
         //if (Physics.Raycast(transform.position, fwd, out hit, rayLength2, Ground))
         //{
-        //    Debug.Log("白色0");
         //    Debug.DrawLine(transform.position, hit.point, Color.red, 0.5f, false);      
         //}
     }
