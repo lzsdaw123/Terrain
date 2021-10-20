@@ -10,7 +10,14 @@ public class AnimEvents : MonoBehaviour
 
     public static bool attacking = false;
     public static int buttleAttack=0;
+    public float h, v;
 
+    void Update()
+    {
+        //Move = animator.SetBool("Move", bool );
+        h = PlayerMove.h;
+        v = PlayerMove.v;
+    }
 
     void NoShooting()
     {
@@ -50,7 +57,11 @@ public class AnimEvents : MonoBehaviour
     }
     public void WalkAudio()
     {
-        AudioManager.PlayFootstepAudio();
+        if (h != 0 || v != 0)
+        {
+            AudioManager.PlayFootstepAudio();
+        }
+
     }
     void WalkCilpRight()
     {

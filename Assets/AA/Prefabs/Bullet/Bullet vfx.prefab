@@ -49,12 +49,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pool_Hit: {fileID: 0}
-  Muzzle_vfx: {fileID: 7867440506293988447, guid: e25bfb0e8b76cd54492bfc9299fe490a,
-    type: 3}
+  GunCamera: {fileID: 0}
   Hit_vfx: {fileID: 953877935754959471, guid: ab51fae94f78e9544a9069c1a8470cb4, type: 3}
+  Hit_vfx_S: {fileID: 0}
   HitType: 0
   target: {fileID: 0}
-  speed: 300
   liftTime: 1
   facingRight: 1
   power: 1
@@ -64,15 +63,13 @@ MonoBehaviour:
   - Player
   - Untagged
   rayLength: 100
-  rayLength2: 1
   Ground:
   - serializedVersion: 2
-    m_Bits: 19968
+    m_Bits: 19969
   - serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 8192
   - serializedVersion: 2
     m_Bits: 1024
-  HitTarget: 0
   muzzlePOS: {x: 0, y: 0, z: 0}
   Tail: {fileID: 0}
 --- !u!136 &9204926344011936254
@@ -86,9 +83,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.012
-  m_Height: 1
+  m_Height: 0.1
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: -0.44}
+  m_Center: {x: 0, y: 0, z: -0.02}
 --- !u!54 &2840697118088834591
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class MouseLook : MonoBehaviour
 
     public float mouseX, mouseY;
 
-    public float smooth = 3;                // 相機移動的平穩程度
+    public float smooth = 3;          // 相機移動的平穩程度
 
 
     void Start()

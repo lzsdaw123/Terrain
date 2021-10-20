@@ -31,7 +31,7 @@ public class PlayerMove : MonoBehaviour
     public float speedUpDown = 3.2f;  //爬梯速度
 
     public Vector3 move;
-    public float h,v;
+    public static float h,v;
     bool Squat = false;
 
     public Vector3 velocity;

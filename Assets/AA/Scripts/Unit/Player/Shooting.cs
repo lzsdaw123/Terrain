@@ -60,7 +60,7 @@ public class Shooting : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetButton("Fire2"))  //右鍵縮放鏡頭
+        if (Input.GetButton("Fire2")&&Reload!=true)  //右鍵縮放鏡頭
         {
             ZoomIn();
         }
@@ -103,27 +103,24 @@ public class Shooting : MonoBehaviour
         //    range = Random.Range(-0.6f, 0.6f);  //晃動範圍
         //    noiseRotateY += (noise * (range / 2) * (Mathf.Cos(Time.time)) - noiseRotateY) / 100;
         //    noiseRotateX += (noise * (range / 2) * (Mathf.Sin(Time.time)) - noiseRotateX) / 100;
-           
+
         //    transform.localEulerAngles += new Vector3(0.0f, noiseRotateY, 0.0f);
         //    GunAimR_x.GetComponent<MouseLook>().rotationX += noiseRotateX;         
         //}      
-
         if (AimIng)  //瞄準
         {
-            //Z軸準心偏移修正
-            GA_R.z += 0.2f;
-            if (GA_R.z >= 2.2f) { GA_R.z = 2.2f; }
-
+            //步槍Z軸準心偏移修正
+            GA_R.z += 0.6f;
+            if (GA_R.z >= 2.76f) { GA_R.z = 2.76f; }
             //range = Random.Range(-0.05f, 0.05f);  //晃動範圍
-
             //localEulerAngles跟localRotation的差別
         }
         else
         {
-            GA_R.z -= 0.2f;
-            if (GA_R.z <= 0) { GA_R.z = 0; }
+            GA_R.z -= 0.4f;
+            if (GA_R.z <= 1) { GA_R.z = 1; }
         }
-        GunAimR.transform.localRotation = Quaternion.Euler(0f, -89.71f, GA_R.z);  //Z軸瞄準偏移修正      
+        GunAimR.transform.localRotation = Quaternion.Euler(0f, -89.66f, GA_R.z);  //Z軸瞄準偏移修正      
         if (coolDownTimer > coolDown) //若冷卻時間已到
         {
             Muzzle_vfx.SetActive(false); //關閉火光
@@ -229,18 +226,18 @@ public class Shooting : MonoBehaviour
     }
     void ZoomIn()
     {
-        if (FieldOfView > 20f)
+        if (FieldOfView > 15f)
         {
-            FieldOfView -= 160f * Time.deltaTime;
+            FieldOfView -= 140f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
     }
     void ZoomOut()
     {
-        if (FieldOfView < 60f)
+        if (FieldOfView < 50f)
         {
-            FieldOfView += 160f * Time.deltaTime;
+            FieldOfView += 140f * Time.deltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
@@ -263,7 +260,7 @@ public class Shooting : MonoBehaviour
             pool.ReUse(muzzlePOS, PlayCamera.transform.rotation);
             Muzzle_vfx.transform.position = muzzlePOS;
             Muzzle_vfx.transform.rotation = PlayCamera.transform.rotation;
-            Muzzle_vfx.SetActive(true);         
+            Muzzle_vfx.SetActive(true);
             GunshotsAudio();
             BFire = false;
         }

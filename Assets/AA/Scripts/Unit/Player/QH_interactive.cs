@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class QH_interactive : MonoBehaviour
 {
     Ray ray; //射線
-    float raylength = 4f; //射線最大長度
+    float raylength = 4.8f; //射線最大長度
     RaycastHit hit; //被射線打到的物件
     RaycastHit oldhit; //被射線打到的物件
 
@@ -18,14 +18,12 @@ public class QH_interactive : MonoBehaviour
         T = GameObject.Find("ObjectText");
         Take = GameObject.Find("Take");
         Take.SetActive(false);
-
     }
 
     void Update()
     {
-        //ray = Camera.current.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         //由攝影機射到是畫面正中央的射線
-        ray = new Ray(transform.position, transform.forward);
+        ray = gameObject.GetComponent<Camera>().ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));     
         T.GetComponent<Text>().text = "";
 
         if (Physics.Raycast(ray, out hit, raylength))

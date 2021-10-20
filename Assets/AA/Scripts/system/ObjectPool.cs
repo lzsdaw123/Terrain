@@ -14,6 +14,7 @@ public class ObjectPool : MonoBehaviour
 
     void Awake()
     {
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
         inttailSize = 12;  //物件池大小
 
         for (int cut =0;cut< inttailSize; cut++)
@@ -41,7 +42,7 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            GameObject go = Instantiate(Bullet) as GameObject;
+            GameObject go = Instantiate(Bullet, BulletPool.transform) as GameObject;
             go.transform.position = positon;
             go.transform.rotation = rotation;
         }
@@ -68,7 +69,7 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            GameObject go2 = Instantiate(Hit) as GameObject;
+            GameObject go2 = Instantiate(Hit, HitPool.transform) as GameObject;
             go2.transform.position = positon;
             go2.transform.rotation = rotation;
             GameObject reHit;
