@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MouseLook : MonoBehaviour
 {
@@ -12,10 +13,18 @@ public class MouseLook : MonoBehaviour
     public Vector3 m_camRot;
     public Transform CameraPos;
     public Camera GunCamera;
-    public float GR;  //槍支攝影機的Rotation
+    public float GRx,GRy;  //槍支攝影機的Rotation
     Vector3 oldPos;  //上一幀
     Vector3 newPos; //當前幀
-    float cha;  //兩幀的螢幕座標差值結果
+    float chaX,chaY;  //兩幀的螢幕座標差值結果
+
+    public GameObject UI;
+    RectTransform oriTransform;   // UI位置
+    Vector3 currentVelocity = Vector3.zero;     // 當前速度，這個值由你每次呼叫這個函式時被修改
+    float maxSpeed = 320;    // 選擇允許你限制的最大速度
+    float minSpeed = 620;    // 選擇允許你限制的最大速度
+    float smoothTime = 0.35f;      // 達到目標大約花費的時間。 一個較小的值將更快達到目標。
+    Vector3 oriRTPos,newRTPos;
 
     public float mouseX, mouseY;
 
@@ -29,6 +38,15 @@ public class MouseLook : MonoBehaviour
         m_transform = this.transform;        // 設置攝像機初始位置
 
         oldPos = CameraPos.rotation.eulerAngles; //上一幀攝影機的歐拉角
+
+        oriTransform = UI.GetComponent<RectTransform>();
+        newRTPos=oriRTPos = oriTransform.transform.position;
+    }
+    void Update()
+    {
+        
+      
+        
     }
     void LateUpdate()
     {
@@ -37,49 +55,68 @@ public class MouseLook : MonoBehaviour
         mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime;
         newPos = CameraPos.rotation.eulerAngles; //當前幀攝影機的歐拉角
 
-        if (newPos.y == oldPos.y)  //攝影機是否轉動
+        if (newPos == oldPos)  //攝影機是否轉動
         {
-            if (GR > 0)
+            if (GRy > 0) //向右轉
             {
-                GR -= 20 * Time.smoothDeltaTime;
-                if (GR < 0)
+                GRy -= 20 * Time.smoothDeltaTime;
+                if (GRy < 0)
                 {
-                    GR = 0;
+                    GRy = 0;
                 }
             }
-            else if (GR < 0)
+            else if (GRy < 0)  //向左轉
             {
-                GR += 20 * Time.smoothDeltaTime;
-                if (GR > 0)
+                GRy += 20 * Time.smoothDeltaTime;
+                if (GRy > 0)
                 {
-                    GR = 0;
+                    GRy = 0;
                 }
             }
         }
         else
         {
-            cha = newPos.y - oldPos.y;
-            
-            if (cha > 1.5f)
+            chaY = newPos.y - oldPos.y;
+            chaX = newPos.x - oldPos.x;
+
+            if (chaY > 1.5f)  //鏡頭向右移
             {
-                GR += 20 * Time.smoothDeltaTime;
-                if (GR >= 4)
+                newRTPos.x -= maxSpeed * Time.smoothDeltaTime;
+                GRy += 20 * Time.smoothDeltaTime;
+                if (GRy >= 4)
                 {
-                    GR = 4;
+                    GRy = 4;
                 }
             }
-            else if (cha < -1.5f)
+            else if (chaY < -1.5f)  //鏡頭向左移
             {
-                GR -= 20 * Time.smoothDeltaTime;
-                if (GR <= -4)
+                newRTPos.x += maxSpeed * Time.smoothDeltaTime;
+                GRy -= 20 * Time.smoothDeltaTime;
+                if (GRy <= -4)
                 {
-                    GR = -4;
+                    GRy = -4;
                 }
+            }
+            if (chaX > 0.5f)  //鏡頭向下移
+            {
+                newRTPos.y += maxSpeed * Time.smoothDeltaTime;
+            }
+            else if (chaX < -0.5f)  //鏡頭向上移
+            {
+                newRTPos.y -= maxSpeed * Time.smoothDeltaTime;
             }
         }
         oldPos = newPos;
-
-        GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GR);
+        if (newRTPos != oriRTPos)  //當UI位移
+        {
+            newRTPos = Vector3.SmoothDamp(newRTPos, oriRTPos, ref currentVelocity, smoothTime, minSpeed);
+        }
+        else
+        {
+            newRTPos = oriRTPos;
+        }
+        oriTransform.transform.position = newRTPos;
+        GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);
 
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -85f, 80f);
@@ -100,9 +137,6 @@ public class MouseLook : MonoBehaviour
         //// 使主角的面向方向與攝像機一致
         //Vector3 camrot = playerBody.transform.eulerAngles;
         //camrot.x = 0; camrot.z = 0;
-        //playerBody.eulerAngles = camrot;
-
-   
-        
+        //playerBody.eulerAngles = camrot;      
     }
 }

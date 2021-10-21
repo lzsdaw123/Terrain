@@ -122,7 +122,7 @@ public class PlayerMove : MonoBehaviour
             if ((v != 0) || (h != 0))
             {
                 Weapon.SetBool("Move", true);             
-                if (Input.GetButton("Run"))    //人物跑動
+                if (Input.GetButton("Run")&& Shooting.Reload!=true)    //人物跑動
                 {                   
                     if (Input.GetButton("Fire2"))
                     {
