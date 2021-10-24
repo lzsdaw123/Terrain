@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     public Camera PlayCamera;
-
     public CharacterController controller;
+    public Shooting _Shooting;
+
     private Rigidbody _rigidbody;
     public float Speed=6.5f;
     public float gravity = -9.81f; //重力
@@ -17,18 +18,19 @@ public class PlayerMove : MonoBehaviour
     public int n, m; //武器種類
     public GameObject Gun;
 
-    public Transform groundCheck;      //地面檢查
+    public Transform groundCheck;    //地面檢查
     public Transform SquatCheck;      //蹲下檢查
     public float groundDistance = 0.6f;  //地面判定球體半徑
     public float SquatDistance = 0.5f;  //頭頂判定球體半徑
     public LayerMask Ground, Ceiling;       //地面圖層
-    public float margin = 0.1f;
-
-    public float rotationX;
+    public CollisionFlags m_CollisionFlags;  //碰撞提醒
+    public bool m_Jump;  //是否跳躍
+    public static bool m_Jumping;  //跳躍中
+    float rotationX;
 
     public bool inside = false;  //是否碰到梯子
     public float insideTimer;  //離開梯子時間
-    public float speedUpDown = 3.2f;  //爬梯速度
+    float speedUpDown = 3.2f;  //爬梯速度
 
     public Vector3 move;
     public static float h,v;
@@ -41,25 +43,13 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         insideTimer = -1;
-        isGrounded = true;
-        jumpHeigh = 2f;
+        jumpHeigh = 2.5f;
         _rigidbody = GetComponent<Rigidbody>();
-        
-    }
-    void Jump()
-    {
-        if (inside == false)
-        {
-            isGrounded = false;
-            velocity.y = Mathf.Sqrt(jumpHeigh * -2 * gravity); //跳躍物理 v=√h*-2*g   
-            //Debug.Log(velocity.y);
-            Weapon.SetTrigger("Jump");
-            Weapon.SetTrigger("Idle");
-        }
+
+        m_Jumping = false;
     }
     void Update()  //Input用
     {
-     
         rotationX = PlayCamera.GetComponent<MouseLook>().rotationX;
 
         if (inside == false)
@@ -68,22 +58,27 @@ public class PlayerMove : MonoBehaviour
             m = GetComponent<Shooting>().m;
             Weapon = _Animator[n].GetComponent<Animator>();
 
-            if (isGrounded && velocity.y < 0)
-            {
-                velocity.y = -2f;
-            }
 
             h = Input.GetAxis("Horizontal");  //取得輸入橫軸
             v = Input.GetAxis("Vertical");    //取得輸入縱軸            
 
-
-            if (Input.GetButtonDown("Jump") && isGrounded == true && Shooting.Reload==false)   //按下跳躍
+            if (Input.GetButtonDown("Jump") && !m_Jump && Shooting.Reload==false && isGrounded)   //按下跳躍
             {
-                Jump();
+                m_Jump = true;
+                //m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
+            if (!isGrounded && controller.isGrounded)
+            {
+                //PlayLandingSound();
+                move.y = 0f;
+                m_Jumping = false;                
+            }
+            if (!controller.isGrounded && !m_Jumping && isGrounded)
+            {
+                move.y = 0f;
+            }
+            isGrounded = controller.isGrounded;  //是否接觸地面
 
-            velocity.y += gravity * Time.deltaTime;  //重力物理
-            controller.Move(velocity * Time.deltaTime); //執行跳躍
 
             if (Input.GetButton("Squat"))  //蹲下
             {
@@ -160,11 +155,10 @@ public class PlayerMove : MonoBehaviour
             {
                 insideTimer += Time.deltaTime;
             }
-            if (insideTimer >= 0.8f)
+            if (insideTimer >= 0.1f)
             {
-                _rigidbody.isKinematic = false;
-                _rigidbody.useGravity = true;
                 insideTimer = -1;
+                inside = false;
             }
         }     
     }
@@ -173,12 +167,43 @@ public class PlayerMove : MonoBehaviour
     void FixedUpdate()  //移動用 固定偵數
     {
         //物理.球體檢查(地面檢查.位置,球體半徑,地面圖層)
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
-        isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);
-
-        if (inside == false)  //是否接觸梯子
+        //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
+        isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);       
+        if (controller.isGrounded)
         {
+            if (m_Jump)
+            {
+                m_Jump = false;
+                m_Jumping = true;
+                velocity.y = Mathf.Sqrt(jumpHeigh * -2 * gravity); //跳躍物理 v=√h*-2*g                                           
+                if (!_Shooting.LayDown)
+                {
+                    Weapon.SetTrigger("Jump");
+                    if (Input.GetButton("Fire2"))
+                    {
+                        Weapon.SetBool("Aim", true);
+                    }
+                    else
+                    {
+                        Weapon.SetTrigger("Idle");
+                        if (Input.GetButton("Fire2"))
+                        {
+                            Weapon.SetBool("Aim", true);
+                        }
+                    }
+                }              
+            }
+        }
+        m_CollisionFlags = controller.Move(move * Time.fixedDeltaTime);
+        velocity.y += gravity * Time.deltaTime;  //重力物理
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+        if (inside == false)  //是否接觸梯子
+        {           
             move = transform.right * h + transform.forward * v;  //按照面對方向移動       
+            controller.Move(velocity * Time.deltaTime); //執行跳躍            
         }
         else
         {
@@ -186,14 +211,8 @@ public class PlayerMove : MonoBehaviour
             {
                 if (rotationX >= 60) //往下看
                 {
-                    if (isGrounded == false)
-                    {
-                        transform.position += Vector3.down / speedUpDown;
-                    }
-                    else
-                    {
-                        inside = false;
-                    }
+                    transform.position += Vector3.down / speedUpDown;
+  
                 }
                 else  //往上看
                 {
@@ -208,27 +227,22 @@ public class PlayerMove : MonoBehaviour
                 }
                 else  //往上看
                 {
-                    if(isGrounded == false)
+                    transform.position += Vector3.down / speedUpDown;
+                    if ((controller.collisionFlags & CollisionFlags.Below) != 0)
                     {
-                        transform.position += Vector3.down / speedUpDown;
+                        insideTimer = 0;
                     }
-                    else
-                    {
-                        inside = false;
-                    }             
                 }
-            }
-        }      
+            }         
+        }
     }
     void OnTriggerEnter(Collider col)  //觸碰梯子
     {
         if (col.gameObject.tag == "Ladder")
         {
-            _rigidbody.isKinematic = true;
-            _rigidbody.useGravity = false;
             inside = true;
-            insideTimer = -1;
-            //transform.position += Vector3.up/2;
+            move = Vector3.zero;
+            Weapon.SetBool("Move", false);
         }
     }
     void OnTriggerExit(Collider col)  //離開梯子
@@ -236,8 +250,23 @@ public class PlayerMove : MonoBehaviour
         if (col.gameObject.tag == "Ladder")
         {
             inside = false;
-            insideTimer = 0;                  
+            Weapon.SetBool("Move", true);
         }
+    }
+    private void OnControllerColliderHit(ControllerColliderHit hit)//角色碰撞偵測
+    {
+        Rigidbody body = hit.collider.attachedRigidbody;
+        //dont move the rigidbody if the character is on top of it
+        if (m_CollisionFlags == CollisionFlags.Below)
+        {
+            return;
+        }
+
+        if (body == null || body.isKinematic)
+        {
+            return;
+        }
+        body.AddForceAtPosition(controller.velocity * 0.1f, hit.point, ForceMode.Impulse);
     }
 
 }

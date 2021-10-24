@@ -460,6 +460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayCamera: {fileID: 0}
   controller: {fileID: 622874816369969761}
+  _Shooting: {fileID: 622874816369969763}
   Speed: 4
   gravity: -19.62
   jumpHeigh: 0
@@ -480,11 +481,10 @@ MonoBehaviour:
   Ceiling:
     serializedVersion: 2
     m_Bits: 16384
-  margin: 0.1
-  rotationX: 0
+  m_CollisionFlags: 0
+  m_Jump: 0
   inside: 0
   insideTimer: -1
-  speedUpDown: 3.2
   move: {x: 0, y: 0, z: 0}
   velocity: {x: 0, y: 0, z: 0}
   isGrounded: 0

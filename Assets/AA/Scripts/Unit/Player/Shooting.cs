@@ -60,7 +60,7 @@ public class Shooting : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetButton("Fire2")&&Reload!=true)  //右鍵縮放鏡頭
+        if (Input.GetButton("Fire2") && !Reload && !PlayerMove.m_Jumping)  //右鍵縮放鏡頭
         {
             ZoomIn();
         }
@@ -68,6 +68,7 @@ public class Shooting : MonoBehaviour
         {
             ZoomOut();
         }
+
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
 
         if ((Input.GetKeyDown(KeyCode.Q)) && (AniTime >= 2))
@@ -128,12 +129,12 @@ public class Shooting : MonoBehaviour
             FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
             FieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
             //若按下滑鼠右鍵瞄準
-            if (Input.GetButton("Fire2") && Reload != true && LayDown == false)  //架槍瞄準
+            if (Input.GetButton("Fire2") && Reload != true && LayDown == false && !PlayerMove.m_Jumping)  //架槍瞄準
             {
                 if (AimIng == false)
                 {
                     AimIng = true; //瞄準
-                    Weapon.SetTrigger("AimUP");
+                    Weapon.SetTrigger("AimUP");                  
                 }
                 Weapon.SetBool("Aim", true);
                 //ZoomIn();
@@ -195,6 +196,7 @@ public class Shooting : MonoBehaviour
                 Weapon.SetTrigger("Reload");
             }
         }
+
         if (Input.GetKeyDown(KeyCode.T))       //收槍
         {
             Reload = false;
@@ -226,9 +228,9 @@ public class Shooting : MonoBehaviour
     }
     void ZoomIn()
     {
-        if (FieldOfView > 15f)
+        if (FieldOfView > 22f)
         {
-            FieldOfView -= 140f * Time.deltaTime;
+            FieldOfView -= 140f * Time.smoothDeltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
@@ -237,7 +239,7 @@ public class Shooting : MonoBehaviour
     {
         if (FieldOfView < 50f)
         {
-            FieldOfView += 140f * Time.deltaTime;
+            FieldOfView += 140f * Time.smoothDeltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }

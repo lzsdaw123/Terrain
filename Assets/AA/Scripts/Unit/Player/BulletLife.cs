@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BulletLife : MonoBehaviour
 {
-    public ObjectPool pool_Hit;
+    public ObjectPool pool_Hit;  //物件池
+    public RectTransform HitUI;
     public Camera GunCamera;
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public int HitType;  //彈孔類型變數
@@ -43,6 +45,8 @@ public class BulletLife : MonoBehaviour
         Tail = gameObject.transform.GetChild(2).gameObject;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         GunCamera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
+        HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
+        HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
         Tail.SetActive(false);
         liftTime = 1f;
         Hit_vfx_S = null;
@@ -78,7 +82,7 @@ public class BulletLife : MonoBehaviour
             liftTime = 0;
             DestroyGameObject();
             Tail.SetActive(false);
-        }     
+        }
         if (gameObject.activeSelf)
         {           
             if (YesHit == true)
@@ -123,6 +127,8 @@ public class BulletLife : MonoBehaviour
                         //hit.transform.SendMessage("Damage", power); //傷害
                         if (hit.collider.tag == "Enemy")  //綠血
                         {
+                            HitUI.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+                            HitUI.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
                             HitType = 2;
                             //hit.transform.SendMessage("Damage", power);
                             //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
@@ -157,12 +163,13 @@ public class BulletLife : MonoBehaviour
     {
         YesHit = true;
         HitType = 0;
-        liftTime = 1f;
+        liftTime = 1f;      
     }
     void DestroyGameObject()
     {       
         //回收物件
         GameObject.Find("ObjectPool").GetComponent<ObjectPool>().Recovery(gameObject);
+        HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
     }
     void FixedUpdate()
     {

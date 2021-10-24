@@ -51,8 +51,8 @@ public class MouseLook : MonoBehaviour
     void LateUpdate()
     {
         // 獲得鼠標當前位置的X和Y                                
-        mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
-        mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.deltaTime;
+        mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.smoothDeltaTime;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.smoothDeltaTime;
         newPos = CameraPos.rotation.eulerAngles; //當前幀攝影機的歐拉角
 
         if (newPos == oldPos)  //攝影機是否轉動
