@@ -93,6 +93,10 @@ public class MonsterLife : MonoBehaviour
     {
         //hpImage.fillAmount = hp / hpFull; //顯示血球
     }
+    void OnDisable()
+    {
+        hp = hpFull;
+    }
 
 
 }

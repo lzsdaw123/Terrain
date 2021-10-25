@@ -33,7 +33,15 @@ public class AnimEvents : MonoBehaviour
         Total_ammunition = Shooting.Total_ammunition;   
 
         int R_ammunition = 30 - ammunition;
-        ammunition = 30;
+        if (Total_ammunition < 30)
+        {
+            int R_Total_ammunition = 30 - Total_ammunition;
+            ammunition = 30 - R_Total_ammunition;
+        }
+        else
+        {
+            ammunition = 30;
+        }       
         Total_ammunition -= R_ammunition;
 
     }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class QH_interactive : MonoBehaviour
 {
     Ray ray; //射線
-    float raylength = 4.8f; //射線最大長度
+    float raylength = 5f; //射線最大長度
     RaycastHit hit; //被射線打到的物件
     RaycastHit oldhit; //被射線打到的物件
 
@@ -45,7 +45,7 @@ public class QH_interactive : MonoBehaviour
            
             oldhit = hit;
 
-            Debug.DrawLine(ray.origin, hit.point, Color.yellow);
+            Debug.DrawLine(ray.origin, hit.point,Color.yellow,0.7f);
             //當射線打到物件時會在Scene視窗畫出黃線，方便查閱
 
             //print(hit.transform.name);

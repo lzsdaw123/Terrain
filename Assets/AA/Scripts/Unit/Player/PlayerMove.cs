@@ -186,10 +186,6 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Weapon.SetTrigger("Idle");
-                        if (Input.GetButton("Fire2"))
-                        {
-                            Weapon.SetBool("Aim", true);
-                        }
                     }
                 }              
             }
