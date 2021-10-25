@@ -14,7 +14,7 @@ public class MonsterLife : MonoBehaviour
     private Rigidbody rigid;
     private Collider cld;
 
-    public float hpFull = 5; // 血量上限
+    public float hpFull; // 血量上限
     public float hp; // 血量
     //public Image hpImage;
 
@@ -24,6 +24,7 @@ public class MonsterLife : MonoBehaviour
 
     void Start()
     {
+        hpFull = 10f;
         hp = hpFull; // 遊戲一開始先補滿血量
         RefreshLifebar(); // 更新血條
         //ani = GetComponent<Animator>();
@@ -77,9 +78,12 @@ public class MonsterLife : MonoBehaviour
         if (hp <= 0)
         {
             hp = 0; // 不要扣到負值
-            monster01.enabled = false; // 關閉 AI 腳本
-            agent.enabled = false; // 立即關閉尋徑功能
+            //monster01.enabled = false; // 關閉 AI 腳本
+            //agent.enabled = false; // 立即關閉尋徑功能
             ani.SetTrigger("Die");
+            print(gameObject);
+            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
+
         }
 
         RefreshLifebar(); // 更新血條

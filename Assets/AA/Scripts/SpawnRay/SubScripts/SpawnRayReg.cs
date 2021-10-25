@@ -13,7 +13,7 @@ public class SpawnRayReg : MonoBehaviour {
 		uid = monsterInfo.uniqueID;
 	}
 
-	public void OnDestroy(){
+	public void OnDisable(){
 		if (mother)
 			mother.UnReg();		// 向母體移除數量
 	}

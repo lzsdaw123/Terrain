@@ -130,7 +130,7 @@ public class BulletLife : MonoBehaviour
                             HitUI.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
                             HitUI.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
                             HitType = 2;
-                            //hit.transform.SendMessage("Damage", power);
+                            hit.transform.SendMessage("Damage", power);
                             //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
                         }
                     }

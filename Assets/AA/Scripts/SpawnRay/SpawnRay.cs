@@ -35,6 +35,8 @@ public class SpawnRay : MonoBehaviour {
 
     NavUtility navUtility = new NavUtility();
 
+	public ObjectPool _ObjectPool;
+
 	void OnDrawGizmos(){
 		if (DisplayField) {
 			if (type == Type.Circle) {
@@ -76,15 +78,16 @@ public class SpawnRay : MonoBehaviour {
 			RaycastHit hit;
 			if (navUtility.TryHitNav (bornPos, out hit, Mathf.Infinity, rayHitLayer)) {	// 判斷位置是否可生怪
 				
-				int monsterNum = (int)(Random.value * monsters.Length);	// 亂數取得一隻怪
-				GameObject monster = (GameObject)Instantiate (monsters [monsterNum], hit.point, Quaternion.identity);	// 生怪
+				//int monsterNum = (int)(Random.value * monsters.Length);	// 亂數取得一隻怪
+				//GameObject monster = (GameObject)Instantiate (monsters [monsterNum], hit.point, Quaternion.identity);   // 生怪
+				_ObjectPool.ReUseMonster01(hit.point, Quaternion.identity);
 				uid++;										// 編號加1
 				counter++;
 
-				if (!monster.GetComponent<SpawnRayReg> ())	// 怪物一定要有這個腳本
-					monster.AddComponent<SpawnRayReg> ();
+				//if (!monster.GetComponent<SpawnRayReg> ())	// 怪物一定要有這個腳本
+				//	monster.AddComponent<SpawnRayReg> ();
 				
-				monster.SendMessage ("Init", new MonterInfo(uid, this));
+				//monster.SendMessage ("Init", new MonterInfo(uid, this));
 			}
 
 			timer = 0;
