@@ -6,8 +6,9 @@ using UnityEditor;
 public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
-    public  GameObject BulletPool, HitPool;
+    public  GameObject BulletPool, HitPool, MBulletPool;  //物件池集中位置
     public GameObject[] MonsterPool = new GameObject[1];	// 可生的怪種類
+    public GameObject MBullet ;	// 怪物子彈
     public SpawnRay _SpawnRay;
 
     public int inttailSize;
@@ -20,6 +21,7 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> _pool_Hit = new Queue<GameObject>();
 
     private Queue<GameObject> Monster_pool = new Queue<GameObject>();
+    private Queue<GameObject> M_Bullet_pool = new Queue<GameObject>();
 
 
     void Awake()
@@ -32,21 +34,23 @@ public class ObjectPool : MonoBehaviour
             //GameObject go = Instantiate(Bullet) as GameObject;
             GameObject go = Instantiate(Bullet, BulletPool.transform) as GameObject; //生成子彈於子彈池
             GameObject go2 = Instantiate(Hit, HitPool.transform) as GameObject;   //生成彈孔於彈孔池
+            GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //怪物子彈於怪物子彈池
             int monsterNum = (int)(Random.value * MonsterPool.Length);	// 亂數取得一隻怪
-            GameObject Mo1 = Instantiate(MonsterPool[monsterNum], gameObject.transform) as GameObject;   //生成彈孔於彈孔池
+            GameObject Mo1 = Instantiate(MonsterPool[monsterNum], gameObject.transform) as GameObject;   //生成怪物於怪物池
             uid++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                     Mo1.AddComponent<SpawnRayReg>();
-
             Mo1.SendMessage("Init", new MonterInfo(uid, _SpawnRay));
 
             _pool.Enqueue(go);  //Queue.Enqueue() 將物件放入結構中
             _pool_Hit.Enqueue(go2);  //Queue.Enqueue() 將物件放入結構中
             Monster_pool.Enqueue(Mo1);  //Queue.Enqueue() 將物件放入結構中
+            M_Bullet_pool.Enqueue(Mo1B);  //Queue.Enqueue() 將物件放入結構中
             go.SetActive(false);
             go2.SetActive(false);
-            Mo1.SetActive(false);                       
+            Mo1.SetActive(false);
+            Mo1B.SetActive(false);                       
         }
     }
     //子彈
@@ -121,7 +125,13 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            GameObject Mo1 = Instantiate(Bullet, BulletPool.transform) as GameObject;
+            int monsterNum = (int)(Random.value * MonsterPool.Length);	// 亂數取得一隻怪
+            GameObject Mo1 = Instantiate(MonsterPool[monsterNum], gameObject.transform) as GameObject;  //生成怪物於怪物池
+            uid++;                                      // 編號加1
+
+            if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
+                Mo1.AddComponent<SpawnRayReg>();
+            Mo1.SendMessage("Init", new MonterInfo(uid, _SpawnRay));
             Mo1.transform.position = positon;
             Mo1.transform.rotation = rotation;
         }
@@ -129,6 +139,29 @@ public class ObjectPool : MonoBehaviour
     public void RecoveryMonster01(GameObject recovery)  //用來回收物件
     {
         Monster_pool.Enqueue(recovery);
+        recovery.SetActive(false);
+    }
+
+    //怪物1 子彈
+    public void ReUseM01Bullet(Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
+    {
+        if (M_Bullet_pool.Count > 0)
+        {
+            GameObject reuse = M_Bullet_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
+            reuse.transform.position = positon;
+            reuse.transform.rotation = rotation;
+            reuse.SetActive(true);
+        }
+        else
+        {
+            GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;  //怪物子彈於怪物子彈池
+            Mo1B.transform.position = positon;
+            Mo1B.transform.rotation = rotation;
+        }
+    }
+    public void RecoveryM01Bullet(GameObject recovery)  //用來回收物件
+    {
+        M_Bullet_pool.Enqueue(recovery);
         recovery.SetActive(false);
     }
 

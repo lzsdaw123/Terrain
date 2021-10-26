@@ -32,7 +32,7 @@ public class MonsterLife : MonoBehaviour
         cld = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
         monster01 = GetComponent<MonsterAI01>();
-        RagdollActive(false); // 先關閉物理娃娃
+        //RagdollActive(false); // 先關閉物理娃娃
 
     }
 
@@ -50,7 +50,7 @@ public class MonsterLife : MonoBehaviour
     {
         ani.enabled = !active; // 關閉或開啟角色的 Animator
         rigid.isKinematic = active; // 關閉或開啟角色原本的 rigidbody
-        cld.enabled = !active; // 關閉或開啟角色原本的(膠囊)Collider
+        //cld.enabled = !active; // 關閉或開啟角色原本的(膠囊)Collider
 
         // 搜尋骨架以下所有的 Rigidbody 關閉或開啟
         Rigidbody[] rigs = root.GetComponentsInChildren<Rigidbody>();
@@ -81,7 +81,6 @@ public class MonsterLife : MonoBehaviour
             //monster01.enabled = false; // 關閉 AI 腳本
             //agent.enabled = false; // 立即關閉尋徑功能
             ani.SetTrigger("Die");
-            print(gameObject);
             GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
 
         }

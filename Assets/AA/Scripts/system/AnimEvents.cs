@@ -56,6 +56,7 @@ public class AnimEvents : MonoBehaviour
     }
     void AttackiBEnd()
     {
+        attacking = false;
         buttleAttack = 0;
     }
 
