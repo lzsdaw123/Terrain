@@ -50,6 +50,7 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()  //Input用
     {
+        if (Time.timeScale == 0) { return; }
         rotationX = PlayCamera.GetComponent<MouseLook>().rotationX;
 
         if (inside == false)

@@ -60,6 +60,7 @@ public class Shooting : MonoBehaviour
     }
     void Update()
     {
+        if (Time.timeScale == 0) {return;}
         if (Input.GetButton("Fire2") && !Reload && !PlayerMove.m_Jumping)  //右鍵縮放鏡頭
         {
             ZoomIn();

@@ -6,8 +6,8 @@ using UnityEditor;
 public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
-    public  GameObject BulletPool, HitPool, MBulletPool;  //物件池集中位置
-    public GameObject[] MonsterPool = new GameObject[1];	// 可生的怪種類
+    public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool;  //物件池集中位置
+    public GameObject[] Monster = new GameObject[1];	// 可生的怪種類
     public GameObject MBullet ;	// 怪物子彈
     public SpawnRay _SpawnRay;
 
@@ -27,7 +27,7 @@ public class ObjectPool : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
-        inttailSize = 12;  //物件池大小
+        inttailSize = 8;  //物件池大小
 
         for (int cut =0;cut< inttailSize; cut++)
         {
@@ -35,8 +35,8 @@ public class ObjectPool : MonoBehaviour
             GameObject go = Instantiate(Bullet, BulletPool.transform) as GameObject; //生成子彈於子彈池
             GameObject go2 = Instantiate(Hit, HitPool.transform) as GameObject;   //生成彈孔於彈孔池
             GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //怪物子彈於怪物子彈池
-            int monsterNum = (int)(Random.value * MonsterPool.Length);	// 亂數取得一隻怪
-            GameObject Mo1 = Instantiate(MonsterPool[monsterNum], gameObject.transform) as GameObject;   //生成怪物於怪物池
+            int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
+            GameObject Mo1 = Instantiate(Monster[monsterNum], MonsterPool.transform) as GameObject;   //生成怪物於怪物池
             uid++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
@@ -125,8 +125,8 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            int monsterNum = (int)(Random.value * MonsterPool.Length);	// 亂數取得一隻怪
-            GameObject Mo1 = Instantiate(MonsterPool[monsterNum], gameObject.transform) as GameObject;  //生成怪物於怪物池
+            int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
+            GameObject Mo1 = Instantiate(Monster[monsterNum], MonsterPool.transform) as GameObject;  //生成怪物於怪物池
             uid++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本

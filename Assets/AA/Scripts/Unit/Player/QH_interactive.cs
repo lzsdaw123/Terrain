@@ -10,12 +10,12 @@ public class QH_interactive : MonoBehaviour
     RaycastHit hit; //被射線打到的物件
     RaycastHit oldhit; //被射線打到的物件
 
-    public GameObject T;
+    public GameObject ObjectText;
     public static GameObject Take;
     public static bool tt;
     void Start()
     {
-        T = GameObject.Find("ObjectText");
+        ObjectText = GameObject.Find("ObjectText");
         Take = GameObject.Find("Take");
         Take.SetActive(false);
     }
@@ -23,8 +23,8 @@ public class QH_interactive : MonoBehaviour
     void Update()
     {
         //由攝影機射到是畫面正中央的射線
-        ray = gameObject.GetComponent<Camera>().ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));     
-        T.GetComponent<Text>().text = "";
+        ray = gameObject.GetComponent<Camera>().ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        ObjectText.GetComponent<Text>().text = "";
 
         if (Physics.Raycast(ray, out hit, raylength))
         // (射線,out 被射線打到的物件,射線長度)，out hit 意思是：把"被射線打到的物件"帶給hit
@@ -54,7 +54,7 @@ public class QH_interactive : MonoBehaviour
         }
         else
         {
-            T.GetComponent<Text>().text = "";
+            ObjectText.GetComponent<Text>().text = "";
         }
     }
     public static void thing()
