@@ -161,7 +161,7 @@ public class PlayerMove : MonoBehaviour
                 insideTimer = -1;
                 inside = false;
             }
-        }     
+        }
     }
 
 
@@ -169,14 +169,14 @@ public class PlayerMove : MonoBehaviour
     {
         //物理.球體檢查(地面檢查.位置,球體半徑,地面圖層)
         //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
-        isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);       
+        isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);      
         if (controller.isGrounded)
         {
             if (m_Jump)
             {
                 m_Jump = false;
-                m_Jumping = true;
-                velocity.y = Mathf.Sqrt(jumpHeigh * -2 * gravity); //跳躍物理 v=√h*-2*g                                           
+                m_Jumping = true;               
+                velocity.y = Mathf.Sqrt(jumpHeigh * -2 * gravity); //跳躍物理 v=√h*-2*g
                 if (!_Shooting.LayDown)
                 {
                     Weapon.SetTrigger("Jump");
@@ -192,7 +192,8 @@ public class PlayerMove : MonoBehaviour
             }
         }
         m_CollisionFlags = controller.Move(move * Time.fixedDeltaTime);
-        velocity.y += gravity * Time.deltaTime;  //重力物理
+        velocity.y += gravity * Time.deltaTime;  //重力物理      
+
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;

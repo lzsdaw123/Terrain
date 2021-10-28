@@ -66,13 +66,17 @@ MonoBehaviour:
   rayLength: 100
   Ground:
   - serializedVersion: 2
-    m_Bits: 19969
+    m_Bits: 19968
   - serializedVersion: 2
     m_Bits: 8192
-  - serializedVersion: 2
-    m_Bits: 1024
   muzzlePOS: {x: 0, y: 0, z: 0}
   Tail: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 3584
+  NolayerMask:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!136 &9204926344011936254
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -128,7 +132,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 251314216931321010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.915, z: 0.095}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 251314215627210433}

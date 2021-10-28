@@ -8,6 +8,7 @@ public class BulletLife : MonoBehaviour
     public ObjectPool pool_Hit;  //物件池
     public RectTransform HitUI;
     public Camera GunCamera;
+    private Transform HIT;
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public int HitType;  //彈孔類型變數
     public GameObject target;
@@ -27,6 +28,9 @@ public class BulletLife : MonoBehaviour
     Quaternion rot;
     Vector3 pos;
     bool YesHit;
+    public LayerMask layerMask;
+    public LayerMask NolayerMask;
+    bool NoActor = false;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -47,7 +51,6 @@ public class BulletLife : MonoBehaviour
         GunCamera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
         HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
         HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
-        Tail.SetActive(false);
         liftTime = 1f;
         Hit_vfx_S = null;
         YesHit = true;     
@@ -72,16 +75,18 @@ public class BulletLife : MonoBehaviour
     }
     void Update()
     {
+        HIT = GameObject.Find("HIT").GetComponent<Transform>();
+
         liftTime -= Time.deltaTime;
         if (liftTime <= 0.8f)
         {
-            Tail.SetActive(true);
+            Tail.GetComponent<TrailRenderer>().emitting = true;  //開啟尾巴軌跡
+            Tail.GetComponent<TrailRenderer>().time = 0.5f; ;  //開啟尾巴軌跡
         }
         if (liftTime <= 0) 
-        {
+        {         
             liftTime = 0;
-            DestroyGameObject();
-            Tail.SetActive(false);
+            DestroyGameObject();          
         }
         if (gameObject.activeSelf)
         {           
@@ -92,8 +97,8 @@ public class BulletLife : MonoBehaviour
                 //int maskGround = 1 << LayerMask.NameToLayer("Ground");
                 //int maskMonster = 1 << LayerMask.NameToLayer("Monster");
                 //int maskWall = 1 << LayerMask.NameToLayer("Wall");
-                LayerMask layerMask = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Monster")) |
-                    (1 << LayerMask.NameToLayer("Wall")) | (0 << LayerMask.NameToLayer("Actor"));
+                //LayerMask layerMask = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Monster")) |
+                //    (1 << LayerMask.NameToLayer("Wall")) | (0 << LayerMask.NameToLayer("Actor"));
                 //LayerMask layerMask = (1 << 9) | (1 << 10) | (1 << 11) | (0 << 13); //Ground,Monster,Wall
 
                 //由攝影機射到是畫面正中央的射線
@@ -105,10 +110,6 @@ public class BulletLife : MonoBehaviour
                 //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
                 if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
                 {
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))  
-                    {
-                        return;
-                    }
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                     {
                         HitType = 0;
@@ -134,7 +135,12 @@ public class BulletLife : MonoBehaviour
                             //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
                         }
                     }
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+                    {
+                        NoActor = true;
+                    }
                 }
+
                 //if (Physics.Raycast(ray, out hit, 1 << 10)) //擊中怪物
                 //{
                 //    if (hit.collider.gameObject.layer == 1 << 10)  //彈孔噴紅血
@@ -154,21 +160,33 @@ public class BulletLife : MonoBehaviour
                 //}              
                 //在到物體上產生彈孔
                 rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                pos = hit.point;
-                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                pos = hit.point;             
+                if (NoActor)
+                {
+                    pos = HIT.transform.position;
+                    pool_Hit.ReUseHit(pos, rot, HitType);;  //從彈孔池取出彈孔
+                    liftTime = 0;
+                    return;
+                }
+                else
+                {
+                    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                }
             }
         }
     }
     void OnDisable()
-    {
+    {       
         YesHit = true;
         HitType = 0;
         liftTime = 1f;      
     }
     void DestroyGameObject()
-    {       
+    {
+        Tail.GetComponent<TrailRenderer>().emitting = false;  //關閉尾巴軌跡        
+        Tail.GetComponent<TrailRenderer>().time = 0f;  //關閉尾巴軌跡        
         //回收物件
-        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().Recovery(gameObject);
+        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().Recovery(gameObject);       
         HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
     }
     void FixedUpdate()
@@ -222,6 +240,10 @@ public class BulletLife : MonoBehaviour
     private void OnTriggerEnter(Collider collider)
     {
         //若碰撞體在作用圖層內才進行運算
+        if (InLayerMask(collider.gameObject.layer, Ground[1]))
+        {
+            NoActor = true;
+        }
         if (InLayerMask(collider.gameObject.layer, Ground[0]))
         {
             liftTime = 0;

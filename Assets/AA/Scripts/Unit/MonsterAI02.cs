@@ -14,7 +14,7 @@ public class MonsterAI02 : MonoBehaviour
     GameObject tagObject;
     bool MissTar;
     public ObjectPool pool;
-
+    [SerializeField] private AnimEvents AnimEvents;
     public Animator ani; //動畫控制器
     public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
@@ -47,16 +47,15 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField] private float attackDistance = 3f; // 攻擊距離
     [SerializeField] private float ArangeDistance = 3f; // 攻擊距離
     bool AttackAngleT=false;
-    public static bool attacking;
-    public static int buttleAttack;
+    private  bool attacking;
+    private  int buttleAttack;
     public bool isEnemy=false;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
-    public GameObject muzzle;
-    public GameObject Bigmuzzle;
-    public Vector3 muzzlePOS;  //槍口座標
+    [SerializeField] private GameObject muzzle;
+    [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
 
 
@@ -304,9 +303,7 @@ public class MonsterAI02 : MonoBehaviour
         Vector3 direct = targetPos - origin;
         Ray ray = new Ray(origin, direct);
         RaycastHit hit = new RaycastHit();
-        float distance = Vector3.Distance(transform.position,
-       targetActor.position);
-
+        float distance = Vector3.Distance(transform.position, targetActor.position);
         int maskMonster = 1 << LayerMask.NameToLayer("Monster");
 
         if (Physics.Raycast(ray, out hit, distance, 0xFFFF - actorLayer)) //若有障礙物
@@ -331,10 +328,7 @@ public class MonsterAI02 : MonoBehaviour
     }
 
     void Update()
-    {
-        attacking = AnimEvents.attacking;
-        buttleAttack = AnimEvents.buttleAttack;
-        muzzlePOS = Bigmuzzle.transform.position;
+    {        
         if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         //oriTarget = MissionTarget.transform;
 
@@ -380,23 +374,24 @@ public class MonsterAI02 : MonoBehaviour
             }
         }
 
-
-
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-
         
-        if(attackTarget)AAT = attackTarget.position; 
+        if(attackTarget)AAT = attackTarget.position;
         //Debug.Log("V3"+AAT);
+
+       
     }
     void FixedUpdate()
     {
         ani.SetFloat("Speed", speed); //設置動畫播放
-        if (buttleAttack>=1)
-        {            
+        if (buttleAttack >= 1)
+        {
+            muzzlePOS = muzzle.transform.position;
             pool.ReUseM01Bullet(muzzlePOS, this.transform.rotation);
+            attacking = false;
             buttleAttack = 0;
         }
     }
@@ -418,8 +413,12 @@ public class MonsterAI02 : MonoBehaviour
         AttackAngleT = false;
         agent.speed = 0;
         speed = 0;
-        attacking = true;
         ani.SetFloat("Speed", speed);
         ani.SetTrigger("Attack");
+    }
+    public void AttackAning(bool attackingB, int buttleAttackI)
+    {
+        attacking = attackingB;
+        buttleAttack = buttleAttackI;
     }
 }
