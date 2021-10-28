@@ -12,7 +12,7 @@ public class BulletLife : MonoBehaviour
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public int HitType;  //彈孔類型變數
     public GameObject target;
-    float speed = 360;//飛行速度
+    float speed = 380;//飛行速度
     public float liftTime; //生命時間
     public bool facingRight = true; //是否面向右邊
     private Vector3 moveDir = Vector3.right;
@@ -24,7 +24,7 @@ public class BulletLife : MonoBehaviour
     public float rayLength = 0.5f;  //1大約x:105-人物到槍口???射線長度??
     public LayerMask[] Ground;  //射線偵測圖層   
     public Vector3 muzzlePOS;  //槍口座標
-    public GameObject Tail;
+    public ParticleSystem Tail;
     Quaternion rot;
     Vector3 pos;
     bool YesHit;
@@ -43,10 +43,11 @@ public class BulletLife : MonoBehaviour
             Hit_vfx_S = Hit_vfx.transform.GetChild(i).gameObject;         
             Hit_vfx_S.SetActive(false);
         }
+        var main = Tail.main;
+        main.simulationSpeed = 7f;
     }
     void Start()
     {
-        Tail = gameObject.transform.GetChild(2).gameObject;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         GunCamera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
         HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
@@ -78,11 +79,6 @@ public class BulletLife : MonoBehaviour
         HIT = GameObject.Find("HIT").GetComponent<Transform>();
 
         liftTime -= Time.deltaTime;
-        if (liftTime <= 0.8f)
-        {
-            Tail.GetComponent<TrailRenderer>().emitting = true;  //開啟尾巴軌跡
-            Tail.GetComponent<TrailRenderer>().time = 0.5f; ;  //開啟尾巴軌跡
-        }
         if (liftTime <= 0) 
         {         
             liftTime = 0;
@@ -94,9 +90,6 @@ public class BulletLife : MonoBehaviour
             {
                 YesHit = false;
                 //判斷圖層
-                //int maskGround = 1 << LayerMask.NameToLayer("Ground");
-                //int maskMonster = 1 << LayerMask.NameToLayer("Monster");
-                //int maskWall = 1 << LayerMask.NameToLayer("Wall");
                 //LayerMask layerMask = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Monster")) |
                 //    (1 << LayerMask.NameToLayer("Wall")) | (0 << LayerMask.NameToLayer("Actor"));
                 //LayerMask layerMask = (1 << 9) | (1 << 10) | (1 << 11) | (0 << 13); //Ground,Monster,Wall
@@ -161,10 +154,10 @@ public class BulletLife : MonoBehaviour
                 //在到物體上產生彈孔
                 rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
                 pos = hit.point;             
-                if (NoActor)
+                if (NoActor && pos != Vector3.zero)
                 {
                     pos = HIT.transform.position;
-                    pool_Hit.ReUseHit(pos, rot, HitType);;  //從彈孔池取出彈孔
+                    //pool_Hit.ReUseHit(pos, rot, HitType);;  //從彈孔池取出彈孔
                     liftTime = 0;
                     return;
                 }
@@ -183,8 +176,6 @@ public class BulletLife : MonoBehaviour
     }
     void DestroyGameObject()
     {
-        Tail.GetComponent<TrailRenderer>().emitting = false;  //關閉尾巴軌跡        
-        Tail.GetComponent<TrailRenderer>().time = 0f;  //關閉尾巴軌跡        
         //回收物件
         GameObject.Find("ObjectPool").GetComponent<ObjectPool>().Recovery(gameObject);       
         HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
@@ -194,19 +185,25 @@ public class BulletLife : MonoBehaviour
         if (pos != Vector3.zero)
         {
             float firstSpeed = Vector3.Distance(transform.position, pos);
+            float orifirstSpeed = firstSpeed;
             if (firstSpeed != 0)
             {
                 transform.position = Vector3.MoveTowards(transform.position, pos, speed * Time.deltaTime);
+                firstSpeed = Vector3.Distance(transform.position, pos);
+                if (firstSpeed == orifirstSpeed)
+                {
+                    DestroyGameObject();
+                }
             }
             else
-            {
+            {                
                 DestroyGameObject();
-            }          
+            }            
         }
         else
         {
             transform.position += transform.forward * speed * Time.deltaTime;  //往前移動
-        }         
+        }      
     }
 
     bool InLayerMask(int layer, LayerMask layerMask) //判斷物件圖層是否在LayerMask內
@@ -238,10 +235,10 @@ public class BulletLife : MonoBehaviour
         }
     }
     private void OnTriggerEnter(Collider collider)
-    {
+    {      
         //若碰撞體在作用圖層內才進行運算
         if (InLayerMask(collider.gameObject.layer, Ground[1]))
-        {
+        {          
             NoActor = true;
         }
         if (InLayerMask(collider.gameObject.layer, Ground[0]))
