@@ -829,6 +829,7 @@ GameObject:
   - component: {fileID: 3655744012591459268}
   - component: {fileID: 1165788678806979713}
   - component: {fileID: 5296694822705293826}
+  - component: {fileID: 949396401389518546}
   m_Layer: 10
   m_Name: Armature
   m_TagString: Enemy
@@ -893,6 +894,103 @@ MonoBehaviour:
   buttleAttack: 0
   h: 0
   v: 0
+  MonAtSource: {fileID: 949396401389518546}
+--- !u!82 &949396401389518546
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2892443035855036814}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: dea05645b49501a4d96b3b2c631cfcca, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 2
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 30
+  MaxDistance: 65
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3077621645088853496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,11 +1528,12 @@ MonoBehaviour:
   walkPercent: 50
   changeActionMin: 5
   changeActionMax: 8
+  actionTimer: 0
   heightOfEye: 1.7
   heightOfTarget: 1
   lookDistance: 250
   lookAngle: 180
-  AttackAngle: 6
+  AttackAngle: 2
   ArangeAngle: 180
   actorLayer:
     serializedVersion: 2
@@ -1443,7 +1542,7 @@ MonoBehaviour:
   - Player
   - MissionTarget
   attackDistance: 60
-  ArangeDistance: 30
+  ArangeDistance: 60
   isEnemy: 0
   attackLv1:
     displayGizmos: 0
@@ -1453,7 +1552,6 @@ MonoBehaviour:
     height: 1
   bullet: {fileID: 251314215627210432, guid: 66f48dbd1505cab4eaaa1a1a108d099e, type: 3}
   muzzle: {fileID: 8741299684743074736}
-  C: {fileID: 2584303994066512964, guid: cb18f15099027a74c8aae41a165f5dc5, type: 3}
   muzzlePOS: {x: 0, y: 0, z: 0}
   targetHP: 0
 --- !u!114 &1165788677594114576

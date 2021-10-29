@@ -8,10 +8,11 @@ public class Elevator : MonoBehaviour
     public bool DownUp=true;
     public LayerMask LayerMask;
     GameObject play;
+    public AudioSource AudioSource;
 
     void Start()
     {
-        
+        AudioSource.volume = 1.7f;
     }
 
     void Update()
@@ -35,10 +36,12 @@ public class Elevator : MonoBehaviour
             if (DownUp)
             {
                 Animator.SetTrigger("Down");
+                AudioSource.Play();
             }
             else
             {
                 Animator.SetTrigger("Up");
+                AudioSource.Play();
             }
         }
     }void OnTriggerExit(Collider collider)

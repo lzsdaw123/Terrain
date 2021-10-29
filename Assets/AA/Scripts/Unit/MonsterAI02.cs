@@ -28,7 +28,7 @@ public class MonsterAI02 : MonoBehaviour
     // 若一段時間沒到達目的或是 idle 一段時間,需強制更換行動
     public float changeActionMin = 5f; // 行為的執行時間範圍
     public float changeActionMax = 8f; // 行為的執行時間範圍
-    private float actionTimer = 0; // 行為計時器
+    [SerializeField] private float actionTimer = 0; // 行為計時器
     private float nextActionTime = 0; // 到下個行為的時間
 
     public float heightOfEye = 1.7f; // 眼睛高度
@@ -44,8 +44,8 @@ public class MonsterAI02 : MonoBehaviour
     public static Vector3 AAT; // 搜尋到最近的攻擊目標
     public static int aTN;
     private float targetDistance = 2000; // 與最近攻擊目標的距離
-    [SerializeField] private float attackDistance = 3f; // 攻擊距離
-    [SerializeField] private float ArangeDistance = 3f; // 攻擊距離
+    [SerializeField] private float attackDistance; // 攻擊角度距離
+    [SerializeField] private float ArangeDistance; // 攻擊範圍距離
     bool AttackAngleT=false;
     private  bool attacking;
     private  int buttleAttack;
@@ -57,7 +57,8 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField] private GameObject muzzle;
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
-
+    GameObject OriGameOb;
+    bool locking;
 
     private AttackUtility attackUtility = new AttackUtility();
 
@@ -206,7 +207,7 @@ public class MonsterAI02 : MonoBehaviour
         Transform player = null;
         float nd = 10000f;
         bool fined = false;
-      
+
         // 取得範圍內所有角色
         Collider[] actors = Physics.OverlapSphere(transform.position, lookDistance, actorLayer);
         for (int i = 0; i < actors.Length; i++)
@@ -236,51 +237,53 @@ public class MonsterAI02 : MonoBehaviour
 
                         if (d < nd)  //比原本還近
                         {
+                            locking = false;
                             //print(d + "++" + actors[i]);
                             nd = d;
-                            player = actors[i].transform;
-                            
-                            //print("+" + player);
+                            player = actors[i].transform;                      
                         }
-                        if (actors[i] == tagObject)
-                        {
-                            actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
-                            speed = 1f;
-                            ani.SetFloat("Speed", speed);
-                            AttackAngleT = false;
-                            //若不在攻擊角度內轉向目標
-                            Vector3 targetDir = tagObject.transform.position - transform.position;
-                            Quaternion rotate = Quaternion.LookRotation(targetDir);
-                            transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 20f * Time.deltaTime);
-                        }
-                        else
+                        tagObject = player.gameObject;
+                        //if (player.gameObject == tagObject)
+                        //{
+                        //    //print(tagObject + "__鎖定了");
+                        //    locking = true;
+                        //}
+                        //else
+                        //{
+                        //    //print(player + "__非");
+                        //    tagObject = player.gameObject;
+                        //}
+                        if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
+                                tagObject.transform.position, false) < ArangeAngle)
                         {
                             isEnemy = true;
-                            tagObject = player.gameObject;
-                            actionTimer += Time.deltaTime; //計時器
-                        }                    
-                        if (isEnemy || actionTimer > nextActionTime)
-                        {                            
-                            isEnemy = false;
                             //判斷在攻擊角度內
                             if (GetXZAngle(transform.forward, transform.position,
-                                player.position, false) < AttackAngle)
+                                tagObject.transform.position, false) < AttackAngle)
                             {
                                 AttackAngleT = true;
-                                //print("攻擊角度內" + player);
+                                //Attack();
+                                //print("攻擊角度內" + tagObject);
                             }
                             else
                             {
                                 speed = 1f;
                                 ani.SetFloat("Speed", speed);
+                                ani.SetBool("Attack", false);
                                 AttackAngleT = false;
-                                //若不在攻擊角度內轉向目標
-                                Vector3 targetDir = player.position - transform.position;
+                                //若不在攻擊角度內轉向目標                            
+                                if (tagObject != player.gameObject)
+                                {
+                                    tagObject = player.gameObject;
+                                }
+                                Vector3 targetDir = tagObject.transform.position - transform.position;
                                 Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 10f * Time.deltaTime);
-                                // print("轉向" + player);
+                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+                                //print("轉向" + tagObject);
                             }
-                            actionTimer = 0; //計時器歸０
+                        }
+                        else
+                        {
                         }
                         fined = true;                     
                     }
@@ -328,12 +331,14 @@ public class MonsterAI02 : MonoBehaviour
     }
 
     void Update()
-    {        
-        if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
-        //oriTarget = MissionTarget.transform;
+    {
+        if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
 
+        //oriTarget = MissionTarget.transform;
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
+
+            //print(OriGameOb);
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
             float d = Vector3.Distance(transform.position, attackTarget.position);
@@ -365,7 +370,7 @@ public class MonsterAI02 : MonoBehaviour
                 //moving = true;
                 if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
                 {
-                    Attack();
+                    Attack();                   
                 }
                 else // 玩家距離大於攻擊距離,進行追踪
                 {
@@ -378,15 +383,11 @@ public class MonsterAI02 : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        
-        if(attackTarget)AAT = attackTarget.position;
+        if (attackTarget)AAT = attackTarget.position;
         //Debug.Log("V3"+AAT);
-
-       
     }
     void FixedUpdate()
-    {
-        ani.SetFloat("Speed", speed); //設置動畫播放
+    {       
         if (buttleAttack >= 1)
         {
             muzzlePOS = muzzle.transform.position;
@@ -397,6 +398,8 @@ public class MonsterAI02 : MonoBehaviour
     }
     private void TrackingPlayer()
     {
+        ani.SetBool("Move", true);
+        ani.SetBool("Attack", false);
         agent.speed = 8;  //移動速度
         agent.destination = attackTarget.position; // 設為尋徑目標
         if (MissionTarget.activeSelf)
@@ -404,17 +407,18 @@ public class MonsterAI02 : MonoBehaviour
             agent.destination = oriTarget.position; // 設為尋徑目標
         }
         speed = 1;// 跑向目標
+        ani.SetFloat("Speed", speed);       
         attacking = false; // 追踪玩家,不在攻擊狀態
-        //print("追擊" + attackTarget);
-       
+        //print("追擊" + attackTarget);  
     }
     private void Attack()
     {
+        ani.SetBool("Move", false);
         AttackAngleT = false;
         agent.speed = 0;
         speed = 0;
         ani.SetFloat("Speed", speed);
-        ani.SetTrigger("Attack");
+        ani.SetBool("Attack",true);
     }
     public void AttackAning(bool attackingB, int buttleAttackI)
     {

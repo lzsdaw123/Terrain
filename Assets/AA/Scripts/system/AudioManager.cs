@@ -104,11 +104,16 @@ public class AudioManager : MonoBehaviour
         current.PlayerSource.clip = current.WalkClip[index];
         current.PlayerSource.Play();
     }
-    public static void PlayGunshotsAudio()
+    public static void PlayGunshotsAudio(int B)
     {
-        current.GunSource.clip = current.GunshotsClip[0];
+        current.GunSource.clip = current.GunshotsClip[B];
         current.GunSource.volume = 0.6f;
         current.GunSource.pitch = 1.3f;
+        if (B == 0)
+        {
+            current.GunSource.volume = 1.2f;
+            current.GunSource.pitch = 1f;
+        }
         current.GunSource.Play();
     }
 }

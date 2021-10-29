@@ -12,7 +12,7 @@ public class S_BulletLife : MonoBehaviour
     public int aTN;
     public Vector3 Atarget;
     public float AtargetY;
-    public float speed = 20f;//飛行速度
+    public float speed ;//飛行速度
     public float liftTime = 5f; //生命時間
     bool Ay = true;  //子彈飛行軌跡
     public Vector3 ABPath;
@@ -39,7 +39,7 @@ public class S_BulletLife : MonoBehaviour
     }
     void Start()
     {
-        speed = 30f; //飛行速度
+        speed = 60f; //飛行速度
 
 
         //if (Muzzle_vfx != null)
@@ -103,6 +103,9 @@ public class S_BulletLife : MonoBehaviour
         //在到物體上產生彈孔
         //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
         Vector3 pos = hit.point;
+
+        AAT = MonsterAI02.AAT;
+        
     }
     void OnDisable()
     {
@@ -120,25 +123,40 @@ public class S_BulletLife : MonoBehaviour
     void FixedUpdate()
     {
         //target = MonsterAI02.attackTarget;
-        AAT = MonsterAI02.AAT;
 
-      
         if (Ay)
         {
             AtargetY = AAT.y + 1.2f;
             Atarget = new Vector3(AAT.x, AtargetY, AAT.z);
             ABPath = Atarget - transform.position;
             ABPath = ABPath / 10;
-
             Ay = false;
+        }
+        if (AAT != Vector3.zero)
+        {          
+            float firstSpeed = Vector3.Distance(transform.position, Atarget);
+            float orifirstSpeed = firstSpeed;
+            if (firstSpeed != 0)
+            {
+                if (firstSpeed == orifirstSpeed)
+                {
+                    transform.localPosition += transform.forward * speed * Time.deltaTime;  //往前移動
+                    return;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
+                firstSpeed = Vector3.Distance(transform.position, Atarget);      
+            }
+            else
+            {
+                  liftTime = 0;
+            }
         }
         else
         {
-            // transform.position += transform.forward * speed * Time.deltaTime;
+            liftTime = 0;
         }
-
-        float step = speed * Time.deltaTime;
-        transform.localPosition += ABPath * speed * Time.deltaTime ;
+        //    float step = speed * Time.deltaTime;
+        //transform.localPosition += ABPath * speed * Time.deltaTime ;
 
         //Vector3.MoveTowards(當前位置.目標位置.速度)
         //transform.localPosition = Vector3.MoveTowards(transform.localPosition, AAT, step);

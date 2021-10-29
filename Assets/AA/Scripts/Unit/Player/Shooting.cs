@@ -158,7 +158,7 @@ public class Shooting : MonoBehaviour
             //若按下滑鼠左鍵開火
             if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
-                MuSmoke.Stop();
+                MuSmoke.Stop();  //關閉槍口煙霧
                 float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
                // float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
                 float rangeX = Random.Range(9f, 15f);  //射擊垂直晃動範圍
@@ -224,6 +224,7 @@ public class Shooting : MonoBehaviour
         if (ammunition <= 0)
         {
             ammunition = 0;
+            if (Input.GetButtonDown("Fire1")) AudioManager.PlayGunshotsAudio(0);
         }
         if (Total_ammunition <= 0)
         {
@@ -257,7 +258,6 @@ public class Shooting : MonoBehaviour
 
     void FixedUpdate()
     {
-        float time = -1;
         if (BFire) //生成子彈
         {
             muzzlePOS = muzzle[n].GetComponent<Transform>().position;
@@ -270,21 +270,11 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx.SetActive(true);
             GunshotsAudio();
             MuSmoke.Play();
-            //MuSmoke.Stop();
-            time = 0;         
             BFire = false;
         }
-        if (time==0) time++;
-        if (time >= 1 && BFire == false)
-        {
-            time = -1;
-            
-        }
-        print(time);
-        
     }
     void GunshotsAudio()
     {
-        AudioManager.PlayGunshotsAudio();
+        AudioManager.PlayGunshotsAudio(1);
     }
 }

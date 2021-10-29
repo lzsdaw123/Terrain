@@ -13,6 +13,11 @@ public class AnimEvents : MonoBehaviour
     public int buttleAttack=0;
     public float h, v;
 
+    public AudioSource MonAtSource;  ///怪物攻擊音源
+
+    void Start()
+    {
+    }
     void Update()
     {
         //Move = animator.SetBool("Move", bool );
@@ -67,6 +72,17 @@ public class AnimEvents : MonoBehaviour
     void WalkCilpRight()
     {
 
+    }
+    void MonsterAttack(int Nub)
+    {
+        //MonAtSource.volume = Scrollbar[2].value;
+        //        MonAtSource.mute = muteState[2];
+        if (Nub == 0)
+        {
+            MonAtSource.Play();
+        }
+
+        
     }
 
 }
