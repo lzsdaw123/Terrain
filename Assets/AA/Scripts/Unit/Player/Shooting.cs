@@ -9,6 +9,7 @@ public class Shooting : MonoBehaviour
 
     public ObjectPool pool;
     public GameObject bullet, Muzzle_vfx;  //子彈,槍口火光  
+    public ParticleSystem MuSmoke;
     //public Transform gun;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR; //槍瞄準鏡上下位移矯正
@@ -57,6 +58,7 @@ public class Shooting : MonoBehaviour
         m = 1;
 
         Muzzle_vfx.SetActive(false);
+        MuSmoke.Stop();
     }
     void Update()
     {
@@ -156,6 +158,7 @@ public class Shooting : MonoBehaviour
             //若按下滑鼠左鍵開火
             if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
             {
+                MuSmoke.Stop();
                 float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
                // float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
                 float rangeX = Random.Range(9f, 15f);  //射擊垂直晃動範圍
@@ -254,6 +257,7 @@ public class Shooting : MonoBehaviour
 
     void FixedUpdate()
     {
+        float time = -1;
         if (BFire) //生成子彈
         {
             muzzlePOS = muzzle[n].GetComponent<Transform>().position;
@@ -265,8 +269,19 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx.transform.rotation = PlayCamera.transform.rotation;
             Muzzle_vfx.SetActive(true);
             GunshotsAudio();
+            MuSmoke.Play();
+            //MuSmoke.Stop();
+            time = 0;         
             BFire = false;
         }
+        if (time==0) time++;
+        if (time >= 1 && BFire == false)
+        {
+            time = -1;
+            
+        }
+        print(time);
+        
     }
     void GunshotsAudio()
     {

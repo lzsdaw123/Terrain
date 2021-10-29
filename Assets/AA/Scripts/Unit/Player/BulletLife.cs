@@ -12,7 +12,7 @@ public class BulletLife : MonoBehaviour
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public int HitType;  //彈孔類型變數
     public GameObject target;
-    float speed = 380;//飛行速度
+    float speed = 450;//飛行速度
     public float liftTime; //生命時間
     public bool facingRight = true; //是否面向右邊
     private Vector3 moveDir = Vector3.right;
@@ -44,7 +44,7 @@ public class BulletLife : MonoBehaviour
             Hit_vfx_S.SetActive(false);
         }
         var main = Tail.main;
-        main.simulationSpeed = 7f;
+        main.simulationSpeed = 3.7f;  //加快粒子開始播放時間
     }
     void Start()
     {
