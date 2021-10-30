@@ -2,9 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+
 
 public class Settings : MonoBehaviour
 {
+    static Settings instance;
+    Scene activeScene;
+    public static UnityAction onScenesLoadingEvent;
+    public static UnityAction onScenesLoadedEvent;
+
+    public Button StartButton;
+    public Button OptionButton;
+    public Button QuitButton;
+
     public GameObject SettingsUI, deSetUI;
 
     public AudioManager AudioManager;
@@ -13,42 +26,58 @@ public class Settings : MonoBehaviour
 
     public Image AsI, PsI;
 
+    public RawImage StartUI;
+    public Texture2D[] Start_image;
+    public bool START_bool;
+
     void Awake()
-    {
-        DontDestroyOnLoad(gameObject);  //切換場景時保留
+    {     
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
+        ReStart();
 
         PictureSetUI.SetActive(false);
-    }
-    void Start()
-    {
-        
-    }
+        START_bool = false;
+        instance = this;
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
+    }  
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (START_bool)
         {
-            if (deSetUI.activeSelf)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                No();
-            }
-            else
-            {
-                if (!SettingsUI.activeSelf)
+                if (deSetUI.activeSelf)
                 {
-                    SettingsUI.SetActive(true);
-                    pause();
+                    No();
                 }
                 else
                 {
-                    SettingsUI.SetActive(false);
-                    con();
+                    if (!SettingsUI.activeSelf)
+                    {
+                        SettingsUI.SetActive(true);
+                        pause();
+                    }
+                    else
+                    {
+                        SettingsUI.SetActive(false);
+                        con();
+                    }
                 }
             }
         }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Cursor.lockState = CursorLockMode.None; //游標無狀態模式
+            Settings.LoadScene("GamePlayScene");
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            Cursor.lockState = CursorLockMode.None; //游標無狀態模式
+            Settings.LoadScene("Start");
+        }
     }
-    void pause()
+    void pause()  //開啟設定介面
     {
         Cursor.lockState = CursorLockMode.None; //游標無狀態模式
         //時間暫停
@@ -67,7 +96,11 @@ public class Settings : MonoBehaviour
         SettingsUI.SetActive(false);
         con();
     }
-    public void Set()
+    public void Set()  //設定
+    {
+        deSetUI_TF();
+    }
+    void deSetUI_TF()  //設定介面開關
     {
         if (!deSetUI.activeSelf)
         {
@@ -75,24 +108,34 @@ public class Settings : MonoBehaviour
         }
         else
         {
+            if (StartUI !=null)
+            {
+                StartUI.GetComponent<RawImage>().texture = Start_image[0];
+            }          
             deSetUI.SetActive(false);
         }
     }
-    public void Exit()
+    public void Exit()  //回到標題
     {
-        Debug.Log("離開遊戲");
+        START_bool = false;
+        SettingsUI.SetActive(false);
+        Cursor.lockState = CursorLockMode.None; //游標無狀態模式
+        SceneManager.LoadScene(0);
+        Settings.LoadScene("Start");
+
     }
-    public void Yes()
+    public void Yes()  //設定確定
     {
-        deSetUI.SetActive(false);
+        deSetUI_TF();
+
     }
     public void Re()
     {
         
     }
-    public void No()
+    public void No()   //設定取消
     {
-        deSetUI.SetActive(false);
+        deSetUI_TF();
     }
     public void PictureSetButton()  //點開畫面設定
     {
@@ -100,5 +143,67 @@ public class Settings : MonoBehaviour
         AsI.color = new Color(0.643f, 0.643f, 0.643f, 1f);
         PsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
         AudioManager.AudioSourceUI.SetActive(false);
+    }
+
+
+    public void StartB()  //進入遊戲
+    {
+        StartUI.GetComponent<RawImage>().texture = Start_image[1];
+        START_bool = true;
+        Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
+        SceneManager.LoadScene(1);
+        Settings.LoadScene("SampleScene");
+        //DontDestroyOnLoad(gameObject);  //切換場景時保留
+
+        //gameObject.SetActiveRecursively(false);
+        //gameObject.SetActive(false);
+    }
+    public void OptionB()
+    {
+        StartUI.GetComponent<RawImage>().texture = Start_image[2];
+        Set();
+    }
+    public void QuitB()  //離開遊戲
+    {
+        StartUI.GetComponent<RawImage>().texture = Start_image[3];
+        Application.Quit();
+    }
+
+    public static void LoadScene(string sceneName)
+    {
+        instance.LoadingScene(sceneName);
+    }
+    public void LoadingScene(string sceneName)
+    {
+        StartCoroutine(LoadingRoutine(sceneName));
+    }
+    IEnumerator LoadingRoutine(string sceneName)
+    {
+        SceneManager.LoadScene("Messenger", LoadSceneMode.Additive);
+
+        yield return null;
+
+        onScenesLoadingEvent?.Invoke();
+        activeScene = SceneManager.GetActiveScene();
+        SceneManager.UnloadSceneAsync(activeScene);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+
+        yield return null;
+
+        onScenesLoadedEvent?.Invoke();
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+        SceneManager.UnloadSceneAsync("Messenger");
+        ReStart();
+    }
+    void ReStart()
+    {
+        StartUI = GameObject.Find("StartUI").GetComponent<RawImage>();
+        StartButton = GameObject.Find("StartB").GetComponent<Button>();
+        OptionButton = GameObject.Find("OptionB").GetComponent<Button>();
+        QuitButton = GameObject.Find("QuitB").GetComponent<Button>();
+        StartButton.onClick.AddListener(StartB);
+        OptionButton.onClick.AddListener(OptionB);
+        QuitButton.onClick.AddListener(QuitB);
+        AudioManager.SettingsCanvas = this;
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 131.16855, g: 162.52502, b: 215.10977, a: 1}
+  m_IndirectSpecularColor: {r: 130.95044, g: 162.22789, b: 214.71747, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -206,10 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 1735382552}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Entries:
-  - id: 0
-    category: 0
-    gameObject: {fileID: 959199682}
+  m_Entries: []
 --- !u!4 &17565331
 Transform:
   m_ObjectHideFlags: 19
@@ -1399,7 +1396,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Tail\u4F4D\u79FB\u5F71\u97FF"
+  m_Text: "\u5834\u666F\u5207\u63DB\u554F\u984C"
 --- !u!222 &137234336
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6820,7 +6817,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &631976308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6833,7 +6830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86382054390184e429b5141ac5ba809c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Settings: {fileID: 1873780479}
+  SettingsCanvas: {fileID: 1873780479}
   AsI: {fileID: 2087518971}
   PsI: {fileID: 1459171121}
   AudioSourceUI: {fileID: 1147003898}
@@ -6869,7 +6866,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &645107447
 PrefabInstance:
@@ -13999,7 +13996,7 @@ Transform:
   - {fileID: 1709486710}
   - {fileID: 1901245190}
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236106808 stripped
 GameObject:
@@ -17488,7 +17485,7 @@ RectTransform:
   m_Children:
   - {fileID: 137234334}
   m_Father: {fileID: 0}
-  m_RootOrder: 24
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -20567,7 +20564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1873780475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20660,12 +20657,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b08a9eea5cabba42b76f48a950dd5d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StartButton: {fileID: 0}
+  OptionButton: {fileID: 0}
+  QuitButton: {fileID: 0}
   SettingsUI: {fileID: 890073071}
   deSetUI: {fileID: 720608141}
   AudioManager: {fileID: 631976308}
   PictureSetUI: {fileID: 500167222}
   AsI: {fileID: 2087518971}
   PsI: {fileID: 1459171121}
+  StartUI: {fileID: 0}
+  Start_image: []
+  START_bool: 0
 --- !u!1001 &1876787431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23824,7 +23827,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2513710360905645810, guid: 36fbffd43539b5047bc94ac1f3c7021f, type: 3}
+  - {fileID: 2100000, guid: c281b5bf24c6ad64c9fedf5e93a14676, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -23969,7 +23972,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2513710360905645810, guid: 36fbffd43539b5047bc94ac1f3c7021f, type: 3}
+  - {fileID: 2100000, guid: c281b5bf24c6ad64c9fedf5e93a14676, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -24544,7 +24547,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2513710360905645810, guid: 36fbffd43539b5047bc94ac1f3c7021f, type: 3}
+  - {fileID: 2100000, guid: c281b5bf24c6ad64c9fedf5e93a14676, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

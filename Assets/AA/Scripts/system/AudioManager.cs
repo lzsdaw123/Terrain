@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class AudioManager : MonoBehaviour
 {
     static AudioManager current;
-    public Settings Settings;
+    public Settings SettingsCanvas;
     public Image AsI, PsI;
 
     public GameObject AudioSourceUI;
@@ -32,6 +32,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);  //切換場景時保留
         current = this;
         AudioSourceUI.SetActive(true);
+        SettingsCanvas = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
 
         //生成聲音控制器
         AmbientSource = gameObject.AddComponent<AudioSource>();
@@ -57,12 +58,12 @@ public class AudioManager : MonoBehaviour
         }
 
     }
-    public void AudioSetUI()  //點開聲音設定
+    public void AudioSetUI()  //點開聲音設定UI
     {
         AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
         PsI.color = new Color(0.643f, 0.643f, 0.643f, 1f);
         AudioSourceUI.SetActive(true);
-        Settings.PictureSetUI.SetActive(false);
+        SettingsCanvas.PictureSetUI.SetActive(false);
     }
     public void MuteState(int N)  //靜音
     {
