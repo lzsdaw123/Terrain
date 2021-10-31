@@ -13,14 +13,22 @@ public class AudioManager : MonoBehaviour
 
     public GameObject AudioSourceUI;
 
-    public AudioClip RainCilp;  //下雨音效
+    public static bool SourcePause = false;
 
+    //BGM
+
+    //BGS
+    public AudioClip RainCilp;  //下雨音效
+    //SE
     public AudioClip[] WalkClip;  //走路音效
     public AudioClip[] GunshotsClip;  //走路音效
+    public AudioClip ElevatorCilp;  //電梯音效
+
 
     AudioSource AmbientSource;  //環境音源
     AudioSource PlayerSource;  //玩家音源
     AudioSource GunSource;  //槍枝音源
+    static AudioSource ElevatorSource;  //電梯音源
 
     public Scrollbar[] Scrollbar;
     public Button[] MuteButton;  //BSE靜音按鈕
@@ -43,12 +51,17 @@ public class AudioManager : MonoBehaviour
         muteState[2] = PlayerSource.mute;
         AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
         StartLevelAudio();
+
     }
     void Update()
     {
         AmbientSource.volume = Scrollbar[1].value;
         PlayerSource.volume = Scrollbar[2].value;
         GunSource.volume = Scrollbar[2].value;
+        if (ElevatorSource !=null)
+        {
+            ElevatorSource.volume = Scrollbar[2].value;
+        }
 
         for (int i =0; i< Nub.Length ; i++)
         {          
@@ -56,7 +69,14 @@ public class AudioManager : MonoBehaviour
             int _Nub = (int)ScrV;
             Nub[i].text = _Nub + " %";
         }
-
+        if (SettingsCanvas.transform.GetChild(0).gameObject.activeSelf)  //遊戲是否暫停
+        {
+            SourcePause = true;
+        }
+        else
+        {
+            SourcePause = false;
+        }
     }
     public void AudioSetUI()  //點開聲音設定UI
     {
@@ -88,6 +108,7 @@ public class AudioManager : MonoBehaviour
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
         GunSource.mute = muteState[2];
+        ElevatorSource.mute = muteState[2];
 
     }
 
@@ -97,15 +118,23 @@ public class AudioManager : MonoBehaviour
         current.AmbientSource.loop = true;
         current.AmbientSource.Play();
     }
-
-    public static void PlayFootstepAudio()
+    public static void ElevatorAudio(GameObject ElevatorA)  //電梯音效
+    {
+        if (ElevatorSource == null)
+        {
+            ElevatorSource = ElevatorA.AddComponent<AudioSource>();
+            ElevatorSource.clip = current.ElevatorCilp;
+            ElevatorSource.volume = 2f;         
+        }
+    }
+    public static void PlayFootstepAudio()  //走路
     {
         int index = Random.Range(0, current.WalkClip.Length);
 
         current.PlayerSource.clip = current.WalkClip[index];
         current.PlayerSource.Play();
     }
-    public static void PlayGunshotsAudio(int B)
+    public static void PlayGunshotsAudio(int B)  //開火
     {
         current.GunSource.clip = current.GunshotsClip[B];
         current.GunSource.volume = 0.6f;
@@ -113,7 +142,7 @@ public class AudioManager : MonoBehaviour
         if (B == 0)
         {
             current.GunSource.volume = 1.2f;
-            current.GunSource.pitch = 1f;
+            //current.GunSource.pitch = 1f;
         }
         current.GunSource.Play();
     }

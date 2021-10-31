@@ -38,6 +38,7 @@ public class Shooting : MonoBehaviour
 
     public static int ammunition = 30, Total_ammunition = 300;  //彈藥量
     public static bool Reload = false;   //是否正在換彈
+    bool ammAudio_N=true;
     bool AimIng;
     float FieldOfView;
 
@@ -156,31 +157,39 @@ public class Shooting : MonoBehaviour
                 //ZoomOut();
             }
             //若按下滑鼠左鍵開火
-            if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
+            if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) )
             {
-                MuSmoke.Stop();  //關閉槍口煙霧
-                float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
-               // float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
-                float rangeX = Random.Range(9f, 15f);  //射擊垂直晃動範圍
-                FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
-                //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
-                FireRotateX = rangeX;
-                if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
-                //Debug.Log("原本的" + " / " + FireRotateX);
-                if (AimIng == true) {
-                    FireRotateY /= 2;
-                    FireRotateX /= 3;
-                }              
-               // Debug.Log("後" + " / " + FireRotateX);
+                if(ammunition != 0)
+                {
+                    MuSmoke.Stop();  //關閉槍口煙霧
+                    float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
+                                                             // float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
+                    float rangeX = Random.Range(9f, 15f);  //射擊垂直晃動範圍
+                    FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
+                    //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
+                    FireRotateX = rangeX;
+                    if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
+                                                                 //Debug.Log("原本的" + " / " + FireRotateX);
+                    if (AimIng == true)
+                    {
+                        FireRotateY /= 2;
+                        FireRotateX /= 3;
+                    }
+                    // Debug.Log("後" + " / " + FireRotateX);
 
-                transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
-                GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.smoothDeltaTime;
+                    transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
+                    GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.smoothDeltaTime;
 
+                    ammunition--;
+                    Weapon.SetBool("Fire", true);
+                    Weapon.SetBool("Aim", false);
+                    BFire = true;  //生成子彈
+                }
+                else
+                {
+                    GussetMachine();
+                }
                 coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown差越小越快
-                ammunition--;
-                Weapon.SetBool("Fire", true);
-                Weapon.SetBool("Aim", false);
-                BFire = true;  //生成子彈
             }
             else
             {
@@ -220,16 +229,14 @@ public class Shooting : MonoBehaviour
         {
             Weapon.SetTrigger("Cherk");
         }
-
         if (ammunition <= 0)
         {
             ammunition = 0;
-            if (Input.GetButtonDown("Fire1")) AudioManager.PlayGunshotsAudio(0);
         }
         if (Total_ammunition <= 0)
         {
             Total_ammunition = 0;
-        }       
+        }
     }
     void ZoomIn()
     {
@@ -276,5 +283,9 @@ public class Shooting : MonoBehaviour
     void GunshotsAudio()
     {
         AudioManager.PlayGunshotsAudio(1);
+    }
+    void GussetMachine()  //扣板機
+    {
+        AudioManager.PlayGunshotsAudio(0);
     }
 }
