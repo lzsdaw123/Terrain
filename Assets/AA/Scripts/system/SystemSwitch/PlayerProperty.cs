@@ -13,6 +13,9 @@ public class PlayerProperty : MonoBehaviour
 
     void Start()
     {
+        Setting = GameObject.Find("Setting").gameObject;
+        AudioManager = GameObject.Find("AudioManager").gameObject;
+
         CustomSceneManager.onScenesLoadingEvent += PassDataToMessanger;
         Settings.onScenesLoadingEvent += PassDataToGameObject;
     }

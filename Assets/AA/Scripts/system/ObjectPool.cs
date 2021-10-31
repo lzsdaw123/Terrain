@@ -26,7 +26,7 @@ public class ObjectPool : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);  //切換場景時保留
+        //DontDestroyOnLoad(gameObject);  //切換場景時保留
         inttailSize = 8;  //物件池大小
 
         for (int cut =0;cut< inttailSize; cut++)

@@ -12,6 +12,7 @@ public class Elevator : MonoBehaviour
 
     void Start()
     {
+        AudioSource = this.GetComponent<AudioSource>();
         AudioSource.volume = 1.7f;
     }
 

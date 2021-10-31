@@ -13,6 +13,7 @@ public class Settings : MonoBehaviour
     Scene activeScene;
     public static UnityAction onScenesLoadingEvent;
     public static UnityAction onScenesLoadedEvent;
+    private AsyncOperation operation;
 
     public Button StartButton;
     public Button OptionButton;
@@ -31,16 +32,23 @@ public class Settings : MonoBehaviour
     public bool START_bool;
 
     void Awake()
-    {     
+    {
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
+        SceneManager.LoadScene(1);
+        SceneManager.UnloadSceneAsync(0);
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
-        ReStart();
+        
 
         PictureSetUI.SetActive(false);
         START_bool = false;
         instance = this;
-        DontDestroyOnLoad(gameObject);  //切換場景時保留
-    }  
+    }
+    void Start()
+    {
+        ReStart();
+
+    }
     void Update()
     {
         if (START_bool)
@@ -66,6 +74,17 @@ public class Settings : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            if (operation != null)
+            {
+                if (operation.progress == 1)
+                {
+                    operation = null;
+                    ReStart();
+                }
+            }
+        }
         if (Input.GetKeyDown(KeyCode.M))
         {
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
@@ -84,7 +103,7 @@ public class Settings : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    void con()
+    void con()  //關閉設定介面
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
         //時間以正常速度運行
@@ -119,10 +138,10 @@ public class Settings : MonoBehaviour
     {
         START_bool = false;
         SettingsUI.SetActive(false);
-        Cursor.lockState = CursorLockMode.None; //游標無狀態模式
-        SceneManager.LoadScene(0);
-        Settings.LoadScene("Start");
-
+        Cursor.lockState = CursorLockMode.None; //游標無狀態模式    
+        operation = SceneManager.LoadSceneAsync(1);
+        SceneManager.UnloadSceneAsync(2);
+        //Settings.LoadScene("Start");
     }
     public void Yes()  //設定確定
     {
@@ -151,16 +170,13 @@ public class Settings : MonoBehaviour
         StartUI.GetComponent<RawImage>().texture = Start_image[1];
         START_bool = true;
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
-        SceneManager.LoadScene(1);
-        Settings.LoadScene("SampleScene");
-        //DontDestroyOnLoad(gameObject);  //切換場景時保留
-
-        //gameObject.SetActiveRecursively(false);
-        //gameObject.SetActive(false);
+        SceneManager.LoadSceneAsync(2);
+        SceneManager.UnloadSceneAsync(1);
+        //Settings.LoadScene("SampleScene");
     }
     public void OptionB()
     {
-        StartUI.GetComponent<RawImage>().texture = Start_image[2];
+        //StartUI.GetComponent<RawImage>().texture = Start_image[2];
         Set();
     }
     public void QuitB()  //離開遊戲
