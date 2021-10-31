@@ -34,8 +34,8 @@ public class Settings : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
-        SceneManager.LoadScene(1);
-        SceneManager.UnloadSceneAsync(0);
+        //SceneManager.LoadScene(1);
+        //SceneManager.UnloadSceneAsync(0);
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
         

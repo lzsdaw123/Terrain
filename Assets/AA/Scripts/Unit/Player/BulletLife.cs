@@ -156,8 +156,9 @@ public class BulletLife : MonoBehaviour
                 pos = hit.point;             
                 if (NoActor && pos != Vector3.zero)
                 {
+                    NoActor = false;
                     pos = HIT.transform.position;
-                    //pool_Hit.ReUseHit(pos, rot, HitType);;  //從彈孔池取出彈孔
+                    pool_Hit.ReUseHit(pos, rot, HitType);;  //從彈孔池取出彈孔
                     liftTime = 0;
                     return;
                 }
