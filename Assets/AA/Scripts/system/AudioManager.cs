@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class AudioManager : MonoBehaviour
@@ -18,7 +19,7 @@ public class AudioManager : MonoBehaviour
     //BGM
 
     //BGS
-    public AudioClip RainCilp;  //下雨音效
+    public AudioClip[] BgsCilp;  //下雨音效
     //SE
     public AudioClip[] WalkClip;  //走路音效
     public AudioClip[] GunshotsClip;  //走路音效
@@ -30,10 +31,13 @@ public class AudioManager : MonoBehaviour
     AudioSource GunSource;  //槍枝音源
     static AudioSource ElevatorSource;  //電梯音源
 
-    public Scrollbar[] Scrollbar;
+    public Slider[] Slider;
     public Button[] MuteButton;  //BSE靜音按鈕
     public Text[] Nub;  //BSE
-    public bool[] muteState;   
+    public bool[] muteState;
+
+    int SceneNub;  //當前場景編號
+    int OriSceneNub;  //當前場景編號
 
     private void Awake()
     {
@@ -50,22 +54,30 @@ public class AudioManager : MonoBehaviour
         muteState[1] = AmbientSource.mute;
         muteState[2] = PlayerSource.mute;
         AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
+        SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        OriSceneNub = SceneNub;
         StartLevelAudio();
 
     }
     void Update()
     {
-        AmbientSource.volume = Scrollbar[1].value;
-        PlayerSource.volume = Scrollbar[2].value;
-        GunSource.volume = Scrollbar[2].value;
+        SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub != OriSceneNub)
+        {
+            StartLevelAudio();
+        }
+        
+        AmbientSource.volume = Slider[1].value;
+        PlayerSource.volume = Slider[2].value;
+        GunSource.volume = Slider[2].value;
         if (ElevatorSource !=null)
         {
-            ElevatorSource.volume = Scrollbar[2].value;
+            ElevatorSource.volume = Slider[2].value;
         }
 
         for (int i =0; i< Nub.Length ; i++)
         {          
-            float ScrV = Scrollbar[i].value * 100;
+            float ScrV = Slider[i].value * 100;
             int _Nub = (int)ScrV;
             Nub[i].text = _Nub + " %";
         }
@@ -81,6 +93,7 @@ public class AudioManager : MonoBehaviour
         {
             ElevatorSource.mute = muteState[2];
         }
+        
     }
     public void AudioSetUI()  //點開聲音設定UI
     {
@@ -116,8 +129,20 @@ public class AudioManager : MonoBehaviour
     }
 
     void StartLevelAudio()  //背景音效
-    {
-        current.AmbientSource.clip = current.RainCilp;
+    {       
+        if (SceneNub == 1)
+        {
+            current.AmbientSource.clip = current.BgsCilp[0];
+            current.AmbientSource.volume = 0.8f;
+        }
+        else if(SceneNub == 2)
+        {
+            current.AmbientSource.clip = current.BgsCilp[1];
+        }
+        else
+        {
+            current.AmbientSource.clip = null;
+        }
         current.AmbientSource.loop = true;
         current.AmbientSource.Play();
     }

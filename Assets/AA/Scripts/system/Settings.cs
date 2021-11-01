@@ -115,10 +115,10 @@ public class Settings : MonoBehaviour
         SettingsUI.SetActive(false);
         con();
     }
-    public void Set()  //設定
-    {
-        deSetUI_TF();
-    }
+    //public void Set()  //設定
+    //{
+    //    deSetUI_TF();
+    //}
     void deSetUI_TF()  //設定介面開關
     {
         if (!deSetUI.activeSelf)
@@ -167,7 +167,6 @@ public class Settings : MonoBehaviour
 
     public void StartB()  //進入遊戲
     {
-        //StartUI.GetComponent<RawImage>().texture = Start_image[1];
         START_bool = true;
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
         LoadNewScene("SampleScene");
@@ -177,12 +176,10 @@ public class Settings : MonoBehaviour
     }
     public void OptionB()
     {
-        //StartUI.GetComponent<RawImage>().texture = Start_image[2];
-        Set();
+        deSetUI_TF();
     }
     public void QuitB()  //離開遊戲
     {
-        //StartUI.GetComponent<RawImage>().texture = Start_image[3];
         Application.Quit();
     }
     //非同步載入新場景
@@ -192,6 +189,21 @@ public class Settings : MonoBehaviour
         Globe.nextSceneName = sceneName;
 
         SceneManager.LoadSceneAsync("Messenger");
+    }
+
+    public void ScreenSwitch(Dropdown dropdown)
+    {
+        if (dropdown.value == 0)
+        {
+            Screen.fullScreen = true; //切換為全螢幕模式
+
+        }
+        else
+        {
+            Screen.fullScreen = false; //切換為視窗化模式
+            //切換到 640 x 480 全屏
+            //Screen.SetResolution(640, 480, true);
+        }
     }
 
     public static void LoadScene(string sceneName)

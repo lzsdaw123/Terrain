@@ -10,25 +10,48 @@ public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Texture2D NoButton;
     public Texture2D Button;
     public GameObject UI;
-
+    bool Down=false;
+    [SerializeField] GameObject PP;
+    GameObject GB;
     void Start()
     {
-        
+        GB = this.gameObject;
+        PP.SetActive(false);
     }
     void Update()
     {
-        
+        if(UI.GetComponent<RawImage>().texture == NoButton)
+        {
+            PP.SetActive(false);
+        }
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        //UI.GetComponent<RawImage>().texture = NoButton;
+        if (!Down)
+        {
+            UI.GetComponent<RawImage>().texture = NoButton;
+        }        
     }    
     public void OnPointerEnter(PointerEventData eventData)
     {
         UI.GetComponent<RawImage>().texture = Button;
+        if (GB.name == "StartB")
+        {
+            PP.transform.position = new Vector3(-194.996f,-82.4f,242);
+        }
+        else if (GB.name == "OptionB")
+        {
+            PP.transform.position = new Vector3(-193f, -100f, 242);
+        }
+        else if (GB.name == "QuitB")
+        {
+            PP.transform.position = new Vector3(-191f, -114.2f, 242);
+        }
+        PP.SetActive(true);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
         UI.GetComponent<RawImage>().texture = Button;
+        Down = true;
     }
 }
