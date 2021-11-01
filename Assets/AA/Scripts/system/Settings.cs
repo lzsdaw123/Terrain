@@ -34,7 +34,7 @@ public class Settings : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
-        //SceneManager.LoadScene(1);
+        //SceneManager.LoadSceneAsync(0);
         //SceneManager.UnloadSceneAsync(0);
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
@@ -167,10 +167,11 @@ public class Settings : MonoBehaviour
 
     public void StartB()  //進入遊戲
     {
-        StartUI.GetComponent<RawImage>().texture = Start_image[1];
+        //StartUI.GetComponent<RawImage>().texture = Start_image[1];
         START_bool = true;
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
-        SceneManager.LoadSceneAsync(2);
+        LoadNewScene("SampleScene");
+        //SceneManager.LoadSceneAsync(2);
         SceneManager.UnloadSceneAsync(1);
         //Settings.LoadScene("SampleScene");
     }
@@ -181,8 +182,16 @@ public class Settings : MonoBehaviour
     }
     public void QuitB()  //離開遊戲
     {
-        StartUI.GetComponent<RawImage>().texture = Start_image[3];
+        //StartUI.GetComponent<RawImage>().texture = Start_image[3];
         Application.Quit();
+    }
+    //非同步載入新場景
+    public void LoadNewScene(string sceneName)
+    {
+        //儲存需要載入的目標場景
+        Globe.nextSceneName = sceneName;
+
+        SceneManager.LoadSceneAsync("Messenger");
     }
 
     public static void LoadScene(string sceneName)

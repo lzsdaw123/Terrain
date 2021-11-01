@@ -77,6 +77,10 @@ public class AudioManager : MonoBehaviour
         {
             SourcePause = false;
         }
+        if (ElevatorSource != null)
+        {
+            ElevatorSource.mute = muteState[2];
+        }
     }
     public void AudioSetUI()  //點開聲音設定UI
     {
@@ -108,7 +112,6 @@ public class AudioManager : MonoBehaviour
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
         GunSource.mute = muteState[2];
-        ElevatorSource.mute = muteState[2];
 
     }
 
