@@ -19,10 +19,11 @@ public class AudioManager : MonoBehaviour
     //BGM
 
     //BGS
-    public AudioClip[] BgsCilp;  //下雨音效
+    public AudioClip[] BgsCilp;  //背景音效
     //SE
     public AudioClip[] WalkClip;  //走路音效
-    public AudioClip[] GunshotsClip;  //走路音效
+    public AudioClip[] JumpClip;  //落地音效
+    public AudioClip[] GunshotsClip;  //開槍音效
     public AudioClip ElevatorCilp;  //電梯音效
 
 
@@ -160,6 +161,11 @@ public class AudioManager : MonoBehaviour
         int index = Random.Range(0, current.WalkClip.Length);
 
         current.PlayerSource.clip = current.WalkClip[index];
+        current.PlayerSource.Play();
+    }
+    public static void PlayJumpAudio()  //跳躍落地
+    {
+        current.PlayerSource.clip = current.JumpClip[0];
         current.PlayerSource.Play();
     }
     public static void PlayGunshotsAudio(int B)  //開火

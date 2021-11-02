@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
@@ -13,6 +14,16 @@ public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     bool Down=false;
     [SerializeField] GameObject PP;
     GameObject GB;
+    [SerializeField]public static bool SceneBool=false;
+
+    void Awake()
+    {
+        if (SceneManager.sceneCount == 1 && !SceneBool )
+        {
+            SceneBool = true;
+            SceneManager.LoadScene(0, LoadSceneMode.Additive);
+        }
+    }
     void Start()
     {
         GB = this.gameObject;
@@ -20,7 +31,7 @@ public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
     void Update()
     {
-        if(UI.GetComponent<RawImage>().texture == NoButton)
+        if (UI.GetComponent<RawImage>().texture == NoButton)
         {
             PP.SetActive(false);
         }

@@ -38,10 +38,13 @@ public class Settings : MonoBehaviour
         //SceneManager.UnloadSceneAsync(0);
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
-        
-
-        PictureSetUI.SetActive(false);
         START_bool = false;
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            START_bool = true;
+        }
+        PictureSetUI.SetActive(false);
+        
         instance = this;
     }
     void Start()
@@ -221,7 +224,7 @@ public class Settings : MonoBehaviour
         yield return null;
 
         onScenesLoadingEvent?.Invoke();
-        activeScene = SceneManager.GetActiveScene();
+        activeScene = SceneManager.GetActiveScene();  //當前活動場景
         SceneManager.UnloadSceneAsync(activeScene);
         SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 

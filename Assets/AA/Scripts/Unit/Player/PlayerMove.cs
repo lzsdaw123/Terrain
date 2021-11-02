@@ -25,6 +25,7 @@ public class PlayerMove : MonoBehaviour
     public LayerMask Ground, Ceiling;       //地面圖層
     public CollisionFlags m_CollisionFlags;  //碰撞提醒
     public bool m_Jump;  //是否跳躍
+    [SerializeField] bool isAir;  //是否跳躍
     public static bool m_Jumping;  //跳躍中
     float rotationX;
 
@@ -70,10 +71,17 @@ public class PlayerMove : MonoBehaviour
             }
             if (!isGrounded && controller.isGrounded)
             {
-                //PlayLandingSound();
+                if (m_Jumping && velocity.y != -2)
+                {
+                    AudioManager.PlayJumpAudio();
+                    //print("落地");
+                    isAir = true;
+                }
+                isAir = false;
                 move.y = 0f;
-                m_Jumping = false;                
+                m_Jumping = false;
             }
+
             if (!controller.isGrounded && !m_Jumping && isGrounded)
             {
                 move.y = 0f;

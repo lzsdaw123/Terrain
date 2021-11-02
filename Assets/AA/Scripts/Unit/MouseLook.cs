@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MouseLook : MonoBehaviour
 {
@@ -30,7 +31,17 @@ public class MouseLook : MonoBehaviour
 
     public float smooth = 3;          // 相機移動的平穩程度
 
+    [SerializeField] bool SceneBool;
 
+    void Awake()
+    {
+        SceneBool=StartButton.SceneBool;
+        if (SceneManager.sceneCount == 1 && !SceneBool)
+        {
+            SceneBool = true;
+            SceneManager.LoadScene(0, LoadSceneMode.Additive);
+        }
+    }
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
@@ -44,9 +55,7 @@ public class MouseLook : MonoBehaviour
     }
     void Update()
     {
-        
-      
-        
+
     }
     void LateUpdate()
     {

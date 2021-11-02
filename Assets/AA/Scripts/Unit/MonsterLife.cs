@@ -19,30 +19,46 @@ public class MonsterLife : MonoBehaviour
     //public Image hpImage;
 
     private NavMeshAgent agent;
-    private MonsterAI01 monster01;
+    private MonsterAI02 monster02;
 
+    public GameObject PS_Dead;
+    [SerializeField] float DeadTime;
 
+    void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
+        cld = GetComponent<Collider>();
+        agent = GetComponent<NavMeshAgent>();
+        monster02 = GetComponent<MonsterAI02>();
+    }
     void Start()
     {
+        PS_Dead.SetActive(false);
+        DeadTime = 0;
         hpFull = 10f;
         hp = hpFull; // 遊戲一開始先補滿血量
         RefreshLifebar(); // 更新血條
         //ani = GetComponent<Animator>();
-        rigid = GetComponent<Rigidbody>();
-        cld = GetComponent<Collider>();
-        agent = GetComponent<NavMeshAgent>();
-        monster01 = GetComponent<MonsterAI01>();
+       
         //RagdollActive(false); // 先關閉物理娃娃
 
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y)) // 測試用
+        //if (Input.GetKeyDown(KeyCode.Y)) // 測試用
+        //{
+        //    monster02.enabled = false; // 關閉控制腳本
+        //    agent.enabled = false;  //立即關閉尋徑功能
+        //    ani.SetTrigger("Die");
+        //}
+        if (PS_Dead.activeSelf)
         {
-            monster01.enabled = false; // 關閉控制腳本
-            agent.enabled = false;  //立即關閉尋徑功能
-            ani.SetTrigger("Die");
+            DeadTime += 1.6f * Time.deltaTime;
+            if (DeadTime >= 1)
+            {
+                GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
+            }
         }
     }
     // 開啟或關閉物理娃娃系統
@@ -78,11 +94,10 @@ public class MonsterLife : MonoBehaviour
         if (hp <= 0)
         {
             hp = 0; // 不要扣到負值
-            //monster01.enabled = false; // 關閉 AI 腳本
-            //agent.enabled = false; // 立即關閉尋徑功能
+            PS_Dead.SetActive(true);
+            monster02.enabled = false; // 關閉 AI 腳本
+            agent.enabled = false; // 立即關閉尋徑功能
             ani.SetTrigger("Die");
-            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
-
         }
 
         RefreshLifebar(); // 更新血條
@@ -95,6 +110,10 @@ public class MonsterLife : MonoBehaviour
     void OnDisable()
     {
         hp = hpFull;
+        PS_Dead.SetActive(false);
+        DeadTime = 0;
+        monster02.enabled = true;
+        agent.enabled = true; // 開啟尋徑功能
     }
 
 

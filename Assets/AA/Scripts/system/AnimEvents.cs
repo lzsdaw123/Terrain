@@ -13,16 +13,22 @@ public class AnimEvents : MonoBehaviour
     public int buttleAttack=0;
     public float h, v;
 
-    public AudioSource MonAtSource;  ///怪物攻擊音源
+    public AudioManager AudioManager;
+    public AudioClip[] MonsterClip;
+    public AudioSource MonsterSource;  ///怪物攻擊音源
+    bool MonsterA=false;
 
     void Start()
     {
+        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
     void Update()
     {
         //Move = animator.SetBool("Move", bool );
         h = PlayerMove.h;
         v = PlayerMove.v;
+
+
     }
 
     void NoShooting()
@@ -67,22 +73,25 @@ public class AnimEvents : MonoBehaviour
         {
             AudioManager.PlayFootstepAudio();
         }
-
+    }
+    public void JumpAudio()
+    {
+        //AudioManager.PlayJumpAudio();
     }
     void WalkCilpRight()
     {
 
     }
-    void MonsterAttack(int Nub)
+    void MonsterAudio(int Nub)
     {
-        //MonAtSource.volume = Scrollbar[2].value;
-        //        MonAtSource.mute = muteState[2];
-        if (Nub == 0)
-        {
-            MonAtSource.Play();
-        }
-
-        
+        MonsterSource.clip = MonsterClip[Nub];
+        MonsterSource.volume = AudioManager.Slider[2].value;
+        MonsterSource.mute = AudioManager.muteState[2];
+        MonsterSource.Play();
+        //if (Nub == 0)
+        //{
+            
+        //}      
     }
 
 }

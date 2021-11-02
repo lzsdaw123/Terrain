@@ -6,6 +6,7 @@ public class S_BulletLife : MonoBehaviour
 {
     public GameObject Muzzle_vfx;
     public GameObject[] Hit_vfx;  //彈孔類型
+    public ParticleSystem[] Pro;
     public int HitType;
     public Transform target;
     public Transform OriTarger;
@@ -28,6 +29,8 @@ public class S_BulletLife : MonoBehaviour
     public float rayLength = 0.5f;  //1大約x:105-人物到槍口???射線長度??
     public float rayLength2 = 1f;
     public LayerMask[] Ground;  //射線偵測圖層
+    bool forwardFly = false;
+    bool AttackPlay;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -40,6 +43,15 @@ public class S_BulletLife : MonoBehaviour
     void Start()
     {
         speed = 60f; //飛行速度
+        for(int i=0; i< Pro.Length; i++)
+        {
+            var main = Pro[i].main;
+            main.simulationSpeed = 8f;  //加快粒子開始播放時間
+            if (i == 2)
+            {
+                main.simulationSpeed = 2f;  //加快粒子開始播放時間
+            }           
+        }
 
 
         //if (Muzzle_vfx != null)
@@ -103,13 +115,13 @@ public class S_BulletLife : MonoBehaviour
         //在到物體上產生彈孔
         //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
         Vector3 pos = hit.point;
-
-        AAT = MonsterAI02.AAT;
-        
     }
     void OnDisable()
     {
         liftTime = 5;
+        Ay = true;
+        Atarget = Vector3.zero;
+        forwardFly = false;
     }
     void Update()
     {
@@ -126,35 +138,56 @@ public class S_BulletLife : MonoBehaviour
 
         if (Ay)
         {
-            AtargetY = AAT.y + 1.2f;
-            Atarget = new Vector3(AAT.x, AtargetY, AAT.z);
-            ABPath = Atarget - transform.position;
-            ABPath = ABPath / 10;
-            Ay = false;
-        }
-        if (AAT != Vector3.zero)
-        {          
-            float firstSpeed = Vector3.Distance(transform.position, Atarget);
-            float orifirstSpeed = firstSpeed;
-            if (firstSpeed != 0)
+            AAT = MonsterAI02.AAT;
+            AttackPlay = MonsterAI02.AttackPlay;
+
+            if (AttackPlay)
             {
-                if (firstSpeed == orifirstSpeed)
-                {
-                    transform.localPosition += transform.forward * speed * Time.deltaTime;  //往前移動
-                    return;
-                }
-                transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
-                firstSpeed = Vector3.Distance(transform.position, Atarget);      
+                AtargetY = AAT.y + 1.2f;
+                Atarget = new Vector3(AAT.x, AtargetY, AAT.z);
             }
             else
             {
-                  liftTime = 0;
+                Atarget = AAT;
+            }
+           
+            //ABPath = Atarget - transform.position;
+            //ABPath = ABPath / 10;
+            Ay = false;
+        }
+
+        if (Atarget != Vector3.zero)
+        {
+            float firstSpeed = Vector3.Distance(transform.position, Atarget);
+            float orifirstSpeed = firstSpeed;
+
+            if (forwardFly)
+            {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime); //往前移動
+            }
+            else
+            {
+                if (firstSpeed != 0)
+                {
+
+                    transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
+                    firstSpeed = Vector3.Distance(transform.position, Atarget);
+                    if (firstSpeed == orifirstSpeed)
+                    {
+                        forwardFly = true;
+                    }
+                }
+                else
+                {
+                    liftTime = 0;
+                }
             }
         }
         else
         {
             liftTime = 0;
         }
+       
         //    float step = speed * Time.deltaTime;
         //transform.localPosition += ABPath * speed * Time.deltaTime ;
 
@@ -171,7 +204,6 @@ public class S_BulletLife : MonoBehaviour
         //    GetComponent<Rigidbody>().useGravity = true;
         //}
     }
-
     bool InLayerMask(int layer, LayerMask layerMask) //判斷物件圖層是否在LayerMask內
     {
         return layerMask == (layerMask | (1 << layer));
