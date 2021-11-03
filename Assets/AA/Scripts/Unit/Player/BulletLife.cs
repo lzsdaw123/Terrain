@@ -130,7 +130,10 @@ public class BulletLife : MonoBehaviour
                     }
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
                     {
-                        NoActor = true;
+                        if (hit.collider.tag != "MissionTarget")
+                        {
+                            NoActor = true;
+                        }                  
                     }
                 }
 

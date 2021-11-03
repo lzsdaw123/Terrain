@@ -1470,7 +1470,7 @@ RectTransform:
   - {fileID: 465036339}
   - {fileID: 1569119612}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2111,7 +2111,7 @@ RectTransform:
   m_Children:
   - {fileID: 2022768275}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4510,7 +4510,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1523080156
 GameObject:
@@ -4598,6 +4598,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 436658739}
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+        m_MethodName: Set
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5540,11 +5552,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3de5484ccaba6c46b7f8a094d38c8d8, type: 3}
   JumpClip:
   - {fileID: 8300000, guid: 2a46302b02bd08c41a8bf5bef8b621ec, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 4219bccb9259ca44f98b49c9250ded8a, type: 3}
   GunshotsClip:
   - {fileID: 8300000, guid: c713b37c5b9739c4a845dde3833a3dfb, type: 3}
   - {fileID: 8300000, guid: 3bbf8ff27e8029a4592f929da19dd5ba, type: 3}
+  - {fileID: 8300000, guid: ab4429b52ad08254aa81257133a7b461, type: 3}
+  - {fileID: 8300000, guid: dd639df7bec210746be30597f3cd0530, type: 3}
   ElevatorCilp: {fileID: 8300000, guid: 8b04db0ff7076b941a7b968f873ec04d, type: 3}
+  ExplodeCilp: {fileID: 8300000, guid: bbeb4ea5c93f24a488f7edf181c62de6, type: 3}
+  ButtonCilp: {fileID: 8300000, guid: 2ea5cc231cce1e94fa150fbba985976d, type: 3}
   Slider:
   - {fileID: 1661427072}
   - {fileID: 86200091}

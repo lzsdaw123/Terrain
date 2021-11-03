@@ -68,13 +68,16 @@ MonoBehaviour:
   facingRight: 1
   power: 1
   damageTags:
-  - Player
+  - MissionTarget
   ignoreTags: []
   rayLength: 0.5
   rayLength2: 1
   Ground:
   - serializedVersion: 2
     m_Bits: 8192
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 31233
 --- !u!136 &9204926344011936254
 CapsuleCollider:
   m_ObjectHideFlags: 0

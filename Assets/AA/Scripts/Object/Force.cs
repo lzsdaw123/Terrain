@@ -31,7 +31,6 @@ public class Force : MonoBehaviour
     {
         if(¯}ªù) {
             time += 0.8f * Time.deltaTime;
-
             foreach (var r in rigidbodies)
             {
                 r.isKinematic = false;

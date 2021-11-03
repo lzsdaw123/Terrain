@@ -9,7 +9,7 @@ public class PlayerMove : MonoBehaviour
     public Shooting _Shooting;
 
     private Rigidbody _rigidbody;
-    public float Speed=6.5f;
+    public static float Speed=6.5f;
     public float gravity = -9.81f; //重力
     public float jumpHeigh; // 跳躍高度
 
@@ -28,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] bool isAir;  //是否跳躍
     public static bool m_Jumping;  //跳躍中
     float rotationX;
+    public static int Metal;
 
     public bool inside = false;  //是否碰到梯子
     public float insideTimer;  //離開梯子時間
@@ -73,7 +74,14 @@ public class PlayerMove : MonoBehaviour
             {
                 if (m_Jumping && velocity.y != -2)
                 {
-                    AudioManager.PlayJumpAudio();
+                    if (Metal==0)
+                    {
+                        AudioManager.PlayJumpAudio(0);
+                    }
+                    else
+                    {
+                        AudioManager.PlayJumpAudio(1);
+                    }                 
                     //print("落地");
                     isAir = true;
                 }
@@ -263,16 +271,23 @@ public class PlayerMove : MonoBehaviour
     {
         Rigidbody body = hit.collider.attachedRigidbody;
         //dont move the rigidbody if the character is on top of it
-        if (m_CollisionFlags == CollisionFlags.Below)
+        if (hit.collider.tag == "Metal")  //金屬
         {
-            return;
+            Metal = 1;
         }
+        else
+        {
+            Metal = 0;
+        }
+        //if (m_CollisionFlags == CollisionFlags.Below)
+        //{
+        //    return;
+        //}
 
-        if (body == null || body.isKinematic)
-        {
-            return;
-        }
-        body.AddForceAtPosition(controller.velocity * 0.1f, hit.point, ForceMode.Impulse);
+        //if (body == null || body.isKinematic)
+        //{
+        //    return;
+        //}
+        //body.AddForceAtPosition(controller.velocity * 0.1f, hit.point, ForceMode.Impulse);
     }
-
 }

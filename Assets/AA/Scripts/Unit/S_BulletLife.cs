@@ -29,16 +29,14 @@ public class S_BulletLife : MonoBehaviour
     public float rayLength = 0.5f;  //1大約x:105-人物到槍口???射線長度??
     public float rayLength2 = 1f;
     public LayerMask[] Ground;  //射線偵測圖層
+    public LayerMask layerMask;
     bool forwardFly = false;
     bool AttackPlay;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
         facingRight = FacingRight;
-
-
         //Destroy(gameObject, liftTime); //設置生命時間到自動刪除
-
     }
     void Start()
     {
@@ -52,65 +50,25 @@ public class S_BulletLife : MonoBehaviour
                 main.simulationSpeed = 2f;  //加快粒子開始播放時間
             }           
         }
-
-
-        //if (Muzzle_vfx != null)
-        //{
-        //    var muzzleVFX = Instantiate(Muzzle_vfx, transform.position, Quaternion.identity);
-        //    muzzleVFX.transform.forward = gameObject.transform.forward;
-        //    var psMuzzle = Muzzle_vfx.GetComponent<ParticleSystem>();
-        //    if (psMuzzle != null)
-        //    {
-        //        //Destroy(muzzleVFX, psMuzzle.main.duration);
-        //    }
-        //    else
-        //    {
-        //        var psChild = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-        //        //Destroy(muzzleVFX, psChild.main.duration);
-        //    }
-        //}
-        int maskGround = 1 << LayerMask.NameToLayer("Ground");
-        int maskMonster = 1 << LayerMask.NameToLayer("Monster");
-        int maskWall = 1 << LayerMask.NameToLayer("Wall");
-
-       // mask |= 1 << LayerMask.NameToLayer("Wall");
         //射線初始位置,射線方向
         Ray ray = new Ray(transform.position, transform.forward); //*********改****子彈位置到滑鼠點擊位置
         RaycastHit hit; //射線擊中資訊
-
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
         //偵測射線判斷，由 自身座標 的 前方 射出，以rayLength為長度，並且只偵測Ground圖層(記得改圖層
         //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
-        if(Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskGround))
+        if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
         {
-            HitType = 0;
-            //Debug.DrawLine(transform.position, hit.point, Color.green, 0.7f, false);
-            //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)        
-        }
-        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskWall)) //彈孔噴綠
-        {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
             {
-                HitType = 0;
-                //Debug.DrawLine(transform.position, hit.point, Color.black, 0.7f, false);
-                hit.transform.SendMessage("Damage", power); //傷害
-
+                return;
             }
-        }
-        if (Physics.Raycast(transform.position, fwd * 0.01f, out hit, maskMonster)) //彈孔噴綠
-        {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
             {
-                HitType = 0;
-                //Debug.DrawLine(transform.position, hit.point, Color.red, 0.7f, false);
-                hit.transform.SendMessage("Damage", power); //傷害
-            }      
-            //if (hit.collider.tag == "Enemy")
-            //{
-            //    HitType = 3;
-            //    //hit.transform.SendMessage("Damage", power);
-            //    Debug.DrawLine(transform.position, hit.point, Color.blue, 0.3f, true);
-            //}
+                hit.transform.SendMessage("Damage", power);
+                if (hit.collider.tag == "MissionTarget")  //目標
+                {
+                    hit.transform.SendMessage("Damage", power);
+                }
+            }
         }
         //在到物體上產生彈孔
         //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);

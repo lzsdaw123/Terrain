@@ -22,15 +22,20 @@ public class AudioManager : MonoBehaviour
     public AudioClip[] BgsCilp;  //背景音效
     //SE
     public AudioClip[] WalkClip;  //走路音效
+    //public AudioClip[] MetalWalkClip;  //走路音效
     public AudioClip[] JumpClip;  //落地音效
     public AudioClip[] GunshotsClip;  //開槍音效
     public AudioClip ElevatorCilp;  //電梯音效
+    public AudioClip ExplodeCilp;  //爆炸音效
+    public AudioClip ButtonCilp;  //按鈕音效
 
 
     AudioSource AmbientSource;  //環境音源
     AudioSource PlayerSource;  //玩家音源
     AudioSource GunSource;  //槍枝音源
     static AudioSource ElevatorSource;  //電梯音源
+    AudioSource EffectsSource;  //特效音源
+    AudioSource ButtonSource;  //按鈕音源
 
     public Slider[] Slider;
     public Button[] MuteButton;  //BSE靜音按鈕
@@ -51,6 +56,8 @@ public class AudioManager : MonoBehaviour
         AmbientSource = gameObject.AddComponent<AudioSource>();
         PlayerSource = gameObject.AddComponent<AudioSource>();
         GunSource = gameObject.AddComponent<AudioSource>();
+        EffectsSource = gameObject.AddComponent<AudioSource>();
+        ButtonSource = gameObject.AddComponent<AudioSource>();
 
         muteState[1] = AmbientSource.mute;
         muteState[2] = PlayerSource.mute;
@@ -67,10 +74,13 @@ public class AudioManager : MonoBehaviour
         {
             StartLevelAudio();
         }
+
         
         AmbientSource.volume = Slider[1].value;
         PlayerSource.volume = Slider[2].value;
         GunSource.volume = Slider[2].value;
+        EffectsSource.volume = Slider[2].value;
+        ButtonSource.volume = Slider[2].value;
         if (ElevatorSource !=null)
         {
             ElevatorSource.volume = Slider[2].value;
@@ -98,6 +108,7 @@ public class AudioManager : MonoBehaviour
     }
     public void AudioSetUI()  //點開聲音設定UI
     {
+        AudioManager.Button();
         AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
         PsI.color = new Color(0.643f, 0.643f, 0.643f, 1f);
         AudioSourceUI.SetActive(true);
@@ -126,6 +137,8 @@ public class AudioManager : MonoBehaviour
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
         GunSource.mute = muteState[2];
+        EffectsSource.mute = muteState[2];
+        ButtonSource.mute = muteState[2];
 
     }
 
@@ -158,14 +171,29 @@ public class AudioManager : MonoBehaviour
     }
     public static void PlayFootstepAudio()  //走路
     {
-        int index = Random.Range(0, current.WalkClip.Length);
-
-        current.PlayerSource.clip = current.WalkClip[index];
+        if (PlayerMove.Metal==0)
+        {
+            int index = Random.Range(0, current.WalkClip.Length);
+            current.PlayerSource.clip = current.WalkClip[index];
+        }
+        else
+        {
+            current.PlayerSource.clip = current.JumpClip[1];
+            current.PlayerSource.pitch = 0.75f;
+            if (PlayerMove.Speed <= 4)
+            {
+                current.PlayerSource.pitch = 0f;
+            }
+        }
         current.PlayerSource.Play();
     }
-    public static void PlayJumpAudio()  //跳躍落地
+    public static void PlayJumpAudio(int Nub)  //跳躍落地
     {
-        current.PlayerSource.clip = current.JumpClip[0];
+        current.PlayerSource.clip = current.JumpClip[Nub];
+        if (Nub == 1)
+        {
+            current.PlayerSource.pitch = 0.65f;
+        }
         current.PlayerSource.Play();
     }
     public static void PlayGunshotsAudio(int B)  //開火
@@ -176,8 +204,29 @@ public class AudioManager : MonoBehaviour
         if (B == 0)
         {
             current.GunSource.volume = 1.2f;
-            //current.GunSource.pitch = 1f;
         }
         current.GunSource.Play();
+    }
+    public static void Reload(int Nub)  //換彈
+    {
+        if (Nub == 0)
+        {
+            current.GunSource.clip = current.GunshotsClip[2];
+        }
+        else
+        {
+            current.GunSource.clip = current.GunshotsClip[3];
+        }
+        current.GunSource.Play();
+    }
+    public static void explode()  //爆炸
+    {
+        current.EffectsSource.clip = current.ExplodeCilp;
+        current.EffectsSource.Play();
+    }
+    public static void Button()  //按鈕
+    {
+        current.ButtonSource.clip = current.ButtonCilp;
+        current.ButtonSource.Play();
     }
 }

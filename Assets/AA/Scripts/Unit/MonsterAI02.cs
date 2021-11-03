@@ -437,7 +437,7 @@ public class MonsterAI02 : MonoBehaviour
         speed = 0;
         ani.SetFloat("Speed", speed);
         ani.SetBool("Attack",true);
-        Vector3 targetDir = tagObject.transform.position - transform.position;
+        Vector3 targetDir = AAT - transform.position;
         Quaternion rotate = Quaternion.LookRotation(targetDir);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
     }

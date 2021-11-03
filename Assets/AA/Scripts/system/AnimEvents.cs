@@ -93,5 +93,9 @@ public class AnimEvents : MonoBehaviour
             
         //}      
     }
+    void Reload(int Nub)
+    {
+        AudioManager.Reload(Nub);
+    }
 
 }

@@ -75,20 +75,20 @@ public class Shooting : MonoBehaviour
 
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
 
-        if ((Input.GetKeyDown(KeyCode.Q)) && (AniTime >= 2))
-        {
-            m = n;
-            if (n < 1)
-            {
-                n += 1;
-            }
-            else
-            {
-                n = 0;
-            }
-            //Weapon.SetBool("LayDown", true);
-            AniTime = STtime - 1f;
-        }
+        //if ((Input.GetKeyDown(KeyCode.Q)) && (AniTime >= 2))
+        //{
+        //    m = n;
+        //    if (n < 1)
+        //    {
+        //        n += 1;
+        //    }
+        //    else
+        //    {
+        //        n = 0;
+        //    }
+        //    //Weapon.SetBool("LayDown", true);
+        //    AniTime = STtime - 1f;
+        //}
         if (AniTime <= 0)
         {
             _Animator[m].SetActive(false);

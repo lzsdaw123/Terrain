@@ -115,15 +115,17 @@ public class Settings : MonoBehaviour
 
     public void Back()  //繼續遊戲
     {
+        ButtonAudio();
         SettingsUI.SetActive(false);
         con();
     }
-    //public void Set()  //設定
-    //{
-    //    deSetUI_TF();
-    //}
+    public void Set()  //設定
+    {
+        ButtonAudio();
+    }
     void deSetUI_TF()  //設定介面開關
     {
+        ButtonAudio();
         if (!deSetUI.activeSelf)
         {
             deSetUI.SetActive(true);
@@ -139,6 +141,7 @@ public class Settings : MonoBehaviour
     }
     public void Exit()  //回到標題
     {
+        ButtonAudio();
         START_bool = false;
         SettingsUI.SetActive(false);
         Cursor.lockState = CursorLockMode.None; //游標無狀態模式    
@@ -153,7 +156,7 @@ public class Settings : MonoBehaviour
     }
     public void Re()
     {
-        
+        ButtonAudio();
     }
     public void No()   //設定取消
     {
@@ -161,6 +164,7 @@ public class Settings : MonoBehaviour
     }
     public void PictureSetButton()  //點開畫面設定
     {
+        ButtonAudio();
         PictureSetUI.SetActive(true);
         AsI.color = new Color(0.643f, 0.643f, 0.643f, 1f);
         PsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
@@ -170,6 +174,7 @@ public class Settings : MonoBehaviour
 
     public void StartB()  //進入遊戲
     {
+        ButtonAudio();
         START_bool = true;
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
         LoadNewScene("SampleScene");
@@ -183,6 +188,7 @@ public class Settings : MonoBehaviour
     }
     public void QuitB()  //離開遊戲
     {
+        ButtonAudio();
         Application.Quit();
     }
     //非同步載入新場景
@@ -194,7 +200,7 @@ public class Settings : MonoBehaviour
         SceneManager.LoadSceneAsync("Messenger");
     }
 
-    public void ScreenSwitch(Dropdown dropdown)
+    public void ScreenSwitch(Dropdown dropdown)  //畫面設定介面
     {
         if (dropdown.value == 0)
         {
@@ -245,5 +251,9 @@ public class Settings : MonoBehaviour
         OptionButton.onClick.AddListener(OptionB);
         QuitButton.onClick.AddListener(QuitB);
         AudioManager.SettingsCanvas = this;
+    }
+    void ButtonAudio()
+    {
+        AudioManager.Button();
     }
 }
