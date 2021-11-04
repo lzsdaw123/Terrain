@@ -250,6 +250,7 @@ public class MonsterAI02 : MonoBehaviour
                         //    //print(player + "__非");
                         //    tagObject = player.gameObject;
                         //}
+                        //------------------放在Attack()後
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {

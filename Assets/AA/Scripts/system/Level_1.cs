@@ -10,19 +10,25 @@ public class Level_1 : MonoBehaviour
     [SerializeField] ParticleSystem PSexplode;
     float time = 0;
     bool Lv1=false;
+    public LayerMask LayerMask;
+    bool start=false;
+    public GameObject MissonUI,warnUI;
 
     void Start()
     {
         SpawnRay= GameObject.Find("SpawnRay");
         SpawnRay.SetActive(false);
         explode.SetActive(false);
+        MissonUI.SetActive(false);
+        warnUI.SetActive(false);
+        warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 373, 0);
     }
 
     void Update()
     {
         if (!Lv1)
         {
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(KeyCode.F1) || start)
             {
                 AudioManager.explode();
                 Level_1_Start = true;
@@ -35,10 +41,17 @@ public class Level_1 : MonoBehaviour
         if (Lv1)
         {
             time += Time.deltaTime;
+            if (time >= 7f)
+            {
+                MissonUI.SetActive(true);
+                warnUI.SetActive(true);
+
+            }
             if (time >= 15f)
             {
                 var main = PSexplode.main;
                 main.loop = false;
+                warnUI.SetActive(false);
             }
             if (time >=25f)
             {
@@ -46,5 +59,15 @@ public class Level_1 : MonoBehaviour
             }
         }
 
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Actor"))
+        {
+            if (other.tag == "Player")
+            {
+                start = true;
+            }
+        }
     }
 }

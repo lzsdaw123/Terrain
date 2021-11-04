@@ -12,6 +12,8 @@ public class Elevator : MonoBehaviour
     public AudioSource AudioS;
     bool Play=false;
     bool Playing = false;
+    bool start=true;
+
     void Start()
     {
         
@@ -22,7 +24,7 @@ public class Elevator : MonoBehaviour
         if(AudioS != null && Playing)
         {
             SourcePause = AudioManager.SourcePause;
-            if (SourcePause)
+            if (SourcePause)  //暫停
             {
                 AudioS.Pause();
                 Play = true;
@@ -51,35 +53,42 @@ public class Elevator : MonoBehaviour
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
         {
-            play = collider.gameObject;
-            EnterEV();
-            if (DownUp)
+            if (start)
             {
-                Animator.SetTrigger("Down");
-                AudioManager.ElevatorAudio(gameObject);
-                AudioS = GetComponent<AudioSource>();
-            }
-            else
-            {
-                Animator.SetTrigger("Up");
-                AudioManager.ElevatorAudio(gameObject);
+                start = false;
+                play = collider.gameObject;
+                if (DownUp)
+                {
+                    Animator.SetTrigger("Down");
+                    AudioManager.ElevatorAudio(gameObject);
+                    AudioS = GetComponent<AudioSource>();
+                }
+                else
+                {
+                    Animator.SetTrigger("Up");
+                    AudioManager.ElevatorAudio(gameObject);
+                }
+                EnterEV();
             }
         }
-    }void OnTriggerExit(Collider collider)
+    }
+    void OnTriggerExit(Collider collider)
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
         {
-            play = collider.gameObject;
-            ExitEV();
+            //play = collider.gameObject;
+            //ExitEV();
         }
     }
     void EnterEV()
     {
-        Play = Playing = true;
+        if (!Playing)
+        {
+            Play = Playing = true;
+        }
         //XX物件變成子物件
         play.transform.parent = gameObject.transform;
         play.GetComponent<PlayerMove>().enabled = false;
-        //print(Playing);
 
     }
     void ExitEV()
@@ -88,6 +97,5 @@ public class Elevator : MonoBehaviour
         //子物件脫離父物件
         play.transform.parent = null;
         play.GetComponent<PlayerMove>().enabled = true;
-        //print(Playing);
     }
 }

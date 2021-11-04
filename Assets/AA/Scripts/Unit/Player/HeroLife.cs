@@ -46,6 +46,14 @@ public class HeroLife : MonoBehaviour
             time = 0;
         }
 
-
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Damage(1);
+        }
+    }
+    public static void PlayerRe()
+    {
+        hp = fullHp = hp_R = 8; //遊戲一開始時先填滿血
+        Dead = false;
     }
 }

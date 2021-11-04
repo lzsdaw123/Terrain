@@ -39,7 +39,7 @@ public class MouseLook : MonoBehaviour
         if (SceneManager.sceneCount == 1 && !SceneBool)
         {
             SceneBool = true;
-            SceneManager.LoadScene(0, LoadSceneMode.Additive);
+            //SceneManager.LoadScene(0, LoadSceneMode.Additive);
         }
     }
     void Start()

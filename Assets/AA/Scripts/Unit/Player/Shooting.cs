@@ -288,4 +288,9 @@ public class Shooting : MonoBehaviour
     {
         AudioManager.PlayGunshotsAudio(0);
     }
+    public static void PlayerRe()
+    {
+        ammunition = 30;
+        Total_ammunition = 300;
+    }
 }

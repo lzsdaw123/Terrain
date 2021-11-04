@@ -63,10 +63,10 @@ public class S_BulletLife : MonoBehaviour
             }
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
             {
-                hit.transform.SendMessage("Damage", power);
+                //hit.transform.SendMessage("Damage", power);
                 if (hit.collider.tag == "MissionTarget")  //目標
                 {
-                    hit.transform.SendMessage("Damage", power);
+                    //hit.transform.SendMessage("Damage", power);
                 }
             }
         }
