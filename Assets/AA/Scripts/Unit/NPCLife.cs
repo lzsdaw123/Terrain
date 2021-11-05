@@ -33,6 +33,7 @@ public class NPCLife : MonoBehaviour
     {
         hp -= Power; // 扣血
         warnUI.SetActive(true);
+        //AudioManager.Warn(0);
         if (hp <= 0)
         {
             hp = 0; // 不要扣到負值
@@ -65,6 +66,7 @@ public class NPCLife : MonoBehaviour
             {
                 HP_O.SetActive(true);
                 SeriousWarnUI.SetActive(true);
+                AudioManager.Warn(0);
             }
             if (warnUI.activeSelf)
             {

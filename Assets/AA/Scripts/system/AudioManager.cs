@@ -25,14 +25,18 @@ public class AudioManager : MonoBehaviour
     //public AudioClip[] MetalWalkClip;  //走路音效
     public AudioClip[] JumpClip;  //落地音效
     public AudioClip[] GunshotsClip;  //開槍音效
+    public AudioClip[] HitClip;  //擊中音效
     public AudioClip ElevatorCilp;  //電梯音效
     public AudioClip ExplodeCilp;  //爆炸音效
     public AudioClip ButtonCilp;  //按鈕音效
+    public AudioClip[] ActionCilp;  //動作音效
+    public AudioClip[] WarnCilp;  //提示音效
 
 
     AudioSource AmbientSource;  //環境音源
     AudioSource PlayerSource;  //玩家音源
     AudioSource GunSource;  //槍枝音源
+    AudioSource HitSource;  //擊中音源
     static AudioSource ElevatorSource;  //電梯音源
     AudioSource EffectsSource;  //特效音源
     AudioSource ButtonSource;  //按鈕音源
@@ -56,6 +60,7 @@ public class AudioManager : MonoBehaviour
         AmbientSource = gameObject.AddComponent<AudioSource>();
         PlayerSource = gameObject.AddComponent<AudioSource>();
         GunSource = gameObject.AddComponent<AudioSource>();
+        HitSource = gameObject.AddComponent<AudioSource>();
         EffectsSource = gameObject.AddComponent<AudioSource>();
         ButtonSource = gameObject.AddComponent<AudioSource>();
 
@@ -79,6 +84,7 @@ public class AudioManager : MonoBehaviour
         AmbientSource.volume = Slider[1].value;
         PlayerSource.volume = Slider[2].value;
         GunSource.volume = Slider[2].value;
+        HitSource.volume = Slider[2].value;
         EffectsSource.volume = Slider[2].value;
         ButtonSource.volume = Slider[2].value;
         if (ElevatorSource !=null)
@@ -137,6 +143,7 @@ public class AudioManager : MonoBehaviour
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
         GunSource.mute = muteState[2];
+        HitSource.mute = muteState[2];
         EffectsSource.mute = muteState[2];
         ButtonSource.mute = muteState[2];
 
@@ -175,6 +182,7 @@ public class AudioManager : MonoBehaviour
         {
             int index = Random.Range(0, current.WalkClip.Length);
             current.PlayerSource.clip = current.WalkClip[index];
+            current.PlayerSource.pitch = 1.5f;
         }
         else
         {
@@ -227,6 +235,33 @@ public class AudioManager : MonoBehaviour
     public static void Button()  //按鈕
     {
         current.ButtonSource.clip = current.ButtonCilp;
+        current.ButtonSource.loop = false;
         current.ButtonSource.Play();
+    }
+    public static void PickUp(int Nub)  //互動
+    {
+        if (Nub == -1)
+        {
+            current.PlayerSource.Stop();
+            return;
+        }
+        current.PlayerSource.clip = current.ActionCilp[Nub];
+        if (Nub == 0)
+        {
+            current.PlayerSource.pitch = 2;
+        }
+        current.PlayerSource.Play();     
+    }
+    public static void Warn(int Nub)  //警告 提示
+    {
+        current.ButtonSource.clip = current.WarnCilp[Nub];
+        current.ButtonSource.loop = true;
+        current.ButtonSource.Play();
+    }
+    public static void Hit(int Nub)
+    {
+        current.HitSource.clip = current.HitClip[Nub];
+        current.HitSource.pitch=0.8f;
+        current.HitSource.Play();
     }
 }

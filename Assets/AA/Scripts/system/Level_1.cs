@@ -45,6 +45,7 @@ public class Level_1 : MonoBehaviour
             {
                 MissonUI.SetActive(true);
                 warnUI.SetActive(true);
+                //AudioManager.Warn(0);
 
             }
             if (time >= 15f)

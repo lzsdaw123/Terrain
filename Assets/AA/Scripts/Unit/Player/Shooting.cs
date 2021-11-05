@@ -10,7 +10,7 @@ public class Shooting : MonoBehaviour
     public ObjectPool pool;
     public GameObject bullet, Muzzle_vfx;  //子彈,槍口火光  
     public ParticleSystem MuSmoke;
-    //public Transform gun;
+    public ParticleSystem MuFire;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR; //槍瞄準鏡上下位移矯正
     public GameObject GunAimR_x;  //X軸瞄準晃動
@@ -60,6 +60,8 @@ public class Shooting : MonoBehaviour
 
         Muzzle_vfx.SetActive(false);
         MuSmoke.Stop();
+        var main = MuFire.main;
+        //main.startLifetime = 2;
     }
     void Update()
     {

@@ -94,6 +94,7 @@ public class MonsterLife : MonoBehaviour
         if (hp <= 0)
         {
             hp = 0; // 不要扣到負值
+            Scoreboard.AddScore(true);
             PS_Dead.SetActive(true);
             monster02.enabled = false; // 關閉 AI 腳本
             agent.enabled = false; // 立即關閉尋徑功能

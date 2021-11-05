@@ -112,7 +112,12 @@ public class BulletLife : MonoBehaviour
                     {
                         HitType = 0;
                         //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
-                        //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);
+                        //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
+                    }
+                    if (hit.collider.tag == "Metal")
+                    {
+                        HitType = 3;
+                        AudioManager.Hit(0);
                     }
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
                     {
