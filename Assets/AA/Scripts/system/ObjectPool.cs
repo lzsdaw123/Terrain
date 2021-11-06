@@ -56,7 +56,6 @@ public class ObjectPool : MonoBehaviour
     //子彈
     public void ReUse (Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
     {
-        muzzlePOS = positon;
         if (_pool.Count > 0)
         {
             GameObject reuse = _pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
@@ -75,7 +74,6 @@ public class ObjectPool : MonoBehaviour
     {
         _pool.Enqueue(recovery);
         recovery.SetActive(false);
-        recovery.transform.position = muzzlePOS;
     }
 
     //彈孔
@@ -99,7 +97,7 @@ public class ObjectPool : MonoBehaviour
             GameObject reHit;
             reHit = go2.transform.GetChild(HitType).gameObject;
             reHit.SetActive(true);
-        }        
+        }
     }
     public void RecoveryHit(GameObject recovery)  //用來回收物件
     {

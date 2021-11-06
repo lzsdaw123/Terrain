@@ -32,10 +32,10 @@ Material:
   - DBufferMesh_M
   - DBufferMesh_AO
   - DBufferMesh_MAO
-  - Mesh_Emissive
+  - DBufferMesh_MAOS
   - DBufferMesh_MS
   - DBufferMesh_AOS
-  - DBufferMesh_MAOS
+  - Mesh_Emissive
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -101,8 +101,8 @@ Material:
     - _AlbedoMode: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DecalBlend: 0.5
-    - _DecalMaskMapBlueScale: 1
+    - _DecalBlend: 1
+    - _DecalMaskMapBlueScale: 0
     - _DecalMeshDepthBias: 0
     - _DecalStencilRef: 16
     - _DecalStencilWriteMask: 16

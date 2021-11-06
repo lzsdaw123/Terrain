@@ -7,7 +7,8 @@ public class Level_1 : MonoBehaviour
     public bool Level_1_Start=false;
     GameObject SpawnRay;
     [SerializeField] GameObject explode;
-    [SerializeField] ParticleSystem PSexplode;
+    [SerializeField] GameObject PSexplode;
+    [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
     bool Lv1=false;
     public LayerMask LayerMask;
@@ -41,6 +42,10 @@ public class Level_1 : MonoBehaviour
         if (Lv1)
         {
             time += Time.deltaTime;
+            if (time >= 3)
+            {
+                PSexplode.SetActive(false);
+            }
             if (time >= 7f)
             {
                 MissonUI.SetActive(true);
@@ -50,7 +55,7 @@ public class Level_1 : MonoBehaviour
             }
             if (time >= 15f)
             {
-                var main = PSexplode.main;
+                var main = PSsmoke.main;
                 main.loop = false;
                 warnUI.SetActive(false);
             }

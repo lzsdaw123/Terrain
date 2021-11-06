@@ -60,6 +60,7 @@ public class PlayerResurrection : MonoBehaviour
     }
     public void Re()  //復活
     {
+        Scoreboard.ReScore(1);
         AudioManager.Button();
         Black.SetActive(true);
         Player.SetActive(false);

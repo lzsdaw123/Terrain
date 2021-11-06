@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BulletLife : MonoBehaviour
 {
     public ObjectPool pool_Hit;  //物件池
-    public RectTransform HitUI;
     public Camera GunCamera;
     private Transform HIT;
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
@@ -15,7 +14,6 @@ public class BulletLife : MonoBehaviour
     float speed = 450;//飛行速度
     public float liftTime; //生命時間
     public bool facingRight = true; //是否面向右邊
-    private Vector3 moveDir = Vector3.right;
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
     public float power = 1; //子彈威力
     [TagSelector] public string[] damageTags; //要傷害的Tag
@@ -50,24 +48,9 @@ public class BulletLife : MonoBehaviour
     {
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         GunCamera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
-        HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
-        HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
         liftTime = 1f;
         Hit_vfx_S = null;
-        YesHit = true;     
-
-        //if (Muzzle_vfx != null)
-        //{
-        //    var muzzleVFX = Instantiate(Muzzle_vfx, transform.position, Quaternion.identity);
-        //    muzzleVFX.transform.forward = gameObject.transform.forward;
-        //    var psMuzzle = Muzzle_vfx.GetComponent<ParticleSystem>();
-        //    if (psMuzzle != null) {Destroy(muzzleVFX, psMuzzle.main.duration);}
-        //    else
-        //    {
-        //        var psChild = muzzleVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-        //        Destroy(muzzleVFX, psChild.main.duration);
-        //    }
-        //}
+        YesHit = true;
         //射線長度測試
         //if (Physics.Raycast(transform.position, fwd, out hit, rayLength2, Ground))
         //{
@@ -76,7 +59,7 @@ public class BulletLife : MonoBehaviour
     }
     void Update()
     {
-        HIT = GameObject.Find("HIT").GetComponent<Transform>();
+        //HIT = GameObject.Find("HIT").GetComponent<Transform>();
 
         liftTime -= Time.deltaTime;
         if (liftTime <= 0) 
@@ -84,97 +67,75 @@ public class BulletLife : MonoBehaviour
             liftTime = 0;
             DestroyGameObject();          
         }
-        if (gameObject.activeSelf)
-        {           
-            if (YesHit == true)
-            {
-                YesHit = false;
-                //判斷圖層
-                //LayerMask layerMask = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Monster")) |
-                //    (1 << LayerMask.NameToLayer("Wall")) | (0 << LayerMask.NameToLayer("Actor"));
-                //LayerMask layerMask = (1 << 9) | (1 << 10) | (1 << 11) | (0 << 13); //Ground,Monster,Wall
+        if (YesHit)
+        {
+            YesHit = false;
+            //判斷圖層
+            //LayerMask layerMask = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Monster")) |
+            //    (1 << LayerMask.NameToLayer("Wall")) | (0 << LayerMask.NameToLayer("Actor"));
+            //LayerMask layerMask = (1 << 9) | (1 << 10) | (1 << 11) | (0 << 13); //Ground,Monster,Wall
 
-                //由攝影機射到是畫面正中央的射線
-                Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));            
-                RaycastHit hit; //射線擊中資訊
-
-                //Vector3 fwd = transform.TransformDirection(Vector3.forward);
-                //偵測射線判斷，由 自身座標 的 前方 射出，以rayLength為長度，並且只偵測Ground圖層(記得改圖層
-                //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
-                if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
-                {
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
-                    {
-                        HitType = 0;
-                        //Debug.DrawLine(ray.origin, hit.point, Color.black, 0.7f, false);
-                    }
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
-                    {
-                        HitType = 0;
-                        //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
-                        //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
-                    }
-                    if (hit.collider.tag == "Metal")
-                    {
-                        HitType = 3;
-                        AudioManager.Hit(0);
-                    }
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
-                    {
-                        HitType = 1;
-                        //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
-                        //hit.transform.SendMessage("Damage", power); //傷害
-                        if (hit.collider.tag == "Enemy")  //綠血
-                        {
-                            HitUI.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-                            HitUI.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
-                            HitType = 2;
-                            hit.transform.SendMessage("Damage", power);
-                            //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
-                        }
-                    }
-                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
-                    {
-                        if (hit.collider.tag != "MissionTarget")
-                        {
-                            NoActor = true;
-                        }                  
-                    }
-                }
-
-                //if (Physics.Raycast(ray, out hit, 1 << 10)) //擊中怪物
-                //{
-                //    if (hit.collider.gameObject.layer == 1 << 10)  //彈孔噴紅血
-                //    {
-                //        HitType = 1;
-                //        print(layerMask.value + "HitType+" + HitType);
-                //        //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
-                //        //hit.transform.SendMessage("Damage", power); //傷害                  
-                //    }
-                //    if (hit.collider.tag == "Enemy")  //綠血
-                //    {
-                //        HitType = 2;
-                //        print(layerMask.value + "+HitType+" + HitType);
-                //        //hit.transform.SendMessage("Damage", power);
-                //        //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
-                //    }
-                //}              
-                //在到物體上產生彈孔
-                rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                pos = hit.point;             
-                if (NoActor && pos != Vector3.zero)
-                {
-                    NoActor = false;
-                    pos = HIT.transform.position;
-                    pool_Hit.ReUseHit(pos, rot, HitType);;  //從彈孔池取出彈孔
-                    liftTime = 0;
-                    return;
-                }
-                else
-                {
-                    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
-                }
-            }
+            //由攝影機射到是畫面正中央的射線
+            //Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            //RaycastHit hit; //射線擊中資訊
+            //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
+            //if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
+            //{
+            //    print("擊中");
+            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
+            //    {
+            //        HitType = 0;
+            //        //Debug.DrawLine(ray.origin, hit.point, Color.black, 0.7f, false);
+            //    }
+            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+            //    {
+            //        HitType = 0;
+            //        //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
+            //        //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
+            //    }
+            //    if (hit.collider.tag == "Metal")
+            //    {
+            //        HitType = 3;
+            //        AudioManager.Hit(0);
+            //        //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
+            //    }
+            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
+            //    {
+            //        HitType = 1;
+            //        //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
+            //        //hit.transform.SendMessage("Damage", power); //傷害
+            //        if (hit.collider.tag == "Enemy")  //綠血
+            //        {
+            //            HitUI.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+            //            HitUI.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
+            //            HitType = 2;
+            //            hit.transform.SendMessage("Damage", power);
+            //            //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
+            //        }
+            //    }
+            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+            //    {
+            //        if (hit.collider.tag != "MissionTarget")
+            //        {
+            //            NoActor = true;
+            //        }
+            //    }
+            //}
+            ////在到物體上產生彈孔
+            //rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            //pos = hit.point;
+            //if (NoActor && pos != Vector3.zero)
+            //{
+            //    NoActor = false;
+            //    pos = HIT.transform.position;
+            //    pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
+            //    liftTime = 0;
+            //}
+            //else
+            //{                
+            //    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+            //    //print("彈孔" + HitType);
+            //}
         }
     }
     void OnDisable()
@@ -187,7 +148,7 @@ public class BulletLife : MonoBehaviour
     {
         //回收物件
         GameObject.Find("ObjectPool").GetComponent<ObjectPool>().Recovery(gameObject);       
-        HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
+        //HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
     }
     void FixedUpdate()
     {

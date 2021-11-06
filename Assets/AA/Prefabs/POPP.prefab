@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayCamera: {fileID: 7529279469598822717}
-  GunCamera: {fileID: 0}
+  GunCamera: {fileID: 7529279469598822717}
   pool: {fileID: 0}
   bullet: {fileID: 251314215627210432, guid: 2048c720fbcf12d46a936dba1498e589, type: 3}
   Muzzle_vfx: {fileID: 4557433543618534346}
@@ -567,6 +567,16 @@ MonoBehaviour:
   controllers:
   - {fileID: 9100000, guid: 19ded79462bb27548af8d5b0c4faddb1, type: 2}
   - {fileID: 9100000, guid: df4c5d331888ad5499414f930a615f3d, type: 2}
+  pool_Hit: {fileID: 0}
+  HitUI: {fileID: 0}
+  HitType: 0
+  Hit_vfx: {fileID: 953877935754959471, guid: ab51fae94f78e9544a9069c1a8470cb4, type: 3}
+  Hit_vfx_S: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 3584
+  power: 1
+  HIT: {fileID: 7293980425390258963}
 --- !u!114 &622874816369969756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3899,6 +3909,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8539171515555324305}
     m_Modifications:
+    - target: {fileID: 792607170214782980, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 885661976346565998, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4962357820224817351, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6390037419474810467, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423763427375491290, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111502031291183294, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 7867440506293988446, guid: e25bfb0e8b76cd54492bfc9299fe490a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3964,6 +4004,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7867440506293988447, guid: e25bfb0e8b76cd54492bfc9299fe490a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e25bfb0e8b76cd54492bfc9299fe490a, type: 3}
 --- !u!198 &2977380839992950389 stripped
@@ -4005,6 +4050,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111502031291183294, guid: f1c157c584d1bf04f83664c37e4bab98,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7867440506293988446, guid: f1c157c584d1bf04f83664c37e4bab98,
         type: 3}
@@ -4065,6 +4115,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MuzSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 7867440506293988447, guid: f1c157c584d1bf04f83664c37e4bab98,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1c157c584d1bf04f83664c37e4bab98, type: 3}

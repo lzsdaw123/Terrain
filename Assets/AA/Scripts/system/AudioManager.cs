@@ -40,6 +40,7 @@ public class AudioManager : MonoBehaviour
     static AudioSource ElevatorSource;  //電梯音源
     AudioSource EffectsSource;  //特效音源
     AudioSource ButtonSource;  //按鈕音源
+    AudioSource WarnSource;  //提示音源
 
     public Slider[] Slider;
     public Button[] MuteButton;  //BSE靜音按鈕
@@ -63,6 +64,7 @@ public class AudioManager : MonoBehaviour
         HitSource = gameObject.AddComponent<AudioSource>();
         EffectsSource = gameObject.AddComponent<AudioSource>();
         ButtonSource = gameObject.AddComponent<AudioSource>();
+        WarnSource = gameObject.AddComponent<AudioSource>();
 
         muteState[1] = AmbientSource.mute;
         muteState[2] = PlayerSource.mute;
@@ -80,13 +82,15 @@ public class AudioManager : MonoBehaviour
             StartLevelAudio();
         }
 
-        
+
+
         AmbientSource.volume = Slider[1].value;
         PlayerSource.volume = Slider[2].value;
         GunSource.volume = Slider[2].value;
         HitSource.volume = Slider[2].value;
         EffectsSource.volume = Slider[2].value;
         ButtonSource.volume = Slider[2].value;
+        WarnSource.volume = Slider[2].value;
         if (ElevatorSource !=null)
         {
             ElevatorSource.volume = Slider[2].value;
@@ -101,10 +105,24 @@ public class AudioManager : MonoBehaviour
         if (SettingsCanvas.transform.GetChild(0).gameObject.activeSelf)  //遊戲是否暫停
         {
             SourcePause = true;
+            AmbientSource.Pause();
+            PlayerSource.Pause();
+            GunSource.Pause();
+            HitSource.Pause();
+            EffectsSource.Pause();
+            ButtonSource.Pause();
+            WarnSource.Pause();
         }
         else
         {
             SourcePause = false;
+            AmbientSource.UnPause();
+            PlayerSource.UnPause();
+            GunSource.UnPause();
+            HitSource.UnPause();
+            EffectsSource.UnPause();
+            ButtonSource.UnPause();
+            WarnSource.UnPause();
         }
         if (ElevatorSource != null)
         {
@@ -146,6 +164,7 @@ public class AudioManager : MonoBehaviour
         HitSource.mute = muteState[2];
         EffectsSource.mute = muteState[2];
         ButtonSource.mute = muteState[2];
+        WarnSource.mute = muteState[2];
 
     }
 
@@ -254,11 +273,16 @@ public class AudioManager : MonoBehaviour
     }
     public static void Warn(int Nub)  //警告 提示
     {
-        current.ButtonSource.clip = current.WarnCilp[Nub];
-        current.ButtonSource.loop = true;
-        current.ButtonSource.Play();
+        if (Nub ==-1)
+        {
+            current.WarnSource.Stop();
+            return;
+        }
+        current.WarnSource.clip = current.WarnCilp[Nub];
+        current.WarnSource.loop = true;
+        current.WarnSource.Play();
     }
-    public static void Hit(int Nub)
+    public static void Hit(int Nub)  //擊中
     {
         current.HitSource.clip = current.HitClip[Nub];
         current.HitSource.pitch=0.8f;

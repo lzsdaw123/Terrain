@@ -60,6 +60,7 @@ public class MonsterLife : MonoBehaviour
                 GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
             }
         }
+
     }
     // 開啟或關閉物理娃娃系統
     void RagdollActive(bool active)
@@ -94,7 +95,6 @@ public class MonsterLife : MonoBehaviour
         if (hp <= 0)
         {
             hp = 0; // 不要扣到負值
-            Scoreboard.AddScore(true);
             PS_Dead.SetActive(true);
             monster02.enabled = false; // 關閉 AI 腳本
             agent.enabled = false; // 立即關閉尋徑功能
@@ -110,6 +110,7 @@ public class MonsterLife : MonoBehaviour
     }
     void OnDisable()
     {
+        Scoreboard.AddScore(true);  //怪物擊殺分數
         hp = hpFull;
         PS_Dead.SetActive(false);
         DeadTime = 0;

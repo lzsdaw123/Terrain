@@ -11,9 +11,10 @@ public class NPCLife : MonoBehaviour
     public static bool Dead;
     float time=0;
     public float UItime;
-    public GameObject Exp;
+    public GameObject Exp,BigExp;
     public GameObject SceneUI;
     float DeadTime=0;
+    bool WarnT=true;
 
     void Awake()
     {
@@ -66,7 +67,11 @@ public class NPCLife : MonoBehaviour
             {
                 HP_O.SetActive(true);
                 SeriousWarnUI.SetActive(true);
-                AudioManager.Warn(0);
+                if (WarnT)
+                {
+                    WarnT = false;
+                    AudioManager.Warn(0);
+                }
             }
             if (warnUI.activeSelf)
             {
@@ -89,9 +94,15 @@ public class NPCLife : MonoBehaviour
         if (Exp.activeSelf)
         {
             DeadTime += Time.deltaTime;
+            AudioManager.Warn(-1);
         }
-        if (DeadTime >= 4)
+        if (DeadTime >= 3)
         {
+            BigExp.SetActive(false);
+        }
+        if (DeadTime >= 12)
+        {
+            Scoreboard.Settlement();
             SceneUI.SetActive(true);
             DeadTime = 4;
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
@@ -103,7 +114,7 @@ public class NPCLife : MonoBehaviour
         if (!Dead)
         {
             Dead = true;
-            print("發電站已被摧毀");
+            //print("發電站已被摧毀");
             Exp.SetActive(true);
             AudioManager.explode();          
        

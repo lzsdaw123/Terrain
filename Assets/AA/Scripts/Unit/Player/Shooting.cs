@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Shooting : MonoBehaviour
 {
-    public Camera PlayCamera,GunCamera;
+    public Camera PlayCamera, GunCamera;
 
     public ObjectPool pool;
     public GameObject bullet, Muzzle_vfx;  //子彈,槍口火光  
@@ -38,13 +38,35 @@ public class Shooting : MonoBehaviour
 
     public static int ammunition = 30, Total_ammunition = 300;  //彈藥量
     public static bool Reload = false;   //是否正在換彈
-    bool ammAudio_N=true;
     bool AimIng;
     float FieldOfView;
 
+    public ObjectPool pool_Hit;  //物件池
+    public RectTransform HitUI;  //命中紅標
+    public int HitType;  //彈孔類型變數
+    public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
+    public LayerMask layerMask;  //圖層
+    bool NoActor = false;  //擊中玩家
+    Quaternion rot;  //彈孔生成角度
+    Vector3 pos;  //彈孔生成位置
+    public float power = 1; //子彈威力
+    [SerializeField] Transform HIT; //預置彈孔位置
+
+
+    void Awake()
+    {
+        for (int i = 0; i < Hit_vfx.transform.childCount; i++)
+        {
+            Hit_vfx_S = Hit_vfx.transform.GetChild(i).gameObject;
+            Hit_vfx_S.SetActive(false);
+        }
+    }
     void Start()
     {
         coolDown = 0.8f;  //冷卻結束時間
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+        HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
+        Hit_vfx_S = null;
 
         Weapon.runtimeAnimatorController = controllers[0];
 
@@ -60,8 +82,7 @@ public class Shooting : MonoBehaviour
 
         Muzzle_vfx.SetActive(false);
         MuSmoke.Stop();
-        var main = MuFire.main;
-        //main.startLifetime = 2;
+
     }
     void Update()
     {
@@ -191,7 +212,7 @@ public class Shooting : MonoBehaviour
                 {
                     GussetMachine();
                 }
-                coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown差越小越快
+                coolDownTimer = 0.7f;   //射擊冷卻時間，與coolDown0.8差越小越快
             }
             else
             {
@@ -239,6 +260,16 @@ public class Shooting : MonoBehaviour
         {
             Total_ammunition = 0;
         }
+        if(HitUI.gameObject.activeSelf)
+        {
+            HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
+            Vector3 Z = new Vector3(0, 0f, 0f);
+            if (HitUI.transform.localScale.x <= Z.x)
+            {
+                HitUI.gameObject.SetActive(false);
+                HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
+            }
+        }
     }
     void ZoomIn()
     {
@@ -270,12 +301,67 @@ public class Shooting : MonoBehaviour
         if (BFire) //生成子彈
         {
             muzzlePOS = muzzle[n].GetComponent<Transform>().position;
-
             //建立子彈在鏡頭中心位置
             //GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
-            pool.ReUse(muzzlePOS, PlayCamera.transform.rotation);
+            pool.ReUse(muzzlePOS, GunCamera.transform.rotation);
+            //由攝影機射到是畫面正中央的射線
+            Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            RaycastHit hit; //射線擊中資訊
+            if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
+                {
+                    HitType = 0;
+                    Debug.DrawLine(ray.origin, hit.point, Color.black, 0.7f, false);
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                {
+                    HitType = 0;
+                    //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
+                    //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
+                }
+                if (hit.collider.tag == "Metal")
+                {
+                    HitType = 3;
+                    AudioManager.Hit(0);
+                    Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
+                {
+                    HitType = 1;
+                    //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
+                    if (hit.collider.tag == "Enemy")  //綠血
+                    {
+                        HitUI.gameObject.SetActive(true);
+                        HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
+                        HitType = 2;
+                        hit.transform.SendMessage("Damage", power);
+                        //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
+                    }
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+                {
+                    if (hit.collider.tag != "MissionTarget")
+                    {
+                        NoActor = true;
+                    }
+                }
+            }
+            //在到物體上產生彈孔
+            rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            pos = hit.point;
+            if (NoActor && pos != Vector3.zero)
+            {
+                NoActor = false;
+                pos = HIT.transform.position;
+                pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
+            }
+            else
+            {
+                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+            }
             Muzzle_vfx.transform.position = muzzlePOS;
-            Muzzle_vfx.transform.rotation = PlayCamera.transform.rotation;
+            Muzzle_vfx.transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx.SetActive(true);
             GunshotsAudio();
             MuSmoke.Play();

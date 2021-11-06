@@ -23,7 +23,11 @@ public class BulletHole : MonoBehaviour
         if (BulletHoleTime <= 0)
         {
             pool_Hit.RecoveryHit(gameObject);
-            BulletHoleTime = 5f;
+            
         }
+    }
+    void OnDisable()
+    {
+        BulletHoleTime = 5f;
     }
 }
