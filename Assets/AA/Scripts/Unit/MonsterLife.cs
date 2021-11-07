@@ -116,7 +116,7 @@ public class MonsterLife : MonoBehaviour
                 hpFull = 17;
             }
         }
-        print("怪物血量:" + hpFull);
+        //print("怪物血量:" + hpFull);
         hp = hpFull;  //補滿血量
     }
     void OnDisable()

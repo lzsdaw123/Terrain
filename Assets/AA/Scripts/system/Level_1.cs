@@ -65,11 +65,11 @@ public class Level_1 : MonoBehaviour
                 explode.SetActive(false);
             }
             MLtime += Time.deltaTime;
-            if (MLtime >= 10)
+            if (MLtime >= 20)
             {
                 MLtime = 0;
                 MonsterLevel++;
-                print(MonsterLevel);
+                //print(MonsterLevel);
             }
         }
 

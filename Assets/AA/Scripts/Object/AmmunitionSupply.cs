@@ -76,6 +76,7 @@ public class AmmunitionSupply : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
         {
+            if (Shooting.Reload) return;
             if (!CoverOn)
             {
                 interactive = true;

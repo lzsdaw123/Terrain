@@ -26,16 +26,12 @@ public class Bloodpack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
         {
             AudioManager.PickUp(1);
-            HeroLife.hp += 1.2f * Time.smoothDeltaTime;
-
-            if (HeroLife.hp >= HeroLife.fullHp)
-            {
-                HeroLife.hp = HeroLife.fullHp;
-            }
+            HeroLife.AddHp(true);
         }
         if (Input.GetKeyUp(KeyCode.E))
         {
             AudioManager.PickUp(-1);
+            HeroLife.AddHp(false);
         }
     }
 }
