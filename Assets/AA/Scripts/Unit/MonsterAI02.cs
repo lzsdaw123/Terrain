@@ -50,6 +50,7 @@ public class MonsterAI02 : MonoBehaviour
     private  int buttleAttack;
     public bool isEnemy=false;
     public static bool AttackPlay;
+    bool TrPlayer;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
@@ -250,7 +251,7 @@ public class MonsterAI02 : MonoBehaviour
                         //    //print(player + "__非");
                         //    tagObject = player.gameObject;
                         //}
-                        //------------------放在Attack()後
+                        //判斷在攻擊範圍內
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
@@ -260,34 +261,20 @@ public class MonsterAI02 : MonoBehaviour
                                 tagObject.transform.position, false) < AttackAngle)
                             {
                                 AttackAngleT = true;
-                                //Attack();
                                 //print("攻擊角度內" + tagObject);
                             }
                             else
                             {
-                                if (attacking)
-                                {
-                                    Player = player;
-                                    Distance = nd;
-                                    return fined;
-                                }
                                 speed = 1f;
                                 ani.SetFloat("Speed", speed);
                                 ani.SetBool("Attack", false);
                                 AttackAngleT = false;
-                                //若不在攻擊角度內轉向目標                            
-                                if (tagObject != player.gameObject)
-                                {
-                                    tagObject = player.gameObject;
-                                }
+                                //若不在攻擊角度內轉向目標
                                 Vector3 targetDir = tagObject.transform.position - transform.position;
                                 Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
                                 //print("轉向" + tagObject);
                             }
-                        }
-                        else
-                        {
                         }
                         fined = true;                     
                     }
@@ -354,6 +341,7 @@ public class MonsterAI02 : MonoBehaviour
             }
             else // 玩家距離大於攻擊距離,進行追踪
             {
+                TrPlayer = true;
                 TrackingPlayer();
             }
         }
@@ -377,6 +365,7 @@ public class MonsterAI02 : MonoBehaviour
                 }
                 else // 玩家距離大於攻擊距離,進行追踪
                 {
+                    TrPlayer = false;
                     TrackingPlayer();
                 }
             }
@@ -384,8 +373,8 @@ public class MonsterAI02 : MonoBehaviour
             {
                 MissionTarget = null;
             }
-        }
 
+        }
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
@@ -409,13 +398,13 @@ public class MonsterAI02 : MonoBehaviour
         ani.SetBool("Move", true);
         ani.SetBool("Attack", false);
         agent.speed = 9;  //移動速度
-        if (MissionTarget.activeSelf)
+        if (TrPlayer)
         {
-            agent.destination = oriTarget.position; // 設為尋徑目標
+            agent.destination = attackTarget.position; // 設為尋徑目標
         }
         else
         {
-            agent.destination = attackTarget.position; // 設為尋徑目標
+            agent.destination = oriTarget.position; // 設為尋徑目標
         }
         speed = 1;// 跑向目標
         ani.SetFloat("Speed", speed);       

@@ -23,6 +23,7 @@ public class S_BulletLife : MonoBehaviour
     private Vector3 moveDir = Vector3.right;
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
     public float power = 1; //子彈威力
+    int AttackLv = 0; //傷害等級
     [TagSelector] public string[] damageTags; //要傷害的Tag
     [TagSelector] public string[] ignoreTags; //要忽略的Tag
 
@@ -74,8 +75,25 @@ public class S_BulletLife : MonoBehaviour
         //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
         Vector3 pos = hit.point;
     }
+    void DifficultyUp()
+    {
+        AttackLv = Level_1.MonsterLevel;
+        if (AttackLv > 0)
+        {
+            speed = 60 + (AttackLv * 6);
+            if (power > 4)
+            {
+                power = 4;
+            }
+            if (speed >= 120)
+            {
+                speed = 120;
+            }
+        }
+    }
     void OnDisable()
     {
+        DifficultyUp();
         liftTime = 5;
         Ay = true;
         Atarget = Vector3.zero;

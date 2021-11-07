@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class MonsterLife : MonoBehaviour
 {
-
-
     [SerializeField] Transform root;
 
     public Animator ani;
@@ -16,6 +14,7 @@ public class MonsterLife : MonoBehaviour
 
     public float hpFull; // 血量上限
     public float hp; // 血量
+    int HpLv;
     //public Image hpImage;
 
     private NavMeshAgent agent;
@@ -35,13 +34,11 @@ public class MonsterLife : MonoBehaviour
     {
         PS_Dead.SetActive(false);
         DeadTime = 0;
-        hpFull = 10f;
-        hp = hpFull; // 遊戲一開始先補滿血量
+        DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
         //ani = GetComponent<Animator>();
        
         //RagdollActive(false); // 先關閉物理娃娃
-
     }
 
     void Update()
@@ -108,10 +105,24 @@ public class MonsterLife : MonoBehaviour
     {
         //hpImage.fillAmount = hp / hpFull; //顯示血球
     }
+    void DifficultyUp()
+    {
+        HpLv = Level_1.MonsterLevel;
+        if (HpLv > 0)
+        {
+            hpFull = 7 + (HpLv * 2);
+            if (hpFull >= 17)
+            {
+                hpFull = 17;
+            }
+        }
+        print("怪物血量:" + hpFull);
+        hp = hpFull;  //補滿血量
+    }
     void OnDisable()
     {
         Scoreboard.AddScore(true);  //怪物擊殺分數
-        hp = hpFull;
+        DifficultyUp();      
         PS_Dead.SetActive(false);
         DeadTime = 0;
         monster02.enabled = true;

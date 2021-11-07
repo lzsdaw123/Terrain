@@ -14,6 +14,8 @@ public class Level_1 : MonoBehaviour
     public LayerMask LayerMask;
     bool start=false;
     public GameObject MissonUI,warnUI;
+    [SerializeField]public static int MonsterLevel=0;
+    [SerializeField] float MLtime = 0;
 
     void Start()
     {
@@ -46,22 +48,28 @@ public class Level_1 : MonoBehaviour
             {
                 PSexplode.SetActive(false);
             }
-            if (time >= 7f)
+            if (time >= 6f)
             {
                 MissonUI.SetActive(true);
                 warnUI.SetActive(true);
                 //AudioManager.Warn(0);
-
+                var main = PSsmoke.main;
+                main.loop = false;
             }
             if (time >= 15f)
             {
-                var main = PSsmoke.main;
-                main.loop = false;
                 warnUI.SetActive(false);
             }
             if (time >=25f)
             {
                 explode.SetActive(false);
+            }
+            MLtime += Time.deltaTime;
+            if (MLtime >= 10)
+            {
+                MLtime = 0;
+                MonsterLevel++;
+                print(MonsterLevel);
             }
         }
 

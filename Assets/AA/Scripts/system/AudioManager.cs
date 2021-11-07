@@ -79,10 +79,9 @@ public class AudioManager : MonoBehaviour
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         if (SceneNub != OriSceneNub)
         {
+            OriSceneNub = SceneNub;
             StartLevelAudio();
         }
-
-
 
         AmbientSource.volume = Slider[1].value;
         PlayerSource.volume = Slider[2].value;
@@ -110,7 +109,6 @@ public class AudioManager : MonoBehaviour
             GunSource.Pause();
             HitSource.Pause();
             EffectsSource.Pause();
-            ButtonSource.Pause();
             WarnSource.Pause();
         }
         else
@@ -121,7 +119,6 @@ public class AudioManager : MonoBehaviour
             GunSource.UnPause();
             HitSource.UnPause();
             EffectsSource.UnPause();
-            ButtonSource.UnPause();
             WarnSource.UnPause();
         }
         if (ElevatorSource != null)
@@ -169,7 +166,7 @@ public class AudioManager : MonoBehaviour
     }
 
     void StartLevelAudio()  //背景音效
-    {       
+    {
         if (SceneNub == 1)
         {
             current.AmbientSource.clip = current.BgsCilp[0];

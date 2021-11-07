@@ -22,8 +22,9 @@ public class MouseLook : MonoBehaviour
     public GameObject UI;
     RectTransform oriTransform;   // UI位置
     Vector3 currentVelocity = Vector3.zero;     // 當前速度，這個值由你每次呼叫這個函式時被修改
-    float maxSpeed = 320;    // 選擇允許你限制的最大速度
-    float minSpeed = 620;    // 選擇允許你限制的最大速度
+    float UD_Speed = 160;    // 介面上下位移速度
+    float LR_Speed = 140;    // 介面左右位移速度
+    float minSpeed = 620;    // 介面回復速度
     float smoothTime = 0.35f;      // 達到目標大約花費的時間。 一個較小的值將更快達到目標。
     Vector3 oriRTPos,newRTPos;
 
@@ -31,17 +32,6 @@ public class MouseLook : MonoBehaviour
 
     public float smooth = 3;          // 相機移動的平穩程度
 
-    [SerializeField] bool SceneBool;
-
-    void Awake()
-    {
-        SceneBool=StartButton.SceneBool;
-        if (SceneManager.sceneCount == 1 && !SceneBool)
-        {
-            SceneBool = true;
-            //SceneManager.LoadScene(0, LoadSceneMode.Additive);
-        }
-    }
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
@@ -66,15 +56,15 @@ public class MouseLook : MonoBehaviour
 
         if (newPos == oldPos)  //攝影機是否轉動
         {
-            if (GRy > 0) //向右轉
+            if (GRy > 0.5f) //槍枝向右轉
             {
-                GRy -= 20 * Time.smoothDeltaTime;
+                GRy -= 20 * Time.smoothDeltaTime;         
                 if (GRy < 0)
                 {
                     GRy = 0;
                 }
             }
-            else if (GRy < 0)  //向左轉
+            else if (GRy < -0.5f)  //槍枝向左轉
             {
                 GRy += 20 * Time.smoothDeltaTime;
                 if (GRy > 0)
@@ -90,7 +80,7 @@ public class MouseLook : MonoBehaviour
 
             if (chaY > 1.5f)  //鏡頭向右移
             {
-                newRTPos.x -= maxSpeed * Time.smoothDeltaTime;
+                newRTPos.x -= LR_Speed * Time.smoothDeltaTime;
                 GRy += 20 * Time.smoothDeltaTime;
                 if (GRy >= 4)
                 {
@@ -99,7 +89,7 @@ public class MouseLook : MonoBehaviour
             }
             else if (chaY < -1.5f)  //鏡頭向左移
             {
-                newRTPos.x += maxSpeed * Time.smoothDeltaTime;
+                newRTPos.x += LR_Speed * Time.smoothDeltaTime;
                 GRy -= 20 * Time.smoothDeltaTime;
                 if (GRy <= -4)
                 {
@@ -108,11 +98,11 @@ public class MouseLook : MonoBehaviour
             }
             if (chaX > 0.5f)  //鏡頭向下移
             {
-                newRTPos.y += maxSpeed * Time.smoothDeltaTime;
+                newRTPos.y += UD_Speed * Time.smoothDeltaTime;
             }
             else if (chaX < -0.5f)  //鏡頭向上移
             {
-                newRTPos.y -= maxSpeed * Time.smoothDeltaTime;
+                newRTPos.y -= UD_Speed * Time.smoothDeltaTime;
             }
         }
         oldPos = newPos;

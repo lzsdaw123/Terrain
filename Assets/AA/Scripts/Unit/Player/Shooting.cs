@@ -186,8 +186,7 @@ public class Shooting : MonoBehaviour
                 {
                     MuSmoke.Stop();  //關閉槍口煙霧
                     float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
-                                                             // float rangeX = Random.Range(3f, 5f);  //射擊垂直晃動範圍
-                    float rangeX = Random.Range(9f, 15f);  //射擊垂直晃動範圍
+                    float rangeX = Random.Range(8f, 16f);  //射擊垂直晃動範圍
                     FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
                     //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
                     FireRotateX = rangeX;
@@ -196,7 +195,7 @@ public class Shooting : MonoBehaviour
                     if (AimIng == true)
                     {
                         FireRotateY /= 2;
-                        FireRotateX /= 3;
+                        FireRotateX /= 4;
                     }
                     // Debug.Log("後" + " / " + FireRotateX);
 
@@ -354,7 +353,7 @@ public class Shooting : MonoBehaviour
             {
                 NoActor = false;
                 pos = HIT.transform.position;
-                pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
+                //pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
             }
             else
             {

@@ -22,7 +22,7 @@ public class NPCLife : MonoBehaviour
     }
     void Start()
     {
-        hp = fullHp= hp_R = 10; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 40; //遊戲一開始時先填滿血
         Dead = false;
         warnUI.SetActive(false);
         SeriousWarnUI.SetActive(false);
@@ -63,7 +63,7 @@ public class NPCLife : MonoBehaviour
         }
         if (!Dead)
         {
-            if (hp <= fullHp * 0.5f)  //血量低於安全值
+            if (hp <= fullHp * 0.15f)  //血量低於安全值
             {
                 HP_O.SetActive(true);
                 SeriousWarnUI.SetActive(true);

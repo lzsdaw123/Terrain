@@ -12,7 +12,7 @@ public class HeroLife : MonoBehaviour
 
     void Start()
     {
-        hp = fullHp= hp_R = 8; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 13; //遊戲一開始時先填滿血
         Dead = false;
     }
 
