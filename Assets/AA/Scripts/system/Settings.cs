@@ -34,6 +34,10 @@ public class Settings : MonoBehaviour
     int SceneCount;  //當前場景編號
     public bool EnterStart;  //起始場景切換開關
 
+    public static float smoothSpeed;
+    public Slider mouse_Slider;
+    public Text mouse_Nub;
+
     void Awake()
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
@@ -75,6 +79,9 @@ public class Settings : MonoBehaviour
         PictureSetUI.SetActive(false);
         
         instance = this;
+
+        mouse_Slider.maxValue = 30;
+        mouse_Slider.value = 15;
     }
     void Start()
     {
@@ -127,6 +134,10 @@ public class Settings : MonoBehaviour
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
             Settings.LoadScene("Start");
         }
+        smoothSpeed = mouse_Slider.value;
+        float ScrN = mouse_Slider.value / mouse_Slider.maxValue *100;
+        int _Nub = (int)ScrN;
+        mouse_Nub.text = _Nub + " %";
     }
     void pause()  //開啟設定介面
     {
