@@ -9,16 +9,18 @@ public class NPCLife : MonoBehaviour
     public Image hpImage, HP_R; //血球的UI物件
     public GameObject HP_O,warnUI, SeriousWarnUI;
     public static bool Dead;
-    float time=0;
+    float time;
     public float UItime;
     public GameObject Exp,BigExp;
     public GameObject SceneUI;
-    float DeadTime=0;
+    float DeadTime;
     bool WarnT=true;
 
     void Awake()
     {
         SceneUI.SetActive(false);
+        time = 0;
+        DeadTime = 0;
     }
     void Start()
     {
@@ -100,11 +102,11 @@ public class NPCLife : MonoBehaviour
         {
             BigExp.SetActive(false);
         }
-        if (DeadTime >= 12)
+        if (DeadTime >= 10)
         {
             Scoreboard.Settlement();
             SceneUI.SetActive(true);
-            DeadTime = 4;
+            DeadTime = 10;
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
             Time.timeScale = 0f;
         }

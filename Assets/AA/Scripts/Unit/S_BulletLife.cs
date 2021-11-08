@@ -22,8 +22,9 @@ public class S_BulletLife : MonoBehaviour
     public bool facingRight = true; //是否面向右邊
     private Vector3 moveDir = Vector3.right;
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
-    public float power = 1; //子彈威力
-    int AttackLv = 0; //傷害等級
+    public float power; //子彈威力
+    int AttackLv; //傷害等級
+    int Level; //難度等級
     [TagSelector] public string[] damageTags; //要傷害的Tag
     [TagSelector] public string[] ignoreTags; //要忽略的Tag
 
@@ -42,7 +43,9 @@ public class S_BulletLife : MonoBehaviour
     void Start()
     {
         speed = 60f; //飛行速度
-        for(int i=0; i< Pro.Length; i++)
+        power = 1;
+        AttackLv = 0;
+        for (int i=0; i< Pro.Length; i++)
         {
             var main = Pro[i].main;
             main.simulationSpeed = 8f;  //加快粒子開始播放時間
@@ -75,21 +78,32 @@ public class S_BulletLife : MonoBehaviour
         //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
         Vector3 pos = hit.point;
     }
-    void DifficultyUp()
+    void DifficultyUp()  //難度設定
     {
         AttackLv = Level_1.MonsterLevel;
+        Level = Settings.Level;
         if (AttackLv > 0)
-        {
-            speed = 60 + (AttackLv * 6);
-            if (power > 4)
+        {          
+            if (Level <= 1)  //難度普通以下
             {
-                power = 4;
+                speed = 60 + (AttackLv * 6);
+                if (speed >= 60 + (Level * 30))
+                {
+                    speed = 60 + (Level * 30);
+                    power = 1;
+                }
             }
-            if (speed >= 120)
+            else  //難度困難
             {
-                speed = 120;
+                speed = 60 + (AttackLv * 12);
+                if (speed >= 60 + (Level * 30))
+                {
+                    speed = 120;
+                    power = 2;
+                }
             }
         }
+        print(speed + ": 速度+傷害 :"+ power);  //最終速度 60 / 90 / 120  最終傷害 1 / 1 / 2
     }
     void OnDisable()
     {

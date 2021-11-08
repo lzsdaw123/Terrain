@@ -10,10 +10,12 @@ public class HeroLife : MonoBehaviour
     public static bool Dead;
     public float time=0;
     static bool AddHpB;
+    bool Invincible=false;
 
     void Start()
     {
-        hp = fullHp= hp_R = 13; //遊戲一開始時先填滿血
+        fullHp = 20;
+        hp = hp_R = fullHp; //遊戲一開始時先填滿血
         Dead = false;
     }
 
@@ -59,10 +61,22 @@ public class HeroLife : MonoBehaviour
         {
             hp = fullHp;
         }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (Invincible)
+            {
+                Invincible = false;
+            }
+            else
+            {
+                Invincible = true;                
+            }
+        }
+        if(Invincible) hp = fullHp;
     }
     public static void PlayerRe()
     {
-        hp = fullHp = hp_R = 8; //遊戲一開始時先填滿血
+        hp = hp_R = fullHp; //遊戲一開始時先填滿血
         Dead = false;
     }
     public static void AddHp(bool A)

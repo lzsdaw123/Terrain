@@ -10,13 +10,20 @@ public class Level_1 : MonoBehaviour
     [SerializeField] GameObject PSexplode;
     [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
-    bool Lv1=false;
+    [SerializeField] bool Lv1;
     public LayerMask LayerMask;
     bool start=false;
     public GameObject MissonUI,warnUI;
-    [SerializeField]public static int MonsterLevel=0;
+    [SerializeField]public static int MonsterLevel;
     [SerializeField] float MLtime = 0;
+    int Level;
+    public RectTransform DiffUI, DiffUI_s;
 
+    void Awake()
+    {
+        Lv1 = false;
+        MonsterLevel = 0;
+    }
     void Start()
     {
         SpawnRay= GameObject.Find("SpawnRay");
@@ -64,15 +71,35 @@ public class Level_1 : MonoBehaviour
             {
                 explode.SetActive(false);
             }
-            MLtime += Time.deltaTime;
-            if (MLtime >= 20)
+            if (MonsterLevel != 5)
+            {
+                //MLtime += Time.deltaTime;
+                MLtime += 10*Time.deltaTime;
+            }
+            Level = Settings.Level;
+            Level = 90 / (Level + 1);
+            if (MLtime >= Level)  //難度設定 90 / 45 / 30 秒升級
             {
                 MLtime = 0;
                 MonsterLevel++;
-                //print(MonsterLevel);
+                print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
             }
         }
-
+        switch (Settings.Level)  //難度圖示
+        {
+            case 0:
+                DiffUI.sizeDelta = new Vector2(129, 100);
+                DiffUI_s.anchoredPosition3D = new Vector3(0, 0, 0);
+                break;
+            case 1:
+                DiffUI.sizeDelta = new Vector2(175, 100);
+                DiffUI_s.anchoredPosition3D = new Vector3(50, 0, 0);
+                break;
+            case 2:
+                DiffUI.sizeDelta = new Vector2(265, 100);
+                DiffUI_s.anchoredPosition3D = new Vector3(0, 0, 0);
+                break;
+        }
     }
     public void OnTriggerEnter(Collider other)
     {

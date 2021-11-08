@@ -14,7 +14,6 @@ public class PlayerResurrection : MonoBehaviour
     public bool StartGame;
     public Settings Settings;
     bool Dead=true;
-    float fullHp;
     void Awake()
     {
         DeadUI.SetActive(false);
@@ -30,7 +29,6 @@ public class PlayerResurrection : MonoBehaviour
     {
         Player.SetActive(true);
         Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
-        fullHp = HeroLife.fullHp;
     }
 
     void Update()

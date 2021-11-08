@@ -51,8 +51,8 @@ public class Shooting : MonoBehaviour
     Vector3 pos;  //彈孔生成位置
     public float power = 1; //子彈威力
     [SerializeField] Transform HIT; //預置彈孔位置
-    [SerializeField] GameObject ReloadWarn;
-    [SerializeField] GameObject Am_zero_Warn;
+    [SerializeField] static GameObject ReloadWarn;
+    [SerializeField] static GameObject Am_zero_Warn;
 
     void Awake()
     {
@@ -218,7 +218,7 @@ public class Shooting : MonoBehaviour
                 {
                     GussetMachine();
                 }
-                coolDownTimer = 0.7f;   //射擊冷卻時間，與coolDown0.8差越小越快
+                coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown0.8差越小越快
             }
             else
             {
@@ -390,6 +390,7 @@ public class Shooting : MonoBehaviour
     {
         ammunition = 30;
         Total_ammunition = 300;
-        print("彈藥");
+        ReloadWarn.SetActive(false);
+        Am_zero_Warn.SetActive(false);
     }
 }

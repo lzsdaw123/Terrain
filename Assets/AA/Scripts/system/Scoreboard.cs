@@ -9,9 +9,11 @@ public class Scoreboard : MonoBehaviour
     public Text Text;
     public Text SettlementText;
     public Text PlayDeadText;
+    public Text MonsterLVText;
     static bool SettlementTF = false;
     static int DeadScore;
-
+    int MonsterLevel;  //怪物等級
+    int Level;  //難度等級
 
     void Start()
     {
@@ -20,12 +22,15 @@ public class Scoreboard : MonoBehaviour
 
     void Update()
     {
+        MonsterLevel = Level_1.MonsterLevel;
         Text.text = "怪物擊殺數 : " + Score;
         PlayDeadText.text = "玩家死亡數 : " + DeadScore;
+        MonsterLVText.text = "怪物等級 : " + MonsterLevel;
         if (SettlementTF)
         {
             SettlementTF = false;
-            int Total = (Score * 20) - (DeadScore * 100);
+            Level = Settings.Level;
+            int Total = (Score * 20) - (DeadScore * 100) + (Level*200);  //擊殺數*20 -死亡數*100 +難度*200
             SettlementText.text = "遊戲分數 : " + Total;
         }
     }

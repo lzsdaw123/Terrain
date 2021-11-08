@@ -37,6 +37,7 @@ public class Settings : MonoBehaviour
     public static float smoothSpeed;
     public Slider mouse_Slider;
     public Text mouse_Nub;
+    public static int Level;
 
     void Awake()
     {
@@ -253,6 +254,10 @@ public class Settings : MonoBehaviour
             //切換到 640 x 480 全屏
             //Screen.SetResolution(640, 480, true);
         }
+    }
+    public void SceneLevel(Dropdown dropdown)  //遊戲難度
+    {
+        Level = dropdown.value;
     }
 
     public static void LoadScene(string sceneName)

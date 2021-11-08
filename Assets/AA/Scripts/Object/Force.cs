@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Force : MonoBehaviour
 {
-    public static bool 破門 = false;
+    public static bool 破門;
     Rigidbody[] rigidbodies = null;
     MeshCollider[] meshcollider = null;
     [Range(0, 50)]
@@ -17,6 +17,7 @@ public class Force : MonoBehaviour
 
     void Start()
     {
+        破門 = false;
         破門力道 = 2;
         rigidbodies = GetComponentsInChildren<Rigidbody>();
         meshcollider = GetComponentsInChildren<MeshCollider>();

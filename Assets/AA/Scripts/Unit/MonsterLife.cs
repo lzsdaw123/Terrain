@@ -14,7 +14,8 @@ public class MonsterLife : MonoBehaviour
 
     public float hpFull; // 血量上限
     public float hp; // 血量
-    int HpLv;
+    int HpLv;  //生命等級
+    int Level;  //難度等級
     //public Image hpImage;
 
     private NavMeshAgent agent;
@@ -33,6 +34,7 @@ public class MonsterLife : MonoBehaviour
     void Start()
     {
         PS_Dead.SetActive(false);
+        hpFull = 7;
         DeadTime = 0;
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
@@ -105,18 +107,20 @@ public class MonsterLife : MonoBehaviour
     {
         //hpImage.fillAmount = hp / hpFull; //顯示血球
     }
-    void DifficultyUp()
+    void DifficultyUp()  //難度設定
     {
         HpLv = Level_1.MonsterLevel;
+        Level = Settings.Level;
+        Level = Level +1;
         if (HpLv > 0)
         {
-            hpFull = 7 + (HpLv * 2);
-            if (hpFull >= 17)
+            hpFull = 7 + (HpLv * Level);
+            if(hpFull >= 7 +(5 * Level))
             {
-                hpFull = 17;
+                hpFull = 7 + (5 * Level);
             }
         }
-        //print("怪物血量:" + hpFull);
+        print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
         hp = hpFull;  //補滿血量
     }
     void OnDisable()
