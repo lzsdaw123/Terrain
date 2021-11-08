@@ -19,6 +19,7 @@ public class StartButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         GB = this.gameObject;
         PP.SetActive(false);
+        Time.timeScale = 1;
     }
     void Update()
     {

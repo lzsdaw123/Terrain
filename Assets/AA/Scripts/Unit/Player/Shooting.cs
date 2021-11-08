@@ -259,7 +259,7 @@ public class Shooting : MonoBehaviour
         {
             Total_ammunition = 0;
         }
-        if(HitUI.gameObject.activeSelf)
+        if (HitUI.gameObject.activeSelf)
         {
             HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
             Vector3 Z = new Vector3(0, 0f, 0f);
