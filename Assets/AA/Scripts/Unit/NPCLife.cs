@@ -110,6 +110,10 @@ public class NPCLife : MonoBehaviour
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
             Time.timeScale = 0f;
         }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            Destroyed();
+        }
     }
     void Destroyed()
     {
