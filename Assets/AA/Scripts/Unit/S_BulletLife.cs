@@ -103,7 +103,7 @@ public class S_BulletLife : MonoBehaviour
                 }
             }
         }
-        print(speed + ": 速度+傷害 :"+ power);  //最終速度 60 / 90 / 120  最終傷害 1 / 1 / 2
+        //print(speed + ": 速度+傷害 :"+ power);  //最終速度 60 / 90 / 120  最終傷害 1 / 1 / 2
     }
     void OnDisable()
     {

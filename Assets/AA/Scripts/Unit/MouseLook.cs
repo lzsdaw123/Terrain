@@ -23,8 +23,8 @@ public class MouseLook : MonoBehaviour
     public GameObject UI;
     RectTransform oriTransform;   // UI位置
     Vector3 currentVelocity = Vector3.zero;     // 當前速度，這個值由你每次呼叫這個函式時被修改
-    float UD_Speed = 160;    // 介面上下位移速度
-    float LR_Speed = 140;    // 介面左右位移速度
+    float UD_Speed = 50;    // 介面上下位移速度
+    float LR_Speed = 40;    // 介面左右位移速度
     float minSpeed = 620;    // 介面回復速度
     float smoothTime = 0.35f;      // 達到目標大約花費的時間。 一個較小的值將更快達到目標。
     Vector3 oriRTPos,newRTPos;

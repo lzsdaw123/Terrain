@@ -243,6 +243,7 @@ public class Settings : MonoBehaviour
 
     public void ScreenSwitch(Dropdown dropdown)  //畫面設定介面
     {
+        ButtonAudio();
         if (dropdown.value == 0)
         {
             Screen.fullScreen = true; //切換為全螢幕模式
@@ -257,6 +258,7 @@ public class Settings : MonoBehaviour
     }
     public void SceneLevel(Dropdown dropdown)  //遊戲難度
     {
+        ButtonAudio();
         Level = dropdown.value;
     }
 

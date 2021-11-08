@@ -16,11 +16,16 @@ public class AsyncLoadScene : MonoBehaviour
 	private float loadingSpeed = 1;
 	private float targetValue;
 	private AsyncOperation operation;
-
+	public GameObject AnyKey;
+	float time;
+	bool AnyKetB;
 	void Start()
 	{
 		loadingScrollbar.size = 0.0f;
 		Time.timeScale = 1f;
+		time = 0;
+		AnyKetB = false;
+		AnyKey.SetActive(false);
 
 		if (SceneManager.GetActiveScene().name == "Messenger")
 		{
@@ -47,7 +52,19 @@ public class AsyncLoadScene : MonoBehaviour
 			//operation.progress的值最大為0.9
 			targetValue = 1.0f;
 		}
-
+        if (AnyKetB)
+		{
+			time +=2 * Time.deltaTime;
+            if (time < 1)
+            {
+				AnyKey.SetActive(true);
+			}
+			if(time >= 1)
+            {			
+				AnyKey.SetActive(false);
+			}
+			if(time>=2) time = 0;
+		}
 		if (targetValue != loadingScrollbar.size)
 		{
 			//插值運算
@@ -62,8 +79,14 @@ public class AsyncLoadScene : MonoBehaviour
 
 		if ((int)(loadingScrollbar.size * 100) == 100)
 		{
-			//允許非同步載入完畢後自動切換場景
-			operation.allowSceneActivation = true;
+			AnyKetB = true;
+			//AnyKey.SetActive(true);
+			if (Input.anyKeyDown)
+            {
+				AnyKey.SetActive(false);
+				//允許非同步載入完畢後自動切換場景
+				operation.allowSceneActivation = true;
+			}			
 		}
 	}
 }

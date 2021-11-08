@@ -82,7 +82,7 @@ public class Level_1 : MonoBehaviour
             {
                 MLtime = 0;
                 MonsterLevel++;
-                print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
+                //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
             }
         }
         switch (Settings.Level)  //難度圖示
