@@ -11,12 +11,15 @@ public class HeroLife : MonoBehaviour
     public float time=0;
     static bool AddHpB;
     bool Invincible=false;
+    GameObject DeBugT;
 
     void Start()
     {
         fullHp = 20;
         hp = hp_R = fullHp; //遊戲一開始時先填滿血
         Dead = false;
+        DeBugT = GameObject.Find("DeBugT").gameObject;
+        DeBugT.SetActive(false);
     }
 
     public void Damage(float Power) // 接受傷害
@@ -61,14 +64,16 @@ public class HeroLife : MonoBehaviour
         {
             hp = fullHp;
         }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
+        if (Input.GetKeyDown(KeyCode.K))  //開發者模式
+        {         
             if (Invincible)
             {
+                DeBugT.SetActive(false);
                 Invincible = false;
             }
             else
             {
+                DeBugT.SetActive(true);
                 Invincible = true;                
             }
         }
