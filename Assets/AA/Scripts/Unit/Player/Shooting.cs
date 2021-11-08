@@ -51,7 +51,8 @@ public class Shooting : MonoBehaviour
     Vector3 pos;  //彈孔生成位置
     public float power = 1; //子彈威力
     [SerializeField] Transform HIT; //預置彈孔位置
-
+    [SerializeField] GameObject ReloadWarn;
+    [SerializeField] GameObject Am_zero_Warn;
 
     void Awake()
     {
@@ -68,6 +69,10 @@ public class Shooting : MonoBehaviour
         coolDown = 0.8f;  //冷卻結束時間
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
+        ReloadWarn = GameObject.Find("ReloadWarn").gameObject;
+        Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;
+        ReloadWarn.SetActive(false);
+        Am_zero_Warn.SetActive(false);
         Hit_vfx_S = null;
 
         Weapon.runtimeAnimatorController = controllers[0];
@@ -231,6 +236,7 @@ public class Shooting : MonoBehaviour
             {
                 Reload = true;
                 Weapon.SetTrigger("Reload");
+                ReloadWarn.SetActive(false);
             }
         }
 
@@ -260,7 +266,9 @@ public class Shooting : MonoBehaviour
         if (Total_ammunition <= 0)
         {
             Total_ammunition = 0;
+            Am_zero_Warn.SetActive(true);
         }
+
         if (HitUI.gameObject.activeSelf)
         {
             HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
@@ -283,7 +291,7 @@ public class Shooting : MonoBehaviour
     }
     void ZoomOut()
     {
-        if (FieldOfView < 50f)
+        if (FieldOfView < 55f)
         {
             FieldOfView += 140f * Time.smoothDeltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
@@ -376,6 +384,7 @@ public class Shooting : MonoBehaviour
     void GussetMachine()  //扣板機
     {
         AudioManager.PlayGunshotsAudio(0);
+        ReloadWarn.SetActive(true);
     }
     public static void PlayerRe()
     {

@@ -47,13 +47,13 @@ public class AnimEvents : MonoBehaviour
         int R_ammunition = 30 - ammunition;
         if (Total_ammunition < 30)
         {
-            int R_Total_ammunition = 30 - Total_ammunition;
-            ammunition = 30 - R_Total_ammunition;
+            ammunition += Total_ammunition;
         }
         else
         {
-            ammunition = 30;
-        }       
+            ammunition +=R_ammunition ;
+        }
+        if (ammunition >= 30) ammunition = 30;
         Total_ammunition -= R_ammunition;
 
     }

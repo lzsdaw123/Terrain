@@ -14,7 +14,13 @@ public class AmmunitionSupply : MonoBehaviour
     public bool Open;
     public float Rotation;
     bool interactive=false;
+    [SerializeField] GameObject Am_zero_Warn;
 
+    void Awake()
+    {
+        Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;
+
+    }
     void Start()
     {
         T = GameObject.Find("ObjectText");
@@ -88,6 +94,7 @@ public class AmmunitionSupply : MonoBehaviour
             }
             if (Shooting.Total_ammunition < Total_ammunition  &&CoverOn)
             {
+                Am_zero_Warn.SetActive(false);
                 AudioManager.PickUp(0);
                 //print("彈藥補給");
                 AmmSupply = AmmSupply - (Total_ammunition - Shooting.Total_ammunition);

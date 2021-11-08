@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class MouseLook : MonoBehaviour
 {
     public float mouseSpeed = 100f;
+    public float smoothSpeed = 10f;
     public Transform playerBody, m_transform,Gun;
     public float rotationX = 0f;
     float camY = 2.865f;
@@ -117,11 +118,11 @@ public class MouseLook : MonoBehaviour
         oriTransform.transform.position = newRTPos;
         GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);
 
-        rotationX -= mouseY;
+        rotationX -= mouseY * smoothSpeed * Time.smoothDeltaTime;  //滑鼠控制鏡頭上下
         rotationX = Mathf.Clamp(rotationX, -85f, 80f);
 
 		Gun.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
-		playerBody.Rotate(Vector3.up * mouseX);
+        playerBody.Rotate(Vector3.up * mouseX * smoothSpeed * Time.smoothDeltaTime);  //滑鼠控制鏡頭左右
 
         Vector3 playerBodyP = new Vector3(Gun.position.x, Gun.position.y, Gun.position.z);
 
