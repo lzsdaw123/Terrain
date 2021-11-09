@@ -35,7 +35,7 @@ public class Settings : MonoBehaviour
     public bool EnterStart;  //起始場景切換開關
 
     public static float smoothSpeed;
-    public Slider mouse_Slider;
+    public Slider mouse_Slider;  //滑鼠靈敏度
     public Text mouse_Nub;
     public static int Level;
 
@@ -81,8 +81,8 @@ public class Settings : MonoBehaviour
         
         instance = this;
 
-        mouse_Slider.maxValue = 30;
-        mouse_Slider.value = 6;
+        mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
+        mouse_Slider.value = 6;  //滑鼠預設靈敏度
     }
     void Start()
     {

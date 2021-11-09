@@ -102,7 +102,7 @@ public class NPCLife : MonoBehaviour
         {
             BigExp.SetActive(false);
         }
-        if (DeadTime >= 10)
+        if (DeadTime >= 6)
         {
             Scoreboard.Settlement();
             FailUI.SetActive(true);
