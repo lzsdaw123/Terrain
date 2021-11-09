@@ -13,7 +13,9 @@ public class PlayerResurrection : MonoBehaviour
     public float time;
     public bool StartGame;
     public Settings Settings;
-    bool Dead=true;
+    bool Dead;
+    bool RePlay;
+
     void Awake()
     {
         DeadUI.SetActive(false);
@@ -22,7 +24,9 @@ public class PlayerResurrection : MonoBehaviour
             Player.SetActive(false);
             Player.transform.position = R1.position;
         }       
-        Black.SetActive(false);     
+        Black.SetActive(false);
+        Dead = true;
+        RePlay = false;
     }
 
     void Start()
@@ -42,7 +46,7 @@ public class PlayerResurrection : MonoBehaviour
                 pause();
             }
         }
-        if (Black.activeSelf)
+        if (RePlay)
         {
             time += Time.deltaTime;          
         }
@@ -54,6 +58,7 @@ public class PlayerResurrection : MonoBehaviour
             Player.SetActive(true);
             DeadUI.SetActive(false);
             Dead = true;
+            RePlay = false;
         }
     }
     public void Re()  //復活
@@ -62,6 +67,7 @@ public class PlayerResurrection : MonoBehaviour
         AudioManager.Button();
         Black.SetActive(true);
         Player.SetActive(false);
+        RePlay = true;
         HeroLife.PlayerRe();  //血量回復
         Shooting.PlayerRe();  //彈藥回復
         Player.transform.position = R2.position;

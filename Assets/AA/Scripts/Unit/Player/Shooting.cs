@@ -40,6 +40,7 @@ public class Shooting : MonoBehaviour
     public static bool Reload = false;   //是否正在換彈
     bool AimIng;
     float FieldOfView;
+    float gFieldOfView;
 
     public ObjectPool pool_Hit;  //物件池
     public RectTransform HitUI;  //命中紅標
@@ -161,7 +162,7 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx.SetActive(false); //關閉火光
             //可以發射子彈了
             FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
-            FieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
+            gFieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
             //若按下滑鼠右鍵瞄準
             if (Input.GetButton("Fire2") && Reload != true && LayDown == false && !PlayerMove.m_Jumping)  //架槍瞄準
             {
@@ -282,11 +283,16 @@ public class Shooting : MonoBehaviour
     }
     void ZoomIn()
     {
-        if (FieldOfView > 22f)
+        if (gFieldOfView > 22f)
+        {
+            gFieldOfView -= 160f * Time.smoothDeltaTime;
+            //PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+            GunCamera.GetComponent<Camera>().fieldOfView = gFieldOfView;
+        }
+        if (FieldOfView > 35f)
         {
             FieldOfView -= 140f * Time.smoothDeltaTime;
             PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
-            GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
     }
     void ZoomOut()
