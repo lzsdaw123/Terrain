@@ -52,9 +52,9 @@ public class HeroLife : MonoBehaviour
             time = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L)) //開發者模式
         {
-            Damage(1);
+            Damage(10);
         }
         if (AddHpB)
         {

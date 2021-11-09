@@ -54,6 +54,6 @@ public class Scoreboard : MonoBehaviour
     }
     public static void ReScore(int Dead)
     {
-        DeadScore = Dead;
+        DeadScore += Dead;
     }
 }

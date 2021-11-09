@@ -82,7 +82,7 @@ public class Settings : MonoBehaviour
         instance = this;
 
         mouse_Slider.maxValue = 30;
-        mouse_Slider.value = 15;
+        mouse_Slider.value = 6;
     }
     void Start()
     {
@@ -125,16 +125,16 @@ public class Settings : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Cursor.lockState = CursorLockMode.None; //游標無狀態模式
-            Settings.LoadScene("GamePlayScene");
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Cursor.lockState = CursorLockMode.None; //游標無狀態模式
-            Settings.LoadScene("Start");
-        }
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    Cursor.lockState = CursorLockMode.None; //游標無狀態模式
+        //    Settings.LoadScene("GamePlayScene");
+        //}
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    Cursor.lockState = CursorLockMode.None; //游標無狀態模式
+        //    Settings.LoadScene("Start");
+        //}
         smoothSpeed = mouse_Slider.value;
         float ScrN = mouse_Slider.value / mouse_Slider.maxValue *100;
         int _Nub = (int)ScrN;

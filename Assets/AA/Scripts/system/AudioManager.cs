@@ -275,8 +275,16 @@ public class AudioManager : MonoBehaviour
             current.WarnSource.Stop();
             return;
         }
-        current.WarnSource.clip = current.WarnCilp[Nub];
-        current.WarnSource.loop = true;
+        if (Nub == 0)
+        {
+            current.WarnSource.clip = current.WarnCilp[Nub];
+            current.WarnSource.loop = true;
+        }
+        if (Nub == 1)
+        {
+            current.WarnSource.clip = current.WarnCilp[Nub];
+            current.WarnSource.loop = false;
+        }     
         current.WarnSource.Play();
     }
     public static void Hit(int Nub)  //擊中

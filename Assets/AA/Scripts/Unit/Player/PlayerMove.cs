@@ -10,6 +10,7 @@ public class PlayerMove : MonoBehaviour
 
     private Rigidbody _rigidbody;
     public static float Speed=6.5f;
+    public static float MoveSpeed=60f;
     public float gravity = -9.81f; //重力
     public float jumpHeigh; // 跳躍高度
 
@@ -36,7 +37,7 @@ public class PlayerMove : MonoBehaviour
 
     public Vector3 move;
     public static float h,v;
-    bool Squat = false;
+    public static bool Squat = false;
 
     public Vector3 velocity;
     public bool isGrounded;  //在地面上
@@ -99,14 +100,28 @@ public class PlayerMove : MonoBehaviour
 
             if (Input.GetButton("Squat"))  //蹲下
             {
-                Speed = 3f;
+                if (_Shooting.LayDown)
+                {
+                    Speed = 4f;
+                }
+                else
+                {
+                    Speed = 3f;
+                }                
                 Squat = true;
                 GetComponent<CharacterController>().height = 1.6f;
                 Gun.transform.localPosition = new Vector3(0,2.29f,0.089f);  //Gun的本地座標修正
             }
             else if(isSquat)  //判斷頭頂是否有障礙物
             {
-                Speed = 3f;
+                if (_Shooting.LayDown)
+                {
+                    Speed = 4f;
+                }
+                else
+                {
+                    Speed = 3f;
+                }
                 Squat = true;
                 GetComponent<CharacterController>().height = 1.6f;
                 Gun.transform.localPosition = new Vector3(0, 2.29f, 0.089f);
@@ -122,14 +137,28 @@ public class PlayerMove : MonoBehaviour
                 }
             }
 
-            if (Speed >= 10)
+            if (_Shooting.LayDown)
             {
-                Speed = 10;
+                if (Speed >= 12)
+                {
+                    Speed = 12;
+                }
+                else if (Speed <= 6.5f && !Squat)
+                {
+                    Speed = 6.5f;
+                }
             }
-            else if (Speed <= 6.5f && Squat == false)
+            else
             {
-                Speed = 6.5f;
-            }
+                if (Speed >= 10 )
+                {
+                    Speed = 10;
+                }
+                else if (Speed <= 6.5f && !Squat)
+                {
+                    Speed = 6.5f;
+                }
+            }          
 
             if ((v != 0) || (h != 0))
             {
@@ -216,7 +245,7 @@ public class PlayerMove : MonoBehaviour
         }
         if (inside == false)  //是否接觸梯子
         {           
-            move = transform.right * h + transform.forward * v;  //按照面對方向移動       
+            move = transform.right * h + transform.forward * v * MoveSpeed * Time.deltaTime;  //按照面對方向移動       
             controller.Move(velocity * Time.deltaTime); //執行跳躍            
         }
         else

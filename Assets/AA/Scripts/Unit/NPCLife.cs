@@ -12,19 +12,19 @@ public class NPCLife : MonoBehaviour
     float time;
     public float UItime;
     public GameObject Exp,BigExp;
-    public GameObject SceneUI;
+    public GameObject FailUI;
     float DeadTime;
     bool WarnT=true;
 
     void Awake()
     {
-        SceneUI.SetActive(false);
+        FailUI.SetActive(false);
         time = 0;
         DeadTime = 0;
     }
     void Start()
     {
-        hp = fullHp= hp_R = 40; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 50; //遊戲一開始時先填滿血
         Dead = false;
         warnUI.SetActive(false);
         SeriousWarnUI.SetActive(false);
@@ -65,7 +65,7 @@ public class NPCLife : MonoBehaviour
         }
         if (!Dead)
         {
-            if (hp <= fullHp * 0.15f)  //血量低於安全值
+            if (hp <= fullHp * 0.12f)  //血量低於安全值
             {
                 HP_O.SetActive(true);
                 SeriousWarnUI.SetActive(true);
@@ -87,11 +87,11 @@ public class NPCLife : MonoBehaviour
         }
         if (!SeriousWarnUI.activeSelf)
         {
-            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 373, 0);
+            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         }
         else
         {
-            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 286, 0);
+            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 300, 0);
         }
         if (Exp.activeSelf)
         {
@@ -105,7 +105,7 @@ public class NPCLife : MonoBehaviour
         if (DeadTime >= 10)
         {
             Scoreboard.Settlement();
-            SceneUI.SetActive(true);
+            FailUI.SetActive(true);
             DeadTime = 10;
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
             Time.timeScale = 0f;

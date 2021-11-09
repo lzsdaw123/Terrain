@@ -95,7 +95,7 @@ public class Shooting : MonoBehaviour
     void Update()
     {
         if (Time.timeScale == 0) {return;}
-        if (Input.GetButton("Fire2") && !Reload && !PlayerMove.m_Jumping)  //右鍵縮放鏡頭
+        if (Input.GetButton("Fire2") && !Reload && !PlayerMove.m_Jumping )  //右鍵縮放鏡頭
         {
             ZoomIn();
         }
@@ -103,7 +103,6 @@ public class Shooting : MonoBehaviour
         {
             ZoomOut();
         }
-
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
 
         //if ((Input.GetKeyDown(KeyCode.Q)) && (AniTime >= 2))
@@ -168,7 +167,7 @@ public class Shooting : MonoBehaviour
             {
                 if (AimIng == false)
                 {
-                    AimIng = true; //瞄準
+                    AimIng = true; //瞄準                  
                     Weapon.SetTrigger("AimUP");                  
                 }
                 Weapon.SetBool("Aim", true);
@@ -200,10 +199,15 @@ public class Shooting : MonoBehaviour
                     FireRotateX = rangeX;
                     if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
                                                                  //Debug.Log("原本的" + " / " + FireRotateX);
-                    if (AimIng == true)
-                    {
+                    if (AimIng || PlayerMove.Squat)
+                    {                      
                         FireRotateY /= 2;
                         FireRotateX /= 4;
+                    }
+                    if (AimIng && PlayerMove.Squat)
+                    {
+                        FireRotateY /= 4;
+                        FireRotateX /= 8;
                     }
                     // Debug.Log("後" + " / " + FireRotateX);
 
@@ -212,14 +216,14 @@ public class Shooting : MonoBehaviour
 
                     ammunition--;
                     Weapon.SetBool("Fire", true);
-                    Weapon.SetBool("Aim", false);
+                    //Weapon.SetBool("Aim", false);
                     BFire = true;  //生成子彈
                 }
-                else
+                else  //沒子彈
                 {
                     GussetMachine();
                 }
-                coolDownTimer = 0.72f;   //射擊冷卻時間，與coolDown0.8差越小越快
+                coolDownTimer = 0.7f;   //射擊冷卻時間，與coolDown0.8差越小越快
             }
             else
             {
@@ -286,7 +290,6 @@ public class Shooting : MonoBehaviour
         if (gFieldOfView > 22f)
         {
             gFieldOfView -= 160f * Time.smoothDeltaTime;
-            //PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             GunCamera.GetComponent<Camera>().fieldOfView = gFieldOfView;
         }
         if (FieldOfView > 35f)

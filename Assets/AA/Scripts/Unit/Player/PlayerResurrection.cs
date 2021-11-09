@@ -9,6 +9,7 @@ public class PlayerResurrection : MonoBehaviour
     public Transform R1, R2;
     public GameObject Player;
     public GameObject DeadUI;
+    public GameObject FailUI;
     public GameObject Black;
     public float time;
     public bool StartGame;
@@ -42,8 +43,9 @@ public class PlayerResurrection : MonoBehaviour
             if (Dead)
             {
                 Dead = false;
-                DeadUI.SetActive(true);
+                //DeadUI.SetActive(true);
                 pause();
+                Re();
             }
         }
         if (RePlay)
@@ -56,7 +58,7 @@ public class PlayerResurrection : MonoBehaviour
 
             Black.SetActive(false);
             Player.SetActive(true);
-            DeadUI.SetActive(false);
+            //DeadUI.SetActive(false);
             Dead = true;
             RePlay = false;
         }
@@ -71,10 +73,12 @@ public class PlayerResurrection : MonoBehaviour
         HeroLife.PlayerRe();  //血量回復
         Shooting.PlayerRe();  //彈藥回復
         Player.transform.position = R2.position;
+        Player.transform.rotation = R2.localRotation;
         con();
     }
     public void SceneRe()  //重新關卡
     {
+        FailUI.SetActive(false);
         Settings.LoadNewScene("SampleScene");
         //Black.SetActive(true);
         //SceneManager.LoadScene("SampleScene");
