@@ -8,8 +8,8 @@ public class PlayerResurrection : MonoBehaviour
 {
     public Transform R1, R2;
     public GameObject Player;
-    public GameObject DeadUI;
-    public GameObject FailUI;
+    public GameObject DeadUI;  //死亡UI
+    public GameObject FailUI;  //失敗UI
     public GameObject Black;
     public float time;
     public bool StartGame;

@@ -39,7 +39,7 @@ public class Settings : MonoBehaviour
     public Text mouse_Nub;
     public static int Level;
 
-    GameObject Player;
+    [SerializeField] GameObject Player;
 
     void Awake()
     {
@@ -75,20 +75,15 @@ public class Settings : MonoBehaviour
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
         START_bool = false;
-        if (SceneManager.GetActiveScene().buildIndex == 2)
-        {
-            START_bool = true;
-            Player = GameObject.Find("POPP").gameObject;
-            Player.GetComponent<PlayerMove>().enabled = true;
-            Player.GetComponent<Shooting>().enabled = true;
-            Player.GetComponent<HeroLife>().enabled = true;
-        }
+
         PictureSetUI.SetActive(false);
         
         instance = this;
 
         mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
         mouse_Slider.value = 6;  //滑鼠預設靈敏度
+
+
     }
     void Start()
     {
@@ -146,14 +141,14 @@ public class Settings : MonoBehaviour
         int _Nub = (int)ScrN;
         mouse_Nub.text = _Nub + " %";
     }
-    void pause()  //開啟設定介面
+    public static void pause()  //開啟設定介面
     {
         Cursor.lockState = CursorLockMode.None; //游標無狀態模式
         //時間暫停
         Time.timeScale = 0f;
     }
 
-    void con()  //關閉設定介面
+    public static void con()  //關閉設定介面
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
         //時間以正常速度運行
@@ -296,6 +291,14 @@ public class Settings : MonoBehaviour
     }
     void ReStart()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            START_bool = true;
+            Player = GameObject.Find("POPP").gameObject;
+            Player.GetComponent<PlayerMove>().enabled = true;
+            Player.GetComponent<Shooting>().enabled = true;
+            Player.GetComponent<HeroLife>().enabled = true;
+        }
         StartUI = GameObject.Find("StartUI").GetComponent<RawImage>();
         StartButton = GameObject.Find("StartB").GetComponent<Button>();
         OptionButton = GameObject.Find("OptionB").GetComponent<Button>();

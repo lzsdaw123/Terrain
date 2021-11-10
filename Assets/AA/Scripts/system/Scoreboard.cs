@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Scoreboard : MonoBehaviour
 {
-    static int Score;
+    public static int Score;
     public Text Text;
     public Text SettlementText;
     public Text PlayDeadText;
@@ -38,7 +38,6 @@ public class Scoreboard : MonoBehaviour
                 SettlementText.text = "遊戲分數 : " + Total;
             }
         }
-
     }
     public static void AddScore(bool St)
     {

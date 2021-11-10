@@ -41,7 +41,6 @@ public class HeroLife : MonoBehaviour
     {
         HP_W.fillAmount = hp / fullHp; //顯示血球
         HP_R.fillAmount = hp_R / fullHp; //顯示血球
-
         if (hp != hp_R)
         {
             time +=4* Time.deltaTime;
@@ -79,7 +78,6 @@ public class HeroLife : MonoBehaviour
             }
         }
         if(Invincible) hp = fullHp;
-        
     }
     public static void PlayerRe()
     {
@@ -89,5 +87,10 @@ public class HeroLife : MonoBehaviour
     public static void AddHp()
     {
         hp += 1.6f * Time.smoothDeltaTime;
+    }
+    public static void HpUp()
+    {
+        fullHp = 20 + Shop.HpLv * 5;
+        hp= hp_R = fullHp;
     }
 }

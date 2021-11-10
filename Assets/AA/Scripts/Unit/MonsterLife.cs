@@ -97,7 +97,7 @@ public class MonsterLife : MonoBehaviour
             PS_Dead.SetActive(true);
             monster02.enabled = false; // 關閉 AI 腳本
             agent.enabled = false; // 立即關閉尋徑功能
-            ani.SetTrigger("Die");
+            ani.SetTrigger("Die");           
         }
 
         RefreshLifebar(); // 更新血條
@@ -126,6 +126,7 @@ public class MonsterLife : MonoBehaviour
     void OnDisable()
     {
         Scoreboard.AddScore(true);  //怪物擊殺分數
+        Shop.AddKillScore();  //怪物擊殺分數
         DifficultyUp();      
         PS_Dead.SetActive(false);
         DeadTime = 0;

@@ -50,7 +50,7 @@ public class Shooting : MonoBehaviour
     bool NoActor = false;  //擊中玩家
     Quaternion rot;  //彈孔生成角度
     Vector3 pos;  //彈孔生成位置
-    public float power = 1; //子彈威力
+    public static float power; //子彈威力
     [SerializeField] Transform HIT; //預置彈孔位置
     [SerializeField] static GameObject ReloadWarn;
     [SerializeField] static GameObject Am_zero_Warn;
@@ -64,6 +64,7 @@ public class Shooting : MonoBehaviour
         }
         ammunition = 30;
         Total_ammunition = 300;
+        power = 1;
     }
     void Start()
     {
@@ -401,5 +402,9 @@ public class Shooting : MonoBehaviour
         Total_ammunition = 300;
         ReloadWarn.SetActive(false);
         Am_zero_Warn.SetActive(false);
+    }
+    public static void DpsUp()
+    {
+        power = 1 + Shop.DpsLv;
     }
 }
