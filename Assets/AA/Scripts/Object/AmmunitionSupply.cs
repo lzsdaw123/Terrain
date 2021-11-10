@@ -72,11 +72,11 @@ public class AmmunitionSupply : MonoBehaviour
     {
         if (interactive || CoverOn)
         {
-            T.GetComponent<Text>().text = "按E拾取彈藥\n" + "彈藥量 " + AmmSupply;
+            T.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply;
         }
         else
         {
-            T.GetComponent<Text>().text = "按E打開彈藥箱 ";
+            T.GetComponent<Text>().text = "按「E」打開彈藥箱 ";
         }
         QH_interactive.thing();  //呼叫QH_拾取圖案
 

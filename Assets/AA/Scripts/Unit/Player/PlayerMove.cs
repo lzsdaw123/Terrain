@@ -139,9 +139,9 @@ public class PlayerMove : MonoBehaviour
 
             if (_Shooting.LayDown)
             {
-                if (Speed >= 12)
+                if (Speed >= 12.5f)
                 {
-                    Speed = 12;
+                    Speed = 12.5f;
                 }
                 else if (Speed <= 6.5f && !Squat)
                 {
@@ -150,9 +150,9 @@ public class PlayerMove : MonoBehaviour
             }
             else
             {
-                if (Speed >= 10 )
+                if (Speed >= 11 )
                 {
-                    Speed = 10;
+                    Speed = 11;
                 }
                 else if (Speed <= 6.5f && !Squat)
                 {
@@ -168,12 +168,12 @@ public class PlayerMove : MonoBehaviour
                     if (Input.GetButton("Fire2"))
                     {
                         Weapon.SetBool("AimMove", true);
-                        Speed -= 0.2f;
+                        Speed -= 0.6f;
                     }
                     else
                     {
                         Weapon.SetBool("AimMove", false);
-                        Speed += 0.2f;
+                        Speed += 0.4f;
                     }                                
                 }            
                 else
@@ -186,7 +186,7 @@ public class PlayerMove : MonoBehaviour
                     {
                         Weapon.SetBool("AimMove", false);
                     }
-                    Speed -= 0.2f;
+                    Speed -= 0.6f;
                 }             
                 Weapon.SetFloat("Speed", Speed);
                 controller.Move(move * Speed * Time.deltaTime);

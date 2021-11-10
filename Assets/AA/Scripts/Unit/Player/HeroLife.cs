@@ -9,7 +9,6 @@ public class HeroLife : MonoBehaviour
     public Image HP_W, HP_R; //血球的UI物件
     public static bool Dead;
     public float time=0;
-    static bool AddHpB;
     bool Invincible=false;
     GameObject DeBugT;
 
@@ -56,10 +55,6 @@ public class HeroLife : MonoBehaviour
         {
             Damage(10);
         }
-        if (AddHpB)
-        {
-            hp += 1.2f * Time.smoothDeltaTime;
-        }
         if (hp >= fullHp)
         {
             hp = fullHp;
@@ -84,8 +79,8 @@ public class HeroLife : MonoBehaviour
         hp = hp_R = fullHp; //遊戲一開始時先填滿血
         Dead = false;
     }
-    public static void AddHp(bool A)
+    public static void AddHp()
     {
-        AddHpB = A;
+        hp += 1.2f * Time.smoothDeltaTime;
     }
 }

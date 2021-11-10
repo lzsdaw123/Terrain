@@ -42,7 +42,7 @@ public class QH_interactive : MonoBehaviour
             {
                 Take.SetActive(false);
             }
-           
+
             oldhit = hit;
 
             Debug.DrawLine(ray.origin, hit.point,Color.yellow,0.7f);
@@ -55,6 +55,7 @@ public class QH_interactive : MonoBehaviour
         else
         {
             ObjectText.GetComponent<Text>().text = "";
+            Take.SetActive(false);
         }
     }
     public static void thing()
