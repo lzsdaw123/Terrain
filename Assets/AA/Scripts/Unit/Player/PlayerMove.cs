@@ -150,9 +150,9 @@ public class PlayerMove : MonoBehaviour
             }
             else
             {
-                if (Speed >= 11 )
+                if (Speed >= 10.5f )
                 {
-                    Speed = 11;
+                    Speed = 10.5f;
                 }
                 else if (Speed <= 6.5f && !Squat)
                 {

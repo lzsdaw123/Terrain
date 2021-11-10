@@ -8,7 +8,7 @@ public class Bloodpack : MonoBehaviour
     public GameObject T;
     bool StartB;
     float time;
-    GameObject Take;
+    [SerializeField] GameObject Take;
 
     void Start()
     {

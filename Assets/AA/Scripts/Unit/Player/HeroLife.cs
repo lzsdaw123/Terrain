@@ -11,6 +11,7 @@ public class HeroLife : MonoBehaviour
     public float time=0;
     bool Invincible=false;
     GameObject DeBugT;
+    public ParticleSystem S_HIT;
 
     void Start()
     {
@@ -19,15 +20,20 @@ public class HeroLife : MonoBehaviour
         Dead = false;
         DeBugT = GameObject.Find("DeBugT").gameObject;
         DeBugT.SetActive(false);
+        S_HIT.Stop();
     }
 
     public void Damage(float Power) // 接受傷害
     {
         hp -= Power; // 扣血
+        S_HIT.gameObject.SetActive(true);
+        S_HIT.Play();
+
         if (hp <= 0)
         {
+            S_HIT.Stop();
+            S_HIT.gameObject.SetActive(false);
             hp = 0; // 不要扣到負值
-            //Debug.Log("死");
             Dead = true;
         }      
     }
@@ -53,7 +59,7 @@ public class HeroLife : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L)) //開發者模式
         {
-            Damage(10);
+            Damage(5);
         }
         if (hp >= fullHp)
         {
@@ -73,14 +79,15 @@ public class HeroLife : MonoBehaviour
             }
         }
         if(Invincible) hp = fullHp;
+        
     }
     public static void PlayerRe()
     {
-        hp = hp_R = fullHp; //遊戲一開始時先填滿血
+        hp = hp_R = fullHp; //遊戲一開始時先填滿血        
         Dead = false;
     }
     public static void AddHp()
     {
-        hp += 1.2f * Time.smoothDeltaTime;
+        hp += 1.6f * Time.smoothDeltaTime;
     }
 }

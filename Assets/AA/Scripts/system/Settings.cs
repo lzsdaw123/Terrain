@@ -39,6 +39,8 @@ public class Settings : MonoBehaviour
     public Text mouse_Nub;
     public static int Level;
 
+    GameObject Player;
+
     void Awake()
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
@@ -76,6 +78,10 @@ public class Settings : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == 2)
         {
             START_bool = true;
+            Player = GameObject.Find("POPP").gameObject;
+            Player.GetComponent<PlayerMove>().enabled = true;
+            Player.GetComponent<Shooting>().enabled = true;
+            Player.GetComponent<HeroLife>().enabled = true;
         }
         PictureSetUI.SetActive(false);
         

@@ -47,7 +47,7 @@ public class AmmunitionSupply : MonoBehaviour
         {
             if (Open)
             {
-                Rotation += 120 * Time.deltaTime;
+                Rotation += 240 * Time.deltaTime;
                 if (Rotation >= 94)
                 {
                     CoverOn = true;
@@ -56,7 +56,7 @@ public class AmmunitionSupply : MonoBehaviour
             }
             else
             {
-                Rotation -= 120 * Time.deltaTime;
+                Rotation -= 240 * Time.deltaTime;
                 if (Rotation <= 0)
                 {
                     CoverOn = false;

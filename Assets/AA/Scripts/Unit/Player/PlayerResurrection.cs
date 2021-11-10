@@ -62,6 +62,7 @@ public class PlayerResurrection : MonoBehaviour
             Player.SetActive(true);
             Player.GetComponent<PlayerMove>().enabled = true;
             Player.GetComponent<Shooting>().enabled = true;
+            Player.GetComponent<HeroLife>().enabled = true;
             //DeadUI.SetActive(false);
             Dead = true;         
         }

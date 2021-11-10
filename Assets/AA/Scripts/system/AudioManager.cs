@@ -15,6 +15,7 @@ public class AudioManager : MonoBehaviour
     public GameObject AudioSourceUI;
 
     public static bool SourcePause = false;
+    public static bool walkPlay=true;
 
     //BGM
 
@@ -40,6 +41,7 @@ public class AudioManager : MonoBehaviour
     static AudioSource ElevatorSource;  //電梯音源
     AudioSource EffectsSource;  //特效音源
     AudioSource ButtonSource;  //按鈕音源
+    AudioSource ActionSource;  //動作音源
     AudioSource WarnSource;  //提示音源
 
     public Slider[] Slider;
@@ -64,6 +66,7 @@ public class AudioManager : MonoBehaviour
         HitSource = gameObject.AddComponent<AudioSource>();
         EffectsSource = gameObject.AddComponent<AudioSource>();
         ButtonSource = gameObject.AddComponent<AudioSource>();
+        ActionSource = gameObject.AddComponent<AudioSource>();
         WarnSource = gameObject.AddComponent<AudioSource>();
 
         muteState[1] = AmbientSource.mute;
@@ -89,6 +92,7 @@ public class AudioManager : MonoBehaviour
         HitSource.volume = Slider[2].value;
         EffectsSource.volume = Slider[2].value;
         ButtonSource.volume = Slider[2].value;
+        ActionSource.volume = Slider[2].value;
         WarnSource.volume = Slider[2].value;
         if (ElevatorSource !=null)
         {
@@ -106,6 +110,7 @@ public class AudioManager : MonoBehaviour
             SourcePause = true;
             AmbientSource.Pause();
             PlayerSource.Pause();
+            ActionSource.Pause();
             GunSource.Pause();
             HitSource.Pause();
             EffectsSource.Pause();
@@ -116,6 +121,7 @@ public class AudioManager : MonoBehaviour
             SourcePause = false;
             AmbientSource.UnPause();
             PlayerSource.UnPause();
+            ActionSource.UnPause();
             GunSource.UnPause();
             HitSource.UnPause();
             EffectsSource.UnPause();
@@ -157,6 +163,7 @@ public class AudioManager : MonoBehaviour
 
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
+        ActionSource.mute = muteState[2];
         GunSource.mute = muteState[2];
         HitSource.mute = muteState[2];
         EffectsSource.mute = muteState[2];
@@ -194,7 +201,7 @@ public class AudioManager : MonoBehaviour
     }
     public static void PlayFootstepAudio()  //走路
     {
-        if (PlayerMove.Metal==0)
+        if (PlayerMove.Metal==0) //是否走在金屬上 0=否
         {
             int index = Random.Range(0, current.WalkClip.Length);
             current.PlayerSource.clip = current.WalkClip[index];
@@ -258,15 +265,15 @@ public class AudioManager : MonoBehaviour
     {
         if (Nub == -1)
         {
-            current.PlayerSource.Stop();
+            current.ActionSource.Stop();
             return;
         }
-        current.PlayerSource.clip = current.ActionCilp[Nub];
+        current.ActionSource.clip = current.ActionCilp[Nub];
         if (Nub == 0)
         {
-            current.PlayerSource.pitch = 2;
+            current.ActionSource.pitch = 2;
         }
-        current.PlayerSource.Play();     
+        current.ActionSource.Play();     
     }
     public static void Warn(int Nub)  //警告 提示
     {

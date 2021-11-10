@@ -28,7 +28,6 @@ public class AnimEvents : MonoBehaviour
         h = PlayerMove.h;
         v = PlayerMove.v;
 
-
     }
 
     void NoShooting()
@@ -69,7 +68,7 @@ public class AnimEvents : MonoBehaviour
     }
     public void WalkAudio()
     {
-        if (h != 0 || v != 0)
+        if (h != 0 || v != 0 )
         {
             AudioManager.PlayFootstepAudio();
         }
