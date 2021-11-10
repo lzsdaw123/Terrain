@@ -44,6 +44,8 @@ public class PlayerResurrection : MonoBehaviour
             {
                 Dead = false;
                 //DeadUI.SetActive(true);
+                Player.GetComponent<PlayerMove>().enabled = false;
+                Player.GetComponent<Shooting>().enabled = false;
                 pause();
                 Re();
             }
@@ -55,12 +57,13 @@ public class PlayerResurrection : MonoBehaviour
         if (time >= 1)   //復活時間
         {
             time =0;
-
+            RePlay = false;
             Black.SetActive(false);
             Player.SetActive(true);
+            Player.GetComponent<PlayerMove>().enabled = true;
+            Player.GetComponent<Shooting>().enabled = true;
             //DeadUI.SetActive(false);
-            Dead = true;
-            RePlay = false;
+            Dead = true;         
         }
     }
     public void Re()  //復活
