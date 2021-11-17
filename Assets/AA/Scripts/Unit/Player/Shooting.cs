@@ -37,7 +37,7 @@ public class Shooting : MonoBehaviour
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
     public static int ammunition, Total_ammunition;  //彈藥量
-    public static bool Reload = false;   //是否正在換彈
+    public static bool Reload;   //是否正在換彈
     bool AimIng;
     float FieldOfView;
     float gFieldOfView;
@@ -65,6 +65,7 @@ public class Shooting : MonoBehaviour
         ammunition = 30;
         Total_ammunition = 300;
         power = 1;
+        Reload = false;
     }
     void Start()
     {
