@@ -9,7 +9,8 @@ public class AnimEvents : MonoBehaviour
     public static int N_ammunition, N_Total_ammunition;  //彈藥量
 
     public MonsterAI02 MonsterAI02;
-    public bool attacking = false;
+    public MonsterAI03 MonsterAI03;
+    [SerializeField] bool attacking = false;
     public int buttleAttack=0;
     public float h, v;
 
@@ -65,6 +66,12 @@ public class AnimEvents : MonoBehaviour
         attacking = true;
         buttleAttack = 1;
         MonsterAI02.AttackAning(attacking, buttleAttack);
+    }
+    void M2_Attacking()
+    {
+        attacking = true;
+        buttleAttack = 1;
+        MonsterAI03.AttackAning(attacking, buttleAttack);
     }
     public void WalkAudio()
     {

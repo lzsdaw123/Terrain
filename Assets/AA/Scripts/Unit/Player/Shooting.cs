@@ -358,6 +358,10 @@ public class Shooting : MonoBehaviour
                         hit.transform.SendMessage("Damage", power);
                         //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
                     }
+                    if (hit.collider.tag == "Carapace")  //甲殼
+                    {
+                        HitType = 4;
+                    }
                 }
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
                 {

@@ -34,7 +34,7 @@ public class Settings : MonoBehaviour
     int SceneCount;  //當前場景編號
     public bool EnterStart;  //起始場景切換開關
 
-    public static float smoothSpeed;
+    public static float smoothSpeed;  //滑鼠速度
     public Slider mouse_Slider;  //滑鼠靈敏度
     public Text mouse_Nub;
     public static int Level;
@@ -81,7 +81,7 @@ public class Settings : MonoBehaviour
         instance = this;
 
         mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
-        mouse_Slider.value = 6;  //滑鼠預設靈敏度
+        mouse_Slider.value = 13;  //滑鼠預設靈敏度
 
 
     }
