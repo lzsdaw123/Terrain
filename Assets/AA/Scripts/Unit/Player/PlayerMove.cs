@@ -16,7 +16,7 @@ public class PlayerMove : MonoBehaviour
 
     public Animator Weapon;   //動畫控制器
     public GameObject[] _Animator;
-    public int n, m; //武器種類
+    public int WeaponType; //武器類型
     public GameObject Gun;
 
     public Transform groundCheck;    //地面檢查
@@ -58,9 +58,8 @@ public class PlayerMove : MonoBehaviour
 
         if (inside == false)
         {
-            n = GetComponent<Shooting>().n;
-            m = GetComponent<Shooting>().m;
-            Weapon = _Animator[n].GetComponent<Animator>();
+            WeaponType = GetComponent<Shooting>().WeaponType;
+            Weapon = _Animator[WeaponType].GetComponent<Animator>();
 
 
             h = Input.GetAxis("Horizontal");  //取得輸入橫軸

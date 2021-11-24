@@ -12,9 +12,8 @@ public class Shooting : MonoBehaviour
     public ParticleSystem MuSmoke;
     public ParticleSystem MuFire;
     public GameObject[] muzzle;  //槍口類型
-    public GameObject GunAimR; //槍瞄準鏡上下位移矯正
     public GameObject GunAimR_x;  //X軸瞄準晃動
-    private Vector3 GA_R;  //Z軸瞄準偏移修正
+    private Vector3 GA_R;  //槍枝Rotation瞄準偏移修正
     public float noise = 1f; //晃動頻率
     public float noiseRotateX;  //X軸晃動偏移量
     public float noiseRotateY;  //Y軸晃動偏移量
@@ -25,10 +24,10 @@ public class Shooting : MonoBehaviour
     public float coolDownTimer; //冷卻時間計時器
     public PlayerMove controller;  //角色控制腳本
     public float AniTime, STtime;
-    public int[] WeaponType;
+    public int WeaponType; //武器類型
+    public int NextWeaponType; //武器類型
     public Animator Weapon;   //動畫控制器
-    public int n, m; //武器種類
-    public GameObject[] _Animator;
+    public GameObject[] _Animator;  //槍枝物件
     public Vector3 muzzlePOS;  //槍口座標
 
     public bool BFire;  //生成子彈
@@ -77,7 +76,7 @@ public class Shooting : MonoBehaviour
         ReloadWarn.SetActive(false);
         Am_zero_Warn.SetActive(false);
         Hit_vfx_S = null;
-
+        WeaponType = 0;
         Weapon.runtimeAnimatorController = controllers[0];
 
         if (controller == null)
@@ -87,8 +86,6 @@ public class Shooting : MonoBehaviour
         coolDownTimer = coolDown + 1;
 
         AniTime = STtime = 2f;
-        n = 0;
-        m = 1;
 
         Muzzle_vfx.SetActive(false);
         MuSmoke.Stop();
@@ -97,6 +94,8 @@ public class Shooting : MonoBehaviour
     void Update()
     {
         if (Time.timeScale == 0) {return;}
+        FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
+        gFieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
         if (Input.GetButton("Fire2") && !Reload && !PlayerMove.m_Jumping )  //右鍵縮放鏡頭
         {
             ZoomIn();
@@ -107,25 +106,36 @@ public class Shooting : MonoBehaviour
         }
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
 
-        //if ((Input.GetKeyDown(KeyCode.Q)) && (AniTime >= 2))
-        //{
-        //    m = n;
-        //    if (n < 1)
-        //    {
-        //        n += 1;
-        //    }
-        //    else
-        //    {
-        //        n = 0;
-        //    }
-        //    //Weapon.SetBool("LayDown", true);
-        //    AniTime = STtime - 1f;
-        //}
+        if ( AniTime >=2)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0)
+            {
+                NextWeaponType = 0;
+                Weapon.SetTrigger("LayDownT");
+                AniTime = STtime - 1.6f;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1)
+            {
+                NextWeaponType = 1;
+                Weapon.SetTrigger("LayDownT");
+                AniTime = STtime - 1.6f;
+            }        
+        }
         if (AniTime <= 0)
         {
-            _Animator[m].SetActive(false);
-            _Animator[n].SetActive(true);
-            Weapon = _Animator[n].GetComponent<Animator>();
+            _Animator[WeaponType].SetActive(false);
+            switch (NextWeaponType)
+            {
+                case 0:
+                    WeaponType = 0;
+                    break;
+                case 1:
+                    WeaponType = 1;
+                    break;
+            }
+            _Animator[WeaponType].SetActive(true);
+
+            Weapon = _Animator[WeaponType].GetComponent<Animator>();
             AniTime = STtime;
         }
         if (AniTime != STtime)  //換武器時間
@@ -146,24 +156,44 @@ public class Shooting : MonoBehaviour
         //}      
         if (AimIng)  //瞄準
         {
-            //步槍Z軸準心偏移修正
-            GA_R.z += 0.6f;
-            if (GA_R.z >= 2.76f) { GA_R.z = 2.76f; }
+            //槍枝準心偏移修正
+            if (WeaponType == 0)
+            {
+                GA_R.z += 0.6f;
+                GA_R.y = -89.66f;
+                if (GA_R.z >= 2.76f) { GA_R.z = 2.76f; }
+            }
+            if (WeaponType == 1)
+            {
+                GA_R.y = -91.11f;
+                GA_R.z -= 16f * Time.smoothDeltaTime;
+                if (GA_R.z <= -3) { GA_R.z = -3; }
+            }
+
             //range = Random.Range(-0.05f, 0.05f);  //晃動範圍
             //localEulerAngles跟localRotation的差別
         }
         else
-        {
-            GA_R.z -= 0.4f;
-            if (GA_R.z <= 1) { GA_R.z = 1; }
+        {          
+            if (WeaponType == 0)
+            {
+                GA_R.z -= 0.4f;
+                GA_R.y = -89.66f;
+                if (GA_R.z <= 1) { GA_R.z = 1; }
+            }
+            if (WeaponType == 1)
+            {
+                GA_R.y = -91.11f;
+                GA_R.z += 9f*Time.smoothDeltaTime;
+                if (GA_R.z >= -1) { GA_R.z = -1; }
+            }
         }
-        GunAimR.transform.localRotation = Quaternion.Euler(0f, -89.66f, GA_R.z);  //Z軸瞄準偏移修正      
+        _Animator[WeaponType].transform.localRotation = Quaternion.Euler(0f, GA_R.y, GA_R.z);  //槍枝Rotation瞄準偏移修正      
         if (coolDownTimer > coolDown) //若冷卻時間已到
         {
             Muzzle_vfx.SetActive(false); //關閉火光
             //可以發射子彈了
-            FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
-            gFieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
+
             //若按下滑鼠右鍵瞄準
             if (Input.GetButton("Fire2") && Reload != true && LayDown == false && !PlayerMove.m_Jumping)  //架槍瞄準
             {
@@ -286,29 +316,53 @@ public class Shooting : MonoBehaviour
                 HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
-    }
-    void ZoomIn()
-    {
-        if (gFieldOfView > 22f)
+
+        void ZoomIn()
         {
-            gFieldOfView -= 160f * Time.smoothDeltaTime;
-            GunCamera.GetComponent<Camera>().fieldOfView = gFieldOfView;
+            if (gFieldOfView > 22f)
+            {
+                gFieldOfView -= 160f * Time.smoothDeltaTime;
+                if (WeaponType == 0)
+                {
+                    if (gFieldOfView <= 22f)
+                    {
+                        gFieldOfView = 22f;
+                    }
+                }
+                else
+                {
+                    if (gFieldOfView <= 40f)
+                    {
+                        gFieldOfView = 40f;
+                    }
+                }
+                GunCamera.GetComponent<Camera>().fieldOfView = gFieldOfView;
+            }
+            if (FieldOfView > 35f)
+            {
+                FieldOfView -= 140f * Time.smoothDeltaTime;
+                if (FieldOfView <= 35f)
+                {
+                    FieldOfView = 35f;
+                }
+                PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+            }
         }
-        if (FieldOfView > 35f)
+        void ZoomOut()
         {
-            FieldOfView -= 140f * Time.smoothDeltaTime;
-            PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+            if (FieldOfView < 55f)
+            {
+                FieldOfView += 140f * Time.smoothDeltaTime;
+                if (FieldOfView >= 55f)
+                {
+                    FieldOfView = 55f;
+                }
+                PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+                GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+            }
         }
     }
-    void ZoomOut()
-    {
-        if (FieldOfView < 55f)
-        {
-            FieldOfView += 140f * Time.smoothDeltaTime;
-            PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
-            GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
-        }
-    }
+   
     public static void ReLoad_E()
     {
         ammunition = AnimEvents.ammunition;
@@ -320,7 +374,7 @@ public class Shooting : MonoBehaviour
     {
         if (BFire) //生成子彈
         {
-            muzzlePOS = muzzle[n].GetComponent<Transform>().position;
+            muzzlePOS = muzzle[WeaponType].GetComponent<Transform>().position;
             //建立子彈在鏡頭中心位置
             //GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
             pool.ReUse(muzzlePOS, GunCamera.transform.rotation);
