@@ -57,7 +57,7 @@ public class MonsterAI01 : MonoBehaviour
         if (attackLv1.displayGizmos)
         {
           weaponHi = new Vector3(0, attackLv1.height, 0);
-            Gizmos.color = Color.red; // 設為紅色
+          Gizmos.color = Color.red; // 設為紅色
           arcRotation= Quaternion.Euler(transform.eulerAngles + new Vector3(0, -attackLv1.angle, 0));// 計算弧線的起始角度
          GizmosExtension.DrawSector(transform.position + weaponHi,attackLv1.distance, attackLv1.angle * 2, arcRotation);// 畫扇形
         }

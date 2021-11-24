@@ -61,7 +61,7 @@ public class S_BulletLife : MonoBehaviour
         //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
         if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //無視怪物
             {
                 return;
             }
@@ -241,6 +241,10 @@ public class S_BulletLife : MonoBehaviour
                 }
             }
         }
+        else if (InLayerMask(collision.gameObject.layer, Ground[1]))
+        {
+            liftTime = 0;
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -265,6 +269,10 @@ public class S_BulletLife : MonoBehaviour
                     break; //結束迴圈
                 }
             }
+        } 
+        else if (InLayerMask(collision.gameObject.layer, Ground[1]))
+        {
+            liftTime = 0;
         }
     }
 }

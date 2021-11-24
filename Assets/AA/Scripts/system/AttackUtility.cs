@@ -11,7 +11,6 @@ public class AttackUtility
 
         // 取得範圍內所有角色
 
-
         Collider[] actors = Physics.OverlapSphere(Attacker.position, AttackLv.distance, ActorLayer);
         for (int i = 0; i < actors.Length; i++)
         {
@@ -55,6 +54,7 @@ public class AttackUtility
         Vector3 targetPos = targetActor.position + new Vector3(0, WeaponHeight, 0);
         Vector3 direct = targetPos - origin;
         float distance = Vector3.Distance(Attacker.position, targetActor.position);
+        int maskMonster = 1 << LayerMask.NameToLayer("Monster");
         Ray ray = new Ray(origin, direct);
         RaycastHit hit = new RaycastHit();
 
@@ -63,7 +63,15 @@ public class AttackUtility
 #if UNITY_EDITOR
             Debug.DrawRay(origin, hit.point - origin, Color.yellow, 0.5f);
 #endif
-            ret = false;
+            if (Physics.Raycast(ray, out hit, distance, maskMonster))  //無視Monster圖層
+            {
+
+            }
+            else
+            {
+                // 射線有打到東西表示角色間有障礙物
+                ret = false;
+            }
         }
 
         return ret;

@@ -327,7 +327,7 @@ public class Shooting : MonoBehaviour
             //由攝影機射到是畫面正中央的射線
             Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit; //射線擊中資訊
-            if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
+            if (Physics.Raycast(ray, out hit, layerMask)) //擊中圖層
             {
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                 {
@@ -340,7 +340,7 @@ public class Shooting : MonoBehaviour
                     //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
                     //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
                 }
-                if (hit.collider.tag == "Metal")
+                if (hit.collider.tag == "Metal")  //金屬
                 {
                     HitType = 3;
                     AudioManager.Hit(0);
@@ -369,6 +369,7 @@ public class Shooting : MonoBehaviour
                     {
                         NoActor = true;
                     }
+                    print("打到Actor");
                 }
             }
             //在到物體上產生彈孔

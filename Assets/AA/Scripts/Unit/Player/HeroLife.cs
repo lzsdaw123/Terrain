@@ -79,7 +79,7 @@ public class HeroLife : MonoBehaviour
         }
         if(Invincible) hp = fullHp;
     }
-    public static void PlayerRe()
+    public static void PlayerRe()  //重生
     {
         hp = hp_R = fullHp; //遊戲一開始時先填滿血        
         Dead = false;

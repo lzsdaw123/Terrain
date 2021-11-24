@@ -53,7 +53,7 @@ public class MonsterAI03 : MonoBehaviour
     public static bool AttackPlay;
     bool TrPlayer;
 
-    public AttackLevel attackLv1 = new AttackLevel(false, 2f, 4f, 40f, 0f); //第一段攻擊力 (威力,距離,角度,高度)
+    public AttackLevel attackLv1 = new AttackLevel(false, 2f, 8.5f, 18f, -1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
     [SerializeField] private GameObject muzzle;
@@ -70,10 +70,14 @@ public class MonsterAI03 : MonoBehaviour
         Quaternion arcRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -lookAngle, 0));// 計算弧線的起始角度
         GizmosExtension.DrawSector(transform.position + eyeHi, lookDistance, lookAngle * 2, arcRotation);// 畫扇形 
 
-        Vector3 weaponHi = new Vector3(0, heightOfAttack, 0); // 武器高度
-        Gizmos.color = Color.red; // 設為紅色
-        Quaternion AttackRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -AttackAngle, 0));// 計算弧線的起始角度
-        GizmosExtension.DrawSector(transform.position + weaponHi, attackDistance, AttackAngle * 2, AttackRotation);// 畫扇形 
+        Vector3 weaponHi; // 武器高度
+        if (attackLv1.displayGizmos)
+        {
+            weaponHi = new Vector3(0, attackLv1.height, 0);
+            Gizmos.color = Color.red; // 設為紅色
+            arcRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -attackLv1.angle, 0));// 計算弧線的起始角度
+            GizmosExtension.DrawSector(transform.position + weaponHi, attackLv1.distance, attackLv1.angle * 2, arcRotation);// 畫扇形
+        }
 
         Gizmos.color = Color.blue; // 設為藍色
         Quaternion ArangeRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -ArangeAngle, 0));// 計算弧線的起始角度
