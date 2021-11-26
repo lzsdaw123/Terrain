@@ -5,8 +5,9 @@ using UnityEngine;
 public class AnimEvents : MonoBehaviour
 {
     public static bool DontShooting;
-    public static int ammunition, Total_ammunition;
-    public static int N_ammunition, N_Total_ammunition;  //彈藥量
+    public static int ammunition, Total_ammunition;  //彈藥量
+    int[] WeaponAmm = new int[] { 30, 6 }; //武器可裝填彈藥量
+    [SerializeField] int WeaponType; //武器類型
 
     public MonsterAI02 MonsterAI02;
     public MonsterAI03 MonsterAI03;
@@ -28,7 +29,7 @@ public class AnimEvents : MonoBehaviour
         //Move = animator.SetBool("Move", bool );
         h = PlayerMove.h;
         v = PlayerMove.v;
-
+        WeaponType = Shooting.WeaponType;
     }
 
     void NoShooting()
@@ -40,21 +41,22 @@ public class AnimEvents : MonoBehaviour
         DontShooting = false;
     }
     void ReLoad()
-    {    
-        ammunition = Shooting.ammunition;
-        Total_ammunition = Shooting.Total_ammunition;   
-
-        int R_ammunition = 30 - ammunition;
-        if (Total_ammunition < 30)
+    {
+        ammunition = Shooting.WeapAm[WeaponType];
+        Total_ammunition = Shooting.T_WeapAm[WeaponType];
+        
+        int R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前數量    
+        if (Total_ammunition < WeaponAmm[WeaponType])  //總數量<武器可裝填量 {當前數量+總數量}
         {
             ammunition += Total_ammunition;
         }
-        else
+        else  //總數量>=武器可裝填量 {當前數量+裝填量}
         {
             ammunition +=R_ammunition ;
         }
-        if (ammunition >= 30) ammunition = 30;
-        Total_ammunition -= R_ammunition;
+        //當前數量 >= 武器可裝填量 {當前數量 = 武器可裝填量}
+        if (ammunition >= WeaponAmm[WeaponType]) ammunition = WeaponAmm[WeaponType];
+        Total_ammunition -= R_ammunition;  //總數量-裝填量
 
     }
     void ReLoadEnd()

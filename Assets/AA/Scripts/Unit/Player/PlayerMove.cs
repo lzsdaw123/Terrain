@@ -58,7 +58,7 @@ public class PlayerMove : MonoBehaviour
 
         if (inside == false)
         {
-            WeaponType = GetComponent<Shooting>().WeaponType;
+            WeaponType = Shooting.WeaponType;
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
 
 

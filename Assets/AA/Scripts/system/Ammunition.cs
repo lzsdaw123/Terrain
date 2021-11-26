@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Ammunition : MonoBehaviour
 {
     public int ammunition, Total_ammunition;
+    public int WeaponType; //武器類型
 
     void Start()
     {
@@ -13,8 +14,9 @@ public class Ammunition : MonoBehaviour
 
     void Update()
     {
-        ammunition = Shooting.ammunition;
-        Total_ammunition = Shooting.Total_ammunition;
+        WeaponType = Shooting.WeaponType;
+        ammunition = Shooting.WeapAm[WeaponType];
+        Total_ammunition = Shooting.T_WeapAm[WeaponType];
 
         GetComponent<Text>().text = ammunition+"/"+ Total_ammunition;  
     }

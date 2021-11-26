@@ -24,7 +24,7 @@ public class Shooting : MonoBehaviour
     public float coolDownTimer; //冷卻時間計時器
     public PlayerMove controller;  //角色控制腳本
     public float AniTime, STtime;
-    public int WeaponType; //武器類型
+    public static int WeaponType; //武器類型
     public int NextWeaponType; //武器類型
     public Animator Weapon;   //動畫控制器
     public GameObject[] _Animator;  //槍枝物件
@@ -35,7 +35,9 @@ public class Shooting : MonoBehaviour
     public bool LayDown = false;
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
-    public static int ammunition, Total_ammunition;  //彈藥量
+    public static int ammunition, Total_ammunition;  //當前武器彈藥量
+    public static int[] WeapAm = new int[] { 30, 6 };  //武器彈藥量
+    public static int[] T_WeapAm = new int[] { 300, 30 }; //武器總彈藥量
     public static bool Reload;   //是否正在換彈
     bool AimIng;
     float FieldOfView;
@@ -61,8 +63,19 @@ public class Shooting : MonoBehaviour
             Hit_vfx_S = Hit_vfx.transform.GetChild(i).gameObject;
             Hit_vfx_S.SetActive(false);
         }
-        ammunition = 30;
-        Total_ammunition = 300;
+        WeaponType = 0;
+
+        //switch (WeaponType)  //不同武器的彈藥量
+        //{
+        //    case 0:
+        //        ammunition = WeapAm[0];  //30
+        //        Total_ammunition = T_WeapAm[0];  //300
+        //        break;
+        //    case 1:
+        //        ammunition = WeapAm[1];  //6
+        //        Total_ammunition = T_WeapAm[1];  //30
+        //        break;
+        //}
         power = 1;
         Reload = false;
     }
@@ -76,7 +89,6 @@ public class Shooting : MonoBehaviour
         ReloadWarn.SetActive(false);
         Am_zero_Warn.SetActive(false);
         Hit_vfx_S = null;
-        WeaponType = 0;
         Weapon.runtimeAnimatorController = controllers[0];
 
         if (controller == null)
@@ -106,7 +118,7 @@ public class Shooting : MonoBehaviour
         }
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
 
-        if ( AniTime >=2)
+        if ( AniTime >=2)  //切換武器
         {
             if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0)
             {
@@ -119,7 +131,7 @@ public class Shooting : MonoBehaviour
                 NextWeaponType = 1;
                 Weapon.SetTrigger("LayDownT");
                 AniTime = STtime - 1.6f;
-            }        
+            }
         }
         if (AniTime <= 0)
         {
@@ -205,7 +217,7 @@ public class Shooting : MonoBehaviour
                 Weapon.SetBool("Aim", true);
                 //ZoomIn();
                 //瞄準射擊
-                if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (ammunition != 0))
+                if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (WeapAm[WeaponType] != 0))
                 {
                     Weapon.SetBool("AimFire", true);
                 }
@@ -221,7 +233,7 @@ public class Shooting : MonoBehaviour
             //若按下滑鼠左鍵開火
             if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) )
             {
-                if(ammunition != 0)
+                if(WeapAm[WeaponType] != 0)
                 {
                     MuSmoke.Stop();  //關閉槍口煙霧
                     float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
@@ -246,7 +258,7 @@ public class Shooting : MonoBehaviour
                     transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
                     GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.smoothDeltaTime;
 
-                    ammunition--;
+                    WeapAm[WeaponType]--;
                     Weapon.SetBool("Fire", true);
                     //Weapon.SetBool("Aim", false);
                     BFire = true;  //生成子彈
@@ -267,7 +279,7 @@ public class Shooting : MonoBehaviour
             coolDownTimer += Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && LayDown == false && Total_ammunition != 0)    //換彈藥
+        if (Input.GetKeyDown(KeyCode.R) && LayDown == false && T_WeapAm[WeaponType] != 0)    //換彈藥
         {
             if (Reload == false)
             {
@@ -296,13 +308,13 @@ public class Shooting : MonoBehaviour
         {
             Weapon.SetTrigger("Cherk");
         }
-        if (ammunition <= 0)
+        if (WeapAm[WeaponType] <= 0)
         {
-            ammunition = 0;
+            WeapAm[WeaponType] = 0;
         }
-        if (Total_ammunition <= 0)
+        if (T_WeapAm[WeaponType] <= 0)
         {
-            Total_ammunition = 0;
+            T_WeapAm[WeaponType] = 0;
             Am_zero_Warn.SetActive(true);
         }
 
@@ -365,8 +377,8 @@ public class Shooting : MonoBehaviour
    
     public static void ReLoad_E()
     {
-        ammunition = AnimEvents.ammunition;
-        Total_ammunition = AnimEvents.Total_ammunition;
+        WeapAm[WeaponType] = AnimEvents.ammunition;
+        T_WeapAm[WeaponType] = AnimEvents.Total_ammunition;
         Reload = false;
     }
 
@@ -409,6 +421,15 @@ public class Shooting : MonoBehaviour
                         HitUI.gameObject.SetActive(true);
                         HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
                         HitType = 2;
+                        switch (WeaponType)  //不同武器傷害量
+                        {
+                            case 0:
+                                power = 1;
+                                break;
+                            case 1:
+                                power = 5;
+                                break;
+                        }
                         hit.transform.SendMessage("Damage", power);
                         //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
                     }
@@ -458,8 +479,12 @@ public class Shooting : MonoBehaviour
     }
     public static void PlayerRe()
     {
-        ammunition = 30;
-        Total_ammunition = 300;
+        //ammunition = 30;
+        //Total_ammunition = 300;
+        WeapAm[0] = 30;
+        T_WeapAm[0] = 300;
+        WeapAm[1] = 6;
+        T_WeapAm[1] = 30;
         ReloadWarn.SetActive(false);
         Am_zero_Warn.SetActive(false);
     }
