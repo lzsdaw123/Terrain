@@ -8,8 +8,9 @@ public class Shooting : MonoBehaviour
     public Camera PlayCamera, GunCamera;
 
     public ObjectPool pool;
-    public GameObject bullet, Muzzle_vfx;  //子彈,槍口火光  
-    public ParticleSystem MuSmoke;
+    public GameObject bullet;  //子彈  
+    public GameObject[] Muzzle_vfx;  //槍口火光  
+    public ParticleSystem MuSmoke;  //槍口煙霧
     public ParticleSystem MuFire;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR_x;  //X軸瞄準晃動
@@ -22,26 +23,28 @@ public class Shooting : MonoBehaviour
 
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
+    static int FireButtle;  //開火動畫冷卻
     public PlayerMove controller;  //角色控制腳本
     public float AniTime, STtime;
+    bool WeapSwitch; //武器切換bool
     public static int WeaponType; //武器類型
     public int NextWeaponType; //武器類型
     public Animator Weapon;   //動畫控制器
     public GameObject[] _Animator;  //槍枝物件
     public Vector3 muzzlePOS;  //槍口座標
 
-    public bool BFire;  //生成子彈
-    public bool DontShooting = false;
-    public bool LayDown = false;
+    public bool BFire;  //生成子彈bool
+    public bool DontShooting;  //停止射擊bool
+    public bool LayDown;  //收槍bool
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
     public static int ammunition, Total_ammunition;  //當前武器彈藥量
     public static int[] WeapAm = new int[] { 30, 6 };  //武器彈藥量
     public static int[] T_WeapAm = new int[] { 300, 30 }; //武器總彈藥量
-    public static bool Reload;   //是否正在換彈
-    bool AimIng;
-    float FieldOfView;
-    float gFieldOfView;
+    public static bool Reload;   //換彈藥bool
+    bool AimIng;  //瞄準中bool
+    float FieldOfView;  //玩家相機視野
+    float gFieldOfView;  //武器相機視野
 
     public ObjectPool pool_Hit;  //物件池
     public RectTransform HitUI;  //命中紅標
@@ -64,24 +67,20 @@ public class Shooting : MonoBehaviour
             Hit_vfx_S.SetActive(false);
         }
         WeaponType = 0;
+        _Animator[0].SetActive(true);
+        _Animator[1].SetActive(false);
 
-        //switch (WeaponType)  //不同武器的彈藥量
-        //{
-        //    case 0:
-        //        ammunition = WeapAm[0];  //30
-        //        Total_ammunition = T_WeapAm[0];  //300
-        //        break;
-        //    case 1:
-        //        ammunition = WeapAm[1];  //6
-        //        Total_ammunition = T_WeapAm[1];  //30
-        //        break;
-        //}
         power = 1;
         Reload = false;
+        DontShooting = false;
+        LayDown = false;
+        WeapSwitch = false;
+        FireButtle = 1;
     }
     void Start()
     {
         coolDown = 0.8f;  //冷卻結束時間
+        coolDownTimer = coolDown + 1;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
         ReloadWarn = GameObject.Find("ReloadWarn").gameObject;
@@ -95,11 +94,10 @@ public class Shooting : MonoBehaviour
         {
             controller = GetComponent<PlayerMove>();
         }
-        coolDownTimer = coolDown + 1;
 
         AniTime = STtime = 2f;
 
-        Muzzle_vfx.SetActive(false);
+        Muzzle_vfx[WeaponType].SetActive(false);
         MuSmoke.Stop();
 
     }
@@ -125,16 +123,19 @@ public class Shooting : MonoBehaviour
                 NextWeaponType = 0;
                 Weapon.SetTrigger("LayDownT");
                 AniTime = STtime - 1.6f;
+                WeapSwitch = true;
             }
             if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1)
             {
                 NextWeaponType = 1;
                 Weapon.SetTrigger("LayDownT");
                 AniTime = STtime - 1.6f;
+                WeapSwitch = true;
             }
         }
         if (AniTime <= 0)
         {
+            WeapSwitch = false;
             _Animator[WeaponType].SetActive(false);
             switch (NextWeaponType)
             {
@@ -146,7 +147,7 @@ public class Shooting : MonoBehaviour
                     break;
             }
             _Animator[WeaponType].SetActive(true);
-
+            MuSmoke.Stop();
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
             AniTime = STtime;
         }
@@ -177,15 +178,15 @@ public class Shooting : MonoBehaviour
             }
             if (WeaponType == 1)
             {
-                GA_R.y = -91.11f;
-                GA_R.z -= 16f * Time.smoothDeltaTime;
-                if (GA_R.z <= -3) { GA_R.z = -3; }
+                GA_R.y = -90.2f;
+                GA_R.z -= 15f * Time.smoothDeltaTime;
+                if (GA_R.z <= -1.6f) { GA_R.z = -1.6f; }
             }
 
             //range = Random.Range(-0.05f, 0.05f);  //晃動範圍
             //localEulerAngles跟localRotation的差別
         }
-        else
+        else  //腰射
         {          
             if (WeaponType == 0)
             {
@@ -195,19 +196,24 @@ public class Shooting : MonoBehaviour
             }
             if (WeaponType == 1)
             {
-                GA_R.y = -91.11f;
+                GA_R.y = -90.2f;
                 GA_R.z += 9f*Time.smoothDeltaTime;
-                if (GA_R.z >= -1) { GA_R.z = -1; }
+                if (GA_R.z >= 0.5) { GA_R.z = 0.5f; }
             }
         }
-        _Animator[WeaponType].transform.localRotation = Quaternion.Euler(0f, GA_R.y, GA_R.z);  //槍枝Rotation瞄準偏移修正      
-        if (coolDownTimer > coolDown) //若冷卻時間已到
+        if (FireButtle == 1)
         {
-            Muzzle_vfx.SetActive(false); //關閉火光
-            //可以發射子彈了
-
+            Weapon.SetBool("Fire", false);
+            Weapon.SetBool("AimFire", false);
+        }
+        _Animator[WeaponType].transform.localRotation = Quaternion.Euler(0.01f, GA_R.y, GA_R.z);  //槍枝Rotation瞄準偏移修正
+        if (coolDownTimer > coolDown) //若冷卻時間已到 可以發射子彈
+        {
+            Muzzle_vfx[WeaponType].SetActive(false); //關閉火光
+            Weapon.SetBool("Fire", false);
+            Weapon.SetBool("AimFire", false);
             //若按下滑鼠右鍵瞄準
-            if (Input.GetButton("Fire2") && Reload != true && LayDown == false && !PlayerMove.m_Jumping)  //架槍瞄準
+            if (Input.GetButton("Fire2") && !Reload && LayDown == false && !PlayerMove.m_Jumping && !WeapSwitch)  //架槍瞄準
             {
                 if (AimIng == false)
                 {
@@ -217,9 +223,13 @@ public class Shooting : MonoBehaviour
                 Weapon.SetBool("Aim", true);
                 //ZoomIn();
                 //瞄準射擊
-                if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) && (WeapAm[WeaponType] != 0))
-                {
-                    Weapon.SetBool("AimFire", true);
+                if (Input.GetButton("Fire1") && DontShooting == false && LayDown == false && WeapAm[WeaponType] != 0)
+                {                 
+                    if (FireButtle == 1)
+                    {
+                        Weapon.SetBool("AimFire", true);
+                        FireButtle = 0;
+                    }
                 }
                 else {Weapon.SetBool("AimFire", false); }
             }
@@ -231,7 +241,7 @@ public class Shooting : MonoBehaviour
                 //ZoomOut();
             }
             //若按下滑鼠左鍵開火
-            if (Input.GetButton("Fire1") && (DontShooting == false) && (LayDown == false) )
+            if (Input.GetButton("Fire1") && DontShooting == false && LayDown == false && !Reload && !WeapSwitch)
             {
                 if(WeapAm[WeaponType] != 0)
                 {
@@ -259,15 +269,27 @@ public class Shooting : MonoBehaviour
                     GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.smoothDeltaTime;
 
                     WeapAm[WeaponType]--;
-                    Weapon.SetBool("Fire", true);
-                    //Weapon.SetBool("Aim", false);
+                    if (FireButtle==1)
+                    {
+                        Weapon.SetBool("Fire", true);
+                        FireButtle = 0;
+                    }
                     BFire = true;  //生成子彈
+                    //Weapon.SetBool("Aim", false);                    
                 }
                 else  //沒子彈
                 {
                     GussetMachine();
                 }
-                coolDownTimer = 0.7f;   //射擊冷卻時間，與coolDown0.8差越小越快
+                switch (WeaponType)  //射擊冷卻時間，與coolDown0.8差越小越快
+                {
+                    case 0:
+                        coolDownTimer = 0.7f;
+                        break;
+                    case 1:
+                        coolDownTimer = 0.4f;   
+                        break;
+                }
             }
             else
             {
@@ -277,18 +299,8 @@ public class Shooting : MonoBehaviour
         else //否則需要冷卻計時
         {
             coolDownTimer += Time.deltaTime;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && LayDown == false && T_WeapAm[WeaponType] != 0)    //換彈藥
-        {
-            if (Reload == false)
-            {
-                Reload = true;
-                Weapon.SetTrigger("Reload");
-                ReloadWarn.SetActive(false);
-            }
-        }
-
+            //Weapon.SetBool("Fire", false);
+        }      
         if (Input.GetKeyDown(KeyCode.T))       //收槍
         {
             Reload = false;
@@ -373,17 +385,19 @@ public class Shooting : MonoBehaviour
                 GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             }
         }
-    }
-   
-    public static void ReLoad_E()
-    {
-        WeapAm[WeaponType] = AnimEvents.ammunition;
-        T_WeapAm[WeaponType] = AnimEvents.Total_ammunition;
-        Reload = false;
-    }
-
+    } 
     void FixedUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.R) && LayDown == false && T_WeapAm[WeaponType] != 0)    //換彈藥
+        {
+            if (Reload == false)
+            {
+                FireButtle = 0;
+                Reload = true;
+                Weapon.SetTrigger("Reload");
+                ReloadWarn.SetActive(false);
+            }
+        }
         if (BFire) //生成子彈
         {
             muzzlePOS = muzzle[WeaponType].GetComponent<Transform>().position;
@@ -394,7 +408,7 @@ public class Shooting : MonoBehaviour
             Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit; //射線擊中資訊
             if (Physics.Raycast(ray, out hit, layerMask)) //擊中圖層
-            {
+            {               
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                 {
                     HitType = 0;
@@ -458,15 +472,26 @@ public class Shooting : MonoBehaviour
             }
             else
             {
+                if (WeaponType == 1)
+                {
+                    HitType = 5;
+                }
                 pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
             }
-            Muzzle_vfx.transform.position = muzzlePOS;
-            Muzzle_vfx.transform.rotation = GunCamera.transform.rotation;
-            Muzzle_vfx.SetActive(true);
+            Muzzle_vfx[WeaponType].transform.position = muzzlePOS;
+            Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
+            Muzzle_vfx[WeaponType].SetActive(true);
             GunshotsAudio();
             MuSmoke.Play();
             BFire = false;
         }
+    }
+    public static void ReLoad_E()  //換彈結束
+    {
+        WeapAm[WeaponType] = AnimEvents.ammunition;
+        T_WeapAm[WeaponType] = AnimEvents.Total_ammunition;
+        Reload = false;
+        FireButtle = 1;
     }
     void GunshotsAudio()
     {
@@ -479,17 +504,17 @@ public class Shooting : MonoBehaviour
     }
     public static void PlayerRe()
     {
-        //ammunition = 30;
-        //Total_ammunition = 300;
-        WeapAm[0] = 30;
-        T_WeapAm[0] = 300;
-        WeapAm[1] = 6;
-        T_WeapAm[1] = 30;
+        WeapAm = new int[] { 30, 6 };
+        T_WeapAm = new int[] { 300, 30 };
         ReloadWarn.SetActive(false);
         Am_zero_Warn.SetActive(false);
     }
     public static void DpsUp()
     {
         power = 1 + Shop.DpsLv;
+    }
+    public static void Loaded()
+    {
+        FireButtle = 1;
     }
 }

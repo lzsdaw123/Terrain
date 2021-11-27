@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class AmmunitionSupply : MonoBehaviour
 {
     public GameObject T;
-    int Total_ammunition;
+    int[] T_WeapAmm = new int[] { 300, 30 }; //武器總彈藥量
     public int AmmSupply;
     public GameObject ASupply;  //彈藥
     public GameObject Cover;  //蓋子
@@ -15,6 +15,7 @@ public class AmmunitionSupply : MonoBehaviour
     public float Rotation;
     bool interactive=false;
     [SerializeField] GameObject Am_zero_Warn;
+    int WeaponType; //武器類型
 
     void Awake()
     {
@@ -24,7 +25,6 @@ public class AmmunitionSupply : MonoBehaviour
     void Start()
     {
         T = GameObject.Find("ObjectText");
-        Total_ammunition = Shooting.Total_ammunition;
         AmmSupply = 480;
         Rotation = Cover.transform.localRotation.x;
         if (CoverOn)
@@ -38,6 +38,8 @@ public class AmmunitionSupply : MonoBehaviour
     }
     void Update()
     {
+        WeaponType = Shooting.WeaponType;
+
         if (AmmSupply <= 0)
         {
             AmmSupply = 0;
@@ -65,8 +67,6 @@ public class AmmunitionSupply : MonoBehaviour
             }
             Cover.transform.localRotation = Quaternion.Euler(Rotation, 0, 0);
         }
-      
-
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
@@ -92,13 +92,13 @@ public class AmmunitionSupply : MonoBehaviour
             {
                 //Open = false;
             }
-            if (Shooting.Total_ammunition < Total_ammunition  &&CoverOn)
+            if (Shooting.T_WeapAm[WeaponType] < T_WeapAmm[WeaponType] && CoverOn)  //玩家總彈藥量是否滿的
             {
                 Am_zero_Warn.SetActive(false);
                 AudioManager.PickUp(0);
                 //print("彈藥補給");
-                AmmSupply = AmmSupply - (Total_ammunition - Shooting.Total_ammunition);
-                Shooting.Total_ammunition = Total_ammunition;
+                AmmSupply = AmmSupply - (T_WeapAmm[WeaponType] - Shooting.T_WeapAm[WeaponType]);
+                Shooting.T_WeapAm[WeaponType] = T_WeapAmm[WeaponType];
             }
         }
     }

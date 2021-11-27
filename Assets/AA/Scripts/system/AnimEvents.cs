@@ -40,6 +40,10 @@ public class AnimEvents : MonoBehaviour
     {
         DontShooting = false;
     }
+    void FireEnd()
+    {
+        Shooting.Loaded();
+    }
     void ReLoad()
     {
         ammunition = Shooting.WeapAm[WeaponType];
@@ -101,7 +105,7 @@ public class AnimEvents : MonoBehaviour
             
         //}      
     }
-    void Reload(int Nub)
+    void ReloadAudio(int Nub)
     {
         AudioManager.Reload(Nub);
     }
