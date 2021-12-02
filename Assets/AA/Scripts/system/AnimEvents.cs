@@ -43,6 +43,7 @@ public class AnimEvents : MonoBehaviour
     void FireEnd()
     {
         Shooting.Loaded();
+        NPC_AI.Loaded();
     }
     void ReLoad()
     {
@@ -66,6 +67,7 @@ public class AnimEvents : MonoBehaviour
     void ReLoadEnd()
     {
         Shooting.ReLoad_E();
+        NPC_AI.ReLoad_E();
     }
     void Attacking()
     {

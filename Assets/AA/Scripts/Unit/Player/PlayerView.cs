@@ -124,7 +124,7 @@ public class PlayerView : MonoBehaviour
             else if (SP.x >= 900) SP.x = 900;
             //畫面上下邊界
             if (SP.y <= -350) SP.y = -350;
-            else if (SP.y >= 350) SP.y = 350;
+            else if (SP.y >= 460) SP.y = 460;
 
             camTransform = Camera.transform; //相機座標
             Vector3 dirForward = (transform.position - camTransform.position).normalized;
@@ -142,8 +142,8 @@ public class PlayerView : MonoBehaviour
                 Fdot = Vector3.Dot(camTransform.forward, Bdir.normalized);//點乘判斷前後：Fdot >0在前，<0在後
                 //UI_y = 700 * Fdot;
                 UI_y = -350;
-                if (UI_y <= -350) UI_y = -350;
-                else if (UI_y >= 350) UI_y = 350;
+                //if (UI_y <= -350) UI_y = -350;
+                //else if (UI_y >= 350) UI_y = 350;
                 sp_Dot = true;
                 targetUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-SP.x, UI_y, 0);
                 //targetUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-SP.x, SP.y, 0);
