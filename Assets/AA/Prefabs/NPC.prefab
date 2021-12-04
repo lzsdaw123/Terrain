@@ -19912,7 +19912,7 @@ MonoBehaviour:
   pool: {fileID: 0}
   AnimEvents: {fileID: 8724607125409311481}
   ani: {fileID: 8724607125409311478}
-  Weap: {fileID: 1332258295179839953}
+  Weap: {fileID: 8494284682339325638}
   arriveDistance: 4
   idlePercent: 10
   walkPercent: 50
@@ -19921,7 +19921,7 @@ MonoBehaviour:
   actionTimer: 0
   heightOfEye: 2.9
   heightOfTarget: 1
-  lookDistance: 100
+  lookDistance: 60
   lookAngle: 180
   AttackAngle: 1
   ArangeAngle: 80
@@ -19930,7 +19930,7 @@ MonoBehaviour:
     m_Bits: 1024
   playerTags:
   - Enemy
-  attackDistance: 60
+  attackDistance: 50
   ArangeDistance: 0
   isEnemy: 0
   Fire: 0
@@ -19941,14 +19941,18 @@ MonoBehaviour:
   Muzzle_vfx: {fileID: 2731016653823465597}
   MuSmoke: {fileID: 4954972023571274669}
   MuFire: {fileID: 3713231762975014338}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 3584
+  HitType: 0
+  pool_Hit: {fileID: 0}
   attackLv1:
     displayGizmos: 0
     power: 2
     distance: 3
     angle: 80
     height: 1
-  bullet: {fileID: 0}
-  muzzle: {fileID: 2731016653823465597}
+  bullet: {fileID: 953877935754959471, guid: ab51fae94f78e9544a9069c1a8470cb4, type: 3}
   muzzlePOS: {x: 0, y: 0, z: 0}
   targetHP: 0
 --- !u!195 &1332258295179839956
@@ -19984,9 +19988,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.35
-  m_Height: 1.84
+  m_Height: 1.48
   m_Direction: 2
-  m_Center: {x: 0, y: 2.6, z: 0.84}
+  m_Center: {x: 0, y: 2.6, z: 0.78}
 --- !u!1 &1332258295633869199
 GameObject:
   m_ObjectHideFlags: 0

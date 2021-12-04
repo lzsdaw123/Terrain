@@ -12,14 +12,16 @@ public class MonsterLife : MonoBehaviour
     private Rigidbody rigid;
     private Collider cld;
 
-    public float hpFull; // 血量上限
+    public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
+    public float[] hpFull = new float[] { 14, 20 }; // 血量上限
     public float hp; // 血量
     int HpLv;  //生命等級
     int Level;  //難度等級
     //public Image hpImage;
 
     private NavMeshAgent agent;
-    private MonsterAI02 monster02;
+    public MonsterAI02 monster02;
+    public MonsterAI03 monster03;
 
     public GameObject PS_Dead;
     [SerializeField] float DeadTime;
@@ -30,11 +32,12 @@ public class MonsterLife : MonoBehaviour
         cld = GetComponent<Collider>();
         agent = GetComponent<NavMeshAgent>();
         monster02 = GetComponent<MonsterAI02>();
+        monster03 = GetComponent<MonsterAI03>();
     }
     void Start()
     {
         PS_Dead.SetActive(false);
-        hpFull = 7;
+        hpFull = new float[] { 14, 20 };
         DeadTime = 0;
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
@@ -96,6 +99,7 @@ public class MonsterLife : MonoBehaviour
             hp = 0; // 不要扣到負值
             PS_Dead.SetActive(true);
             monster02.enabled = false; // 關閉 AI 腳本
+            monster03.enabled = false; // 關閉 AI 腳本
             agent.enabled = false; // 立即關閉尋徑功能
             ani.SetTrigger("Die");           
         }
@@ -114,14 +118,14 @@ public class MonsterLife : MonoBehaviour
         Level = Level +1;
         if (HpLv > 0)
         {
-            hpFull = 7 + (HpLv * Level);
-            if(hpFull >= 7 +(5 * Level))
+            hpFull[MonsterType] = 7 + (HpLv * Level);
+            if(hpFull[MonsterType] >= 7 +(5 * Level))
             {
-                hpFull = 7 + (5 * Level);
+                hpFull[MonsterType] = 7 + (5 * Level);
             }
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hp = hpFull;  //補滿血量
+        hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
     {
@@ -131,6 +135,7 @@ public class MonsterLife : MonoBehaviour
         PS_Dead.SetActive(false);
         DeadTime = 0;
         monster02.enabled = true;
+        monster03.enabled = true;
         agent.enabled = true; // 開啟尋徑功能
     }
 

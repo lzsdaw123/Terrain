@@ -62,13 +62,19 @@ public class NPC_AI : MonoBehaviour
     public bool BFire;  //生成子彈bool
     public GameObject Muzzle_vfx;  //槍口火光  
     public ParticleSystem MuSmoke;  //槍口煙霧
-    public ParticleSystem MuFire;
-
+    public ParticleSystem MuFire;  //槍口火
+    public LayerMask layerMask;  //圖層
+    public int HitType;  //彈孔類型變數
+    bool NoActor = false;  //擊中玩家
+    Quaternion rot;  //彈孔生成角度
+    Vector3 pos;  //彈孔生成位置
+    public static float power; //子彈威力
+    public ObjectPool pool_Hit;  //物件池
+    bool LayDown;  //收槍bool
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
-    [SerializeField] private GameObject muzzle;
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
 
@@ -96,11 +102,13 @@ public class NPC_AI : MonoBehaviour
 
     void Start()
     {
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         agent = GetComponent<NavMeshAgent>();
         coolDown = 0.8f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
         agent.enabled = true;
+        LayDown = false;
 
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
@@ -255,11 +263,11 @@ public class NPC_AI : MonoBehaviour
                             player = actors[i].transform;                      
                         }
                         tagObject = player.gameObject;
+                        print(tagObject);
                         //判斷在攻擊範圍內
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
-                            print(tagObject.name);
                             isEnemy = true;
                             //判斷在攻擊角度內
                             if (GetXZAngle(transform.forward, transform.position,
@@ -275,7 +283,8 @@ public class NPC_AI : MonoBehaviour
                                 //若不在攻擊角度內轉向目標
                                 Vector3 targetDir = tagObject.transform.position - transform.position;
                                 Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                Weap.transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
+                                //Weap.transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
+                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
                             }
                         }
                         fined = true;                     
@@ -294,13 +303,12 @@ public class NPC_AI : MonoBehaviour
 
         // 打一條射線看之間是否有障礙物
         Vector3 origin = transform.position + new Vector3(0, heightOfEye, 0);
-        Vector3 targetPos = targetActor.position + new Vector3(0,
-       heightOfTarget, 0);
+        Vector3 targetPos = targetActor.position + new Vector3(0,heightOfTarget, 0);
         Vector3 direct = targetPos - origin;
         Ray ray = new Ray(origin, direct);
         RaycastHit hit = new RaycastHit();
         float distance = Vector3.Distance(transform.position, targetActor.position);
-        int maskMonster = 1 << LayerMask.NameToLayer("Monster");
+        int maskMonster = 1 << LayerMask.NameToLayer("Actor");
 
         if (Physics.Raycast(ray, out hit, distance, 0xFFFF - actorLayer)) //若有障礙物
         {
@@ -329,6 +337,11 @@ public class NPC_AI : MonoBehaviour
 
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
+            if (LayDown)
+            {
+                LayDown = false;
+                ani.SetBool("LayDown", false);
+            }
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
             float d = Vector3.Distance(transform.position, attackTarget.position);
@@ -360,7 +373,14 @@ public class NPC_AI : MonoBehaviour
             //{
             //    //print("警戒");
             //}
-
+            Fire = false;
+            if (!LayDown && !Reload)
+            {
+                LayDown = true;
+                ani.SetTrigger("LayDownT");
+                ani.SetBool("LayDown", true);
+            }
+                
             if (MissionTarget.activeSelf)
             {
                 //取得角色與目標的距離
@@ -416,7 +436,7 @@ public class NPC_AI : MonoBehaviour
                         ani.SetTrigger("Reload");
                     }
                 }
-                coolDownTimer = 0.7f;
+                coolDownTimer = 0.6f;
             }
             else
             {
@@ -428,89 +448,76 @@ public class NPC_AI : MonoBehaviour
             coolDownTimer += Time.deltaTime;
             //Weapon.SetBool("Fire", false);
         }
+
     }
     void FixedUpdate()
     {
         if (BFire) //生成子彈
         {
-            muzzlePOS = muzzle.GetComponent<Transform>().position;
-            //建立子彈在鏡頭中心位置
-            //GameObject obj = Instantiate(bullet, muzzlePOS, PlayCamera.transform.rotation);
-            pool.ReUse(muzzlePOS, transform.rotation);
-            //由攝影機射到是畫面正中央的射線
-            //Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-            //RaycastHit hit; //射線擊中資訊
-            //if (Physics.Raycast(ray, out hit, layerMask)) //擊中圖層
-            //{
-            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
-            //    {
-            //        HitType = 0;
-            //        Debug.DrawLine(ray.origin, hit.point, Color.black, 0.7f, false);
-            //    }
-            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
-            //    {
-            //        HitType = 0;
-            //        //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
-            //        //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
-            //    }
-            //    if (hit.collider.tag == "Metal")  //金屬
-            //    {
-            //        HitType = 3;
-            //        AudioManager.Hit(0);
-            //        Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
-            //    }
-            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
-            //    {
-            //        HitType = 1;
-            //        //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
-            //        if (hit.collider.tag == "Enemy")  //綠血
-            //        {
-            //            HitUI.gameObject.SetActive(true);
-            //            HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
-            //            HitType = 2;
-            //            switch (WeaponType)  //不同武器傷害量
-            //            {
-            //                case 0:
-            //                    power = 1;
-            //                    break;
-            //                case 1:
-            //                    power = 5;
-            //                    break;
-            //            }
-            //            hit.transform.SendMessage("Damage", power);
-            //            //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
-            //        }
-            //        if (hit.collider.tag == "Carapace")  //甲殼
-            //        {
-            //            HitType = 4;
-            //        }
-            //    }
-            //    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
-            //    {
-            //        if (hit.collider.tag != "MissionTarget")
-            //        {
-            //            NoActor = true;
-            //        }
-            //        print("打到Actor");
-            //    }
-            //}
-            ////在到物體上產生彈孔
-            //rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            //pos = hit.point;
-            //if (NoActor && pos != Vector3.zero)
-            //{
-            //    NoActor = false;
-            //    pos = HIT.transform.position;
-            //    //pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
-            //}
-            //else
-            //{
-            //    if (WeaponType == 1)
-            //    {
-            //        HitType = 5;
-            //    }
-            //    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
-            //}
+            muzzlePOS = Muzzle_vfx.transform.position;
+            //pool.ReUse(muzzlePOS, transform.rotation);
+            Vector3 targetPos = tagObject.transform.position;
+            Vector3 direct = targetPos - muzzlePOS;
+            Ray ray = new Ray(muzzlePOS, direct);
+            RaycastHit hit = new RaycastHit(); //射線擊中資訊       
+            float distance = Vector3.Distance(transform.position, tagObject.transform.position);
+            //由槍口位置射到是敵物位置的射線
+            if (Physics.Raycast(ray, out hit, distance, layerMask)) //擊中圖層
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
+                {
+                    HitType = 0;
+                    //Debug.DrawLine(ray.origin, hit.point, Color.black, 0.7f, false);
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                {
+                    HitType = 0;
+                    //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,是否被靠近相機的物體遮住)      
+                    //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
+                }
+                if (hit.collider.tag == "Metal")  //金屬
+                {
+                    HitType = 3;
+                    AudioManager.Hit(0);
+                    //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
+                {
+                    HitType = 1;
+                    //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
+                    if (hit.collider.tag == "Enemy")  //綠血
+                    {
+                        HitType = 2;
+                        power = 1;
+                        hit.transform.SendMessage("Damage", power);  //造成傷害
+                        //Debug.DrawLine(ray.origin, targetHit, Color.blue, 1f, false);
+                    }
+                    if (hit.collider.tag == "Carapace")  //甲殼
+                    {
+                        HitType = 4;
+                    }
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+                {
+                    if (hit.collider.tag != "MissionTarget")
+                    {
+                        NoActor = true;
+                    }
+                    print("打到Actor");
+                }
+            }
+            //在到物體上產生彈孔
+            rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            pos = hit.point;
+            if (NoActor && pos != Vector3.zero)
+            {
+                NoActor = false;
+                //pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
+            }
+            else
+            {
+                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+            }
             Muzzle_vfx.transform.position = muzzlePOS;
             Muzzle_vfx.transform.rotation = transform.rotation;
             Muzzle_vfx.SetActive(true);
@@ -560,9 +567,4 @@ public class NPC_AI : MonoBehaviour
     {
         FireButtle = 1;
     }
-    //public void AttackAning(bool attackingB, int buttleAttackI)
-    //{
-    //    attacking = attackingB;
-    //    buttleAttack = buttleAttackI;
-    //}
 }

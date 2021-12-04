@@ -55,7 +55,7 @@ public class S_BulletLife : MonoBehaviour
             }           
         }
         //射線初始位置,射線方向
-        Ray ray = new Ray(transform.position, transform.forward); //*********改****子彈位置到滑鼠點擊位置
+        Ray ray = new Ray(transform.position, transform.forward); 
         RaycastHit hit; //射線擊中資訊
         //偵測射線判斷，由 自身座標 的 前方 射出，以rayLength為長度，並且只偵測Ground圖層(記得改圖層
         //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)

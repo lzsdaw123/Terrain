@@ -54,7 +54,7 @@ public class Shooting : MonoBehaviour
     bool NoActor = false;  //擊中玩家
     Quaternion rot;  //彈孔生成角度
     Vector3 pos;  //彈孔生成位置
-    public static float power; //子彈威力
+    public static float[] power = new float[] { 2,10}; //子彈威力
     [SerializeField] Transform HIT; //預置彈孔位置
     [SerializeField] static GameObject ReloadWarn;
     [SerializeField] static GameObject Am_zero_Warn;
@@ -70,7 +70,7 @@ public class Shooting : MonoBehaviour
         _Animator[0].SetActive(true);
         _Animator[1].SetActive(false);
 
-        power = 1;
+        power = new float[] { 2, 10 };
         Reload = false;
         DontShooting = false;
         LayDown = false;
@@ -417,7 +417,7 @@ public class Shooting : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
                 {
                     HitType = 0;
-                    //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,??)      
+                    //繪出起點到射線擊中的綠色線段(起點座標,目標座標,顏色,持續時間,是否被靠近相機的物體遮住)      
                     //Debug.DrawLine(ray.origin, hit.point, Color.green, 0.7f, false);                        
                 }
                 if (hit.collider.tag == "Metal")  //金屬
@@ -435,21 +435,16 @@ public class Shooting : MonoBehaviour
                         HitUI.gameObject.SetActive(true);
                         HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
                         HitType = 2;
-                        switch (WeaponType)  //不同武器傷害量
-                        {
-                            case 0:
-                                power = 1;
-                                break;
-                            case 1:
-                                power = 5;
-                                break;
-                        }
-                        hit.transform.SendMessage("Damage", power);
-                        //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, true);
+                        hit.transform.SendMessage("Damage", power[WeaponType]);  //造成傷害
+                        //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                     }
                     if (hit.collider.tag == "Carapace")  //甲殼
                     {
                         HitType = 4;
+                        if (WeaponType == 1)
+                        {
+                            hit.transform.SendMessage("Damage", 5);  //造成傷害
+                        }
                     }
                 }
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
@@ -511,7 +506,7 @@ public class Shooting : MonoBehaviour
     }
     public static void DpsUp()
     {
-        power = 1 + Shop.DpsLv;
+        power[WeaponType] = 1 + Shop.DpsLv;
     }
     public static void Loaded()
     {

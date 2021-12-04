@@ -351,7 +351,7 @@ public class MonsterAI03 : MonoBehaviour
             float d = Vector3.Distance(transform.position, target);
             if (d < arriveDistance)  //若距離小於停止距離
             {
-                print("接近");
+                //print("接近");
             }
 
             ////if (MissionTarget.activeSelf)
