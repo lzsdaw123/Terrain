@@ -124,7 +124,7 @@ public class NPC_AI : MonoBehaviour
         //{
         //    ani = GetComponent<Animator>(); //自動取得動畫控制器
         //}
-        MissionTarget = GameObject.Find("MissionTager").gameObject;
+        MissionTarget = GameObject.Find("MissionTarget").gameObject;
         oriTarget = MissionTarget.transform;
     }
 
@@ -263,7 +263,6 @@ public class NPC_AI : MonoBehaviour
                             player = actors[i].transform;                      
                         }
                         tagObject = player.gameObject;
-                        print(tagObject);
                         //判斷在攻擊範圍內
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
@@ -436,7 +435,7 @@ public class NPC_AI : MonoBehaviour
                         ani.SetTrigger("Reload");
                     }
                 }
-                coolDownTimer = 0.6f;
+                coolDownTimer = 0.66f;  //開火冷卻時間，與coolDown 0.8差越小越快
             }
             else
             {
@@ -464,6 +463,10 @@ public class NPC_AI : MonoBehaviour
             //由槍口位置射到是敵物位置的射線
             if (Physics.Raycast(ray, out hit, distance, layerMask)) //擊中圖層
             {
+                //if(hit.collider.name == "Scorpion")
+                //{
+
+                //}
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                 {
                     HitType = 0;
@@ -484,13 +487,14 @@ public class NPC_AI : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
                 {
                     HitType = 1;
-                    //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
+                    //Debug.DrawLine(ray.origin, hit.point, Color.red, 1f, false);
                     if (hit.collider.tag == "Enemy")  //綠血
                     {
                         HitType = 2;
                         power = 1;
-                        hit.transform.SendMessage("Damage", power);  //造成傷害
-                        //Debug.DrawLine(ray.origin, targetHit, Color.blue, 1f, false);
+                        hit.transform.SendMessage("Unit", false);  //攻擊者是否為玩家
+                        hit.transform.SendMessage("Damage", power) ;  //造成傷害
+                        //Debug.DrawLine(ray.origin, hit.point, Color.green, 1f, false);
                     }
                     if (hit.collider.tag == "Carapace")  //甲殼
                     {
@@ -521,6 +525,7 @@ public class NPC_AI : MonoBehaviour
             Muzzle_vfx.transform.position = muzzlePOS;
             Muzzle_vfx.transform.rotation = transform.rotation;
             Muzzle_vfx.SetActive(true);
+            AnimEvents.NPC_Audio(2);  //開火音效
             MuSmoke.Play();
             BFire = false;
         }

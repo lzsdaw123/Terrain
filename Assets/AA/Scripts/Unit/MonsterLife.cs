@@ -27,6 +27,7 @@ public class MonsterLife : MonoBehaviour
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
+    bool Player;
 
     void Awake()
     {
@@ -40,12 +41,14 @@ public class MonsterLife : MonoBehaviour
     void Start()
     {
         PS_Dead.SetActive(false);
+        hpFull = new float[] { 14, 20 };
         hp = hpFull[MonsterType];  //補滿血量
         DeadTime = 0;
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
+        HitUI.SetActive(false);
         //ani = GetComponent<Animator>();
-       
+
         //RagdollActive(false); // 先關閉物理娃娃
     }
 
@@ -67,12 +70,17 @@ public class MonsterLife : MonoBehaviour
         }
         if (HitUI.activeSelf)  //命中UI
         {
-            HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f)*10*Time.deltaTime;
-            Vector3 Z = new Vector3(0, 0f, 0f);
-            if (HitUI.transform.localScale.x <= Z.x)
+            //HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0f) * 10 * Time.deltaTime;
+            //if (HitUI.transform.localScale.x <= 0)
+            //{
+            //    HitUI.SetActive(false);
+            //    HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
+            //}
+            HitUI.transform.localScale += new Vector3(0.15f, 0.15f, 0f) * 12 * Time.deltaTime;
+            if (HitUI.transform.localScale.x >= 1.2)
             {
                 HitUI.SetActive(false);
-                HitUI.transform.localScale = new Vector3(1.4f, 1.4f, 1f);
+                HitUI.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
             }
         }
     }
@@ -103,25 +111,35 @@ public class MonsterLife : MonoBehaviour
     {
         RagdollActive(true);
     }
+    public void Unit(bool player)
+    {
+        Player = player;
+    }
     public void Damage(float Power)
     {
-        if (hp < 0) return;
         hp -= Power; // 扣血
-        HitUI.SetActive(true);
-        HitUI.transform.localScale = new Vector3(1.4f, 1.4f, 1f);
-        HitUI.GetComponent<Image>().color = Color.white;
+        if (hp >-10)
+        {        
+            if (Player)
+            {
+                HitUI.SetActive(true);
+                //HitUI.transform.localScale = new Vector3(1.4f, 1.4f, 1f);
+                HitUI.transform.localScale = new Vector3(0f, 0f, 1f);            
+                HitUI.GetComponent<Image>().color = Color.white;
+            }
+        }
         if (hp <= 0)
         {
             HitUI.GetComponent<Image>().color = Color.red;
-            hp = -1; // 不要扣到負值
+            hp = -10; // 不要扣到負值
             PS_Dead.SetActive(true);
-            switch (MonsterType)
+            switch (MonsterType)  //關閉怪物AI 腳本
             {
                 case 0:
-                    monster02.enabled = false; // 關閉 AI 腳本
+                    monster02.enabled = false; 
                     break;
                 case 1:
-                    monster03.enabled = false; // 關閉 AI 腳本
+                    monster03.enabled = false;
                     break;
             }           
             agent.enabled = false; // 立即關閉尋徑功能
@@ -154,12 +172,12 @@ public class MonsterLife : MonoBehaviour
     }
     void OnDisable()
     {
-        Scoreboard.AddScore(true);  //怪物擊殺分數
+        Scoreboard.AddScore(true);  //怪物擊殺
         Shop.AddKillScore();  //怪物擊殺分數
         DifficultyUp();      
         PS_Dead.SetActive(false);
         DeadTime = 0;
-        switch (MonsterType)
+        switch (MonsterType)  //開啟怪物AI 腳本
         {
             case 0:
                 monster02.enabled = true;

@@ -27,7 +27,7 @@ public class Scoreboard : MonoBehaviour
         Text.text = "怪物擊殺數 : " + Score;
         PlayDeadText.text = "玩家死亡數 : " + DeadScore;
         MonsterLVText.text = "怪物等級 : " + MonsterLevel;
-        if (NPCLife.Dead)
+        if (MissionTarget_Life.Dead)
         {
             Level = Settings.Level;
             int Total = (Score * 20) - (DeadScore * 100) + (Level * 200);  //擊殺數*20 -死亡數*100 +難度*200  

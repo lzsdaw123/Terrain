@@ -107,7 +107,7 @@ public class MonsterAI03 : MonoBehaviour
         //{
         //    ani = GetComponent<Animator>(); //自動取得動畫控制器
         //}
-        MissionTarget = GameObject.Find("MissionTager").gameObject;
+        MissionTarget = GameObject.Find("MissionTarget").gameObject;
         oriTarget = MissionTarget.transform;
     }
 

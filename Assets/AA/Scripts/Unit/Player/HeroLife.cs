@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HeroLife : MonoBehaviour
 {
-    public static float fullHp,hp, hp_R;  //滿血時數值,實際
+    public static float fullHp,hp, hp_R;  //滿血時數值, 實際, 紅血
     public Image HP_W, HP_R; //血球的UI物件
     public static bool Dead;
     public float time=0;
@@ -15,8 +15,7 @@ public class HeroLife : MonoBehaviour
 
     void Start()
     {
-        fullHp = 20;
-        hp = hp_R = fullHp; //遊戲一開始時先填滿血
+        hp = hp_R = fullHp = 20; //遊戲一開始時先填滿血
         Dead = false;
         DeBugT = GameObject.Find("DeBugT").gameObject;
         DeBugT.SetActive(false);

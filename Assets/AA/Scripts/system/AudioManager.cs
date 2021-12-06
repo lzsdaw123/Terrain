@@ -227,12 +227,12 @@ public class AudioManager : MonoBehaviour
         }
         current.PlayerSource.Play();
     }
-    public static void PlayGunshotsAudio(int B)  //開火
+    public static void PlayGunshotsAudio(int Nub)  //開火
     {
-        current.GunSource.clip = current.GunshotsClip[B];
+        current.GunSource.clip = current.GunshotsClip[Nub];
         current.GunSource.volume = 0.6f;
         current.GunSource.pitch = 1.3f;
-        if (B == 0)
+        if (Nub == 0)
         {
             current.GunSource.volume = 1.2f;
         }

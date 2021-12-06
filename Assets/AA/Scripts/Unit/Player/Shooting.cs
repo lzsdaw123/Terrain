@@ -279,7 +279,7 @@ public class Shooting : MonoBehaviour
                 {
                     GussetMachine();
                 }
-                switch (WeaponType)  //射擊冷卻時間，與coolDown0.8差越小越快
+                switch (WeaponType)  //開火冷卻時間，與coolDown 0.8差越小越快
                 {
                     case 0:
                         coolDownTimer = 0.7f;
@@ -328,7 +328,7 @@ public class Shooting : MonoBehaviour
             Am_zero_Warn.SetActive(true);
         }
 
-        void ZoomIn()
+        void ZoomIn()  //鏡頭拉近
         {
             if (gFieldOfView > 22f)
             {
@@ -359,7 +359,7 @@ public class Shooting : MonoBehaviour
                 PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             }
         }
-        void ZoomOut()
+        void ZoomOut()  //鏡頭拉遠
         {
             if (FieldOfView < 55f)
             {
@@ -421,6 +421,7 @@ public class Shooting : MonoBehaviour
                     {
 
                         HitType = 2;
+                        hit.transform.SendMessage("Unit", true);  //攻擊者為玩家?
                         hit.transform.SendMessage("Damage", power[WeaponType]);  //造成傷害
                         //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                     }

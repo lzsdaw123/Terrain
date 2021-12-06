@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NPCLife : MonoBehaviour
+public class MissionTarget_Life : MonoBehaviour
 {
-    public float fullHp, hp, hp_R;  //滿血時數值,實際
+    public float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
     public Image hpImage, HP_R; //血球的UI物件
     public GameObject HP_O,warnUI, SeriousWarnUI;
     public static bool Dead;
     float time;
     public float UItime;
-    public GameObject Exp,BigExp;
-    public GameObject FailUI;
+    public GameObject Exp,BigExp;  //爆炸,大爆炸
+    public GameObject FailUI;  //任務失敗UI
     float DeadTime;
     bool WarnT=true;
 

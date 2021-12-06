@@ -513,7 +513,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184266014792978328}
   m_LocalRotation: {x: -0.15749699, y: -0.011343729, z: 0.0013877607, w: 0.98745334}
-  m_LocalPosition: {x: -0.043, y: 0.548, z: 0.931}
+  m_LocalPosition: {x: -0.043, y: 0.627, z: 0.906}
   m_LocalScale: {x: 0.6145744, y: 0.6145744, z: 1.4348993}
   m_Children: []
   m_Father: {fileID: 2393291709028296619}
@@ -854,6 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6684f66b1d7b7441b7f3b9248dd5d39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitType: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 6863350338353859676}
@@ -904,6 +905,7 @@ MonoBehaviour:
   monster03: {fileID: 6863350338353859676}
   PS_Dead: {fileID: 9183927141351714136}
   DeadTime: 0
+  HitUI: {fileID: 0}
 --- !u!1 &1651288624067104888
 GameObject:
   m_ObjectHideFlags: 0
@@ -3505,7 +3507,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8802370816306400295}
   m_LocalRotation: {x: 0.0038488826, y: -0.24572895, z: 0.96930015, w: -0.007726897}
-  m_LocalPosition: {x: -0.00000006106893, y: 0.00000014522811, z: -0.000000022002496}
+  m_LocalPosition: {x: 0.001, y: -0.047, z: -0.029}
   m_LocalScale: {x: 1, y: 1.0000005, z: 1.0000014}
   m_Children:
   - {fileID: 6398245146856000230}
@@ -3522,8 +3524,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.33
-  m_Height: 0.72
+  m_Radius: 0.35
+  m_Height: 0.87
   m_Direction: 1
   m_Center: {x: -0.0000017504221, y: 0.17, z: -0.0819178}
 --- !u!1 &9062167448179421656

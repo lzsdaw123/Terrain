@@ -5,37 +5,32 @@ using UnityEngine.UI;
 
 public class NPC_Life : MonoBehaviour
 {
-    public float fullHp, hp, hp_R;  //滿血時數值,實際
-    public Image hpImage, HP_R; //血球的UI物件
-    public GameObject HP_O,warnUI, SeriousWarnUI;
-    public static bool Dead;
+    public float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
+    //public Image hpImage, HP_R; //血球的UI物件
+    [SerializeField] bool Dead;  //是否死亡
     float time;
     public float UItime;
-    public GameObject Exp,BigExp;
-    public GameObject FailUI;
+    public NPC_AI NPC_AI;
+    public GameObject Exp, BigExp;  //爆炸,大爆炸
     float DeadTime;
-    bool WarnT=true;
 
     void Awake()
     {
-        FailUI.SetActive(false);
         time = 0;
         DeadTime = 0;
     }
     void Start()
     {
-        hp = fullHp= hp_R = 40; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 20; //遊戲一開始時先填滿血
         Dead = false;
-        warnUI.SetActive(false);
-        SeriousWarnUI.SetActive(false);
         UItime = 0;
         Exp.SetActive(false);
+        NPC_AI.enabled = true;
     }
 
     public void Damage(float Power) // 接受傷害
     {
         hp -= Power; // 扣血
-        warnUI.SetActive(true);
         //AudioManager.Warn(0);
         if (hp <= 0)
         {
@@ -46,84 +41,60 @@ public class NPC_Life : MonoBehaviour
     }
     void Update()
     {
-        hpImage.fillAmount = hp / fullHp; //顯示血球
-        HP_R.fillAmount = hp_R / fullHp; //顯示血球
+        //hpImage.fillAmount = hp / fullHp; //顯示血球
+        //HP_R.fillAmount = hp_R / fullHp; //顯示血球
 
-        if (hp != hp_R)
-        {
-            time += 4 * Time.deltaTime;
-            if (time >= 2)
-            {
-                time = 2;
-                hp_R -= 1f * Time.deltaTime;
-            }
-        }
-        if (hp_R <= hp)
-        {
-            hp_R = hp;
-            time = 0;
-        }
-        if (!Dead)
-        {
-            if (hp <= fullHp * 0.12f)  //血量低於安全值
-            {
-                HP_O.SetActive(true);
-                SeriousWarnUI.SetActive(true);
-                if (WarnT)
-                {
-                    WarnT = false;
-                    AudioManager.Warn(0);
-                }
-            }
-            if (warnUI.activeSelf)
-            {
-                UItime += Time.deltaTime;
-                if (UItime >= 1)
-                {
-                    warnUI.SetActive(false);
-                    UItime = 0;
-                }
-            }
-        }
-        if (!SeriousWarnUI.activeSelf)
-        {
-            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
-        }
-        else
-        {
-            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 300, 0);
-        }
+        //if (hp != hp_R)
+        //{
+        //    time += 4 * Time.deltaTime;
+        //    if (time >= 2)
+        //    {
+        //        time = 2;
+        //        hp_R -= 1f * Time.deltaTime;
+        //    }
+        //}
+        //if (hp_R <= hp)
+        //{
+        //    hp_R = hp;
+        //    time = 0;
+        //}
+        //if (!Dead)
+        //{
+        //    if (hp <= fullHp * 0.12f)  //血量低於安全值
+        //    {
+        //        if (WarnT)
+        //        {
+        //            WarnT = false;
+        //            AudioManager.Warn(0);
+        //        }
+        //    }
+        //}
         if (Exp.activeSelf)
         {
             DeadTime += Time.deltaTime;
-            AudioManager.Warn(-1);
+            //AudioManager.Warn(-1);
         }
-        if (DeadTime >= 3)
+        if (DeadTime >= 1.6f)
         {
-            BigExp.SetActive(false);
+            //BigExp.SetActive(false);
+            Exp.SetActive(false);
+            gameObject.SetActive(false);
+            DeadTime = 2;
         }
-        if (DeadTime >= 6)
-        {
-            Scoreboard.Settlement();
-            FailUI.SetActive(true);
-            DeadTime = 10;
-            Cursor.lockState = CursorLockMode.None; //游標無狀態模式
-            Time.timeScale = 0f;
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            Destroyed();
-        }
+        //if (DeadTime >= 6)
+        //{
+        //    DeadTime = 10;
+        //}
     }
     void Destroyed()
     {
         if (!Dead)
         {
             Dead = true;
-            //print("發電站已被摧毀");
+            //print("守衛已被摧毀");
             Exp.SetActive(true);
-            AudioManager.explode();          
-       
+            NPC_AI.enabled = false;  //關閉AI腳本
+            //AudioManager.explode();   
         }
     }
 }
