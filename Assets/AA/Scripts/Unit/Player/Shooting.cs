@@ -47,7 +47,6 @@ public class Shooting : MonoBehaviour
     float gFieldOfView;  //武器相機視野
 
     public ObjectPool pool_Hit;  //物件池
-    public RectTransform HitUI;  //命中紅標
     public int HitType;  //彈孔類型變數
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public LayerMask layerMask;  //圖層
@@ -82,7 +81,6 @@ public class Shooting : MonoBehaviour
         coolDown = 0.8f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
-        HitUI = GameObject.Find("HitUI").GetComponent<RectTransform>();
         ReloadWarn = GameObject.Find("ReloadWarn").gameObject;
         Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;
         ReloadWarn.SetActive(false);
@@ -330,17 +328,6 @@ public class Shooting : MonoBehaviour
             Am_zero_Warn.SetActive(true);
         }
 
-        if (HitUI.gameObject.activeSelf)
-        {
-            HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0.15f);
-            Vector3 Z = new Vector3(0, 0f, 0f);
-            if (HitUI.transform.localScale.x <= Z.x)
-            {
-                HitUI.gameObject.SetActive(false);
-                HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
-            }
-        }
-
         void ZoomIn()
         {
             if (gFieldOfView > 22f)
@@ -432,8 +419,7 @@ public class Shooting : MonoBehaviour
                     //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
                     if (hit.collider.tag == "Enemy")  //綠血
                     {
-                        HitUI.gameObject.SetActive(true);
-                        HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
+
                         HitType = 2;
                         hit.transform.SendMessage("Damage", power[WeaponType]);  //造成傷害
                         //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);

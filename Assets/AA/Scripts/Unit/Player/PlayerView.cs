@@ -58,6 +58,12 @@ public class PlayerView : MonoBehaviour
             Vector2 viewPos = Camera.WorldToViewportPoint(this.gameObject.transform.position);  //世界座標到視口座標
             Vector2 ScreenPos = Camera.ViewportToScreenPoint(viewPos);  //視口座標→螢幕座標
             Vector2 SP = new Vector2(ScreenPos.x - 960, ScreenPos.y - 540);
+            //畫面左右邊界
+            if (SP.x <= -900) SP.x = -900;
+            else if (SP.x >= 900) SP.x = 900;
+            //畫面上下邊界
+            if (SP.y <= -350) SP.y = -350;
+            else if (SP.y >= 350) SP.y = 350;
             targetUI.GetComponent<RectTransform>().anchoredPosition3D = SP;
         }
         else
@@ -124,7 +130,7 @@ public class PlayerView : MonoBehaviour
             else if (SP.x >= 900) SP.x = 900;
             //畫面上下邊界
             if (SP.y <= -350) SP.y = -350;
-            else if (SP.y >= 460) SP.y = 460;
+            else if (SP.y >= 350) SP.y = 350;
 
             camTransform = Camera.transform; //相機座標
             Vector3 dirForward = (transform.position - camTransform.position).normalized;
