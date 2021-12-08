@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AmmunitionSupply : MonoBehaviour
 {
-    public GameObject T;
+    public GameObject TextG;
     int[] T_WeapAmm = new int[] { 300, 30 }; //武器總彈藥量
     public int AmmSupply;
     public GameObject ASupply;  //彈藥
@@ -24,7 +24,7 @@ public class AmmunitionSupply : MonoBehaviour
     }
     void Start()
     {
-        T = GameObject.Find("ObjectText");
+        TextG = GameObject.Find("ObjectText");
         AmmSupply = 480;
         Rotation = Cover.transform.localRotation.x;
         if (CoverOn)
@@ -72,11 +72,11 @@ public class AmmunitionSupply : MonoBehaviour
     {
         if (interactive || CoverOn)
         {
-            T.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply;
+            TextG.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply;
         }
         else
         {
-            T.GetComponent<Text>().text = "按「E」打開彈藥箱 ";
+            TextG.GetComponent<Text>().text = "按「E」打開彈藥箱 ";
         }
         QH_interactive.thing();  //呼叫QH_拾取圖案
 

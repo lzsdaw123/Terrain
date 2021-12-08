@@ -29,6 +29,8 @@ public class Shooting : MonoBehaviour
     bool WeapSwitch; //武器切換bool
     public static int WeaponType; //武器類型
     public int NextWeaponType; //武器類型
+    public static int PickUpWeapon;  //身上武器類型
+    public static bool SwitchWeapon;
     public Animator Weapon;   //動畫控制器
     public GameObject[] _Animator;  //槍枝物件
     public Vector3 muzzlePOS;  //槍口座標
@@ -50,11 +52,9 @@ public class Shooting : MonoBehaviour
     public int HitType;  //彈孔類型變數
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public LayerMask layerMask;  //圖層
-    bool NoActor = false;  //擊中玩家
     Quaternion rot;  //彈孔生成角度
     Vector3 pos;  //彈孔生成位置
     public static float[] power = new float[] { 2,10}; //子彈威力
-    [SerializeField] Transform HIT; //預置彈孔位置
     [SerializeField] static GameObject ReloadWarn;
     [SerializeField] static GameObject Am_zero_Warn;
 
@@ -75,6 +75,8 @@ public class Shooting : MonoBehaviour
         LayDown = false;
         WeapSwitch = false;
         FireButtle = 1;
+        PickUpWeapon = 0;
+        SwitchWeapon = false;
     }
     void Start()
     {
@@ -113,19 +115,29 @@ public class Shooting : MonoBehaviour
             ZoomOut();
         }
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
-
+        if (SwitchWeapon && WeaponType != 1)
+        {
+            SwitchWeapon = false;
+            NextWeaponType = PickUpWeapon;           
+            WeapSwitching();
+        }
         if ( AniTime >=2)  //切換武器
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0)
+            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0)  //主武器
             {
                 NextWeaponType = 0;
-                Weapon.SetTrigger("LayDownT");
-                AniTime = STtime - 1.6f;
-                WeapSwitch = true;
+                WeapSwitching();
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1)
+            if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1 && PickUpWeapon==1)  //副武器
             {
                 NextWeaponType = 1;
+                WeapSwitching();
+            }
+        }
+        void WeapSwitching()
+        {
+            if (!WeapSwitch)
+            {
                 Weapon.SetTrigger("LayDownT");
                 AniTime = STtime - 1.6f;
                 WeapSwitch = true;
@@ -153,6 +165,7 @@ public class Shooting : MonoBehaviour
         {
             AniTime -= Time.deltaTime;
         }
+
         //if (AimIng != true && DontShooting !=true)
         //{
         //    float oriRotateY = transform.rotation.y;
@@ -394,8 +407,10 @@ public class Shooting : MonoBehaviour
             //由攝影機射到是畫面正中央的射線
             Ray ray = GunCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit; //射線擊中資訊
-            if (Physics.Raycast(ray, out hit, layerMask)) //擊中圖層
-            {               
+            float distance = 400;
+            if (Physics.Raycast(ray, out hit, distance, layerMask)) //擊中圖層
+            {
+                //print(hit.collider.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                 {
                     HitType = 0;
@@ -434,32 +449,15 @@ public class Shooting : MonoBehaviour
                         }
                     }
                 }
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
-                {
-                    if (hit.collider.tag != "MissionTarget")
-                    {
-                        NoActor = true;
-                    }
-                    print("打到Actor");
-                }
             }
             //在到物體上產生彈孔
             rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
             pos = hit.point;
-            if (NoActor && pos != Vector3.zero)
+            if (WeaponType == 1)
             {
-                NoActor = false;
-                pos = HIT.transform.position;
-                //pool_Hit.ReUseHit(pos, rot, HitType); ;  //從彈孔池取出彈孔
+                HitType = 5;
             }
-            else
-            {
-                if (WeaponType == 1)
-                {
-                    HitType = 5;
-                }
-                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
-            }
+            pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
             Muzzle_vfx[WeaponType].transform.position = muzzlePOS;
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx[WeaponType].SetActive(true);
@@ -498,5 +496,10 @@ public class Shooting : MonoBehaviour
     public static void Loaded()
     {
         FireButtle = 1;
+    }
+    public static void PickUpWeapons(int Nub)
+    {
+        PickUpWeapon = Nub;
+        SwitchWeapon = true;
     }
 }
