@@ -48,7 +48,6 @@ public class NPC_AI : MonoBehaviour
     [SerializeField] private float ArangeDistance; // 攻擊範圍距離
     bool AttackAngleT=false;
     private  bool attacking;
-    private  int buttleAttack;
     public bool isEnemy=false;
     public static bool AttackPlay;
     bool TrPlayer;
@@ -267,7 +266,6 @@ public class NPC_AI : MonoBehaviour
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
-                            isEnemy = true;
                             //判斷在攻擊角度內
                             if (GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < AttackAngle)

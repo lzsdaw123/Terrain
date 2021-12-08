@@ -894,8 +894,6 @@ MonoBehaviour:
   WeaponType: 0
   MonsterAI02: {fileID: 1165788677594114577}
   MonsterAI03: {fileID: 0}
-  attacking: 0
-  buttleAttack: 0
   h: 0
   v: 0
   AudioManager: {fileID: 0}
@@ -1590,7 +1588,7 @@ MonoBehaviour:
   heightOfTarget: 1
   lookDistance: 400
   lookAngle: 180
-  AttackAngle: 2
+  AttackAngle: 1.5
   ArangeAngle: 180
   actorLayer:
     serializedVersion: 2
@@ -1600,7 +1598,9 @@ MonoBehaviour:
   - MissionTarget
   attackDistance: 80
   ArangeDistance: 80
-  isEnemy: 0
+  attacking: 0
+  Fire: 0
+  "\u76EE\u524D\u653B\u64CA\u76EE\u6A19": {fileID: 0}
   attackLv1:
     displayGizmos: 0
     power: 2

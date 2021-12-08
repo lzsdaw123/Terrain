@@ -55,6 +55,7 @@ public class AttackUtility
         Vector3 direct = targetPos - origin;
         float distance = Vector3.Distance(Attacker.position, targetActor.position);
         int maskMonster = 1 << LayerMask.NameToLayer("Monster");
+        int maskNoShoot = 1 << LayerMask.NameToLayer("NoShoot");
         Ray ray = new Ray(origin, direct);
         RaycastHit hit = new RaycastHit();
 
@@ -64,6 +65,10 @@ public class AttackUtility
             Debug.DrawRay(origin, hit.point - origin, Color.yellow, 0.5f);
 #endif
             if (Physics.Raycast(ray, out hit, distance, maskMonster))  //無視Monster圖層
+            {
+
+            }
+            else if (Physics.Raycast(ray, out hit, distance, maskNoShoot))
             {
 
             }

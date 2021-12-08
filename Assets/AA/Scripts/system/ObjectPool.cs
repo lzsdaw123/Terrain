@@ -7,7 +7,7 @@ public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
     public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool;  //物件池集中位置
-    public GameObject[] Monster = new GameObject[1];	// 可生的怪種類
+    public GameObject[] Monster;	// 可生的怪種類
     public GameObject MBullet ;	// 怪物子彈
     public SpawnRay _SpawnRay;
 

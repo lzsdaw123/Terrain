@@ -301,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 359848962757300829}
   - component: {fileID: 6507358508954187903}
-  m_Layer: 10
+  m_Layer: 16
   m_Name: GameObject (1)
   m_TagString: Carapace
   m_Icon: {fileID: 0}
@@ -498,7 +498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9121702679439000030}
   - component: {fileID: 3099928612868712701}
-  m_Layer: 10
+  m_Layer: 16
   m_Name: GameObject
   m_TagString: Carapace
   m_Icon: {fileID: 0}
@@ -512,13 +512,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184266014792978328}
-  m_LocalRotation: {x: -0.15749699, y: -0.011343729, z: 0.0013877607, w: 0.98745334}
-  m_LocalPosition: {x: -0.043, y: 0.627, z: 0.906}
+  m_LocalRotation: {x: 0.5384169, y: -0.0075553847, z: 0.008574515, w: 0.8426012}
+  m_LocalPosition: {x: -0, y: -0.821, z: -0.9}
   m_LocalScale: {x: 0.6145744, y: 0.6145744, z: 1.4348993}
   m_Children: []
   m_Father: {fileID: 2393291709028296619}
   m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 42.452, y: -1.377, z: 0.381}
+  m_LocalEulerAnglesHint: {x: 65.158, y: -0.477, z: 0.861}
 --- !u!136 &3099928612868712701
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -530,7 +530,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 1.27
-  m_Height: 1.5
+  m_Height: 2.4
   m_Direction: 2
   m_Center: {x: 0.0020160568, y: 0.22429189, z: -1.2303684}
 --- !u!1 &1474758525694960558
@@ -731,6 +731,7 @@ GameObject:
   - component: {fileID: 3364810162441013626}
   - component: {fileID: 8928566633838639723}
   - component: {fileID: 3566356382963536693}
+  - component: {fileID: 1932601864907927301}
   m_Layer: 10
   m_Name: Crab
   m_TagString: Enemy
@@ -747,7 +748,7 @@ Transform:
   m_GameObject: {fileID: 1626291735349723986}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1.6}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.6}
   m_Children:
   - {fileID: 6694001312552593906}
   - {fileID: 282099444488859841}
@@ -809,13 +810,13 @@ MonoBehaviour:
   - MissionTarget
   attackDistance: 8.5
   ArangeDistance: 0
-  isEnemy: 0
+  "\u76EE\u524D\u653B\u64CA\u76EE\u6A19": {fileID: 0}
   attackLv1:
     displayGizmos: 1
     power: 2
     distance: 8.5
     angle: 18
-    height: -1
+    height: 0
   bullet: {fileID: 0}
   muzzle: {fileID: 0}
   muzzlePOS: {x: 0, y: 0, z: 0}
@@ -838,8 +839,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 3.12
-  m_BaseOffset: 2.5
+  m_Height: 3
+  m_BaseOffset: 2.4
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &3364810162441013626
@@ -858,12 +859,12 @@ MonoBehaviour:
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 6863350338353859676}
-  attacking: 0
-  buttleAttack: 0
   h: 0
   v: 0
   AudioManager: {fileID: 0}
+  NPC_Clip: []
   MonsterClip: []
+  NPC_Source: {fileID: 0}
   MonsterSource: {fileID: 0}
 --- !u!95 &8928566633838639723
 Animator:
@@ -906,6 +907,19 @@ MonoBehaviour:
   PS_Dead: {fileID: 9183927141351714136}
   DeadTime: 0
   HitUI: {fileID: 0}
+--- !u!114 &1932601864907927301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626291735349723986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0710a48f211f45d6929ff7fc9b998ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mother: {fileID: 0}
 --- !u!1 &1651288624067104888
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,7 +2395,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6825137701868490593}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.73075825, y: 0, z: 0, w: 0.6826363}
   m_LocalPosition: {x: -0.6824412, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2396,7 +2410,7 @@ Transform:
   - {fileID: 1439698477775130694}
   m_Father: {fileID: 2151153934182177256}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -93.9, y: 0, z: 0}
 --- !u!1 &6898097050192774894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2973,7 +2987,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7252851009629544992}
   - component: {fileID: 4599980320567760683}
-  m_Layer: 10
+  m_Layer: 16
   m_Name: GameObject (2)
   m_TagString: Carapace
   m_Icon: {fileID: 0}

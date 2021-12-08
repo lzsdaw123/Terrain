@@ -27,17 +27,22 @@ public class HeroLife : MonoBehaviour
         hp -= Power; // 扣血
         S_HIT.gameObject.SetActive(true);
         S_HIT.Play();
+    }
+    public static void DownDamage(int Dps)
+    {
+        hp -= Dps;
+    }
 
+    void Update()
+    {
         if (hp <= 0)
         {
             S_HIT.Stop();
             S_HIT.gameObject.SetActive(false);
             hp = 0; // 不要扣到負值
             Dead = true;
-        }      
-    }
-    void Update()
-    {
+        }
+
         HP_W.fillAmount = hp / fullHp; //顯示血球
         HP_R.fillAmount = hp_R / fullHp; //顯示血球
         if (hp != hp_R)

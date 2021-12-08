@@ -10,7 +10,7 @@ public class Shooting : MonoBehaviour
     public ObjectPool pool;
     public GameObject bullet;  //子彈  
     public GameObject[] Muzzle_vfx;  //槍口火光  
-    public ParticleSystem MuSmoke;  //槍口煙霧
+    public ParticleSystem[] MuSmoke;  //槍口煙霧
     public ParticleSystem MuFire;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR_x;  //X軸瞄準晃動
@@ -80,7 +80,7 @@ public class Shooting : MonoBehaviour
     }
     void Start()
     {
-        coolDown = 0.8f;  //冷卻結束時間
+        coolDown = 1f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         ReloadWarn = GameObject.Find("ReloadWarn").gameObject;
@@ -98,7 +98,7 @@ public class Shooting : MonoBehaviour
         AniTime = STtime = 2f;
 
         Muzzle_vfx[WeaponType].SetActive(false);
-        MuSmoke.Stop();
+        MuSmoke[WeaponType].Stop();
 
     }
     void Update()
@@ -157,7 +157,7 @@ public class Shooting : MonoBehaviour
                     break;
             }
             _Animator[WeaponType].SetActive(true);
-            MuSmoke.Stop();
+            MuSmoke[WeaponType].Stop();
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
             AniTime = STtime;
         }
@@ -256,7 +256,7 @@ public class Shooting : MonoBehaviour
             {
                 if(WeapAm[WeaponType] != 0)
                 {
-                    MuSmoke.Stop();  //關閉槍口煙霧
+                    MuSmoke[WeaponType].Stop();  //關閉槍口煙霧
                     float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
                     float rangeX = Random.Range(8f, 16f);  //射擊垂直晃動範圍
                     FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
@@ -295,10 +295,10 @@ public class Shooting : MonoBehaviour
                 switch (WeaponType)  //開火冷卻時間，與coolDown 0.8差越小越快
                 {
                     case 0:
-                        coolDownTimer = 0.7f;
+                        coolDownTimer = 0.9f;
                         break;
                     case 1:
-                        coolDownTimer = 0.4f;   
+                        coolDownTimer = 0.2f;   
                         break;
                 }
             }
@@ -462,7 +462,8 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx[WeaponType].SetActive(true);
             GunshotsAudio();
-            MuSmoke.Play();
+            MuSmoke[WeaponType].transform.position = muzzlePOS;
+            MuSmoke[WeaponType].Play();
             BFire = false;
         }
     }

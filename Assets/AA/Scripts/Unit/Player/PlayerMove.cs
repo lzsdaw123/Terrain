@@ -234,12 +234,19 @@ public class PlayerMove : MonoBehaviour
                     }
                 }              
             }
+
         }
         m_CollisionFlags = controller.Move(move * Time.fixedDeltaTime);
-        velocity.y += gravity * Time.deltaTime;  //重力物理      
-
+        velocity.y += gravity * Time.deltaTime;  //重力物理
+        float Vy = velocity.y;
+        int Dhp;  //墜落傷害
         if (isGrounded && velocity.y < 0)
         {
+            if (Vy <= -20)  //墜落傷害
+            {
+                Dhp = (int)Vy * -1 - 20;
+                HeroLife.DownDamage(Dhp);
+            }
             velocity.y = -2f;
         }
         if (inside == false)  //是否接觸梯子
@@ -277,6 +284,7 @@ public class PlayerMove : MonoBehaviour
                 }
             }         
         }
+
     }
     void OnTriggerEnter(Collider col)  //觸碰梯子
     {

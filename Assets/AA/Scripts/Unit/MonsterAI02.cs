@@ -45,13 +45,13 @@ public class MonsterAI02 : MonoBehaviour
     private float targetDistance = 2000; // 與最近攻擊目標的距離
     [SerializeField] private float attackDistance; // 攻擊角度距離
     [SerializeField] private float ArangeDistance; // 攻擊範圍距離
-    bool AttackAngleT=false;
-    private  bool attacking;
-    private  int buttleAttack;
-    public bool isEnemy=false;
+    bool AttackAngleT = false;
+    [SerializeField] private bool attacking;
+    private int bulletAttack;
     public static bool AttackPlay;
     bool TrPlayer;
-
+    [SerializeField] private bool Fire;
+    [SerializeField] GameObject 目前攻擊目標;
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
@@ -87,6 +87,8 @@ public class MonsterAI02 : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
+        attacking = false;
+        Fire = false;
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
         reg = GetComponent<SpawnRayReg>();
@@ -255,7 +257,6 @@ public class MonsterAI02 : MonoBehaviour
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
-                            isEnemy = true;
                             //判斷在攻擊角度內
                             if (GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < AttackAngle)
@@ -265,8 +266,7 @@ public class MonsterAI02 : MonoBehaviour
                             }
                             else
                             {
-                                speed = 1f;
-                                ani.SetFloat("Speed", speed);
+                                ani.SetBool("Move", true);
                                 ani.SetBool("Attack", false);
                                 AttackAngleT = false;
                                 //若不在攻擊角度內轉向目標
@@ -332,16 +332,26 @@ public class MonsterAI02 : MonoBehaviour
             float d = Vector3.Distance(transform.position, attackTarget.position);
             if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
             {
+
+                //Vector3 targetDir = tagObject.transform.position - transform.position;
+                //Quaternion rotate = Quaternion.LookRotation(targetDir);
+                //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
                 if (AttackAngleT)
                 {
                     AttackPlay = true;
+                    Fire = true;
                     Attack();
                     //print("小於攻擊距離 攻擊+"+ attackTarget);
+                }
+                else
+                {
+                    Fire = false;
                 }
             }
             else // 玩家距離大於攻擊距離,進行追踪
             {
                 TrPlayer = true;
+                Fire = false;
                 TrackingPlayer();
             }
         }
@@ -352,7 +362,6 @@ public class MonsterAI02 : MonoBehaviour
             //{
             //    //print("警戒");
             //}
-
             if (MissionTarget.activeSelf)
             {
                 //取得角色與目標的距離
@@ -361,36 +370,37 @@ public class MonsterAI02 : MonoBehaviour
                 if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
                 {
                     AttackPlay = false;
-                    Attack();                   
+                    Fire = true;
+                    Attack();
                 }
                 else // 玩家距離大於攻擊距離,進行追踪
                 {
                     TrPlayer = false;
                     TrackingPlayer();
+                    Fire = false;
                 }
             }
             else
             {
                 MissionTarget = null;
             }
-
         }
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        //Debug.Log("V3"+AAT);
+        //目前攻擊目標 = attackTarget.gameObject;
     }
     void FixedUpdate()
-    {       
-        if (buttleAttack >= 1)
+    {
+        if (bulletAttack >= 1)
         {
+            attacking = false;
+            bulletAttack = 0;
             Vector3 targetDir = AAT - transform.position;
             Quaternion rotate = Quaternion.LookRotation(targetDir);
             muzzlePOS = muzzle.transform.position;
             pool.ReUseM01Bullet(muzzlePOS, rotate);  //生成子彈
-            attacking = false;
-            buttleAttack = 0;
         }
     }
     private void TrackingPlayer()
@@ -406,8 +416,6 @@ public class MonsterAI02 : MonoBehaviour
         {
             agent.destination = oriTarget.position; // 設為尋徑目標
         }
-        speed = 1;// 跑向目標
-        ani.SetFloat("Speed", speed);       
         attacking = false; // 追踪玩家,不在攻擊狀態
         //print("追擊" + attackTarget);  
     }
@@ -421,19 +429,21 @@ public class MonsterAI02 : MonoBehaviour
         {
             AAT = oriTarget.position;
         }
-        ani.SetBool("Move", false);
-        AttackAngleT = false;
-        agent.speed = 0;
-        speed = 0;
-        ani.SetFloat("Speed", speed);
-        ani.SetBool("Attack",true);
-        Vector3 targetDir = AAT - transform.position;
-        Quaternion rotate = Quaternion.LookRotation(targetDir);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+        if (Fire)
+        {
+            attacking = true;
+            ani.SetBool("Move", false);
+            AttackAngleT = false;
+            agent.speed = 0;
+            ani.SetBool("Attack", true);
+            Vector3 targetDir = AAT - transform.position;
+            Quaternion rotate = Quaternion.LookRotation(targetDir);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+        }
     }
-    public void AttackAning(bool attackingB, int buttleAttackI)
+    public void AttackAning(bool attackingB, int BulletAttackNub)
     {
         attacking = attackingB;
-        buttleAttack = buttleAttackI;
+        bulletAttack = BulletAttackNub;
     }
 }

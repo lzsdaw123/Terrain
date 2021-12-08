@@ -48,11 +48,10 @@ public class MonsterAI03 : MonoBehaviour
     [SerializeField] private float ArangeDistance; // 攻擊範圍距離
     bool AttackAngleT = false;
     private bool attacking;
-    private int buttleAttack;
-    public bool isEnemy = false;
+    private int bulletAttack;
     public static bool AttackPlay;
     bool TrPlayer;
-
+    [SerializeField] GameObject 目前攻擊目標;
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 8.5f, 18f, -1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
@@ -249,7 +248,6 @@ public class MonsterAI03 : MonoBehaviour
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
-                            isEnemy = true;
                             //判斷在攻擊角度內
                             if (!attacking)
                             {
@@ -296,6 +294,7 @@ public class MonsterAI03 : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         float distance = Vector3.Distance(transform.position, targetActor.position);
         int maskMonster = 1 << LayerMask.NameToLayer("Monster");
+        int maskNoShoot = 1 << LayerMask.NameToLayer("NoShoot");
 
         if (Physics.Raycast(ray, out hit, distance, 0xFFFF - actorLayer)) //若有障礙物
         {
@@ -305,6 +304,10 @@ public class MonsterAI03 : MonoBehaviour
 
 #endif
             if (Physics.Raycast(ray, out hit, distance, maskMonster))  //無視Monster圖層
+            {
+                
+            }
+            else if (Physics.Raycast(ray, out hit, distance, maskNoShoot))
             {
 
             }
@@ -329,7 +332,6 @@ public class MonsterAI03 : MonoBehaviour
             float d = Vector3.Distance(transform.position, attackTarget.position);
             if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
             {
-                //Attack();
                 if (AttackAngleT)
                 {
                     AttackPlay = true;
@@ -343,6 +345,7 @@ public class MonsterAI03 : MonoBehaviour
             else // 玩家距離大於攻擊距離,進行追踪
             {
                 TrPlayer = true;
+                AttackAngleT = false;
                 TrackingPlayer();
             }
         }
@@ -354,40 +357,39 @@ public class MonsterAI03 : MonoBehaviour
                 //print("接近");
             }
 
-            ////if (MissionTarget.activeSelf)
-            ////{
-            ////    //取得角色與目標的距離
-            ////    float dn = Vector3.Distance(transform.position, oriTarget.position);
-            ////    //moving = true;
-            ////    if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
-            ////    {
-            ////        AttackPlay = false;
-            ////        Attack();
-            ////    }
-            ////    else // 玩家距離大於攻擊距離,進行追踪
-            ////    {
-            ////        TrPlayer = false;
-            ////        TrackingPlayer();
-            ////    }
-            ////}
-            ////else
-            ////{
-            ////    MissionTarget = null;
-            ////}
-
+            if (MissionTarget.activeSelf)
+            {
+                //取得角色與目標的距離
+                float dn = Vector3.Distance(transform.position, oriTarget.position);
+                //moving = true;
+                if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+                {
+                    AttackPlay = false;
+                    Attack();
+                }
+                else // 玩家距離大於攻擊距離,進行追踪
+                {
+                    TrPlayer = false;
+                    TrackingPlayer();
+                }
+            }
+            else
+            {
+                MissionTarget = null;
+            }
         }
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        //Debug.Log("V3"+AAT);
+        //目前攻擊目標 = attackTarget.gameObject;
     }
     void FixedUpdate()
     {
-        if (buttleAttack >= 1)
+        if (bulletAttack >= 1)
         {
             attacking = false;
-            buttleAttack = 0;
+            bulletAttack = 0;
         }
     }
     private void TrackingPlayer()
@@ -427,9 +429,9 @@ public class MonsterAI03 : MonoBehaviour
         ani.SetBool("Attack", true);
 
     }
-    public void AttackAning(bool attackingB, int buttleAttackI)
+    public void AttackAning(bool attackingB, int BulletAttackNub)
     {
         attacking = attackingB;
-        buttleAttack = buttleAttackI;
+        bulletAttack = BulletAttackNub;
     }
 }

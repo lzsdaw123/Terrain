@@ -12,8 +12,6 @@ public class AnimEvents : MonoBehaviour
 
     public MonsterAI02 MonsterAI02;
     public MonsterAI03 MonsterAI03;
-    [SerializeField] bool attacking = false;
-    public int buttleAttack=0;
     public float h, v;
 
 
@@ -99,17 +97,13 @@ public class AnimEvents : MonoBehaviour
     }
 
     //怪物用
-    void Attacking()
+    void M1_Attack()
     {
-        attacking = true;
-        buttleAttack = 1;
-        MonsterAI02.AttackAning(attacking, buttleAttack);
+        MonsterAI02.AttackAning(true, 1);
     }
-    void M2_Attacking()
+    void M2_AttackEnd()
     {
-        attacking = true;
-        buttleAttack = 1;
-        MonsterAI03.AttackAning(attacking, buttleAttack);
+        MonsterAI03.AttackAning(true, 1);
     }
 
     //音效用
@@ -155,5 +149,4 @@ public class AnimEvents : MonoBehaviour
                 break;
         }
     }
-
 }
