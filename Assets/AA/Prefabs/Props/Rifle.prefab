@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5115446999261784758
+--- !u!1 &2716211286119650865
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5599776839853043724}
-  - component: {fileID: 8798270917293211561}
-  - component: {fileID: 6772652433617816419}
-  - component: {fileID: 1575621040530398057}
-  - component: {fileID: 1775083296755855583}
+  - component: {fileID: 7908961803058581537}
+  - component: {fileID: 4150606437495734206}
+  - component: {fileID: 3766927205353259862}
+  - component: {fileID: 6480727205261103942}
+  - component: {fileID: 418084485719701647}
   m_Layer: 15
-  m_Name: HandGun
+  m_Name: Rifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5599776839853043724
+--- !u!4 &7908961803058581537
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5115446999261784758}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 318.32352, y: 56.967, z: 277.21783}
-  m_LocalScale: {x: 25.396982, y: 25.396984, z: 25.396988}
+  m_GameObject: {fileID: 2716211286119650865}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 323.74, y: 57.66, z: 278.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!33 &8798270917293211561
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &4150606437495734206
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5115446999261784758}
-  m_Mesh: {fileID: -2124705421725058983, guid: a197752d92ddcda4dac5378702448993, type: 3}
---- !u!23 &6772652433617816419
+  m_GameObject: {fileID: 2716211286119650865}
+  m_Mesh: {fileID: 4300000, guid: 0370c83bfc2edb64785912530fe8def5, type: 2}
+--- !u!23 &3766927205353259862
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5115446999261784758}
+  m_GameObject: {fileID: 2716211286119650865}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7668e5b8a80021746a83394e71c6366f, type: 2}
+  - {fileID: 2100000, guid: c48e9b0351646e648a341b7e58091f08, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,26 +83,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1575621040530398057
+--- !u!65 &6480727205261103942
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5115446999261784758}
+  m_GameObject: {fileID: 2716211286119650865}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.033, y: 0.015, z: 0.004236052}
-  m_Center: {x: 0.015830494, y: 0.014021855, z: -0.00117438}
---- !u!114 &1775083296755855583
+  m_Size: {x: 1.807271, y: 0.08648764, z: 0.4742537}
+  m_Center: {x: -0.44770992, y: -0.006723009, z: 0.16972592}
+--- !u!114 &418084485719701647
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5115446999261784758}
+  m_GameObject: {fileID: 2716211286119650865}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02a0b84601fbc1b4180cbcfd46b34d13, type: 3}
@@ -110,4 +110,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextG: {fileID: 0}
   Take: {fileID: 0}
-  WeaponsType: 1
+  WeaponsType: 0

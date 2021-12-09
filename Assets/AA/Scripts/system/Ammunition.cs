@@ -15,8 +15,8 @@ public class Ammunition : MonoBehaviour
     void Update()
     {
         WeaponType = Shooting.WeaponType;
-        ammunition = Shooting.WeapAm[WeaponType];
-        Total_ammunition = Shooting.T_WeapAm[WeaponType];
+        ammunition = Shooting.Weapons[WeaponType].WeapAm;
+        Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
 
         GetComponent<Text>().text = ammunition+"/"+ Total_ammunition;  
     }

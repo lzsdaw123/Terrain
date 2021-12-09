@@ -7,7 +7,7 @@ public class AnimEvents : MonoBehaviour
     public int UnitType;  //0=玩家 / 1=NPC
     public static bool DontShooting;
     public static int ammunition, Total_ammunition;  //彈藥量
-    int[] WeaponAmm = new int[] { 30, 6 }; //武器可裝填彈藥量
+    int[] WeaponAmm = new int[] { 30, 6, 5 }; //武器可裝填彈藥量
     [SerializeField] int WeaponType; //武器類型
 
     public MonsterAI02 MonsterAI02;
@@ -66,8 +66,8 @@ public class AnimEvents : MonoBehaviour
     {
         if (UnitType == 0)
         {
-            ammunition = Shooting.WeapAm[WeaponType];
-            Total_ammunition = Shooting.T_WeapAm[WeaponType];
+            ammunition = Shooting.Weapons[WeaponType].WeapAm;
+            Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
 
             int R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前數量    
             if (Total_ammunition < WeaponAmm[WeaponType])  //總數量<武器可裝填量 {當前數量+總數量}

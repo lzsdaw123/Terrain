@@ -92,13 +92,13 @@ public class AmmunitionSupply : MonoBehaviour
             {
                 //Open = false;
             }
-            if (Shooting.T_WeapAm[WeaponType] < T_WeapAmm[WeaponType] && CoverOn)  //玩家總彈藥量是否滿的
+            if (Shooting.Weapons[WeaponType].T_WeapAm < T_WeapAmm[WeaponType] && CoverOn)  //玩家總彈藥量是否滿的
             {
                 Am_zero_Warn.SetActive(false);
                 AudioManager.PickUp(0);
                 //print("彈藥補給");
-                AmmSupply = AmmSupply - (T_WeapAmm[WeaponType] - Shooting.T_WeapAm[WeaponType]);
-                Shooting.T_WeapAm[WeaponType] = T_WeapAmm[WeaponType];
+                AmmSupply = AmmSupply - (T_WeapAmm[WeaponType] - Shooting.Weapons[WeaponType].T_WeapAm);
+                Shooting.Weapons[WeaponType].T_WeapAm = T_WeapAmm[WeaponType];
             }
         }
     }
