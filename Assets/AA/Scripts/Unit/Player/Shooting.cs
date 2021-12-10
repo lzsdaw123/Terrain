@@ -30,7 +30,7 @@ public class Shooting : MonoBehaviour
     public static int WeaponType; //武器類型
     public int NextWeaponType; //武器類型
     public static int PickUpWeapon;  //取得的武器類型
-    public static int[] Equipment = new int[3]; //身上持有的武器 {步槍,左輪}
+    public static int[] Equipment = new int[3]; //身上持有的武器 {步槍,左輪, 霰彈槍}
     public static int[] Weapon_of_Pos = new int[2];  //武器放置位置 {主武器,副武器}
     public static bool SwitchWeapon;  //取得武器後切換
     public Animator Weapon;   //動畫控制器
@@ -60,6 +60,8 @@ public class Shooting : MonoBehaviour
     [SerializeField] private WeaponValue[] SF_Weapons;  //序列化用
     [SerializeField] private int[] SF_Equipment;
     [SerializeField] private int[] SF_Weapon_of_Pos;
+    bool Fire1st = false;
+    public bool TargetWall;
 
     public static void StartAll()
     {
@@ -143,10 +145,18 @@ public class Shooting : MonoBehaviour
         }
         if ( AniTime >=2)  //切換武器
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0 && Equipment[0] == 1)  //主武器
+            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0)  //主武器
             {
-                NextWeaponType = 0;
-                WeapSwitching();
+                if(Equipment[0] == 1)
+                {
+                    NextWeaponType = 0;
+                    WeapSwitching();
+                }
+                if (Equipment[2] == 1)
+                {
+                    NextWeaponType = 2;
+                    WeapSwitching();
+                }
             }
             if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1 && Equipment[1] == 1)  //副武器
             {
@@ -175,13 +185,16 @@ public class Shooting : MonoBehaviour
         {
             WeapSwitch = false;
             _Animator[WeaponType].SetActive(false);
-            switch (NextWeaponType)
+            switch (NextWeaponType)  //切換武器模型
             {
                 case 0:
                     WeaponType = 0;
                     break;
                 case 1:
                     WeaponType = 1;
+                    break;
+                case 2:
+                    WeaponType = 2;
                     break;
             }
             _Animator[WeaponType].SetActive(true);
@@ -285,27 +298,28 @@ public class Shooting : MonoBehaviour
                 if(Weapons[WeaponType].WeapAm != 0)
                 {
                     MuSmoke[WeaponType].Stop();  //關閉槍口煙霧
+                    float[] FRxMin = new float[] { 8, 12, 14 };
+                    float[] FRxMax = new float[] {16, 24, 28 };
                     float rangeY = Random.Range(-40f, 40f);  //射擊水平晃動範圍
-                    float rangeX = Random.Range(8f, 16f);  //射擊垂直晃動範圍
-                    FireRotateY = (noise * rangeY * (Mathf.Sin(Time.time)) - FireRotateY) / 100;
+                    float rangeX = Random.Range(FRxMin[WeaponType], FRxMax[WeaponType]);  //射擊垂直晃動範圍
+                    FireRotateY = (noise * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100;
                     //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
                     FireRotateX = rangeX;
                     if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
-                                                                 //Debug.Log("原本的" + " / " + FireRotateX);
-                    if (AimIng || PlayerMove.Squat)
+                    if (AimIng || PlayerMove.Squat)  //瞄準或蹲下
                     {                      
                         FireRotateY /= 2;
                         FireRotateX /= 4;
                     }
-                    if (AimIng && PlayerMove.Squat)
+                    if (AimIng && PlayerMove.Squat)  //瞄準並蹲下
                     {
                         FireRotateY /= 4;
                         FireRotateX /= 8;
                     }
                     // Debug.Log("後" + " / " + FireRotateX);
-
-                    transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f);
-                    GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.smoothDeltaTime;
+                    //print(FireRotateX + "," + FireRotateY);
+                    transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f) *Time.deltaTime;
+                    GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;
                     Weapons[WeaponType].WeapAm--;
                     if (FireButtle==1)
                     {
@@ -326,6 +340,9 @@ public class Shooting : MonoBehaviour
                         break;
                     case 1:
                         coolDownTimer = 0.2f;   
+                        break;
+                    case 2:
+                        coolDownTimer = 0.25f;
                         break;
                 }
             }
@@ -412,6 +429,7 @@ public class Shooting : MonoBehaviour
                 GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             }
         }
+        TargetWall = ShootingRange.TargetWall;
     } 
     void FixedUpdate()
     {
@@ -434,27 +452,41 @@ public class Shooting : MonoBehaviour
             int rayNum = 1;  //射線數量       
             float distance = Weapons[WeaponType].distance;  //射程
             float MixR = 2, MaxR = 2;  //畫面位置
-            if (WeaponType == 0 || WeaponType == 1)  //步槍 || 手槍
+            if (WeaponType == 0)  //步槍
             {
                 rayNum = 1;
                 MixR = 2f;
                 MaxR = 2f;
             }
-            if (WeaponType == 2)  //霰彈槍射擊
+            if (WeaponType == 1)  //手槍
             {
-                rayNum = 10;
-                MixR = 1.81f;
-                MaxR = 2.22f;
+                rayNum = 9;                
+            }
+            if (WeaponType == 2)  //霰彈槍
+            {
+                rayNum = 12;
+                MixR = 1.86f;
+                MaxR = 2.17f;
             }
             Ray[] ray = new Ray[rayNum];
             RaycastHit[] hit = new RaycastHit[rayNum]; //射線擊中資訊       
 
             for (int n = 0; n < ray.Length; n++)
             {
-                float RangeX = Random.Range(MixR, MaxR);
-                float RangeY = Random.Range(MixR, MaxR);
-                //由攝影機射到是畫面正中央的射線
-                ray[n] = GunCamera.ScreenPointToRay(new Vector3(Screen.width / RangeX, Screen.height / RangeY, 0));
+                if (WeaponType == 1)  //手槍
+                {
+                    float[] RangeX = new float[] { 2f, 2f, 2.03f, 2.04f, 2.03f, 2f, 1.97f, 1.96f, 1.97f};
+                    float[] RangeY = new float[] { 2f, 2.04f, 2.03f, 2f, 1.97f, 1.96f, 1.97f, 2f, 2.03f};
+                    //由攝影機射到是畫面正中央的射線
+                    ray[n] = GunCamera.ScreenPointToRay(new Vector3(Screen.width / RangeX[n], Screen.height / RangeY[n], 0));
+                }
+                else
+                {
+                    float RangeX = Random.Range(MixR, MaxR);
+                    float RangeY = Random.Range(MixR, MaxR);
+                    //由攝影機射到是畫面正中央的射線
+                    ray[n] = GunCamera.ScreenPointToRay(new Vector3(Screen.width / RangeX, Screen.height / RangeY, 0));
+                }
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
                     Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
@@ -481,10 +513,23 @@ public class Shooting : MonoBehaviour
                         //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
                         if (hit[n].collider.tag == "Enemy")  //綠血
                         {
-
                             HitType = 2;
                             hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
-                            hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power);  //造成傷害
+                            if (WeaponType == 1)  //電磁手槍傷害
+                            {
+                                if (n == 0)
+                                {
+                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 2 +1);  //造成傷害
+                                }
+                                else
+                                {
+                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 10);  //造成範圍傷害
+                                }
+                            }
+                            else
+                            {
+                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power);  //造成傷害
+                            }
                             //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                         }
                         if (hit[n].collider.tag == "Carapace")  //甲殼
@@ -492,7 +537,14 @@ public class Shooting : MonoBehaviour
                             HitType = 4;
                             if (WeaponType == 1)
                             {
-                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power /2);  //造成一半傷害
+                                if (n == 0)
+                                {
+                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 5);  //造成一半傷害
+                                }
+                                else
+                                {
+                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 20);  //造成一半範圍傷害
+                                }
                             }
                         }
                     }
@@ -500,11 +552,22 @@ public class Shooting : MonoBehaviour
                 //在到物體上產生彈孔
                 rot = Quaternion.FromToRotation(Vector3.up, hit[n].normal);
                 pos = hit[n].point;
+                if (TargetWall) HitType = 0;
                 if (WeaponType == 1)
-                {
+                {            
+                    rot = Quaternion.FromToRotation(Vector3.up, hit[0].normal);
+                    pos = hit[n].point;
                     HitType = 5;
+                    if (!Fire1st)
+                    {
+                        pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                        Fire1st = true;
+                    }
                 }
-                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                else
+                {
+                    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                }            
             }
             Muzzle_vfx[WeaponType].transform.position = muzzlePOS;
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
@@ -513,6 +576,7 @@ public class Shooting : MonoBehaviour
             MuSmoke[WeaponType].transform.position = muzzlePOS;
             MuSmoke[WeaponType].Play();
             BFire = false;
+            Fire1st = false;
         }
     }
     void LateUpdate()

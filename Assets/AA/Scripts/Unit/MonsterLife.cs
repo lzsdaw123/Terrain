@@ -27,7 +27,10 @@ public class MonsterLife : MonoBehaviour
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
+    float HitUITime;
     bool Player;
+    Color UIcolor;
+    bool Dead;
 
     void Awake()
     {
@@ -47,6 +50,8 @@ public class MonsterLife : MonoBehaviour
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
         HitUI.SetActive(false);
+        HitUITime = 0;
+        Dead = false;
         //ani = GetComponent<Animator>();
 
         //RagdollActive(false); // 先關閉物理娃娃
@@ -76,11 +81,33 @@ public class MonsterLife : MonoBehaviour
             //    HitUI.SetActive(false);
             //    HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
             //}
+            HitUITime += Time.deltaTime;
+            UIcolor = HitUI.GetComponent<Image>().color;
             HitUI.transform.localScale += new Vector3(0.15f, 0.15f, 0f) * 12 * Time.deltaTime;
-            if (HitUI.transform.localScale.x >= 1.2)
+
+            if (UIcolor == Color.white)
             {
-                HitUI.SetActive(false);
-                HitUI.transform.localScale = new Vector3(1.2f, 1.2f, 1f);
+                if (HitUI.transform.localScale.x >= 0.8)
+                {
+                    HitUI.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+                }
+                if (HitUITime >= 0.55f)
+                {
+                    HitUI.SetActive(false);
+                    HitUITime = 0;
+                }
+            }
+            else if(UIcolor == Color.red)
+            {
+                if (HitUI.transform.localScale.x >= 1.4)
+                {
+                    HitUI.transform.localScale = new Vector3(1.4f, 1.4f, 1f);
+                }
+                if (HitUITime >= 0.8f)
+                {
+                    HitUI.SetActive(false);
+                    HitUITime = 0;
+                }
             }
         }
     }
@@ -117,21 +144,28 @@ public class MonsterLife : MonoBehaviour
     }
     public void Damage(float Power)
     {
+        //print(Power);
         hp -= Power; // 扣血
-        if (hp >-10)
+        if (hp >0)
         {        
             if (Player)
             {
                 HitUI.SetActive(true);
-                //HitUI.transform.localScale = new Vector3(1.4f, 1.4f, 1f);
-                HitUI.transform.localScale = new Vector3(0f, 0f, 1f);            
+                //HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
+                HitUI.transform.localScale = new Vector3(0f, 0f, 1f);
                 HitUI.GetComponent<Image>().color = Color.white;
             }
         }
         if (hp <= 0)
         {
-            HitUI.GetComponent<Image>().color = Color.red;
-            hp = -10; // 不要扣到負值
+            if (!Dead)
+            {
+                HitUI.SetActive(true);
+                HitUI.transform.localScale = new Vector3(0f, 0f, 1f);
+                HitUI.GetComponent<Image>().color = Color.red;
+                Dead = true;
+            }           
+            hp = 0; // 不要扣到負值
             PS_Dead.SetActive(true);
             switch (MonsterType)  //關閉怪物AI 腳本
             {
