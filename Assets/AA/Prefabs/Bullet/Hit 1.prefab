@@ -50,7 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BulletHoleTime: 5
+  InputTime: []
   pool_Hit: {fileID: 0}
+  WeaponType: 0
+  Light: {fileID: 476980055490549952}
 --- !u!1001 &733108338149435525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -515,11 +518,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3387438423018720860, guid: c8c6664919779fc4e8ff1849bbab9132, type: 3}
+    - {fileID: 5004957251624385979, guid: c8c6664919779fc4e8ff1849bbab9132, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c8c6664919779fc4e8ff1849bbab9132, type: 3}
 --- !u!4 &8368347589794101739 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000011693693590, guid: c8c6664919779fc4e8ff1849bbab9132,
+    type: 3}
+  m_PrefabInstance: {fileID: 8371173795380454269}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &476980055490549952 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8264933127126793149, guid: c8c6664919779fc4e8ff1849bbab9132,
     type: 3}
   m_PrefabInstance: {fileID: 8371173795380454269}
   m_PrefabAsset: {fileID: 0}

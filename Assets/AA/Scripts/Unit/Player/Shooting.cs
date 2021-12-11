@@ -11,7 +11,7 @@ public class Shooting : MonoBehaviour
     public GameObject bullet;  //子彈  
     public GameObject[] Muzzle_vfx;  //槍口火光  
     public ParticleSystem[] MuSmoke;  //槍口煙霧
-    public ParticleSystem MuFire;
+    public GameObject MuFire_Light;
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR_x;  //X軸瞄準晃動
     private Vector3 GA_R;  //槍枝Rotation瞄準偏移修正
@@ -62,6 +62,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] private int[] SF_Weapon_of_Pos;
     bool Fire1st = false;
     public bool TargetWall;
+    public GameObject[] GunFlashlight; //槍枝手電筒
 
     public static void StartAll()
     {
@@ -119,6 +120,7 @@ public class Shooting : MonoBehaviour
         AniTime = STtime = 2f;
 
         Muzzle_vfx[WeaponType].SetActive(false);
+        MuFire_Light.SetActive(false);
         MuSmoke[WeaponType].Stop();
         Weapon.SetBool("LayDown", true);
     }
@@ -370,7 +372,24 @@ public class Shooting : MonoBehaviour
                 LayDown = false;  
                 Weapon.SetBool("LayDown", false);
             }         
-        }      
+        }
+        if (Input.GetKeyDown(KeyCode.F))  //槍枝手電筒
+        {
+            if (!GunFlashlight[WeaponType].activeSelf)
+            {
+                for (int i =0; i< GunFlashlight.Length; i++)
+                {
+                    GunFlashlight[i].SetActive(true);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < GunFlashlight.Length; i++)
+                {
+                    GunFlashlight[i].SetActive(false);
+                }
+            }
+        }
         if (Input.GetKeyDown(KeyCode.C) && Reload != true && LayDown == false)  //看槍
         {
             Weapon.SetTrigger("Cherk");
@@ -430,6 +449,16 @@ public class Shooting : MonoBehaviour
             }
         }
         TargetWall = ShootingRange.TargetWall;
+        if (MuFire_Light.activeSelf)
+        {
+            MuFire_Light.GetComponent<Light>().range -= 80 * Time.deltaTime;
+            float Range = MuFire_Light.GetComponent<Light>().range;
+            if (Range <= 0)
+            {
+                MuFire_Light.SetActive(false);
+                MuFire_Light.GetComponent<Light>().range = 20;
+            }
+        }
     } 
     void FixedUpdate()
     {
@@ -572,6 +601,7 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx[WeaponType].transform.position = muzzlePOS;
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx[WeaponType].SetActive(true);
+            MuFire_Light.SetActive(true);
             GunshotsAudio();
             MuSmoke[WeaponType].transform.position = muzzlePOS;
             MuSmoke[WeaponType].Play();
