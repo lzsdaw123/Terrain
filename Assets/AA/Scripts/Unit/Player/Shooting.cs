@@ -518,7 +518,7 @@ public class Shooting : MonoBehaviour
                 }
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
-                    Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
+                    //Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                     {
                         HitType = 0;

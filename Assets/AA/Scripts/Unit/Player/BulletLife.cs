@@ -11,7 +11,7 @@ public class BulletLife : MonoBehaviour
     public GameObject Hit_vfx, Hit_vfx_S;  //彈孔類型
     public int HitType;  //彈孔類型變數
     public GameObject target;
-    float speed = 450;//飛行速度
+    public float speed = 600;//飛行速度
     public float liftTime; //生命時間
     public bool facingRight = true; //是否面向右邊
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
@@ -41,8 +41,8 @@ public class BulletLife : MonoBehaviour
             Hit_vfx_S = Hit_vfx.transform.GetChild(i).gameObject;         
             Hit_vfx_S.SetActive(false);
         }
-        var main = Tail.main;
-        main.simulationSpeed = 3.7f;  //加快粒子開始播放時間
+        //var main = Tail.main;
+        //main.simulationSpeed = 3.7f;  //加快粒子開始播放時間
     }
     void Start()
     {
