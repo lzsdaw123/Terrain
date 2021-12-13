@@ -30,8 +30,8 @@ public class AnimEvents : MonoBehaviour
     void Update()
     {
         //Move = animator.SetBool("Move", bool );
-        h = PlayerMove.h;
-        v = PlayerMove.v;
+        h = PlayerMove.Player_h;
+        v = PlayerMove.Player_v;
         WeaponType = Shooting.WeaponType;
     }
 

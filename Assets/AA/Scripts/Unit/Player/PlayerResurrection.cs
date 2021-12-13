@@ -24,7 +24,8 @@ public class PlayerResurrection : MonoBehaviour
         {
             Player.SetActive(false);
             Player.transform.position = R1.position;
-        }       
+            Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        }
         Black.SetActive(false);
         Dead = true;
         RePlay = false;

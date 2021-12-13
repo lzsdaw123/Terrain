@@ -36,7 +36,7 @@ public class PlayerMove : MonoBehaviour
     float speedUpDown = 3.2f;  //爬梯速度
 
     public Vector3 move;
-    public static float h,v;
+    public static float Player_h,Player_v;  //人物位移
     public static bool Squat = false;
 
     public Vector3 velocity;
@@ -62,8 +62,8 @@ public class PlayerMove : MonoBehaviour
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
 
 
-            h = Input.GetAxis("Horizontal");  //取得輸入橫軸
-            v = Input.GetAxis("Vertical");    //取得輸入縱軸            
+            Player_h = Input.GetAxis("Horizontal");  //取得輸入橫軸
+            Player_v = Input.GetAxis("Vertical");    //取得輸入縱軸            
 
             if (Input.GetButtonDown("Jump") && !m_Jump && Shooting.Reload==false && isGrounded)   //按下跳躍
             {
@@ -159,7 +159,7 @@ public class PlayerMove : MonoBehaviour
                 }
             }          
 
-            if ((v != 0) || (h != 0))
+            if ((Player_v != 0) || (Player_h != 0))  //人物移動
             {
                 Weapon.SetBool("Move", true);             
                 if (Input.GetButton("Run")&& Shooting.Reload!=true)    //人物跑動
@@ -251,7 +251,7 @@ public class PlayerMove : MonoBehaviour
         }
         if (inside == false)  //是否接觸梯子
         {           
-            move = transform.right * h + transform.forward * v * MoveSpeed * Time.deltaTime;  //按照面對方向移動       
+            move = transform.right * Player_h + transform.forward * Player_v * MoveSpeed * Time.deltaTime;  //按照面對方向移動       
             controller.Move(velocity * Time.deltaTime); //執行跳躍            
         }
         else

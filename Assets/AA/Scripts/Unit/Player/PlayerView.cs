@@ -12,6 +12,8 @@ public class PlayerView : MonoBehaviour
     float lastTime = 0f;
     public Camera Camera;
     public Transform camTransform;
+    public  GameObject[] MissionTaget;
+    static int missionLevel;  //任務階段
     public float Rdot;
     public float Fdot;
     public Image targetUI;
@@ -23,8 +25,11 @@ public class PlayerView : MonoBehaviour
     public float dot;
     bool sp_Dot;
     bool sp_Dot_D=true;
-    [SerializeField] float distance;
-
+    [SerializeField] float distance;  //距離
+    public static float pu_distance;
+    [SerializeField] int d;  //換算距離
+    Color UIcolor;
+    Color textcolor;
     Vector3 oldPos;
 
     void OnWillRenderObject()
@@ -44,18 +49,39 @@ public class PlayerView : MonoBehaviour
         else
             return false;
     }
+    public static void TagetChange()  //改變目標
+    {
+        missionLevel++;
+    }
+    void Start()
+    {
+        missionLevel = 0;
+    }
     void Update()
     {
         //Vector2 vec2 = Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
         camTransform = Camera.transform;  //相機座標
-        float distance = (camTransform.position - transform.position).magnitude / 3.5f;
-        int d = (int)distance;
+        distance = (camTransform.position - MissionTaget[missionLevel].transform.position).magnitude / 3.5f;
+        pu_distance = distance;
+        d = (int)distance;
         text.text = d + " m";
+        UIcolor = targetUI.color;
+        if (distance <= 0.9)  //最大距離
+        {
+            UIcolor.a = 0.7058824f * ( (distance - 0.6f) * 5);  //透明度 * ((目前距離-最小距離)*5)
+        }
+        else
+        {
+            UIcolor.a = 0.7058824f;
+        }
+        targetUI.color = UIcolor;
+        textcolor = new Color(1, 1, 1, UIcolor.a);
+        text.color = textcolor;
 
-        if (IsInView(transform.position))
+        if (IsInView(MissionTaget[missionLevel].transform.position))
         {
             //Debug.Log("目前本物體在攝像機範圍內");
-            Vector2 viewPos = Camera.WorldToViewportPoint(this.gameObject.transform.position);  //世界座標到視口座標
+            Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionLevel].transform.position);  //世界座標到視口座標
             Vector2 ScreenPos = Camera.ViewportToScreenPoint(viewPos);  //視口座標→螢幕座標
             Vector2 SP = new Vector2(ScreenPos.x - 960, ScreenPos.y - 540);
             //畫面左右邊界
@@ -68,7 +94,7 @@ public class PlayerView : MonoBehaviour
         }
         else
         {
-            Vector2 viewPos = Camera.WorldToViewportPoint(this.gameObject.transform.position);  //世界座標到視口座標
+            Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionLevel].transform.position);  //世界座標到視口座標
             Vector2 ScreenPos = Camera.ViewportToScreenPoint(viewPos);  //視口座標→螢幕座標
             Vector2 SP = new Vector2(ScreenPos.x - 960, ScreenPos.y - 540);
 
@@ -133,7 +159,7 @@ public class PlayerView : MonoBehaviour
             else if (SP.y >= 350) SP.y = 350;
 
             camTransform = Camera.transform; //相機座標
-            Vector3 dirForward = (transform.position - camTransform.position).normalized;
+            Vector3 dirForward = (MissionTaget[missionLevel].transform.position - camTransform.position).normalized;
             dot = Vector3.Dot(camTransform.forward, dirForward);     //判斷物體是否在相機前面
             if (dot >= 0f)
             {
@@ -143,7 +169,7 @@ public class PlayerView : MonoBehaviour
             }
             else if(dot < 0f)
             {
-                Vector3 Bdir = transform.position - camTransform.position; //位置差，方向  
+                Vector3 Bdir = MissionTaget[missionLevel].transform.position - camTransform.position; //位置差，方向  
                 Rdot = Vector3.Dot(camTransform.right, Bdir.normalized);//點乘判斷左右： Rdot >0在右，<0在左
                 Fdot = Vector3.Dot(camTransform.forward, Bdir.normalized);//點乘判斷前後：Fdot >0在前，<0在後
                 //UI_y = 700 * Fdot;

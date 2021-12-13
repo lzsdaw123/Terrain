@@ -34,7 +34,7 @@ public class Shooting : MonoBehaviour
     public static int[] Weapon_of_Pos = new int[2];  //武器放置位置 {主武器,副武器}
     public static bool SwitchWeapon;  //取得武器後切換
     public Animator Weapon;   //動畫控制器
-    public bool FirstWeapon;
+    public bool FirstWeapon;  //第一把武器
     public GameObject[] _Animator;  //槍枝物件
     public Vector3 muzzlePOS;  //槍口座標
 
@@ -60,7 +60,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] private WeaponValue[] SF_Weapons;  //序列化用
     [SerializeField] private int[] SF_Equipment;
     [SerializeField] private int[] SF_Weapon_of_Pos;
-    bool Fire1st = false;
+    bool Fire1st = false;  
     public bool TargetWall;
     public GameObject[] GunFlashlight; //槍枝手電筒
 
@@ -166,12 +166,13 @@ public class Shooting : MonoBehaviour
                 WeapSwitching();
             }
         }
-        void WeapSwitching()
+        void WeapSwitching()  //武器切換
         {
             if (!WeapSwitch)
             {
                 if (!FirstWeapon)
                 {
+                    Level_1.FirstWeapon();
                     FirstWeapon = true;
                     LayDown = false;
                 }
@@ -335,7 +336,7 @@ public class Shooting : MonoBehaviour
                 {
                     GussetMachine();
                 }
-                switch (WeaponType)  //開火冷卻時間，與coolDown 0.8差越小越快
+                switch (WeaponType)  //開火冷卻時間，與coolDown 1差越小越快
                 {
                     case 0:
                         coolDownTimer = 0.9f;

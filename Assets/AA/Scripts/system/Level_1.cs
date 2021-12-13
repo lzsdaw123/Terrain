@@ -14,7 +14,10 @@ public class Level_1 : MonoBehaviour
     [SerializeField] bool Lv1;
     public LayerMask LayerMask;
     bool start=false;
-    public GameObject MissionTarget, MissionWarn;
+    public GameObject MissionTarget, MissionWarn;  //任務警告UI
+    public GameObject tagetUI;  //任務目標UI
+    static int missionLevel;  //任務階段
+    public GameObject DialogBox;
     public Text MissonTxet;
     [SerializeField]public static int MonsterLevel;
     [SerializeField] float MLtime = 0;
@@ -22,6 +25,8 @@ public class Level_1 : MonoBehaviour
     public RectTransform DiffUI, DiffUI_s;
     float StartTime;
     bool PlayAu;
+    [SerializeField] float Taget_distance;
+    bool StartDialogue;
 
     void Awake()
     {
@@ -36,19 +41,33 @@ public class Level_1 : MonoBehaviour
         SpawnRay.SetActive(false);
         explode.SetActive(false);
         MissionTarget.SetActive(false);
+        tagetUI.SetActive(false);
+        DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonTxet.text = "前往發電站";
+        MissonTxet.text = "前往主管室";
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
+        StartDialogue = true;
     }
 
     void Update()
     {
+        Taget_distance = PlayerView.pu_distance;
+        if (Taget_distance <= 0.9f)
+        {
+            if (StartDialogue)
+            {
+                StartDialogue = false;
+                DialogueEditor.StartConversation(0, 0);  //開始對話
+            }
+        }
+
         if (!Lv1)
         {
             StartTime += 2 * Time.deltaTime;
             if (StartTime >= 17)
             {
                 MissionWarn.SetActive(true);
+                tagetUI.SetActive(true);
                 PlayAudio();
             }
             if (Input.GetKeyDown(KeyCode.F1) || start)
@@ -134,5 +153,10 @@ public class Level_1 : MonoBehaviour
                 start = true;
             }
         }
+    }
+    public static void FirstWeapon()
+    {
+        missionLevel = 2;
+        DialogueEditor.StartConversation(1, 0);  //開始對話
     }
 }
