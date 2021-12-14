@@ -16,6 +16,7 @@ public class AmmunitionSupply : MonoBehaviour
     bool interactive=false;
     [SerializeField] GameObject Am_zero_Warn;
     int WeaponType; //武器類型
+    bool FirstAmm = false;
 
     void Awake()
     {
@@ -96,6 +97,11 @@ public class AmmunitionSupply : MonoBehaviour
             {
                 Am_zero_Warn.SetActive(false);
                 AudioManager.PickUp(0);
+                if (!FirstAmm)
+                {
+                    FirstAmm = true;
+                    Shooting.PickUpAmm();
+                }
                 //print("彈藥補給");
                 AmmSupply = AmmSupply - (T_WeapAmm[WeaponType] - Shooting.Weapons[WeaponType].T_WeapAm);
                 Shooting.Weapons[WeaponType].T_WeapAm = T_WeapAmm[WeaponType];

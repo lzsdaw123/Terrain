@@ -13,6 +13,8 @@ public class PlayerResurrection : MonoBehaviour
     public GameObject Black;
     public float time;
     public bool StartGame;
+    public static bool Mission_L1;
+    [SerializeField] private bool SF_Mission_L1;
     public Settings Settings;
     bool Dead;
     bool RePlay;
@@ -20,10 +22,17 @@ public class PlayerResurrection : MonoBehaviour
     void Awake()
     {
         DeadUI.SetActive(false);
+        Mission_L1 = SF_Mission_L1;
         if (StartGame)
         {
             Player.SetActive(false);
             Player.transform.position = R1.position;
+            Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        }
+        if(Mission_L1)
+        {
+            Player.SetActive(false);
+            Player.transform.position = R2.position;
             Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
         }
         Black.SetActive(false);

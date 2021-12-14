@@ -221,9 +221,9 @@ public class PlayerMove : MonoBehaviour
                 m_Jump = false;
                 m_Jumping = true;               
                 velocity.y = Mathf.Sqrt(jumpHeigh * -2 * gravity); //跳躍物理 v=√h*-2*g
+                Weapon.SetTrigger("Jump");
                 if (!_Shooting.LayDown)
                 {
-                    Weapon.SetTrigger("Jump");
                     if (Input.GetButton("Fire2"))
                     {
                         Weapon.SetBool("Aim", true);
@@ -232,7 +232,7 @@ public class PlayerMove : MonoBehaviour
                     {
                         Weapon.SetTrigger("Idle");
                     }
-                }              
+                }
             }
 
         }

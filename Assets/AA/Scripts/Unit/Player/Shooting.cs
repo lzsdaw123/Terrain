@@ -34,7 +34,9 @@ public class Shooting : MonoBehaviour
     public static int[] Weapon_of_Pos = new int[2];  //武器放置位置 {主武器,副武器}
     public static bool SwitchWeapon;  //取得武器後切換
     public Animator Weapon;   //動畫控制器
-    public bool FirstWeapon;  //第一把武器
+    public static Animator st_Weapon;   //static用動畫控制器
+    public static bool FirstWeapon;  //第一把武器
+    public static bool FirstAmm;  //第一次拿彈藥
     public GameObject[] _Animator;  //槍枝物件
     public Vector3 muzzlePOS;  //槍口座標
 
@@ -66,7 +68,13 @@ public class Shooting : MonoBehaviour
 
     public static void StartAll()
     {
-        Weapons[0] = new WeaponValue(0, 2, 400, 30, 300);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量)
+        if(!FirstAmm && !FirstWeapon) Weapons[0] = new WeaponValue(0, 2, 400, 0, 0); //沒槍沒子彈
+        else if (!FirstAmm) Weapons[0] = new WeaponValue(0, 2, 400, 30, 0);  //只有槍
+        else if (!FirstWeapon) Weapons[0] = new WeaponValue(0, 2, 400, 0, 300);  //只有子彈
+        else
+        {
+            Weapons[0] = new WeaponValue(0, 2, 400, 30, 300);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量)           
+        }
         Weapons[1] = new WeaponValue(1, 10, 200, 6, 30);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量)
         Weapons[2] = new WeaponValue(0, 1, 100, 5, 30);  //霰彈槍(武器位置,威力,射程,彈藥量,總彈藥量)
     }
@@ -123,6 +131,10 @@ public class Shooting : MonoBehaviour
         MuFire_Light.SetActive(false);
         MuSmoke[WeaponType].Stop();
         Weapon.SetBool("LayDown", true);
+        for (int i = 0; i < GunFlashlight.Length; i++)  //預設關手電筒
+        {
+            GunFlashlight[i].SetActive(false);
+        }
     }
     void Update()
     {
@@ -170,11 +182,16 @@ public class Shooting : MonoBehaviour
         {
             if (!WeapSwitch)
             {
-                if (!FirstWeapon)
+                if (!FirstWeapon )
                 {
-                    Level_1.FirstWeapon();
                     FirstWeapon = true;
+                    Ammunition.showUI();
+                    if (FirstWeapon && FirstAmm)  //第一次取得武器和彈藥
+                    {
+                        Level_1.NextTask(2);
+                    }
                     LayDown = false;
+                    StartAll();
                 }
                 else
                 {
@@ -366,7 +383,7 @@ public class Shooting : MonoBehaviour
             {
                 LayDown = true;
                 Weapon.SetTrigger("LayDownT");
-                Weapon.SetBool("LayDown", true);            
+                Weapon.SetBool("LayDown", true);               
             }
             else
             {
@@ -395,11 +412,11 @@ public class Shooting : MonoBehaviour
         {
             Weapon.SetTrigger("Cherk");
         }
-        if (Weapons[WeaponType].WeapAm <= 0)
+        if (Weapons[WeaponType].WeapAm <= 0)  //彈藥最小為0
         {
             Weapons[WeaponType].WeapAm = 0;
         }
-        if (Weapons[WeaponType].T_WeapAm <= 0)
+        if (Weapons[WeaponType].T_WeapAm <= 0 && FirstWeapon && FirstAmm)  //總彈藥最小為0
         {
             Weapons[WeaponType].T_WeapAm = 0;
             Am_zero_Warn.SetActive(true);
@@ -463,7 +480,7 @@ public class Shooting : MonoBehaviour
     } 
     void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.R) && LayDown == false && Weapons[WeaponType].T_WeapAm != 0)    //換彈藥
+        if (Input.GetKeyDown(KeyCode.R) && !LayDown && Weapons[WeaponType].T_WeapAm != 0)    //換彈藥
         {
             if (Reload == false)
             {
@@ -613,6 +630,7 @@ public class Shooting : MonoBehaviour
     void LateUpdate()
     {
         OnBeforeSerialize();
+        st_Weapon = Weapon;
     }
     public static void ReLoad_E()  //換彈結束
     {
@@ -661,5 +679,19 @@ public class Shooting : MonoBehaviour
             }
             SwitchWeapon = true;
         }   
+    }
+    public static void PickUpAmm()  //第一次拿彈藥
+    {
+        FirstAmm = true; 
+        Ammunition.showUI();
+        if (FirstWeapon && FirstAmm)  //第一次取得武器和彈藥
+        {
+            Level_1.NextTask(2);
+        }
+        st_Weapon.SetTrigger("Reload");
+        Reload = true;
+        FireButtle = 0;
+        ReloadWarn.SetActive(false);
+        StartAll();
     }
 }

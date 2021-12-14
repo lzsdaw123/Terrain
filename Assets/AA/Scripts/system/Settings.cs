@@ -88,7 +88,6 @@ public class Settings : MonoBehaviour
     void Start()
     {
         ReStart();
-
     }
     void Update()
     {

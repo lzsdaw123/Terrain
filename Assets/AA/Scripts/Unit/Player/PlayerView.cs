@@ -7,13 +7,14 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerView : MonoBehaviour
 {
+    public DialogueEditor DialogueEditor;
     bool isRendering;
     float curtTime = 0f;
     float lastTime = 0f;
     public Camera Camera;
     public Transform camTransform;
     public  GameObject[] MissionTaget;
-    static int missionLevel;  //任務階段
+    public static int missionLevel;  //任務階段
     public float Rdot;
     public float Fdot;
     public Image targetUI;
@@ -49,9 +50,25 @@ public class PlayerView : MonoBehaviour
         else
             return false;
     }
+    public void YesTeaching()  //進行教學
+    {
+        Settings.con();
+        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
+    }
+    public void NoTeaching()  //不要教學
+    {
+        Settings.con();
+        DialogueEditor.TextLine = 0;
+        missionLevel = 2;
+        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
+        DialogueEditor.StartConversation(missionLevel, 0);
+    }
     public static void TagetChange()  //改變目標
     {
         missionLevel++;
+        Level_1.MissionTime = 0;
+        Level_1.UiOpen = true;
+        Level_1.StartDialogue = true;
     }
     void Start()
     {
