@@ -51,7 +51,7 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonT = new string[] { "尋找主管", "前往倉庫", "取得武器與彈藥", "前往工作間" };
+        MissonT = new string[] { "尋找主管", "前往倉庫", "取得武器與彈藥", "前往工作間", "核電廠" };
         MissonTxet.text = MissonT[0];
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
@@ -60,7 +60,7 @@ public class Level_1 : MonoBehaviour
     {
         missionLevel = PlayerView.missionLevel;  //跟換目標
         Taget_distance = PlayerView.pu_distance;
-        if(missionLevel==0 || missionLevel == 1)
+        if(missionLevel==0 || missionLevel == 1 || missionLevel == 3 || missionLevel == 4)
         {
             if (MissionTime >= 3)  //UI浮現時間
             {
