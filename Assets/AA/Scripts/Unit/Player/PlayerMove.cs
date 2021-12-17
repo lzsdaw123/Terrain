@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public Camera PlayCamera;
+    public Camera PlayCamera;  //原Camera
     public CharacterController controller;
     public Shooting _Shooting;
 

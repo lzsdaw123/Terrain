@@ -22,7 +22,7 @@ public class NPC_interaction : MonoBehaviour
     {
         if (Camera == null)
         {
-            Camera = GameObject.Find("Camera").gameObject.GetComponent<Camera>();
+            Camera = GameObject.Find("Gun_Camera").gameObject.GetComponent<Camera>();
         }
         camTransform = Camera.transform;  //相機座標
         distance = (camTransform.position - this.transform.position).magnitude / 3.5f;

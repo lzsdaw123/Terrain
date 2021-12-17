@@ -13,7 +13,7 @@ public class Shooting : MonoBehaviour
     public ParticleSystem[] MuSmoke;  //槍口煙霧
     public GameObject MuFire_Light;
     public GameObject[] muzzle;  //槍口類型
-    public GameObject GunAimR_x;  //X軸瞄準晃動
+    public GameObject GunAimR_x;  //X軸瞄準晃動  原Camera
     private Vector3 GA_R;  //槍枝Rotation瞄準偏移修正
     public float noise = 1f; //晃動頻率
     public float noiseRotateX;  //X軸晃動偏移量
@@ -442,14 +442,14 @@ public class Shooting : MonoBehaviour
                         gFieldOfView = 40f;
                     }
                 }
-                GunCamera.GetComponent<Camera>().fieldOfView = gFieldOfView;
+                //GunCamera.GetComponent<Camera>().fieldOfView = gFieldOfView;
             }
-            if (FieldOfView > 35f)
+            if (FieldOfView > 32)
             {
                 FieldOfView -= 140f * Time.smoothDeltaTime;
-                if (FieldOfView <= 35f)
+                if (FieldOfView <= 32f)
                 {
-                    FieldOfView = 35f;
+                    FieldOfView = 32f;
                 }
                 PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             }
@@ -464,7 +464,7 @@ public class Shooting : MonoBehaviour
                     FieldOfView = 55f;
                 }
                 PlayCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
-                GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+                //GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             }
         }
         TargetWall = ShootingRange.TargetWall;
