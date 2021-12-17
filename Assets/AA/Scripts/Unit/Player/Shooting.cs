@@ -65,6 +65,7 @@ public class Shooting : MonoBehaviour
     bool Fire1st = false;  
     public bool TargetWall;
     public GameObject[] GunFlashlight; //槍枝手電筒
+    public BoxCollider GunCollider;
 
     public static void StartAll()
     {
@@ -693,5 +694,17 @@ public class Shooting : MonoBehaviour
         FireButtle = 0;
         ReloadWarn.SetActive(false);
         StartAll();
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other == GunCollider)
+        {
+            //print("碰到槍了");
+
+            if (other.gameObject.layer != LayerMask.NameToLayer("Weapon"))
+            {
+
+            }
+        }
     }
 }

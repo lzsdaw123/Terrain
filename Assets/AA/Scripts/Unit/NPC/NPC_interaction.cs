@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NPC_interaction : MonoBehaviour
 {
-    [SerializeField] private GameObject Npc;
     [SerializeField] private int NpcName;
     [SerializeField] private bool ReDialogue;
     [SerializeField] private float distance;  //距離
@@ -16,10 +15,15 @@ public class NPC_interaction : MonoBehaviour
 
     void Start()
     {
+
     }
 
     void Update()
     {
+        if (Camera == null)
+        {
+            Camera = GameObject.Find("Camera").gameObject.GetComponent<Camera>();
+        }
         camTransform = Camera.transform;  //相機座標
         distance = (camTransform.position - this.transform.position).magnitude / 3.5f;
         st_distance = distance;
