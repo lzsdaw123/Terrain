@@ -66,6 +66,7 @@ public class Shooting : MonoBehaviour
     public bool TargetWall;
     public GameObject[] GunFlashlight; //槍枝手電筒
     public BoxCollider GunCollider;
+    public static bool SkipTeach;
 
     public static void StartAll()
     {
@@ -156,7 +157,7 @@ public class Shooting : MonoBehaviour
             SwitchWeapon = false;
             NextWeaponType = PickUpWeapon;
             
-            WeapSwitching();
+            WeapSwitching();  //開始換武器
         }
         if ( AniTime >=2)  //切換武器
         {
@@ -187,7 +188,7 @@ public class Shooting : MonoBehaviour
                 {
                     FirstWeapon = true;
                     Ammunition.showUI();
-                    if (FirstWeapon && FirstAmm)  //第一次取得武器和彈藥
+                    if (FirstWeapon && FirstAmm && !SkipTeach)  //第一次取得武器和彈藥
                     {
                         Level_1.NextTask(2);
                     }
@@ -685,7 +686,7 @@ public class Shooting : MonoBehaviour
     {
         FirstAmm = true; 
         Ammunition.showUI();
-        if (FirstWeapon && FirstAmm)  //第一次取得武器和彈藥
+        if (FirstWeapon && FirstAmm && !SkipTeach)  //第一次取得武器和彈藥
         {
             Level_1.NextTask(2);
         }

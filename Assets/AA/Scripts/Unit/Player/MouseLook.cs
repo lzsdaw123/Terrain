@@ -15,6 +15,7 @@ public class MouseLook : MonoBehaviour
     public Vector3 m_camRot;
     public Transform CameraPos;
     public Camera GunCamera;
+    public GameObject GunObject;  //槍枝物件
     public float GRx,GRy;  //槍支攝影機的Rotation
     Vector3 oldPos;  //上一幀
     Vector3 newPos; //當前幀
@@ -56,7 +57,7 @@ public class MouseLook : MonoBehaviour
 
         if (newPos == oldPos)  //攝影機是否轉動
         {
-            if (GRy > 0.5f) //槍枝向右轉
+            if (GRy > 0.5f) //槍枝向右歸位
             {
                 GRy -= 20 * Time.smoothDeltaTime;         
                 if (GRy < 0)
@@ -64,7 +65,7 @@ public class MouseLook : MonoBehaviour
                     GRy = 0;
                 }
             }
-            else if (GRy < -0.5f)  //槍枝向左轉
+            else if (GRy < -0.5f)  //槍枝向左歸位
             {
                 GRy += 20 * Time.smoothDeltaTime;
                 if (GRy > 0)
@@ -115,7 +116,8 @@ public class MouseLook : MonoBehaviour
             newRTPos = oriRTPos;
         }
         oriTransform.transform.position = newRTPos;
-        GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);
+        //GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);  //武器左右晃
+        GunObject.transform.localRotation = Quaternion.Euler(0, 0, -GRy);  //武器左右晃
 
         smoothSpeed = Settings.smoothSpeed;
         //print(smoothSpeed);

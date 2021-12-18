@@ -20,7 +20,7 @@ public class Level_1 : MonoBehaviour
     bool Mission_L1;
     public GameObject DialogBox;
     public Text MissonTxet;
-    public string[] MissonT;
+    public string[] MissonString;
     [SerializeField] float UiTime;
     public static float MissionTime;  //任務切換時間
    public static bool UiOpen=true;
@@ -51,8 +51,8 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonT = new string[] { "尋找主管", "前往倉庫", "取得武器與彈藥", "前往工作間", "核電廠" };
-        MissonTxet.text = MissonT[0];
+        MissonString = new string[] { "尋找主管", "前往倉庫", "取得武器與彈藥", "前往工作間", "核電廠",  "到工作崗位"};
+        MissonTxet.text = MissonString[0];
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
     }
@@ -60,35 +60,41 @@ public class Level_1 : MonoBehaviour
     {
         missionLevel = PlayerView.missionLevel;  //跟換目標
         Taget_distance = PlayerView.pu_distance;
-        if(missionLevel==0 || missionLevel == 1 || missionLevel == 3 || missionLevel == 4)
+        if (missionLevel <= DialogueEditor.missionLevel)  //任務目標是否結束
         {
-            if (MissionTime >= 3)  //UI浮現時間
+            if (missionLevel != 2)  //靠近任務點
             {
-                MissionTime = 3;
-                if (Taget_distance <= 0.9f)
+                if (MissionTime >= 3)  //UI浮現時間
                 {
-                    if (StartDialogue)
+                    MissionTime = 3;
+                    if (Taget_distance <= 0.9f)
                     {
-                        StartDialogue = false;
-                        DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
+                        if (StartDialogue)
+                        {
+                            StartDialogue = false;
+                            DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
+                        }
                     }
                 }
+                else MissionTime += Time.deltaTime;
             }
-            else MissionTime += Time.deltaTime;
+            if (MissionWarn.activeSelf)
+            {
+                MissonTxet.text = MissonString[missionLevel];
+                if (UiTime >= 3)  //UI浮現時間
+                {
+                    MissionWarn.SetActive(false);
+                    UiTime = 0;
+                }
+                else
+                {
+                    UiTime += Time.deltaTime;
+                }
+            }
         }
-
-        if (MissionWarn.activeSelf)
+        else
         {
-            MissonTxet.text = MissonT[missionLevel];
-            if (UiTime >= 3)  //UI浮現時間
-            {
-                MissionWarn.SetActive(false);
-                UiTime = 0;
-            }
-            else
-            {
-                UiTime += Time.deltaTime;
-            }
+            MissionWarn.SetActive(false);
         }
 
         if (!Lv1)

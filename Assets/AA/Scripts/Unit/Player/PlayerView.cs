@@ -13,11 +13,11 @@ public class PlayerView : MonoBehaviour
     float lastTime = 0f;
     public Camera Camera;
     public Transform camTransform;
-    public  GameObject[] MissionTaget;
+    public  GameObject[] MissionTaget;  //任務目標物件
     public static int missionLevel;  //任務階段
     public float Rdot;
     public float Fdot;
-    public Image targetUI;
+    public Image targetUI;  //任務目標UI
     public Text text;
     public float UI_x;
     public float UI_y;
@@ -30,7 +30,6 @@ public class PlayerView : MonoBehaviour
     public static float pu_distance;
     [SerializeField] int d;  //換算距離
     Color UIcolor;
-    Color textcolor;
     Vector3 oldPos;
 
     void OnWillRenderObject()
@@ -50,19 +49,30 @@ public class PlayerView : MonoBehaviour
         else
             return false;
     }
-    public void YesTeaching()  //進行教學
-    {
-        Settings.con();
-        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
-    }
-    public void NoTeaching()  //不要教學
-    {
-        Settings.con();
-        DialogueEditor.TextLine = 0;
-        missionLevel = 2;
-        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
-        DialogueEditor.StartConversation(missionLevel, 0);
-    }
+    //public void DialogueOptionYes(int Task)  //進行教學
+    //{
+    //    Settings.con();
+    //    if (Task == 0)
+    //    {
+    //        Shooting.SkipTeach = false;
+    //        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
+    //    }
+
+    //}
+    //public void DialogueOptionNo(int Task)  //不要教學
+    //{
+    //    Settings.con();
+    //    if (Task == 0)
+    //    {
+    //        Shooting.PickUpWeapons(0, 0);
+    //        Shooting.FirstAmm = true;
+    //        Shooting.SkipTeach = true;
+    //        missionLevel = 5;  //對話階段
+    //        DialogueEditor.TextLine = 0;  //對話句子數歸零
+    //        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
+    //        DialogueEditor.StartConversation(missionLevel, 0);  //跳到對應的對話階段
+    //    }
+    //}
     public static void TagetChange()  //改變目標
     {
         missionLevel++;
@@ -76,9 +86,16 @@ public class PlayerView : MonoBehaviour
     }
     void Update()
     {
+        if (missionLevel > DialogueEditor.missionLevel)  //任務目標結束
+        {
+            targetUI.color = new Color(1, 1, 1, 0);
+            text.color = new Color(1, 1, 1, 0);
+            return;
+        }
         //Vector2 vec2 = Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
         camTransform = Camera.transform;  //相機座標
         distance = (camTransform.position - MissionTaget[missionLevel].transform.position).magnitude / 3.5f;
+
         pu_distance = distance;
         d = (int)distance;
         text.text = d + " m";
@@ -92,8 +109,7 @@ public class PlayerView : MonoBehaviour
             UIcolor.a = 0.7058824f;
         }
         targetUI.color = UIcolor;
-        textcolor = new Color(1, 1, 1, UIcolor.a);
-        text.color = textcolor;
+        text.color = new Color(1, 1, 1, UIcolor.a);
 
         if (IsInView(MissionTaget[missionLevel].transform.position))
         {

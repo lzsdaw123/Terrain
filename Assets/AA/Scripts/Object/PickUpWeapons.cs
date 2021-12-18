@@ -11,7 +11,7 @@ public class PickUpWeapons : MonoBehaviour
     string[] WeaponsText = new string[] { "自動步槍", "電磁手槍", "霰彈槍" };
     public WeaponValue[] Weapons;
     int _WeaponType; //玩家身上武器類型
-    int WeaponPos;
+    int WeaponPos;  //同武器類型
     int[] Equipment;
     string WaveText;
     bool WT;
