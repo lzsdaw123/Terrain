@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Level_1 : MonoBehaviour
 {
-    public bool Level_1_Start=false;
+    public static bool Level_A_Start=false;
+    public static int LevelA_;
     GameObject SpawnRay;
     [SerializeField] GameObject explode;
     [SerializeField] GameObject PSexplode;
@@ -13,17 +14,18 @@ public class Level_1 : MonoBehaviour
     float time = 0;
     [SerializeField] bool Lv1;
     public LayerMask LayerMask;
-    bool start=false;
+    public static bool start=false;
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
-    static int missionLevel;  //任務階段 0=主管,1=武器
+    static int missionLevel;  //任務階段
     bool Mission_L1;
     public GameObject DialogBox;
     public Text MissonTxet;
+    bool MissT;
     public string[] MissonString;
     [SerializeField] float UiTime;
     public static float MissionTime;  //任務切換時間
-   public static bool UiOpen=true;
+   public static bool UiOpen;
     [SerializeField]public static int MonsterLevel;
     [SerializeField] float MLtime = 0;
     int Level;
@@ -32,12 +34,14 @@ public class Level_1 : MonoBehaviour
     bool PlayAu;
     [SerializeField] float Taget_distance;
     public static bool StartDialogue;
+    public static bool MissionEnd=false;
 
     void Awake()
     {
         Lv1 = false;
         MonsterLevel = 0;
         PlayAu = true;
+        LevelA_ = 0;
     }
     void Start()
     {
@@ -51,7 +55,7 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonString = new string[] { "尋找主管", "前往倉庫", "取得武器與彈藥", "前往工作間", "核電廠",  "到工作崗位"};
+        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線"};
         MissonTxet.text = MissonString[0];
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
@@ -60,11 +64,11 @@ public class Level_1 : MonoBehaviour
     {
         missionLevel = PlayerView.missionLevel;  //跟換目標
         Taget_distance = PlayerView.pu_distance;
-        if (missionLevel <= DialogueEditor.missionLevel)  //任務目標是否結束
+        if (!MissionEnd)  //任務目標是否結束
         {
             if (missionLevel != 2)  //靠近任務點
             {
-                if (MissionTime >= 3)  //UI浮現時間
+                if (MissionTime >= 3 && LevelA_!=2)  //任務UI浮現時間
                 {
                     MissionTime = 3;
                     if (Taget_distance <= 0.9f)
@@ -78,10 +82,24 @@ public class Level_1 : MonoBehaviour
                 }
                 else MissionTime += Time.deltaTime;
             }
-            if (MissionWarn.activeSelf)
+            if(missionLevel == 5 && LevelA_==0)
             {
+                LevelA_ = 1;
+                Level_A_Start = true;
+                DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
+            }
+            if (UiOpen)
+            {
+                UiOpen = false;
                 MissonTxet.text = MissonString[missionLevel];
-                if (UiTime >= 3)  //UI浮現時間
+                MissionWarn.SetActive(true);  // 開啟任務UI
+                tagetUI.SetActive(true);
+                PlayAu = true;
+                PlayAudio();
+            }
+            if (MissionWarn.activeSelf)  //任務UI開啟
+            {
+                if (UiTime >= 3.3)  //UI浮現時間
                 {
                     MissionWarn.SetActive(false);
                     UiTime = 0;
@@ -91,31 +109,38 @@ public class Level_1 : MonoBehaviour
                     UiTime += Time.deltaTime;
                 }
             }
+            if (LevelA_ == 2)
+            {
+                if (MissionTime >= 4)
+                {
+                    LevelA_ = 3;
+                    PlayerView.TagetChange();  //任務目標切換
+                    DialogueEditor.StartConversation(6, 0);  //開始對話
+                }
+                else
+                {
+                    MissionTime += Time.deltaTime;
+                }
+            }
         }
         else
         {
             MissionWarn.SetActive(false);
         }
-
         if (!Lv1)
         {
-            if (StartTime >= 17 && UiOpen)  //遊戲開始後
+            if (StartTime >= 17)  //遊戲開始後 開啟任務UI
             {
-                StartTime = 17;
-                UiOpen = false;
-                MissionWarn.SetActive(true);
-                tagetUI.SetActive(true);
-                PlayAu = true;
-                PlayAudio();
+                StartTime = -1;
+                UiOpen = true;
             }
-            else if(StartTime < 17)
+            else if(StartTime < 17 && StartTime>=0)
             {
                 StartTime += 2 * Time.deltaTime;
             }
             if (Input.GetKeyDown(KeyCode.F1) || start)
             {
                 AudioManager.explode();
-                Level_1_Start = true;
                 explode.SetActive(true);
                 Force.開始破門();
                 SpawnRay.SetActive(true);
@@ -133,18 +158,13 @@ public class Level_1 : MonoBehaviour
             }
             if (time >= 4)
             {
-                MissionTarget.SetActive(true);
-                MissionWarn.SetActive(true);
-                PlayAudio();
-                MissonTxet.text = "保護發電站";
+                //MissionTarget.SetActive(true);
+                //MissionWarn.SetActive(true);
+                //PlayAudio();
                 var main = PSsmoke.main;
                 main.loop = false;
             }
-            if (time >= 10f)
-            {
-                MissionWarn.SetActive(false);
-            }
-            if (time >=25f)
+            if (time >= 25f)
             {
                 explode.SetActive(false);
             }
@@ -186,13 +206,19 @@ public class Level_1 : MonoBehaviour
             AudioManager.Warn(1);
         }
     }
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)  //開始第一關
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Actor"))
+        if (Level_A_Start)
         {
-            if (other.tag == "Player")
+            Level_A_Start = false;
+            if (other.gameObject.layer == LayerMask.NameToLayer("Actor"))
             {
-                start = true;
+                if (other.tag == "Player")
+                {
+                    start = true;
+                    LevelA_ = 2;
+                    MissionTime = 0;
+                }
             }
         }
     }

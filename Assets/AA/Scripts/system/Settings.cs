@@ -27,7 +27,7 @@ public class Settings : MonoBehaviour
 
     public Image AsI, PsI;
 
-    public RawImage StartUI;
+    public RawImage StartUI;  //遊戲開場UI
     public Texture2D[] Start_image;
     public bool START_bool;
     int SceneNub;  //當前場景編號
@@ -298,13 +298,17 @@ public class Settings : MonoBehaviour
             Player.GetComponent<Shooting>().enabled = true;
             Player.GetComponent<HeroLife>().enabled = true;
         }
-        StartUI = GameObject.Find("StartUI").GetComponent<RawImage>();
-        StartButton = GameObject.Find("StartB").GetComponent<Button>();
-        OptionButton = GameObject.Find("OptionB").GetComponent<Button>();
-        QuitButton = GameObject.Find("QuitB").GetComponent<Button>();
-        StartButton.onClick.AddListener(StartB);
-        OptionButton.onClick.AddListener(OptionB);
-        QuitButton.onClick.AddListener(QuitB);
+        SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub == 1)
+        {
+            StartUI = GameObject.Find("StartUI").GetComponent<RawImage>();
+            StartButton = GameObject.Find("StartB").GetComponent<Button>();
+            OptionButton = GameObject.Find("OptionB").GetComponent<Button>();
+            QuitButton = GameObject.Find("QuitB").GetComponent<Button>();
+            StartButton.onClick.AddListener(StartB);
+            OptionButton.onClick.AddListener(OptionB);
+            QuitButton.onClick.AddListener(QuitB);
+        }
         AudioManager.SettingsCanvas = this;
     }
     void ButtonAudio()

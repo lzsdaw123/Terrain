@@ -15,6 +15,7 @@ public class PlayerView : MonoBehaviour
     public Transform camTransform;
     public  GameObject[] MissionTaget;  //任務目標物件
     public static int missionLevel;  //任務階段
+    [SerializeField] private int st_missionLevel;  //任務階段
     public float Rdot;
     public float Fdot;
     public Image targetUI;  //任務目標UI
@@ -31,6 +32,7 @@ public class PlayerView : MonoBehaviour
     [SerializeField] int d;  //換算距離
     Color UIcolor;
     Vector3 oldPos;
+    public static bool MissionEnd;
 
     void OnWillRenderObject()
     {
@@ -49,33 +51,17 @@ public class PlayerView : MonoBehaviour
         else
             return false;
     }
-    //public void DialogueOptionYes(int Task)  //進行教學
-    //{
-    //    Settings.con();
-    //    if (Task == 0)
-    //    {
-    //        Shooting.SkipTeach = false;
-    //        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
-    //    }
-
-    //}
-    //public void DialogueOptionNo(int Task)  //不要教學
-    //{
-    //    Settings.con();
-    //    if (Task == 0)
-    //    {
-    //        Shooting.PickUpWeapons(0, 0);
-    //        Shooting.FirstAmm = true;
-    //        Shooting.SkipTeach = true;
-    //        missionLevel = 5;  //對話階段
-    //        DialogueEditor.TextLine = 0;  //對話句子數歸零
-    //        DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
-    //        DialogueEditor.StartConversation(missionLevel, 0);  //跳到對應的對話階段
-    //    }
-    //}
     public static void TagetChange()  //改變目標
     {
-        missionLevel++;
+        if (missionLevel == 10)
+        {
+            Level_1.MissionEnd = true;
+            MissionEnd = true;
+        }
+        else
+        {
+            missionLevel++;
+        }
         Level_1.MissionTime = 0;
         Level_1.UiOpen = true;
         Level_1.StartDialogue = true;
@@ -86,7 +72,8 @@ public class PlayerView : MonoBehaviour
     }
     void Update()
     {
-        if (missionLevel > DialogueEditor.missionLevel)  //任務目標結束
+        st_missionLevel = missionLevel;
+        if (MissionEnd)  //任務目標結束
         {
             targetUI.color = new Color(1, 1, 1, 0);
             text.color = new Color(1, 1, 1, 0);

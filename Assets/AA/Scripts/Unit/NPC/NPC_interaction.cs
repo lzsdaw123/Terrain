@@ -26,7 +26,7 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
     {
         if (interact)
         {
-            TextG.GetComponent<Text>().text = "按住「E」對話\n" + Name[NpcName];
+            TextG.GetComponent<Text>().text = "按「E」對話\n" + Name[NpcName];
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)
@@ -61,7 +61,7 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
         distance = (camTransform.position - this.transform.position).magnitude / 3.5f;
         st_distance = distance;
 
-        if (distance <= 1.2f)
+        if (distance <= 1.2f)  //靠近NPC
         {
             if (StartDialogue)
             {

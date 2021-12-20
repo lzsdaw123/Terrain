@@ -81,7 +81,6 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
                 }
                 if (Ra_Dialogue)  //是否為隨機對話
                 {
-                    coolDown = 3.2f;
                     TextLine = Random.Range(0, Dialogue.Length);
                     dialogueText.text = Name[NpcName] + Dialogue[TextLine];
                 }
@@ -128,7 +127,7 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
         {
             case 0:  //武器庫管理員
                 Dialogue = new string[3];
-                Dialogue[0] = "小子，我以前和你一樣也是個探勘區警衛，直到我的膝蓋中了一槍。";
+                Dialogue[0] = "小子，我以前和你一樣也是個守衛，直到我的膝蓋中了一槍。";
                 Dialogue[1] = "你還沒準備好，兄弟。";
                 Dialogue[2] = "你的惡行從愛爾蘭到契丹，無人不知，無人不曉。";
                 break;

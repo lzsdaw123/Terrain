@@ -13,6 +13,7 @@ public class DialogueEditor : MonoBehaviour
     static int NpcName;  //對話者
     //[SerializeField] int NameNum;  //對話者數量
     public static int TextLine;  //當前對話行數
+    [SerializeField] int SF_TextLine;  //當前對話行數
     public static int missionLevel = 0;
     public static bool StartDialogue;
     public static bool EndDialogue;
@@ -37,6 +38,7 @@ public class DialogueEditor : MonoBehaviour
     }
     void Update()
     {
+        SF_TextLine = TextLine;
         if (StartDialogue)  //開始對話
         {
             if (coolDownTimer >= coolDown) //對話冷卻時間，coolDown 越小越快
@@ -66,7 +68,6 @@ public class DialogueEditor : MonoBehaviour
                     if (Length >= 18) coolDownTimer = -0.8f;  //重置長對話冷卻
                     if (Length >= 26) coolDownTimer = -1.6f;  //重置更長對話冷卻
                 }
-
                 if (TextLine >= Dialogue.Length)
                 {
                     StartDialogue = false;
@@ -91,7 +92,10 @@ public class DialogueEditor : MonoBehaviour
         {
             TextLine = 0;
             EndDialogue = false;
-            PlayerView.TagetChange();  //任務目標切換
+            if (Level_1.LevelA_ <=0)
+            {
+                PlayerView.TagetChange();  //任務目標切換
+            }
         }
     }
     public static void StartConversation(int level, int Who)  //任務階段, 對話者
@@ -108,7 +112,7 @@ public class DialogueEditor : MonoBehaviour
         {
             case 0:
                 Dialogue = new string[5];
-                Dialogue[0] = "歡迎來到「4號探勘地」，我是這裡的主管。";
+                Dialogue[0] = "歡迎來到「遺蹟4號探勘地」，我是這裡的主管。";
                 Dialogue[1] = "負責在此監控各地的情況。";
                 Dialogue[2] = "而你的任務是保護這區域不受到任何威脅。";
                 Dialogue[3] = "要進行區域導覽嗎?";
@@ -144,11 +148,11 @@ public class DialogueEditor : MonoBehaviour
                 break;
             case 5:
                 Dialogue = new string[1];
-                Dialogue[0] = "這是警衛室。";
-                //Dialogue[1] = "產出的電力會輸送到隔壁的蓄電塔保存。";
-                //Dialogue[2] = "並由變電站輸出到各個電塔，再分配給各建築。";
-                //Dialogue[3] = "所以這裡最為重要，必須優先保護好這裡。";
-                //Dialogue[4] = "重點都介紹差不多了，現在該到你的工作崗位。";
+                Dialogue[0] = "既然不需要就直接到你的工作崗位。";
+                break;
+            case 6:
+                Dialogue = new string[1];
+                Dialogue[0] = "任務變更，現在開始阻擋怪物入侵。";
                 break;
         }
     }

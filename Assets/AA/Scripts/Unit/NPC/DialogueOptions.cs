@@ -71,6 +71,7 @@ public class DialogueOptions : MonoBehaviour
             PlayerView.missionLevel = 5;  //對話階段
             DialogueEditor.TextLine = 0;  //對話句子數歸零
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
+            Level_1.UiOpen = true;
             DialogueEditor.StartConversation(PlayerView.missionLevel, 0);  //跳到對應的對話階段
         }
         if (Task == 1) //No
@@ -78,7 +79,7 @@ public class DialogueOptions : MonoBehaviour
             //DailyDialogue.TextLine = 0;  //對話句子數歸零
             DailyDialogue.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
             DailyDialogue.dialogueText.text = "";
-            NPC_interaction.ReAdd_Dialogue();
+            NPC_interaction.EndDialogue();
         }
     }
 }
