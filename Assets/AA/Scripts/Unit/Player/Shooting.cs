@@ -586,6 +586,7 @@ public class Shooting : MonoBehaviour
                             HitType = 4;
                             if (WeaponType == 1)
                             {
+                                hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
                                 if (n == 0)
                                 {
                                     hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 5);  //造成一半傷害

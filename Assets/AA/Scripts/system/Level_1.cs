@@ -13,6 +13,9 @@ public class Level_1 : MonoBehaviour
     [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
     [SerializeField] bool Lv1;
+    int stage;  //關卡階段
+    public int TTT; 
+    public float stageTime;
     public LayerMask LayerMask;
     public static bool start=false;
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
@@ -150,7 +153,7 @@ public class Level_1 : MonoBehaviour
         }
         if (Lv1)
         {
-            MissionWarn.SetActive(false);
+            stage = 1;
             time += Time.deltaTime;
             if (time >= 3)
             {
@@ -158,9 +161,6 @@ public class Level_1 : MonoBehaviour
             }
             if (time >= 4)
             {
-                //MissionTarget.SetActive(true);
-                //MissionWarn.SetActive(true);
-                //PlayAudio();
                 var main = PSsmoke.main;
                 main.loop = false;
             }
@@ -168,7 +168,7 @@ public class Level_1 : MonoBehaviour
             {
                 explode.SetActive(false);
             }
-            if (MonsterLevel != 5)
+            if (MonsterLevel != 5)  //升級時間冷卻
             {
                 MLtime += Time.deltaTime;
                 //MLtime += 10*Time.deltaTime;
@@ -180,6 +180,26 @@ public class Level_1 : MonoBehaviour
                 MLtime = 0;
                 MonsterLevel++;
                 //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
+            }
+        }
+        if (stage==1)
+        {                
+            if(TTT<5)
+            {
+                if (stageTime >= 5)
+                {
+                    SpawnRay.GetComponent<SpawnRay>().StartBorn = false;
+                }
+                if (stageTime>= stage * 15)
+                {
+                    SpawnRay.GetComponent<SpawnRay>().StartBorn = true;
+                    stageTime = 0;
+                    TTT++;
+                }
+                else
+                {
+                    stageTime += Time.deltaTime;
+                }           
             }
         }
         switch (Settings.Level)  //難度圖示

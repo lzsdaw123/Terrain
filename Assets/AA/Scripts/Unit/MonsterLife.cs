@@ -73,43 +73,6 @@ public class MonsterLife : MonoBehaviour
                 GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
             }
         }
-        if (HitUI.activeSelf)  //命中UI
-        {
-            //HitUI.transform.localScale -= new Vector3(0.15f, 0.15f, 0f) * 10 * Time.deltaTime;
-            //if (HitUI.transform.localScale.x <= 0)
-            //{
-            //    HitUI.SetActive(false);
-            //    HitUI.transform.localScale = new Vector3(0f, 0f, 0f);
-            //}
-            HitUITime += Time.deltaTime;
-            UIcolor = HitUI.GetComponent<Image>().color;
-            HitUI.transform.localScale += new Vector3(0.15f, 0.15f, 0f) * 12 * Time.deltaTime;
-
-            if (UIcolor == Color.white)
-            {
-                if (HitUI.transform.localScale.x >= 0.8)
-                {
-                    HitUI.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
-                }
-                if (HitUITime >= 0.55f)
-                {
-                    HitUI.SetActive(false);
-                    HitUITime = 0;
-                }
-            }
-            else if(UIcolor == Color.red)
-            {
-                if (HitUI.transform.localScale.x >= 1.4)
-                {
-                    HitUI.transform.localScale = new Vector3(1.4f, 1.4f, 1f);
-                }
-                if (HitUITime >= 0.8f)
-                {
-                    HitUI.SetActive(false);
-                    HitUITime = 0;
-                }
-            }
-        }
     }
     // 開啟或關閉物理娃娃系統
     void RagdollActive(bool active)
@@ -151,8 +114,6 @@ public class MonsterLife : MonoBehaviour
             if (Player)
             {
                 HitUI.SetActive(true);
-                //HitUI.transform.localScale = new Vector3(1f, 1f, 1f);
-                HitUI.transform.localScale = new Vector3(0f, 0f, 1f);
                 HitUI.GetComponent<Image>().color = Color.white;
             }
         }
@@ -161,7 +122,6 @@ public class MonsterLife : MonoBehaviour
             if (!Dead)
             {
                 HitUI.SetActive(true);
-                HitUI.transform.localScale = new Vector3(0f, 0f, 1f);
                 HitUI.GetComponent<Image>().color = Color.red;
                 Dead = true;
             }           

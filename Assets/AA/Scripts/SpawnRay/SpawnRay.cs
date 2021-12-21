@@ -8,14 +8,13 @@ public class SpawnRay : MonoBehaviour {
 
 	[SerializeField] bool DisplayField = true;
 	public GameObject[] monsters = new GameObject[1];	// 可生的怪種類
-	public int maxNumber = 5;							// 生怪上限
+	public int[] maxNumber = new int[] {5, 5 };							// 生怪上限
 	[SerializeField] private float bornTimespanMin = 3f;	// 下次生怪時間間隔
 	[SerializeField] private float bornTimespanMax = 10f;
-	private float nextBornTime = 0f;
-	private float timer = 0;							// 計數器
-	public int counter{ get; set; }						// 目前場上怪物數量
-	private int uid = 0;								// 怪物編號
-
+	private float[] nextBornTime = new float[] { 0, 0 };
+	private float[] timer =new float[] {0, 0 };                         // 計數器
+    public int[] counter { get; set; } = new int[] { 0, 0 };		// 目前場上怪物數量
+	private int uid = 0;                                // 怪物編號
 
 	[SerializeField] private LayerMask rayHitLayer = -1;	// 射線判斷的圖層，-1表示全部圖層
 	public enum Type  {Circle, Rectangle};	// 圓形或矩形生怪區域
@@ -36,6 +35,7 @@ public class SpawnRay : MonoBehaviour {
     NavUtility navUtility = new NavUtility();
 
 	public ObjectPool _ObjectPool;
+	public bool StartBorn;  //開始生成
 
 	void OnDrawGizmos(){
 		if (DisplayField) {
@@ -56,44 +56,85 @@ public class SpawnRay : MonoBehaviour {
 	}
 
 	void Start(){
-		counter = 0;
+		counter = new int[] { 0, 0 };
 		uid = 0;
+		StartBorn = true;
 	}
 
-	void Update(){
-		if (counter >= maxNumber)	// 若已達生怪上限，返回
-			return;
-		
-		timer += Time.deltaTime;
+	void Update()
+	{
+		if (!StartBorn) return;
+		if (counter[0] < maxNumber[0])    // 若已達生怪上限，返回
+		{
+			timer[0] += Time.deltaTime;
 
-		if (timer > nextBornTime) {	// 若已達生怪時間間隔
+			if (timer[0] > nextBornTime[0])
+			{   // 若已達生怪時間間隔
 
-			// 計算生怪亂數位置
-			Vector3 bornPos = transform.position;
-			if (type == Type.Circle)
-				bornPos = navUtility.RandomCirclePos (transform.position, bornRadius);
-			else
-				bornPos = navUtility.RandomRectanglePos (transform.position, bornWidth, bornDepth);
+				// 計算生怪亂數位置
+				Vector3 bornPos = transform.position;
+				if (type == Type.Circle)
+					bornPos = navUtility.RandomCirclePos(transform.position, bornRadius);
+				else
+					bornPos = navUtility.RandomRectanglePos(transform.position, bornWidth, bornDepth);
 
-			RaycastHit hit;
-			if (navUtility.TryHitNav (bornPos, out hit, Mathf.Infinity, rayHitLayer)) {	// 判斷位置是否可生怪
-				
-				//int monsterNum = (int)(Random.value * monsters.Length);	// 亂數取得一隻怪
-				//GameObject monster = (GameObject)Instantiate (monsters [monsterNum], hit.point, Quaternion.identity);   // 生怪
-				_ObjectPool.ReUseMonster01(hit.point, Quaternion.identity);
-				uid++;										// 編號加1
-				counter++;
+				RaycastHit hit;
+				if (navUtility.TryHitNav(bornPos, out hit, Mathf.Infinity, rayHitLayer))
+				{ // 判斷位置是否可生怪
 
-				//if (!monster.GetComponent<SpawnRayReg> ())	// 怪物一定要有這個腳本
-				//	monster.AddComponent<SpawnRayReg> ();
-				
-				//monster.SendMessage ("Init", new MonterInfo(uid, this));
+					//int monsterNum = (int)(Random.value * monsters.Length);	// 亂數取得一隻怪
+					//GameObject monster = (GameObject)Instantiate (monsters [monsterNum], hit.point, Quaternion.identity);   // 生怪
+					_ObjectPool.ReUseMonster01(hit.point, Quaternion.identity);  //呼叫物件池
+					uid++;                                      // 編號加1
+					counter[0]++;
+
+					//if (!monster.GetComponent<SpawnRayReg> ())	// 怪物一定要有這個腳本
+					//	monster.AddComponent<SpawnRayReg> ();
+
+					//monster.SendMessage ("Init", new MonterInfo(uid, this));
+				}
+
+				timer[0] = 0;
+				nextBornTime[0] = Random.Range(bornTimespanMin, bornTimespanMax);   // 亂數取得下次生怪時間
+
 			}
-
-			timer = 0;
-			nextBornTime = Random.Range (bornTimespanMin, bornTimespanMax);	// 亂數取得下次生怪時間
-
 		}
+		if (counter[1] < maxNumber[1])    // 若已達生怪上限，返回
+		{
+			timer[1] += Time.deltaTime;
+
+			if (timer[1] > nextBornTime[1])
+			{   // 若已達生怪時間間隔
+
+				// 計算生怪亂數位置
+				Vector3 bornPos = transform.position;
+				if (type == Type.Circle)
+					bornPos = navUtility.RandomCirclePos(transform.position, bornRadius);
+				else
+					bornPos = navUtility.RandomRectanglePos(transform.position, bornWidth, bornDepth);
+
+				RaycastHit hit;
+				if (navUtility.TryHitNav(bornPos, out hit, Mathf.Infinity, rayHitLayer))
+				{ // 判斷位置是否可生怪
+
+					//int monsterNum = (int)(Random.value * monsters.Length);	// 亂數取得一隻怪
+					//GameObject monster = (GameObject)Instantiate (monsters [monsterNum], hit.point, Quaternion.identity);   // 生怪
+					_ObjectPool.ReUseMonster02(hit.point, Quaternion.identity);  //呼叫物件池
+					uid++;                                      // 編號加1
+					counter[1]++;
+
+					//if (!monster.GetComponent<SpawnRayReg> ())	// 怪物一定要有這個腳本
+					//	monster.AddComponent<SpawnRayReg> ();
+
+					//monster.SendMessage ("Init", new MonterInfo(uid, this));
+				}
+
+				timer[1] = 0;
+				nextBornTime[1] = Random.Range(bornTimespanMin, bornTimespanMax);   // 亂數取得下次生怪時間
+
+			}
+		}
+
 	}
 
 
@@ -134,11 +175,11 @@ public class SpawnRay : MonoBehaviour {
 	}
 
 
-	public void UnReg(){
-		if (counter >= maxNumber) { // 若怪物已滿，重新計時，以免立即生怪
-			timer = 0;
+	public void UnReg(int Type){
+		if (counter[Type] >= maxNumber[Type]) { // 若怪物已滿，重新計時，以免立即生怪
+			timer[Type] = 0;
 		}
-		counter--;
+		counter[Type]--;
 	}
 
 }
@@ -149,10 +190,12 @@ public class SpawnRay : MonoBehaviour {
 public struct MonterInfo{
 	public int uniqueID;	// 怪物編號
 	public SpawnRay mother;
+	public int MpnsterType;
 
-	public MonterInfo(int UniqueID, SpawnRay Mother){
+	public MonterInfo(int UniqueID, SpawnRay Mother, int Type){
 		uniqueID = UniqueID;
         mother = Mother;
+		MpnsterType = Type;
 	}
 }
 

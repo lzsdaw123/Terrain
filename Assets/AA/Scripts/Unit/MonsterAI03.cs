@@ -396,7 +396,7 @@ public class MonsterAI03 : MonoBehaviour
     {
         ani.SetBool("Move", true);
         ani.SetBool("Attack", false);
-        agent.speed = 5;  //移動速度
+        agent.speed = 5.5f;  //移動速度
         if (TrPlayer)
         {
             agent.destination = attackTarget.position; // 設為尋徑目標

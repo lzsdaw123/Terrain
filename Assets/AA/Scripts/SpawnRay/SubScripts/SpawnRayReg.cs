@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpawnRayReg : MonoBehaviour {
 
+	public int MpnsterType=0;
 	private int uid = 0;
 	public int actorID{ get{return uid;} }	// 怪物編號
 	[HideInInspector] public SpawnRay mother;
@@ -11,10 +12,11 @@ public class SpawnRayReg : MonoBehaviour {
 	public void Init(MonterInfo monsterInfo){
 		mother = monsterInfo.mother;
 		uid = monsterInfo.uniqueID;
+		MpnsterType = monsterInfo.MpnsterType;
 	}
 
 	public void OnDisable(){
 		if (mother)
-			mother.UnReg();		// 向母體移除數量
+			mother.UnReg(MpnsterType);		// 向母體移除數量
 	}
 }
