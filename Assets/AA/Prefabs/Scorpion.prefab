@@ -1579,6 +1579,7 @@ MonoBehaviour:
   AnimEvents: {fileID: 5296694822705293826}
   ani: {fileID: 1165788678806979713}
   arriveDistance: 30
+  agentSpeed: 9
   idlePercent: 10
   walkPercent: 50
   changeActionMin: 5
@@ -1642,7 +1643,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4990210699203305952}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2.58
+  m_Radius: 2.56
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1651,8 +1652,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 4.36
-  m_BaseOffset: 0.87
+  m_Height: 4
+  m_BaseOffset: 0.95
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &5296694821759665390
@@ -1667,6 +1668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0710a48f211f45d6929ff7fc9b998ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MpnsterType: 0
   mother: {fileID: 0}
 --- !u!1 &5198741589348518991
 GameObject:

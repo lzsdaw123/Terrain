@@ -12,6 +12,7 @@ public class ObjectPool : MonoBehaviour
     public SpawnRay _SpawnRay;
 
     public int inttailSize;  //預置物件數量
+    public int inttailSizeMS;  //預置物件數量
     Vector3 muzzlePOS;
 
     private int uid = 0;								// 怪物編號
@@ -29,6 +30,7 @@ public class ObjectPool : MonoBehaviour
     {
         //DontDestroyOnLoad(gameObject);  //切換場景時保留
         inttailSize = 8;  //物件池大小
+        inttailSizeMS = 10;  //物件池大小
 
         for (int cut =0;cut< inttailSize; cut++)
         {
@@ -36,28 +38,35 @@ public class ObjectPool : MonoBehaviour
             GameObject go = Instantiate(Bullet, BulletPool.transform) as GameObject; //生成子彈於子彈池
             GameObject go2 = Instantiate(Hit, HitPool.transform) as GameObject;   //生成彈孔於彈孔池
             GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //怪物子彈於怪物子彈池
+
+
+            _pool.Enqueue(go);  //Queue.Enqueue() 將物件放入結構中
+            _pool_Hit.Enqueue(go2);  //Queue.Enqueue() 將物件放入結構中
+
+            M_Bullet_pool.Enqueue(Mo1B);  //Queue.Enqueue() 將怪物1子彈放入結構中
+            go.SetActive(false);
+            go2.SetActive(false);
+            Mo1B.SetActive(false);                       
+        }
+        for (int cut = 0; cut < inttailSizeMS; cut++)
+        {
             //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
             GameObject Mo1 = Instantiate(Monster[0], MonsterPool_A.transform) as GameObject;   //生成怪物於怪物池
             GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;   //生成怪物於怪物池
             uid++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
-                    Mo1.AddComponent<SpawnRayReg>();
+                Mo1.AddComponent<SpawnRayReg>();
             Mo1.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 0));
             if (!Mo2.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo2.AddComponent<SpawnRayReg>();
             Mo2.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 1));
 
-            _pool.Enqueue(go);  //Queue.Enqueue() 將物件放入結構中
-            _pool_Hit.Enqueue(go2);  //Queue.Enqueue() 將物件放入結構中
             Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
             Monster_poolB.Enqueue(Mo2);  //Queue.Enqueue() 將怪物2放入結構中
-            M_Bullet_pool.Enqueue(Mo1B);  //Queue.Enqueue() 將怪物1子彈放入結構中
-            go.SetActive(false);
-            go2.SetActive(false);
+
             Mo1.SetActive(false);
             Mo2.SetActive(false);
-            Mo1B.SetActive(false);                       
         }
     }
     //子彈
@@ -130,8 +139,8 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
-            GameObject Mo1 = Instantiate(Monster[monsterNum], MonsterPool_A.transform) as GameObject;  //生成怪物於怪物池
+            //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
+            GameObject Mo1 = Instantiate(Monster[0], MonsterPool_A.transform) as GameObject;  //生成怪物於怪物池
             uid++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
@@ -139,6 +148,7 @@ public class ObjectPool : MonoBehaviour
             Mo1.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 0));
             Mo1.transform.position = positon;
             Mo1.transform.rotation = rotation;
+            Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
         }
     }
     public void RecoveryMonster01(GameObject recovery)  //用來回收物件
@@ -158,8 +168,8 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
-            GameObject Mo2 = Instantiate(Monster[monsterNum], MonsterPool_B.transform) as GameObject;  //生成怪物於怪物池
+            //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
+            GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;  //生成怪物於怪物池
             uid++;                                      // 編號加1
 
             if (!Mo2.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
@@ -167,6 +177,7 @@ public class ObjectPool : MonoBehaviour
             Mo2.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 1));
             Mo2.transform.position = positon;
             Mo2.transform.rotation = rotation;
+            Monster_poolB.Enqueue(Mo2);  //Queue.Enqueue() 將怪物2放入結構中
         }
     }
     public void RecoveryMonster02(GameObject recovery)  //用來回收物件

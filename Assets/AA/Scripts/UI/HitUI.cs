@@ -7,6 +7,7 @@ public class HitUI : MonoBehaviour
 {
     public float HitUITime;
     public Color UIcolor;
+    public float speed=10; 
 
     void Start()
     {
@@ -18,7 +19,7 @@ public class HitUI : MonoBehaviour
     {
         HitUITime += Time.deltaTime;
         UIcolor = GetComponent<Image>().color;
-        transform.localScale += new Vector3(1f, 1f, 0f) * 10 * Time.deltaTime;
+        transform.localScale += new Vector3(1f, 1f, 0f) * speed * Time.deltaTime;
 
         if (UIcolor == Color.white)
         {
@@ -35,9 +36,9 @@ public class HitUI : MonoBehaviour
         }
         if (UIcolor == Color.red)
         {
-            if (transform.localScale.x >= 1.4)
+            if (transform.localScale.x >= 1.3)
             {
-                transform.localScale = new Vector3(1.4f, 1.4f, 1f);
+                transform.localScale = new Vector3(1.3f, 1.3f, 1f);
             }
             if (HitUITime >= 0.3f)
             {

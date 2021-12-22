@@ -18,6 +18,7 @@ public class MonsterAI02 : MonoBehaviour
     public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
+    public float agentSpeed = 9f;  //尋徑速度
 
     // run 的%不用指定,因為除了 idle 和 walk,剩下就是 run
     public float idlePercent = 10;
@@ -266,14 +267,14 @@ public class MonsterAI02 : MonoBehaviour
                             }
                             else
                             {
-                                ani.SetBool("Move", true);
-                                ani.SetBool("Attack", false);
-                                AttackAngleT = false;
-                                //若不在攻擊角度內轉向目標
-                                Vector3 targetDir = tagObject.transform.position - transform.position;
-                                Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
-                                //print("轉向" + tagObject);
+                                //ani.SetBool("Move", true);
+                                //ani.SetBool("Attack", false);
+                                //AttackAngleT = false;
+                                ////若不在攻擊角度內轉向目標
+                                //Vector3 targetDir = tagObject.transform.position - transform.position;
+                                //Quaternion rotate = Quaternion.LookRotation(targetDir);
+                                //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
+                                ////print("轉向" + tagObject);
                             }
                         }
                         fined = true;                     
@@ -341,6 +342,9 @@ public class MonsterAI02 : MonoBehaviour
                     AttackPlay = true;
                     Fire = true;
                     Attack();
+                    Vector3 targetDir = attackTarget.position - transform.position;
+                    Quaternion rotate = Quaternion.LookRotation(targetDir);
+                    transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 1.2f * Time.smoothDeltaTime);
                     //print("小於攻擊距離 攻擊+"+ attackTarget);
                 }
                 else
@@ -397,7 +401,7 @@ public class MonsterAI02 : MonoBehaviour
         {
             attacking = false;
             bulletAttack = 0;
-            Vector3 targetDir = AAT - transform.position;
+            Vector3 targetDir = AAT - transform.position;  //子彈轉向目標
             Quaternion rotate = Quaternion.LookRotation(targetDir);
             muzzlePOS = muzzle.transform.position;
             pool.ReUseM01Bullet(muzzlePOS, rotate);  //生成子彈
@@ -407,7 +411,7 @@ public class MonsterAI02 : MonoBehaviour
     {
         ani.SetBool("Move", true);
         ani.SetBool("Attack", false);
-        agent.speed = 9;  //移動速度
+        agent.speed = agentSpeed;  //移動速度
         if (TrPlayer)
         {
             agent.destination = attackTarget.position; // 設為尋徑目標
@@ -436,9 +440,9 @@ public class MonsterAI02 : MonoBehaviour
             AttackAngleT = false;
             agent.speed = 0;
             ani.SetBool("Attack", true);
-            Vector3 targetDir = AAT - transform.position;
-            Quaternion rotate = Quaternion.LookRotation(targetDir);
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+            //Vector3 targetDir = AAT - transform.position;  
+            //Quaternion rotate = Quaternion.LookRotation(targetDir);
+            //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
         }
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)

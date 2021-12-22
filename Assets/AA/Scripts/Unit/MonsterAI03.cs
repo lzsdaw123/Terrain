@@ -18,6 +18,7 @@ public class MonsterAI03 : MonoBehaviour
     public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
+    public float agentSpeed=5.5f;  //尋徑速度
 
     // run 的%不用指定,因為除了 idle 和 walk,剩下就是 run
     public float idlePercent = 10;
@@ -396,7 +397,7 @@ public class MonsterAI03 : MonoBehaviour
     {
         ani.SetBool("Move", true);
         ani.SetBool("Attack", false);
-        agent.speed = 5.5f;  //移動速度
+        agent.speed = agentSpeed;  //移動速度
         if (TrPlayer)
         {
             agent.destination = attackTarget.position; // 設為尋徑目標

@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Level_1 : MonoBehaviour
 {
     public static bool Level_A_Start=false;
     public static int LevelA_;
     GameObject SpawnRay;
+    public SpawnRay _SpawnRay;
     [SerializeField] GameObject explode;
     [SerializeField] GameObject PSexplode;
     [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
     [SerializeField] bool Lv1;
     int stage;  //關卡階段
-    public int TTT; 
-    public float stageTime;
+    public int EnemyWave;  //敵人波數
+    public static float stageTime=-1;
+    [SerializeField] float SF_stageTime;
     public LayerMask LayerMask;
     public static bool start=false;
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
@@ -45,6 +48,7 @@ public class Level_1 : MonoBehaviour
         MonsterLevel = 0;
         PlayAu = true;
         LevelA_ = 0;
+
     }
     void Start()
     {
@@ -52,6 +56,7 @@ public class Level_1 : MonoBehaviour
         StartTime = 0;
         if (Mission_L1) StartTime = 15;
         SpawnRay = GameObject.Find("SpawnRay");
+        _SpawnRay = SpawnRay.GetComponent<SpawnRay>();
         SpawnRay.SetActive(false);
         explode.SetActive(false);
         MissionTarget.SetActive(false);
@@ -67,6 +72,7 @@ public class Level_1 : MonoBehaviour
     {
         missionLevel = PlayerView.missionLevel;  //跟換目標
         Taget_distance = PlayerView.pu_distance;
+        SF_stageTime = stageTime;
         if (!MissionEnd)  //任務目標是否結束
         {
             if (missionLevel != 2)  //靠近任務點
@@ -184,19 +190,16 @@ public class Level_1 : MonoBehaviour
         }
         if (stage==1)
         {                
-            if(TTT<5)
+            if(EnemyWave <5)
             {
-                if (stageTime >= 5)
+                if (stageTime>= 20)  //進階時間
                 {
-                    SpawnRay.GetComponent<SpawnRay>().StartBorn = false;
+                    _SpawnRay.StartBorn = true;
+                    EnemyWave++;
+                    _SpawnRay.EnemyWaveNum(EnemyWave);
+                    stageTime = -1;
                 }
-                if (stageTime>= stage * 15)
-                {
-                    SpawnRay.GetComponent<SpawnRay>().StartBorn = true;
-                    stageTime = 0;
-                    TTT++;
-                }
-                else
+                else if(stageTime >=0)
                 {
                     stageTime += Time.deltaTime;
                 }           
@@ -245,5 +248,20 @@ public class Level_1 : MonoBehaviour
     public static void NextTask(int nextTask)
     {
         DialogueEditor.StartConversation(nextTask, 0);  //開始對話
+    }
+}
+
+[Serializable]
+public class EnemyWaveNum  //敵人每波數量
+{
+    public int EnemyNumA;  //怪物1波數
+    public int EnemyNumB;  //怪物2波數
+    public int EnemyNumC;  //怪物3波數
+
+
+    public EnemyWaveNum(int enemyNumA, int enemyNumB)
+    {
+        EnemyNumA = enemyNumA;
+        EnemyNumB = enemyNumB;
     }
 }

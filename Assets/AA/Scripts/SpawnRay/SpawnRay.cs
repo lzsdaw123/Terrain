@@ -36,6 +36,10 @@ public class SpawnRay : MonoBehaviour {
 
 	public ObjectPool _ObjectPool;
 	public bool StartBorn;  //開始生成
+	public int EnemyWave;  //敵人波數
+	public EnemyWaveNum[] EnemyNum;   //敵人每波數量
+	bool[] StartBool=new bool[2];
+	public float BornTime;
 
 	void OnDrawGizmos(){
 		if (DisplayField) {
@@ -59,15 +63,40 @@ public class SpawnRay : MonoBehaviour {
 		counter = new int[] { 0, 0 };
 		uid = 0;
 		StartBorn = true;
+		EnemyNum = new EnemyWaveNum[5];
+		EnemyNum[0] = new EnemyWaveNum(4, 2);
+		EnemyNum[1] = new EnemyWaveNum(6, 4);
+		EnemyNum[2] = new EnemyWaveNum(8, 4);
+		EnemyNum[3] = new EnemyWaveNum(8, 6);
+		EnemyNum[4] = new EnemyWaveNum(10, 6);
 	}
-
+	public void EnemyWaveNum(int enemyWave)
+    {
+		EnemyWave = enemyWave;
+	}
 	void Update()
 	{
+        if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
+        {
+			if (BornTime >= 10)  //停止生成
+			{
+				BornTime = 0;
+				StartBorn = false;
+				StartBool[0] = false;
+				Level_1.stageTime = 0;  //開始進階冷卻
+			}
+			else if (BornTime >= 0)
+			{
+				BornTime += Time.deltaTime;
+			}
+		}
+
+
 		if (!StartBorn) return;
-		if (counter[0] < maxNumber[0])    // 若已達生怪上限，返回
+		if (counter[0] < EnemyNum[EnemyWave].EnemyNumA)    // 若已達生怪上限，返回
 		{
 			timer[0] += Time.deltaTime;
-
+			StartBool[0] = false;
 			if (timer[0] > nextBornTime[0])
 			{   // 若已達生怪時間間隔
 
@@ -98,11 +127,11 @@ public class SpawnRay : MonoBehaviour {
 				nextBornTime[0] = Random.Range(bornTimespanMin, bornTimespanMax);   // 亂數取得下次生怪時間
 
 			}
-		}
-		if (counter[1] < maxNumber[1])    // 若已達生怪上限，返回
+		}else StartBool[0] = true;
+		if (counter[1] < EnemyNum[EnemyWave].EnemyNumB)    // 若已達生怪上限，返回
 		{
 			timer[1] += Time.deltaTime;
-
+			StartBool[1] = false;
 			if (timer[1] > nextBornTime[1])
 			{   // 若已達生怪時間間隔
 
@@ -133,7 +162,7 @@ public class SpawnRay : MonoBehaviour {
 				nextBornTime[1] = Random.Range(bornTimespanMin, bornTimespanMax);   // 亂數取得下次生怪時間
 
 			}
-		}
+		}else StartBool[1] = true;
 
 	}
 
