@@ -101,7 +101,7 @@ public class MonsterLife : MonoBehaviour
     {
         RagdollActive(true);
     }
-    public void Unit(bool player)
+    public void Unit(bool player)  //攻擊者是否為玩家
     {
         Player = player;
     }
@@ -121,8 +121,11 @@ public class MonsterLife : MonoBehaviour
         {
             if (!Dead)
             {
-                HitUI.SetActive(true);
-                HitUI.GetComponent<Image>().color = Color.red;
+                if (Player)
+                {
+                    HitUI.SetActive(true);
+                    HitUI.GetComponent<Image>().color = Color.red;
+                }
                 Dead = true;
             }           
             hp = 0; // 不要扣到負值

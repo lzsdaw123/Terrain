@@ -63,13 +63,13 @@ public class SpawnRay : MonoBehaviour {
 		counter = new int[] { 0, 0 };
 		uid = 0;
 		StartBorn = true;
-		EnemyNum = new EnemyWaveNum[5];
+		EnemyNum = new EnemyWaveNum[3];
 		EnemyNum[0] = new EnemyWaveNum(4, 2);
 		EnemyNum[1] = new EnemyWaveNum(6, 4);
-		EnemyNum[2] = new EnemyWaveNum(8, 4);
-		EnemyNum[3] = new EnemyWaveNum(8, 6);
-		EnemyNum[4] = new EnemyWaveNum(10, 6);
-	}
+        EnemyNum[2] = new EnemyWaveNum(8, 4);
+        //EnemyNum[3] = new EnemyWaveNum(8, 6);
+        //EnemyNum[4] = new EnemyWaveNum(10, 6);
+    }
 	public void EnemyWaveNum(int enemyWave)
     {
 		EnemyWave = enemyWave;

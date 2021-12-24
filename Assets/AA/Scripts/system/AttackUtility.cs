@@ -32,7 +32,10 @@ public class AttackUtility
                 {
                     if (NoObstacle(Attacker, actors[i].transform, AttackLv.height, 0xFFFF - ActorLayer)) // 若中間沒有障礙物
                     {
-                        actors[i].transform.SendMessage("Damage", AttackLv.power); // 進行傷害
+                        if (actors[i].gameObject.layer == LayerMask.NameToLayer("Actor"))
+                        {
+                            actors[i].transform.SendMessage("Damage", AttackLv.power); // 進行傷害
+                        }
                     }
                 }
             }

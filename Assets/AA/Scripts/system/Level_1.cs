@@ -16,7 +16,7 @@ public class Level_1 : MonoBehaviour
     float time = 0;
     [SerializeField] bool Lv1;
     int stage;  //關卡階段
-    public int EnemyWave;  //敵人波數
+    public int EnemyWave=0;  //敵人波數
     public static float stageTime=-1;
     [SerializeField] float SF_stageTime;
     public LayerMask LayerMask;
@@ -190,7 +190,7 @@ public class Level_1 : MonoBehaviour
         }
         if (stage==1)
         {                
-            if(EnemyWave <5)
+            if(EnemyWave <2)  //進攻波數
             {
                 if (stageTime>= 20)  //進階時間
                 {
@@ -251,6 +251,7 @@ public class Level_1 : MonoBehaviour
     }
 }
 
+
 [Serializable]
 public class EnemyWaveNum  //敵人每波數量
 {
@@ -258,7 +259,12 @@ public class EnemyWaveNum  //敵人每波數量
     public int EnemyNumB;  //怪物2波數
     public int EnemyNumC;  //怪物3波數
 
-
+    /// <summary>
+    /// 怪物進攻波次
+    /// </summary>
+    /// <param name="enemyNumA">怪物1波數</param>
+    /// <param name="enemyNumB">怪物2波數</param>
+    /// <returns></returns>
     public EnemyWaveNum(int enemyNumA, int enemyNumB)
     {
         EnemyNumA = enemyNumA;

@@ -61,6 +61,7 @@ public class MonsterAI02 : MonoBehaviour
     public float targetHP;
 
     private AttackUtility attackUtility = new AttackUtility();
+    public float coolDown;
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -75,7 +76,7 @@ public class MonsterAI02 : MonoBehaviour
         Quaternion AttackRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -AttackAngle, 0));// 計算弧線的起始角度
         GizmosExtension.DrawSector(transform.position + eyeHi, attackDistance, AttackAngle * 2, AttackRotation);// 畫扇形 
 
-        Gizmos.color = Color.blue; // 設為紅色
+        Gizmos.color = Color.blue; // 設為藍色
         Quaternion ArangeRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -ArangeAngle, 0));// 計算弧線的起始角度
         GizmosExtension.DrawSector(transform.position + eyeHi, ArangeDistance, ArangeAngle * 2, ArangeRotation);// 畫扇形 
 
@@ -240,9 +241,8 @@ public class MonsterAI02 : MonoBehaviour
 
                         if (d < nd)  //比原本還近
                         {
-                            //print(d + "++" + actors[i]);
                             nd = d;
-                            player = actors[i].transform;                      
+                            player = actors[i].transform;
                         }
                         tagObject = player.gameObject;
                         //if (player.gameObject == tagObject)
@@ -258,24 +258,31 @@ public class MonsterAI02 : MonoBehaviour
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
-                            //判斷在攻擊角度內
-                            if (GetXZAngle(transform.forward, transform.position,
-                                tagObject.transform.position, false) < AttackAngle)
+                            if (coolDown >= 1)
                             {
-                                AttackAngleT = true;
-                                //print("攻擊角度內" + tagObject);
+                                //判斷在攻擊角度內
+                                if (GetXZAngle(transform.forward, transform.position,
+                                    tagObject.transform.position, false) < AttackAngle)
+                                {
+                                    agent.speed = 0;
+                                    AttackAngleT = true;
+                                    //print("攻擊角度內" + tagObject);
+                                }
+                                else
+                                {
+                                    //若不在攻擊角度內轉向目標
+                                    Vector3 targetDir = tagObject.transform.position - transform.position;
+                                    Quaternion rotate = Quaternion.LookRotation(targetDir);
+                                    transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
+                                    //print("轉向" + tagObject);
+                                }
+                                coolDown = 1f;
                             }
                             else
                             {
-                                //ani.SetBool("Move", true);
-                                //ani.SetBool("Attack", false);
-                                //AttackAngleT = false;
-                                ////若不在攻擊角度內轉向目標
-                                //Vector3 targetDir = tagObject.transform.position - transform.position;
-                                //Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
-                                ////print("轉向" + tagObject);
+                                coolDown += Time.deltaTime;
                             }
+                            
                         }
                         fined = true;                     
                     }
@@ -331,20 +338,15 @@ public class MonsterAI02 : MonoBehaviour
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
             float d = Vector3.Distance(transform.position, attackTarget.position);
-            if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+            float random = Random.Range(0, 5);
+            if (d < attackDistance - random) // 玩家距離小於攻擊距離,攻擊玩家
             {
-
-                //Vector3 targetDir = tagObject.transform.position - transform.position;
-                //Quaternion rotate = Quaternion.LookRotation(targetDir);
-                //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
                 if (AttackAngleT)
                 {
                     AttackPlay = true;
                     Fire = true;
+                    attacking = true;
                     Attack();
-                    Vector3 targetDir = attackTarget.position - transform.position;
-                    Quaternion rotate = Quaternion.LookRotation(targetDir);
-                    transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 1.2f * Time.smoothDeltaTime);
                     //print("小於攻擊距離 攻擊+"+ attackTarget);
                 }
                 else
@@ -370,7 +372,7 @@ public class MonsterAI02 : MonoBehaviour
             {
                 //取得角色與目標的距離
                 float dn = Vector3.Distance(transform.position, oriTarget.position);
-                //moving = true;
+                moving = true;
                 if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
                 {
                     AttackPlay = false;
@@ -401,10 +403,12 @@ public class MonsterAI02 : MonoBehaviour
         {
             attacking = false;
             bulletAttack = 0;
-            Vector3 targetDir = AAT - transform.position;  //子彈轉向目標
-            Quaternion rotate = Quaternion.LookRotation(targetDir);
+            //目前攻擊目標 = attackTarget.gameObject;
+            Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
+            Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             muzzlePOS = muzzle.transform.position;
             pool.ReUseM01Bullet(muzzlePOS, rotate);  //生成子彈
+            coolDown = 0;
         }
     }
     private void TrackingPlayer()
@@ -435,7 +439,6 @@ public class MonsterAI02 : MonoBehaviour
         }
         if (Fire)
         {
-            attacking = true;
             ani.SetBool("Move", false);
             AttackAngleT = false;
             agent.speed = 0;

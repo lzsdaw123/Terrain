@@ -19,6 +19,7 @@ public class NPC_AI : MonoBehaviour
     public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
+    public bool Move;  //是否移動
 
     // run 的%不用指定,因為除了 idle 和 walk,剩下就是 run
     public float idlePercent = 10;
@@ -46,15 +47,15 @@ public class NPC_AI : MonoBehaviour
     private float targetDistance = 2000; // 與最近攻擊目標的距離
     [SerializeField] private float attackDistance; // 攻擊角度距離
     [SerializeField] private float ArangeDistance; // 攻擊範圍距離
-    bool AttackAngleT=false;
-    private  bool attacking;
-    public bool isEnemy=false;
+    bool AttackAngleT = false;
+    private bool attacking;
+    public bool isEnemy = false;
     public static bool AttackPlay;
     bool TrPlayer;
-    public bool Fire=false;
+    public bool Fire = false;
     public static bool Reload;
-    public static int WeapAm =30;  //武器彈藥量
-    public int T_WeapAm = 300; //武器總彈藥量
+    public static int WeapAm = 30;  //武器彈藥量
+    [SerializeField] int SF_WeapAm; //武器總彈藥量
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
     static int FireButtle;  //開火動畫冷卻
@@ -76,6 +77,7 @@ public class NPC_AI : MonoBehaviour
     public GameObject bullet;
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
+    [SerializeField] GameObject 目前攻擊目標;
 
     private AttackUtility attackUtility = new AttackUtility();
 
@@ -104,7 +106,7 @@ public class NPC_AI : MonoBehaviour
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         agent = GetComponent<NavMeshAgent>();
-        coolDown = 0.8f;  //冷卻結束時間
+        coolDown = 1f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
         agent.enabled = true;
         LayDown = false;
@@ -280,8 +282,11 @@ public class NPC_AI : MonoBehaviour
                                 //若不在攻擊角度內轉向目標
                                 Vector3 targetDir = tagObject.transform.position - transform.position;
                                 Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                //Weap.transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
-                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);
+                                Quaternion Weaprotate = Quaternion.LookRotation(targetDir);
+                                rotate.x = rotate.z = 0;
+                                Weaprotate.y = Weaprotate.z = 0;
+                                Weap.transform.localRotation = Quaternion.Slerp(Weap.transform.localRotation, Weaprotate, 120f * Time.smoothDeltaTime);
+                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);  //轉向敵人
                             }
                         }
                         fined = true;                     
@@ -353,7 +358,7 @@ public class NPC_AI : MonoBehaviour
                 }
                 else
                 {
-                    Fire = false;
+                    //Fire = false;
                 }
             }
             else // 玩家距離大於攻擊距離,進行追踪
@@ -404,7 +409,7 @@ public class NPC_AI : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-
+        SF_WeapAm = WeapAm;
         if (coolDownTimer > coolDown) //若冷卻時間已到 可以發射子彈
         {
             Muzzle_vfx.SetActive(false); //關閉火光
@@ -433,7 +438,7 @@ public class NPC_AI : MonoBehaviour
                         ani.SetTrigger("Reload");
                     }
                 }
-                coolDownTimer = 0.66f;  //開火冷卻時間，與coolDown 0.8差越小越快
+                coolDownTimer = 0.87f;  //開火冷卻時間，與coolDown 1差越小越快
             }
             else
             {
@@ -455,12 +460,18 @@ public class NPC_AI : MonoBehaviour
             //pool.ReUse(muzzlePOS, transform.rotation);
             Vector3 targetPos = tagObject.transform.position;
             Vector3 direct = targetPos - muzzlePOS;
+            float RangeX = Random.Range(-0.5f, 0.5f);
+            float RangeY = Random.Range(-0.5f, 0.5f);
+            direct.x = direct.x + RangeX;
+            direct.y = direct.y + RangeY;
             Ray ray = new Ray(muzzlePOS, direct);
             RaycastHit hit = new RaycastHit(); //射線擊中資訊       
             float distance = Vector3.Distance(transform.position, tagObject.transform.position);
             //由槍口位置射到是敵物位置的射線
             if (Physics.Raycast(ray, out hit, distance, layerMask)) //擊中圖層
             {
+                Debug.DrawLine(ray.origin, hit.point, Color.white, 0.5f, false);
+
                 //if(hit.collider.name == "Scorpion")
                 //{
 
@@ -532,7 +543,14 @@ public class NPC_AI : MonoBehaviour
     {
         ani.SetBool("Move", true);
         ani.SetBool("Fire", false);
-        agent.speed = 9;  //移動速度
+        if (Move)
+        {
+            agent.speed = 9;  //移動速度
+        }
+        else
+        {
+            agent.speed = 0;  //移動速度
+        }
         if (TrPlayer)
         {
             agent.destination = attackTarget.position; // 設為尋徑目標
