@@ -23,6 +23,7 @@ public class Level_1 : MonoBehaviour
     public static bool start=false;
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
+    public GameObject[] tagetObject;
     static int missionLevel;  //任務階段
     bool Mission_L1;
     public GameObject DialogBox;

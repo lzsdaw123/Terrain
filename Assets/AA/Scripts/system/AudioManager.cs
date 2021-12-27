@@ -199,24 +199,28 @@ public class AudioManager : MonoBehaviour
             ElevatorSource.volume = 2f;         
         }
     }
-    public static void PlayFootstepAudio()  //走路
+    public static void PlayFootstepAudio(int Type)  //走路
     {
-        if (PlayerMove.Metal==0) //是否走在金屬上 0=否
+        if (Type == 0)
         {
-            int index = Random.Range(0, current.WalkClip.Length);
-            current.PlayerSource.clip = current.WalkClip[index];
-            current.PlayerSource.pitch = 1.5f;
-        }
-        else
-        {
-            current.PlayerSource.clip = current.JumpClip[1];
-            current.PlayerSource.pitch = 0.75f;
-            if (PlayerMove.Speed <= 4)
+            if (PlayerMove.Metal == 0) //是否走在金屬上 0=否
             {
-                current.PlayerSource.pitch = 0f;
+                int index = Random.Range(0, current.WalkClip.Length);
+                current.PlayerSource.clip = current.WalkClip[index];
+                current.PlayerSource.pitch = 1.5f;
             }
+            else
+            {
+                current.PlayerSource.clip = current.JumpClip[1];
+                current.PlayerSource.pitch = 0.75f;
+                if (PlayerMove.Speed <= 4)
+                {
+                    current.PlayerSource.pitch = 0f;
+                }
+            }
+            current.PlayerSource.Play();
         }
-        current.PlayerSource.Play();
+
     }
     public static void PlayJumpAudio(int Nub)  //跳躍落地
     {

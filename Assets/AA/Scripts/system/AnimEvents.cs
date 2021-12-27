@@ -30,9 +30,13 @@ public class AnimEvents : MonoBehaviour
     void Update()
     {
         //Move = animator.SetBool("Move", bool );
-        h = PlayerMove.Player_h;
-        v = PlayerMove.Player_v;
-        WeaponType = Shooting.WeaponType;
+        if (UnitType == 0)
+        {
+            h = PlayerMove.Player_h;
+            v = PlayerMove.Player_v;
+            WeaponType = Shooting.WeaponType;
+        }
+
     }
 
     //玩家&NPC用
@@ -107,12 +111,16 @@ public class AnimEvents : MonoBehaviour
     }
 
     //音效用
-    public void WalkAudio()
+    public void WalkAudio(int Type)
     {
-        if (h != 0 || v != 0 )
+        if (Type == 0)
         {
-            AudioManager.PlayFootstepAudio();
+            if (h != 0 || v != 0)
+            {
+                AudioManager.PlayFootstepAudio(0);
+            }
         }
+
     }
     public void JumpAudio()
     {

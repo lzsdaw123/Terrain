@@ -28,11 +28,35 @@ public class QH_interactive : MonoBehaviour
         ray = gameObject.GetComponent<Camera>().ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         ObjectText.GetComponent<Text>().text = "";
 
+        int maskActor = 1 << LayerMask.NameToLayer("Actor");
+        if(Physics.Raycast(ray, out hit, raylength, maskActor))  //NPC互動
+        {
+            if (hit.collider.tag == "NPC")
+            {
+                hit.transform.SendMessage("HitByRaycast", gameObject, SendMessageOptions.DontRequireReceiver);
+                if (hit.collider == null)
+                {
+                    return;
+                }
+                else if (hit.collider == oldhit.collider)
+                {
+                    return;
+                }
+                else if (hit.collider != oldhit.collider)
+                {
+                    Take.SetActive(false);
+                }
+                oldhit = hit;
+            }
+        }
+
         // (射線,out 被射線打到的物件,射線長度)，out hit 意思是：把"被射線打到的物件"帶給hit
         if (Physics.Raycast(ray, out hit, raylength, layerMask))
-        {
+        {           
             hit.transform.SendMessage("HitByRaycast", gameObject, SendMessageOptions.DontRequireReceiver);
             //向被射線打到的物件呼叫名為"HitByRaycast"的方法，不需要傳回覆
+  
+
             if (hit.collider == null)
             {
                 return;
@@ -46,6 +70,8 @@ public class QH_interactive : MonoBehaviour
                 Take.SetActive(false);
             }
             oldhit = hit;
+
+
 
             //Debug.DrawLine(ray.origin, hit.point, Color.yellow, 1f);
             //當射線打到物件時會在Scene視窗畫出黃線，方便查閱
