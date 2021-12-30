@@ -34,7 +34,10 @@ public class AttackUtility
                     {
                         if (actors[i].gameObject.layer == LayerMask.NameToLayer("Actor"))
                         {
-                            actors[i].transform.SendMessage("Damage", AttackLv.power); // 進行傷害
+                            if (actors[i].GetComponent<HeroLife>() || actors[i].GetComponent<NPC_Life>() || actors[i].GetComponent<building_Life>())
+                            {
+                                actors[i].transform.SendMessage("Damage", AttackLv.power); // 進行傷害
+                            }
                         }
                     }
                 }

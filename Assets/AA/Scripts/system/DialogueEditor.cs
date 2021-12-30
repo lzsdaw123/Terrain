@@ -151,8 +151,13 @@ public class DialogueEditor : MonoBehaviour
                 Dialogue[0] = "既然不需要就直接到你的工作崗位。";
                 break;
             case 6:
-                Dialogue = new string[1];
+                Dialogue = new string[2];
                 Dialogue[0] = "任務變更，現在開始阻擋怪物入侵。";
+                Dialogue[1] = "要防住大門防線。";
+                break;
+            case 7:
+                Dialogue = new string[1];
+                Dialogue[0] = "大門防線被突破了，快退到第二防線。";
                 break;
         }
     }

@@ -265,8 +265,11 @@ public class S_BulletLife : MonoBehaviour
             {
                 if (collision.gameObject.tag == damageTags[i])
                 {
-                    collision.gameObject.SendMessage("Damage", power); //傷害
-                    break; //結束迴圈
+                    if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>())
+                    {
+                        collision.gameObject.SendMessage("Damage", power); //傷害
+                        break; //結束迴圈
+                    }
                 }
             }
         } 

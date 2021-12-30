@@ -23,7 +23,6 @@ public class Level_1 : MonoBehaviour
     public static bool start=false;
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
-    public GameObject[] tagetObject;
     static int missionLevel;  //任務階段
     bool Mission_L1;
     public GameObject DialogBox;
@@ -49,7 +48,6 @@ public class Level_1 : MonoBehaviour
         MonsterLevel = 0;
         PlayAu = true;
         LevelA_ = 0;
-
     }
     void Start()
     {
@@ -64,7 +62,7 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線"};
+        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線", "第二防線"};
         MissonTxet.text = MissonString[0];
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
@@ -246,6 +244,7 @@ public class Level_1 : MonoBehaviour
             }
         }
     }
+
     public static void NextTask(int nextTask)
     {
         DialogueEditor.StartConversation(nextTask, 0);  //開始對話
