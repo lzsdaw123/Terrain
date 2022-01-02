@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3144357757865010118}
   - component: {fileID: 8023720822121262826}
   - component: {fileID: 6946407286499307060}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cube.132
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 4507831326346123309}
   - component: {fileID: 2940235570456066649}
   - component: {fileID: 91803197950899395}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 7112799266426849916}
   - component: {fileID: 7112799266426849906}
   - component: {fileID: 7112799266426849917}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: SearchLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,9 +376,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7828639233151854229}
-  m_Layer: 0
+  - component: {fileID: 4704266542988918404}
+  - component: {fileID: 5545282067066913641}
+  m_Layer: 13
   m_Name: SearchLight
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -399,3 +401,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4704266542988918404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980489682055358254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9fed261b79349d4d8835c5d24fbeb90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullHp: 1
+  hp: 0
+  hp_R: 0
+  Dead: 0
+  UItime: 0
+  NormalVer: {fileID: 1677602790799597534}
+  DamageVer: {fileID: 0}
+  BaseVer: {fileID: 0}
+  BoxCollider1: {fileID: 5545282067066913641}
+  Exp: {fileID: 0}
+  BigExp: {fileID: 0}
+--- !u!65 &5545282067066913641
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980489682055358254}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 6.16, z: 0}

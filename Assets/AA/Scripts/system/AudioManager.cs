@@ -27,7 +27,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip[] JumpClip;  //落地音效
     public AudioClip[] GunshotsClip;  //開槍音效
     public AudioClip[] HitClip;  //擊中音效
-    public AudioClip ElevatorCilp;  //電梯音效
+    public AudioClip[] MechanicalCilp;  //機械音效  (電梯&開門)
     public AudioClip ExplodeCilp;  //爆炸音效
     public AudioClip ButtonCilp;  //按鈕音效
     public AudioClip[] ActionCilp;  //動作音效
@@ -190,12 +190,12 @@ public class AudioManager : MonoBehaviour
         current.AmbientSource.loop = true;
         current.AmbientSource.Play();
     }
-    public static void ElevatorAudio(GameObject ElevatorA)  //電梯音效
+    public static void MechanicalAudio(GameObject gameObject)  //機械音效 (電梯&開門)
     {
         if (ElevatorSource == null)
         {
-            ElevatorSource = ElevatorA.AddComponent<AudioSource>();
-            ElevatorSource.clip = current.ElevatorCilp;
+            ElevatorSource = gameObject.AddComponent<AudioSource>();
+            ElevatorSource.clip = current.MechanicalCilp[0];
             ElevatorSource.volume = 2f;         
         }
     }
@@ -301,7 +301,12 @@ public class AudioManager : MonoBehaviour
     public static void Hit(int Nub)  //擊中
     {
         current.HitSource.clip = current.HitClip[Nub];
-        current.HitSource.pitch=0.8f;
+        switch (Nub)
+        {
+            case 0:
+                current.HitSource.pitch = 0.8f;
+                break;
+        }
         current.HitSource.Play();
     }
 }

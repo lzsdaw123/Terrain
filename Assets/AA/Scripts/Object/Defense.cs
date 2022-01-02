@@ -35,18 +35,18 @@ public class Defense : MonoBehaviour
                 case 0:
                     defenseOb[0].SetActive(false);
                     defenseOb[1].SetActive(true);
+                    PlayerView.TagetChange();
                     DialogueEditor.StartConversation(7, 0);
-                    print("0");
                     break;
                 case 1:
                     defenseOb[1].SetActive(false);
-                    defenseOb[2].SetActive(true);
-                    print("1");
+                    //defenseOb[2].SetActive(true);
+                    PlayerView.TagetChange();
+                    DialogueEditor.StartConversation(8, 0);
                     break;
                 case 2:
-                    defenseOb[2].SetActive(false);
+                    //defenseOb[2].SetActive(false);
                     //defenseOb[2].SetActive(true);
-                    print("2");
                     break;
             }
         }

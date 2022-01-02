@@ -10,7 +10,7 @@ public class Elevator : MonoBehaviour
     GameObject play;
     bool SourcePause;
     public AudioSource AudioS;
-    bool Play=false;
+    bool PlayAudio = false;
     bool Playing = false;
     bool start=true;
 
@@ -27,14 +27,14 @@ public class Elevator : MonoBehaviour
             if (SourcePause)  //暫停
             {
                 AudioS.Pause();
-                Play = true;
+                PlayAudio = true;
                 //("Play_暫停" + Play);
             }
             else
             {
-                if (Play)
+                if (PlayAudio)
                 {
-                    Play = false;
+                    PlayAudio = false;
                     AudioS.Play();
                     //print("暫停後Play_" + Play);
                 }
@@ -60,13 +60,13 @@ public class Elevator : MonoBehaviour
                 if (DownUp)
                 {
                     Animator.SetTrigger("Down");
-                    AudioManager.ElevatorAudio(gameObject);
+                    AudioManager.MechanicalAudio(gameObject);
                     AudioS = GetComponent<AudioSource>();
                 }
                 else
                 {
                     Animator.SetTrigger("Up");
-                    AudioManager.ElevatorAudio(gameObject);
+                    AudioManager.MechanicalAudio(gameObject);
                 }
                 EnterEV();
             }
@@ -84,7 +84,7 @@ public class Elevator : MonoBehaviour
     {
         if (!Playing)
         {
-            Play = Playing = true;
+            PlayAudio = Playing = true;
         }
         //XX物件變成子物件
         play.transform.parent = gameObject.transform;

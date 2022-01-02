@@ -159,6 +159,10 @@ public class DialogueEditor : MonoBehaviour
                 Dialogue = new string[1];
                 Dialogue[0] = "大門防線被突破了，快退到第二防線。";
                 break;
+            case 8:
+                Dialogue = new string[1];
+                Dialogue[0] = "第二防線失守，請保護好發電廠。";
+                break;
         }
     }
 }

@@ -13,6 +13,9 @@ public class ElectricDoor : MonoBehaviour
     bool OpenDoor;
     [SerializeField] private float time;
     float speed;
+    bool SourcePause;
+    bool PlayAudio;
+    public AudioSource AudioS;
 
     void Start()
     {
@@ -84,14 +87,29 @@ public class ElectricDoor : MonoBehaviour
                 }
                 break;
         }
-        if (OpenDoor && !Botton)
+        if (OpenDoor && !Botton)  //時間到自動關門
         {
             time += Time.deltaTime;
             if (time>=2.6)
             {
                 time = 0;
                 Botton = true;
+                PlayAudio = true;
                 OpenDoor = false;
+            }
+        }
+        SourcePause = AudioManager.SourcePause;
+        if (SourcePause)  //暫停
+        {
+            PlayAudio = true;
+            AudioS.Pause();
+        }
+        else
+        {
+            if (PlayAudio)
+            {
+                PlayAudio = false;
+                AudioS.Play();
             }
         }
     }
@@ -112,6 +130,7 @@ public class ElectricDoor : MonoBehaviour
             {
                 Botton = true;
                 time = 0;
+                PlayAudio = true;
                 if (OpenDoor) //門開的
                 {
                     OpenDoor =false;
@@ -119,7 +138,7 @@ public class ElectricDoor : MonoBehaviour
                 else
                 {
                     OpenDoor = true;
-                }              
+                }
             }
         }
     }

@@ -10,9 +10,9 @@ public class building_Life : MonoBehaviour
     [SerializeField] bool Dead;  //是否死亡
     float time;
     public float UItime;
-    public GameObject NormalVer;
-    public GameObject DamageVer;
-    public GameObject BaseVer;
+    public GameObject NormalVer;  //普通
+    public GameObject DamageVer;  //損毀
+    public GameObject BaseVer;  //位移
     public BoxCollider BoxCollider1;
     public GameObject Exp, BigExp;  //爆炸,大爆炸
     float DeadTime;
@@ -21,7 +21,7 @@ public class building_Life : MonoBehaviour
     {
         time = 0;
         DeadTime = 0;
-        BaseVer.transform.localRotation = Quaternion.Euler(0,0,0);
+        if (BaseVer != null) BaseVer.transform.localRotation = Quaternion.Euler(0,0,0);
     }
     void Start()
     {
@@ -73,7 +73,7 @@ public class building_Life : MonoBehaviour
 
         if (!Dead)
         {
-            BaseVer.transform.localRotation = Quaternion.Euler(-20, 0, 0);
+            if (BaseVer != null)  BaseVer.transform.localRotation = Quaternion.Euler(-20, 0, 0);
             Dead = true;
             //print("守衛已被摧毀");
             //Exp.SetActive(true);

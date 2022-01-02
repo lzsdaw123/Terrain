@@ -553,7 +553,7 @@ public class Shooting : MonoBehaviour
                     if (hit[n].collider.tag == "Metal")  //金屬
                     {
                         HitType = 3;
-                        AudioManager.Hit(0);
+                        AudioManager.Hit(0);  //擊中音效
                         //Debug.DrawLine(ray1[n].origin, hit1[n].point, Color.blue, 0.3f, false);
                     }
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
@@ -584,6 +584,7 @@ public class Shooting : MonoBehaviour
                         if (hit[n].collider.tag == "Carapace")  //甲殼
                         {
                             HitType = 4;
+                            AudioManager.Hit(1);  //擊中音效
                             if (WeaponType == 1)
                             {
                                 hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?

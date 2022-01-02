@@ -62,7 +62,7 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線", "第二防線"};
+        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線", "第二防線", "保護發電廠"};
         MissonTxet.text = MissonString[0];
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
@@ -74,7 +74,7 @@ public class Level_1 : MonoBehaviour
         SF_stageTime = stageTime;
         if (!MissionEnd)  //任務目標是否結束
         {
-            if (missionLevel != 2)  //靠近任務點
+            if (missionLevel != 2 && missionLevel != 6 && missionLevel != 7)  //靠近任務點
             {
                 if (MissionTime >= 3 && LevelA_!=2)  //任務UI浮現時間
                 {
@@ -83,6 +83,7 @@ public class Level_1 : MonoBehaviour
                     {
                         if (StartDialogue)
                         {
+                            print(missionLevel);
                             StartDialogue = false;
                             DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
                         }
