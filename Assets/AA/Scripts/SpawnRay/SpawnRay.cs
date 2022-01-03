@@ -81,7 +81,7 @@ public class SpawnRay : MonoBehaviour {
 	{
         if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
         {
-			if (BornTime >= 1)  //停止復活生成
+			if (BornTime >= 60)  //停止復活生成
 			{
 				BornTime = 0;
 				StartBorn = false;

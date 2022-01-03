@@ -24,8 +24,8 @@ public class NPC_Life : MonoBehaviour
         hp = fullHp= hp_R = 20; //遊戲一開始時先填滿血
         Dead = false;
         UItime = 0;
-        Exp.SetActive(false);
-        NPC_AI.enabled = true;
+        if (Exp != null) Exp.SetActive(false);
+        if(NPC_AI!=null) NPC_AI.enabled = true;
     }
 
     public void Damage(float Power) // 接受傷害
@@ -69,7 +69,7 @@ public class NPC_Life : MonoBehaviour
         //        }
         //    }
         //}
-        if (Exp.activeSelf)
+        if (Dead)
         {
             DeadTime += Time.deltaTime;
             //AudioManager.Warn(-1);
@@ -77,7 +77,7 @@ public class NPC_Life : MonoBehaviour
         if (DeadTime >= 1.6f)
         {
             //BigExp.SetActive(false);
-            Exp.SetActive(false);
+            if (Exp != null)  Exp.SetActive(false);
             gameObject.SetActive(false);
             DeadTime = 2;
         }
@@ -92,8 +92,8 @@ public class NPC_Life : MonoBehaviour
         {
             Dead = true;
             //print("守衛已被摧毀");
-            Exp.SetActive(true);
-            NPC_AI.enabled = false;  //關閉AI腳本
+            if (Exp != null) Exp.SetActive(true);
+            if (NPC_AI != null)  NPC_AI.enabled = false;  //關閉AI腳本
             //AudioManager.explode();   
         }
     }

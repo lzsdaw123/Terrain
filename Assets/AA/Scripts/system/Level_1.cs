@@ -192,7 +192,7 @@ public class Level_1 : MonoBehaviour
         {                
             if(EnemyWave <2)  //進攻波數
             {
-                if (stageTime>= 1)  //進階時間
+                if (stageTime>= 30)  //進階時間
                 {
                     _SpawnRay.StartBorn = true;
                     EnemyWave++;
