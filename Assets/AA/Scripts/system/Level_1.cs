@@ -169,6 +169,7 @@ public class Level_1 : MonoBehaviour
             {
                 var main = PSsmoke.main;
                 main.loop = false;
+                MissionTarget.SetActive(true);
             }
             if (time >= 25f)
             {
