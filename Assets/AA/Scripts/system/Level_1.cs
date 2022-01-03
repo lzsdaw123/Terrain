@@ -41,6 +41,7 @@ public class Level_1 : MonoBehaviour
     [SerializeField] float Taget_distance;
     public static bool StartDialogue;
     public static bool MissionEnd=false;
+    bool Lv1End;
 
     void Awake()
     {
@@ -62,7 +63,7 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線", "第二防線", "保護發電廠"};
+        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線", "第二防線", "保護發電廠", "任務完成"};
         MissonTxet.text = MissonString[0];
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
@@ -83,7 +84,6 @@ public class Level_1 : MonoBehaviour
                     {
                         if (StartDialogue)
                         {
-                            print(missionLevel);
                             StartDialogue = false;
                             DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
                         }
@@ -192,7 +192,7 @@ public class Level_1 : MonoBehaviour
         {                
             if(EnemyWave <2)  //進攻波數
             {
-                if (stageTime>= 20)  //進階時間
+                if (stageTime>= 1)  //進階時間
                 {
                     _SpawnRay.StartBorn = true;
                     EnemyWave++;
@@ -202,7 +202,16 @@ public class Level_1 : MonoBehaviour
                 else if(stageTime >=0)
                 {
                     stageTime += Time.deltaTime;
-                }           
+                }
+            }
+            else
+            {
+                if(!Lv1End && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)
+                {
+                    Lv1End = true;
+                    DialogueEditor.StartConversation(9, 0);
+                    PlayerView.missionLevel = 8;
+                }
             }
         }
         switch (Settings.Level)  //難度圖示

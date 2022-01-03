@@ -12,6 +12,7 @@ public class HeroLife : MonoBehaviour
     bool Invincible=false;
     GameObject DeBugT;
     public ParticleSystem S_HIT;
+    public float HP_R_speed =0.8f;
 
     void Start()
     {
@@ -51,7 +52,7 @@ public class HeroLife : MonoBehaviour
             if (time >= 2f)
             {
                 time = 2;
-                hp_R -= 0.8f * Time.deltaTime;
+                hp_R -= HP_R_speed * Time.deltaTime;
             }
         }
         if(hp_R <=hp)

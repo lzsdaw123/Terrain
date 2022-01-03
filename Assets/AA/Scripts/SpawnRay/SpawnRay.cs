@@ -64,11 +64,14 @@ public class SpawnRay : MonoBehaviour {
 		uid = 0;
 		StartBorn = true;
 		EnemyNum = new EnemyWaveNum[3];
-		EnemyNum[0] = new EnemyWaveNum(4, 2);
-		EnemyNum[1] = new EnemyWaveNum(6, 4);
+        EnemyNum[0] = new EnemyWaveNum(4, 2);
+        EnemyNum[1] = new EnemyWaveNum(6, 4);
         EnemyNum[2] = new EnemyWaveNum(8, 4);
         //EnemyNum[3] = new EnemyWaveNum(8, 6);
         //EnemyNum[4] = new EnemyWaveNum(10, 6);
+        //EnemyNum[0] = new EnemyWaveNum(0, 1);
+        //EnemyNum[1] = new EnemyWaveNum(0, 1);
+        //EnemyNum[2] = new EnemyWaveNum(0, 1);
     }
 	public void EnemyWaveNum(int enemyWave)
     {
@@ -78,7 +81,7 @@ public class SpawnRay : MonoBehaviour {
 	{
         if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
         {
-			if (BornTime >= 10)  //停止生成
+			if (BornTime >= 1)  //停止復活生成
 			{
 				BornTime = 0;
 				StartBorn = false;

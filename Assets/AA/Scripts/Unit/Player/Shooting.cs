@@ -201,6 +201,7 @@ public class Shooting : MonoBehaviour
                 }
                 AniTime = STtime - 1.6f;
                 WeapSwitch = true;
+                Ammunition.Switch(NextWeaponType);
             }
         }
         if (AniTime <= 0)
