@@ -15,7 +15,7 @@ public class ObjectPool : MonoBehaviour
     public int inttailSizeMS;  //預置物件數量
     Vector3 muzzlePOS;
 
-    private int uid = 0;								// 怪物編號
+    private int[] uid =new int[] { 0, 0};								// 怪物編號
 
 
     private Queue<GameObject> _pool = new Queue<GameObject>();
@@ -53,14 +53,15 @@ public class ObjectPool : MonoBehaviour
             //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
             GameObject Mo1 = Instantiate(Monster[0], MonsterPool_A.transform) as GameObject;   //生成怪物於怪物池
             GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;   //生成怪物於怪物池
-            uid++;                                      // 編號加1
+            uid[0]++;                                      // 編號加1
+            uid[1]++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo1.AddComponent<SpawnRayReg>();
-            Mo1.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 0));
+            Mo1.SendMessage("Init", new MonterInfo(uid[0], _SpawnRay, 0));
             if (!Mo2.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo2.AddComponent<SpawnRayReg>();
-            Mo2.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 1));
+            Mo2.SendMessage("Init", new MonterInfo(uid[1], _SpawnRay, 1));
 
             Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
             Monster_poolB.Enqueue(Mo2);  //Queue.Enqueue() 將怪物2放入結構中
@@ -141,11 +142,11 @@ public class ObjectPool : MonoBehaviour
         {
             //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
             GameObject Mo1 = Instantiate(Monster[0], MonsterPool_A.transform) as GameObject;  //生成怪物於怪物池
-            uid++;                                      // 編號加1
+            uid[0]++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo1.AddComponent<SpawnRayReg>();
-            Mo1.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 0));
+            Mo1.SendMessage("Init", new MonterInfo(uid[0], _SpawnRay, 0));
             Mo1.transform.position = positon;
             Mo1.transform.rotation = rotation;
             Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
@@ -170,11 +171,11 @@ public class ObjectPool : MonoBehaviour
         {
             //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
             GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;  //生成怪物於怪物池
-            uid++;                                      // 編號加1
+            uid[1]++;                                      // 編號加1
 
             if (!Mo2.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo2.AddComponent<SpawnRayReg>();
-            Mo2.SendMessage("Init", new MonterInfo(uid, _SpawnRay, 1));
+            Mo2.SendMessage("Init", new MonterInfo(uid[1], _SpawnRay, 1));
             Mo2.transform.position = positon;
             Mo2.transform.rotation = rotation;
             Monster_poolB.Enqueue(Mo2);  //Queue.Enqueue() 將怪物2放入結構中

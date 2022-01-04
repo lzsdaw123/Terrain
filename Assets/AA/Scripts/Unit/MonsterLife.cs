@@ -70,7 +70,16 @@ public class MonsterLife : MonoBehaviour
             DeadTime += 1.6f * Time.deltaTime;
             if (DeadTime >= 1)
             {
-                GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
+                switch (MonsterType)
+                {
+                    case 0:
+                        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
+                        break;
+                    case 1:
+                        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster02(gameObject);
+                        break;
+
+                }
             }
         }
     }
@@ -133,7 +142,7 @@ public class MonsterLife : MonoBehaviour
             switch (MonsterType)  //關閉怪物AI 腳本
             {
                 case 0:
-                    monster02.enabled = false; 
+                    monster02.enabled = false;
                     break;
                 case 1:
                     monster03.enabled = false;

@@ -10,11 +10,14 @@ public class Bloodpack : MonoBehaviour
     float time;
     [SerializeField] GameObject Take;
 
+    void Awake()
+    {
+        Take = GameObject.Find("Take");
+    }
     void Start()
     {
         T = GameObject.Find("ObjectText");
         StartB = false;
-        Take = GameObject.Find("Take");
     }
 
     // Update is called once per frame

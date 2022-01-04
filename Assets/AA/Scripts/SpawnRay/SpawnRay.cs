@@ -79,7 +79,10 @@ public class SpawnRay : MonoBehaviour {
 	}
 	void Update()
 	{
-        if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
+		maxNumber[0] = EnemyNum[EnemyWave].EnemyNumA;
+		maxNumber[1] = EnemyNum[EnemyWave].EnemyNumB;
+
+		if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
         {
 			if (BornTime >= 60)  //停止復活生成
 			{
@@ -207,7 +210,7 @@ public class SpawnRay : MonoBehaviour {
 	}
 
 
-	public void UnReg(int Type){
+	public void UnReg(int Type){	
 		if (counter[Type] >= maxNumber[Type]) { // 若怪物已滿，重新計時，以免立即生怪
 			timer[Type] = 0;
 		}

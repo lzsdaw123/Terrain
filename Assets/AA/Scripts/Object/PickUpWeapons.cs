@@ -16,10 +16,13 @@ public class PickUpWeapons : MonoBehaviour
     string WaveText;
     bool WT;
 
+    void Awake()
+    {
+        Take = GameObject.Find("Take");
+    }
     void Start()
     {
         TextG = GameObject.Find("ObjectText");
-        Take = GameObject.Find("Take");
         gameObject.SetActive(true);
         WaveText = null;
     }

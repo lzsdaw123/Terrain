@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 20848.867, g: 23635.398, b: 26499.635, a: 1}
+  m_IndirectSpecularColor: {r: 2669.0273, g: 3016.2793, b: 3435.2715, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3482,7 +3482,7 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 9600
+  m_Intensity: 2400
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 200
   m_InnerSpotPercent: 40
@@ -3585,7 +3585,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
-  m_Intensity: 384000000
+  m_Intensity: 96000000
   m_Range: 30
   m_SpotAngle: 80
   m_InnerSpotAngle: 1
@@ -5594,7 +5594,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: df61e98e0c6e2974e85caba07ff3fbe5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: df61e98e0c6e2974e85caba07ff3fbe5,
         type: 3}
@@ -7250,12 +7250,12 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 9600
+  m_Intensity: 2400
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 200
   m_InnerSpotPercent: 40
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 0.1
   m_LightUnit: 2
   m_FadeDistance: 10000
   m_AffectDiffuse: 1
@@ -7353,7 +7353,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
-  m_Intensity: 384000000
+  m_Intensity: 96000000
   m_Range: 30
   m_SpotAngle: 80
   m_InnerSpotAngle: 1
@@ -10296,7 +10296,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 11b9b1f29fb3120469dbc0a31c9f3b88,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11b9b1f29fb3120469dbc0a31c9f3b88,
         type: 3}
@@ -11338,7 +11338,7 @@ PrefabInstance:
     - target: {fileID: 1332258295179839952, guid: 32e64f2c46e35e24cb3a145b48e91828,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1332258295179839952, guid: 32e64f2c46e35e24cb3a145b48e91828,
         type: 3}
@@ -13665,7 +13665,7 @@ PrefabInstance:
     - target: {fileID: 622874816369969767, guid: d5e87e674587f7743b1e19bdedabbda3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 622874816369969767, guid: d5e87e674587f7743b1e19bdedabbda3,
         type: 3}
@@ -14680,7 +14680,7 @@ PrefabInstance:
     - target: {fileID: 5132430500810040574, guid: d5e87e674587f7743b1e19bdedabbda3,
         type: 3}
       propertyPath: m_Intensity
-      value: 172800000
+      value: 23520000
       objectReference: {fileID: 0}
     - target: {fileID: 5132430500810040574, guid: d5e87e674587f7743b1e19bdedabbda3,
         type: 3}
@@ -15428,6 +15428,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 8655236705850580865, guid: d5e87e674587f7743b1e19bdedabbda3,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 1200
+      objectReference: {fileID: 0}
     - target: {fileID: 8683649075982686931, guid: d5e87e674587f7743b1e19bdedabbda3,
         type: 3}
       propertyPath: m_Layer
@@ -16029,12 +16034,12 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 100000
+  m_Intensity: 4000
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 200
   m_InnerSpotPercent: 30
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 0.5
   m_LightUnit: 2
   m_FadeDistance: 10000
   m_AffectDiffuse: 1
@@ -16132,7 +16137,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.4745098, g: 0.5905011, b: 0.85882354, a: 1}
-  m_Intensity: 4e+9
+  m_Intensity: 160000000
   m_Range: 50
   m_SpotAngle: 100
   m_InnerSpotAngle: 1
@@ -32709,7 +32714,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879821799}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0, z: -0.0037}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7043881573243933594}
@@ -32735,7 +32740,7 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 38400
+  m_Intensity: 2400
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 200
   m_InnerSpotPercent: 40
@@ -32838,7 +32843,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
-  m_Intensity: 1.536e+9
+  m_Intensity: 96000000
   m_Range: 70
   m_SpotAngle: 80
   m_InnerSpotAngle: 1
@@ -33027,7 +33032,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 23cc8be8b9002cb4a8ec5934c10f76f0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 23cc8be8b9002cb4a8ec5934c10f76f0,
         type: 3}
@@ -33931,7 +33936,7 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 12000
+  m_Intensity: 1200
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 80
   m_InnerSpotPercent: 100
@@ -34034,7 +34039,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.4745098, g: 0.5905011, b: 0.85882354, a: 1}
-  m_Intensity: 76800000
+  m_Intensity: 7680000
   m_Range: 4.5
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -34393,7 +34398,7 @@ PrefabInstance:
     - target: {fileID: 2680009625425445268, guid: 7a4315f7663e9a7439d8341b5a8b770b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2680009625425445268, guid: 7a4315f7663e9a7439d8341b5a8b770b,
         type: 3}
@@ -36159,6 +36164,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1488280691}
     m_Modifications:
+    - target: {fileID: 1570741406599087448, guid: 6c5092a8bdf6bfd4fab264c8a4ce067b,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 7680000
+      objectReference: {fileID: 0}
     - target: {fileID: 3129603922953139606, guid: 6c5092a8bdf6bfd4fab264c8a4ce067b,
         type: 3}
       propertyPath: m_Name
@@ -36218,6 +36228,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4468320759671254782, guid: 6c5092a8bdf6bfd4fab264c8a4ce067b,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 1200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c5092a8bdf6bfd4fab264c8a4ce067b, type: 3}
@@ -42630,7 +42645,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: e629e94791a84d4478737b0d5f3f3a9a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e629e94791a84d4478737b0d5f3f3a9a,
         type: 3}
@@ -51025,7 +51040,7 @@ PrefabInstance:
     - target: {fileID: 1737251021833011361, guid: c0c7becdbeb36854fbfe093c5e054561,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1737251021833011361, guid: c0c7becdbeb36854fbfe093c5e054561,
         type: 3}
@@ -54297,7 +54312,7 @@ PrefabInstance:
     - target: {fileID: 7112799266426849906, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
       propertyPath: m_Intensity
-      value: 120000000
+      value: 12000000
       objectReference: {fileID: 0}
     - target: {fileID: 7828639233151854229, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
@@ -55505,7 +55520,7 @@ PrefabInstance:
     - target: {fileID: 7112799266426849906, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
       propertyPath: m_Intensity
-      value: 120000000
+      value: 12000000
       objectReference: {fileID: 0}
     - target: {fileID: 7828639233151854229, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
@@ -61592,9 +61607,9 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 4800
+  m_Intensity: 1200
   m_EnableSpotReflector: 0
-  m_LuxAtDistance: 45
+  m_LuxAtDistance: 40
   m_InnerSpotPercent: 40
   m_LightDimmer: 1
   m_VolumetricDimmer: 1
@@ -61695,7 +61710,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.63403344, g: 0.7777815, b: 0.9811321, a: 1}
-  m_Intensity: 9720000
+  m_Intensity: 1920000
   m_Range: 15
   m_SpotAngle: 80
   m_InnerSpotAngle: 1
@@ -63577,7 +63592,7 @@ Transform:
   - {fileID: 34919544}
   - {fileID: 2139983053}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1829509523
 GameObject:
@@ -64935,7 +64950,7 @@ PrefabInstance:
     - target: {fileID: 7112799266426849906, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
       propertyPath: m_Intensity
-      value: 120000000
+      value: 12000000
       objectReference: {fileID: 0}
     - target: {fileID: 7828639233151854229, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
@@ -77221,7 +77236,7 @@ MonoBehaviour:
   FailUI: {fileID: 1234858911}
   Black: {fileID: 515764213}
   time: 0
-  StartGame: 1
+  StartGame: 0
   SF_Mission_L1: 0
   Settings: {fileID: 0}
 --- !u!1 &2095709746
@@ -81733,12 +81748,12 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 4800
+  m_Intensity: 1200
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 200
   m_InnerSpotPercent: 40
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 0.1
   m_LightUnit: 2
   m_FadeDistance: 10000
   m_AffectDiffuse: 1
@@ -85949,7 +85964,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.63403344, g: 0.7777815, b: 0.9811321, a: 1}
-  m_Intensity: 192000000
+  m_Intensity: 48000000
   m_Range: 25
   m_SpotAngle: 80
   m_InnerSpotAngle: 1
@@ -87252,7 +87267,12 @@ PrefabInstance:
     - target: {fileID: 7112799266426849906, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}
       propertyPath: m_Intensity
-      value: 120000000
+      value: 12000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7112799266426849917, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 1200
       objectReference: {fileID: 0}
     - target: {fileID: 7112799266426849919, guid: 0f09e7649a1b44a4d8c0b526f5cb1bb0,
         type: 3}

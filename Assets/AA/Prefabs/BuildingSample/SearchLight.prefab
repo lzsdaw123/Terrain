@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3144357757865010118}
   - component: {fileID: 8023720822121262826}
   - component: {fileID: 6946407286499307060}
+  - component: {fileID: 6964108302416198746}
   m_Layer: 13
   m_Name: Cube.132
   m_TagString: Untagged
@@ -82,6 +83,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6964108302416198746
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677602790799597534}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.023023376, y: 0.014693236, z: 0.019080553}
+  m_Center: {x: -4.9951454e-10, y: -0.0036560716, z: 0.00000011927138}
 --- !u!1 &5768150863725005852
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,6 +107,7 @@ GameObject:
   - component: {fileID: 4507831326346123309}
   - component: {fileID: 2940235570456066649}
   - component: {fileID: 91803197950899395}
+  - component: {fileID: 5537740795341259686}
   m_Layer: 13
   m_Name: Cylinder
   m_TagString: Untagged
@@ -163,6 +178,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5537740795341259686
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5768150863725005852}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: 77037ff21b28bca49a753bbb8be352f0, type: 3}
 --- !u!1 &7112799266426849919
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,7 +236,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 76800000
+  m_Intensity: 12000000
   m_Range: 60
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
@@ -254,7 +283,7 @@ Light:
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 2.5
+  m_ShadowRadius: 0.75
   m_ShadowAngle: 0
 --- !u!114 &7112799266426849917
 MonoBehaviour:
@@ -276,7 +305,7 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 12000
+  m_Intensity: 1200
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 100
   m_InnerSpotPercent: 100
