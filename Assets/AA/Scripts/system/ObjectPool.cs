@@ -12,7 +12,7 @@ public class ObjectPool : MonoBehaviour
     public SpawnRay _SpawnRay;
 
     public int inttailSize;  //預置物件數量
-    public int inttailSizeMS;  //預置物件數量
+    public int[] inttailSizeMS;  //預置物件數量
     Vector3 muzzlePOS;
 
     private int[] uid =new int[] { 0, 0};								// 怪物編號
@@ -30,7 +30,8 @@ public class ObjectPool : MonoBehaviour
     {
         //DontDestroyOnLoad(gameObject);  //切換場景時保留
         inttailSize = 8;  //物件池大小
-        inttailSizeMS = 10;  //物件池大小
+        inttailSizeMS[0] = 16;  //物件池大小
+        inttailSizeMS[1] = 10;  //物件池大小
 
         for (int cut =0;cut< inttailSize; cut++)
         {
@@ -48,27 +49,35 @@ public class ObjectPool : MonoBehaviour
             go2.SetActive(false);
             Mo1B.SetActive(false);                       
         }
-        for (int cut = 0; cut < inttailSizeMS; cut++)
+        for (int cut = 0; cut < inttailSizeMS[0]; cut++)
         {
             //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
             GameObject Mo1 = Instantiate(Monster[0], MonsterPool_A.transform) as GameObject;   //生成怪物於怪物池
-            GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;   //生成怪物於怪物池
             uid[0]++;                                      // 編號加1
-            uid[1]++;                                      // 編號加1
 
             if (!Mo1.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo1.AddComponent<SpawnRayReg>();
             Mo1.SendMessage("Init", new MonterInfo(uid[0], _SpawnRay, 0));
+            
+
+            Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
+
+            Mo1.SetActive(false);
+        }
+        for (int cut = 0; cut < inttailSizeMS[1]; cut++)
+        {
+            GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;   //生成怪物於怪物池
+            uid[1]++;                                      // 編號加1
+
             if (!Mo2.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
                 Mo2.AddComponent<SpawnRayReg>();
             Mo2.SendMessage("Init", new MonterInfo(uid[1], _SpawnRay, 1));
 
-            Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
             Monster_poolB.Enqueue(Mo2);  //Queue.Enqueue() 將怪物2放入結構中
 
-            Mo1.SetActive(false);
             Mo2.SetActive(false);
         }
+
     }
     //子彈
     public void ReUse (Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
