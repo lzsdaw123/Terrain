@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 2671.712, g: 3019.1912, b: 3439.6008, a: 1}
+  m_IndirectSpecularColor: {r: 2667.2295, g: 3015.3242, b: 3434.0293, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4154,6 +4154,7 @@ GameObject:
   - component: {fileID: 149862345}
   - component: {fileID: 149862349}
   - component: {fileID: 149862350}
+  - component: {fileID: 149862351}
   m_Layer: 15
   m_Name: DoorButton
   m_TagString: Untagged
@@ -4354,6 +4355,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &149862351
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149862344}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.18, y: 1.0000006, z: 4.86}
+  m_Center: {x: -2.87, y: 0, z: -0.31}
 --- !u!1 &150794290 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4356877828898064976, guid: ef0814a78667dc44da13c40450135a67,
@@ -23410,6 +23424,7 @@ GameObject:
   - component: {fileID: 628302693}
   - component: {fileID: 628302697}
   - component: {fileID: 628302698}
+  - component: {fileID: 628302699}
   m_Layer: 15
   m_Name: DoorButton
   m_TagString: Untagged
@@ -23612,6 +23627,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &628302699
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628302692}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.33, y: 0.9, z: 9.31}
+  m_Center: {x: 5.43, y: -0.000015258789, z: 2}
 --- !u!1 &638004431
 GameObject:
   m_ObjectHideFlags: 0
@@ -77856,8 +77884,8 @@ MonoBehaviour:
   FailUI: {fileID: 1234858911}
   Black: {fileID: 515764213}
   time: 0
-  StartGame: 1
-  SF_Mission_L1: 0
+  StartGame: 0
+  SF_Mission_L1: 1
   Settings: {fileID: 0}
 --- !u!1 &2095709746
 GameObject:

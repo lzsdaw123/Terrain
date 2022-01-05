@@ -135,7 +135,7 @@ public class Shooting : MonoBehaviour
         Weapon.SetBool("LayDown", true);
         for (int i = 0; i < GunFlashlight.Length; i++)  //預設關手電筒
         {
-            GunFlashlight[i].SetActive(false);
+            GunFlashlight[i].SetActive(true);
         }
     }
     void Update()
