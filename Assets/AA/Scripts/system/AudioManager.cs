@@ -193,7 +193,7 @@ public class AudioManager : MonoBehaviour
     public static void MechanicalAudio(GameObject gameObject)  //機械音效 (電梯&開門)
     {
         if (ElevatorSource == null)
-        {
+        {       
             ElevatorSource = gameObject.AddComponent<AudioSource>();
             ElevatorSource.clip = current.MechanicalCilp[0];
             ElevatorSource.volume = 2f;         

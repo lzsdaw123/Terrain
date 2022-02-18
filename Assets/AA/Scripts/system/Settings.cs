@@ -93,7 +93,7 @@ public class Settings : MonoBehaviour
     {
         if (START_bool)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))  //按下Esc
             {
                 if (deSetUI.activeSelf)
                 {

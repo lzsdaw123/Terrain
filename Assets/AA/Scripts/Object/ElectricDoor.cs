@@ -10,11 +10,11 @@ public class ElectricDoor : MonoBehaviour
     public int Type;
     public Vector3[] pos;
     public GameObject[] Door;
-    bool OpenDoor;
+    [SerializeField] bool OpenDoor;
     [SerializeField] private float time;
     float speed;
     bool SourcePause;
-    bool PlayAudio;
+    [SerializeField] bool PlayAudio;
     public AudioSource AudioS;
 
     void Start()
@@ -39,7 +39,10 @@ public class ElectricDoor : MonoBehaviour
             case 0:
                 if (OpenDoor)
                 {
-                    pos[Type].y -= speed * Time.deltaTime;
+                    if (Botton)
+                    {
+                        pos[Type].y -= speed * Time.deltaTime;
+                    }
                     if (pos[Type].y <= -0.58)
                     {
                         pos[Type].y = -0.58f;
@@ -48,7 +51,10 @@ public class ElectricDoor : MonoBehaviour
                 }
                 else
                 {
-                    pos[Type].y += speed * Time.deltaTime;
+                    if (Botton)
+                    {
+                        pos[Type].y += speed * Time.deltaTime;
+                    }
                     if (pos[Type].y >= 1.29)
                     {
                         pos[Type].y = 1.29f;
@@ -58,26 +64,32 @@ public class ElectricDoor : MonoBehaviour
                 Door[Type].transform.localPosition = pos[Type];
                 break;
             case 1:
-                if (OpenDoor)
+                if (OpenDoor) //進行開門
                 {
-                    //97.51 / 80.9 -/- 110.7 /67.71  13.19
-                    pos[0].x += speed * Time.deltaTime;
-                    pos[1].x -= speed * Time.deltaTime;
-                    if (pos[0].x >= 110.7 && pos[1].x <= 67.71)
+                    //關門 115.71 /  97.8 -/- 開門 102.71 / 110.8  打開距離13
+                    if (Botton)
                     {
-                        pos[0].x = 110.7f;
-                        pos[1].x = 67.71f;
+                        pos[0].x -= speed * Time.deltaTime;
+                        pos[1].x += speed * Time.deltaTime;
+                    }
+                    if (pos[0].x <= 102.71 && pos[1].x >= 110.8)
+                    {
+                        pos[0].x = 102.71f;
+                        pos[1].x = 110.8f;
                         Botton = false;
                     }
                 }
-                else
+                else  //進行關門
                 {
-                    pos[0].x -= speed * Time.deltaTime;
-                    pos[1].x += speed * Time.deltaTime;
-                    if (pos[0].x <= 97.51 && pos[1].x >= 80.9)
+                    if (Botton)
                     {
-                        pos[0].x = 97.51f;
-                        pos[1].x = 80.9f;
+                        pos[0].x += speed * Time.deltaTime;
+                        pos[1].x -= speed * Time.deltaTime;
+                    }
+                    if(pos[0].x >= 115.71 && pos[1].x <= 97.8)
+                    {
+                        pos[0].x = 115.71f;
+                        pos[1].x = 97.8f;
                         Botton = false;
                     }
                 }
@@ -99,19 +111,23 @@ public class ElectricDoor : MonoBehaviour
             }
         }
         SourcePause = AudioManager.SourcePause;
-        if (SourcePause)  //暫停
+        if (Botton)
         {
-            PlayAudio = true;
-            AudioS.Pause();
-        }
-        else
-        {
-            if (PlayAudio)
+            if (SourcePause)  //暫停
             {
-                PlayAudio = false;
-                AudioS.Play();
+                PlayAudio = true;
+                AudioS.Pause();
+            }
+            else
+            {
+                if (PlayAudio)
+                {
+                    PlayAudio = false;
+                    AudioS.Play();
+                }
             }
         }
+
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
