@@ -109,8 +109,8 @@ public class MonsterAI02 : MonoBehaviour
         //{
         //    ani = GetComponent<Animator>(); //自動取得動畫控制器
         //}
-        Defense = GameObject.Find("defense").GetComponent<Defense>();
-        defense = Defense.A_defense;
+        Defense = GameObject.Find("defense_1").GetComponent<Defense>();
+        defense = Defense.defense;
         MissionTarget[0] = Defense.defenseOb[0];
         MissionTarget[1] = Defense.defenseOb[1];
         MissionTarget[2] = Defense.defenseOb[2];

@@ -22,6 +22,7 @@ public class Shooting : MonoBehaviour
     public float FireRotateX;  //腰射X軸晃動偏移量
     public float OriFireRotateY;  //Y軸原本位置
     public float OriFireRotateX;  //X軸原本位置
+    float FireRotateReTime;
 
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
@@ -401,11 +402,23 @@ public class Shooting : MonoBehaviour
                     {
                         if (NewFireRotateX < distance)
                         {
-                            GunAimR_x.GetComponent<MouseLook>().rotationX += speed * 4f * Time.deltaTime;  //垂直晃動
+                            FireRotateReTime+=Time.deltaTime;
+                            if (FireRotateReTime >= 0.3f)
+                            {
+                                FireRotateReTime = 0;
+                                shooting = false;
+                                return;
+                            }
+                            GunAimR_x.GetComponent<MouseLook>().rotationX += speed * 2f * Time.deltaTime;  //垂直晃動
                         }
                         else
                         {
                             GunAimR_x.GetComponent<MouseLook>().rotationX = distance;
+                            shooting = false;
+                        }
+                        if (NewFireRotateX > OriFireRotateX)
+                        {
+                            GunAimR_x.GetComponent<MouseLook>().rotationX = NewFireRotateX;
                             shooting = false;
                         }
                     }
