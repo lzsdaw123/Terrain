@@ -331,7 +331,7 @@ public class Shooting : MonoBehaviour
                     }
                     MuSmoke[WeaponType].Stop();  //關閉槍口煙霧
                     float[] FRxMin = new float[] { 6*2, 14*2, 16*2 };  //最小垂直晃動 x
-                    float[] FRxMax = new float[] {14*2, 26*2, 30*2 };  //最大垂直晃動 x
+                    float[] FRxMax = new float[] {12*2, 26*2, 30*2 };  //最大垂直晃動 x
                     float rangeY = Random.Range(-40+20f, 40+20f);  //射擊水平晃動範圍
                     float rangeX = Random.Range(FRxMin[WeaponType], FRxMax[WeaponType]);  //射擊垂直晃動範圍
                     FireRotateY = (noise * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100;
@@ -351,7 +351,12 @@ public class Shooting : MonoBehaviour
                     // Debug.Log("後" + " / " + FireRotateX);
                     //print(FireRotateX + "," + FireRotateY);
                     transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f) *Time.deltaTime;  //水平晃動
-                    GunAimR_x.GetComponent<MouseLook>().rotationX -= FireRotateX * Time.deltaTime;  //垂直晃動
+                    float oriX= GunAimR_x.GetComponent<MouseLook>().rotationX;
+                    float newX= GunAimR_x.GetComponent<MouseLook>().rotationX- FireRotateX;
+                    if(oriX > newX)
+                    {
+                        GunAimR_x.GetComponent<MouseLook>().rotationX -= 10f * Time.deltaTime;  //垂直晃動
+                    }
                     Weapons[WeaponType].WeapAm--;
                     if (FireButtle==1)
                     {
@@ -385,7 +390,7 @@ public class Shooting : MonoBehaviour
                     float NewFireRotateX = GunAimR_x.GetComponent<MouseLook>().rotationX;
                     //float ddd = (OriFireRotateX - NewFireRotateX) / 2;
                     //float distance = OriFireRotateX - ddd;
-                    float distance = OriFireRotateX - 3.5f;
+                    float distance = OriFireRotateX - 1f;
                     float speed = OriFireRotateX - NewFireRotateX;
                     if (speed < 2) speed = 2;
                     //print("一  "+ OriFireRotateX);

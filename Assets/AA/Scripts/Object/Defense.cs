@@ -6,6 +6,7 @@ public class Defense : MonoBehaviour
 {
     public Collider target;
     public int defense;
+    public int A_defense;
     public GameObject[] defenseOb;
 
     void Awake()
@@ -13,14 +14,15 @@ public class Defense : MonoBehaviour
         defenseOb = new GameObject[3];
         defenseOb[0] = GameObject.Find("defense_1").gameObject;
         defenseOb[1] = GameObject.Find("defense_2").gameObject;
-        defenseOb[2] = GameObject.Find("defense_3").gameObject;
+        //defenseOb[2] = GameObject.Find("defense_3").gameObject;
+        defenseOb[2] = GameObject.Find("defense_3 (1)").gameObject;
     }
     void Start()
     {
         defenseOb[0].SetActive(true);
         defenseOb[1].SetActive(false);
         defenseOb[2].SetActive(false);
-        
+        A_defense = 0;
     }
     void Update()
     {
@@ -33,14 +35,16 @@ public class Defense : MonoBehaviour
             switch (defense)
             {
                 case 0:
+                    A_defense = 1;
                     defenseOb[0].SetActive(false);
                     defenseOb[1].SetActive(true);
                     PlayerView.TagetChange();
                     DialogueEditor.StartConversation(7, 0);
                     break;
                 case 1:
+                    A_defense = 2;
                     defenseOb[1].SetActive(false);
-                    //defenseOb[2].SetActive(true);
+                    defenseOb[2].SetActive(true);
                     PlayerView.TagetChange();
                     DialogueEditor.StartConversation(8, 0);
                     break;
