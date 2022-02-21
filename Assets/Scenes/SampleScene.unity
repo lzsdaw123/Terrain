@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 2671.7285, g: 3020.579, b: 3439.913, a: 1}
+  m_IndirectSpecularColor: {r: 2669.2886, g: 3017.122, b: 3436.6704, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -616,7 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 1735382552}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Entries: []
 --- !u!4 &17565331
 Transform:
   m_ObjectHideFlags: 19
@@ -20956,7 +20955,7 @@ Transform:
   - {fileID: 928858985}
   - {fileID: 729334410}
   m_Father: {fileID: 1073036037}
-  m_RootOrder: 47
+  m_RootOrder: 50
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &545855755
 GameObject:
@@ -72894,6 +72893,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: door
       objectReference: {fileID: 0}
+    - target: {fileID: 281855664364225751, guid: 5517ceba3cc4fb645a97de6ff03d2134,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5517ceba3cc4fb645a97de6ff03d2134,
         type: 3}
       propertyPath: m_Name
@@ -73037,7 +73041,7 @@ MonoBehaviour:
   OpenDoor: 0
   time: 0
   PlayAudio: 0
-  AudioS: {fileID: 0}
+  AudioS: {fileID: 1978331289}
   AutoDoor: 0
 --- !u!65 &1978331291
 BoxCollider:
@@ -76637,7 +76641,7 @@ MonoBehaviour:
   Black: {fileID: 515764213}
   time: 0
   StartGame: 0
-  SF_Mission_L1: 0
+  SF_Mission_L1: 1
   Settings: {fileID: 0}
 --- !u!1 &2095775397
 GameObject:
