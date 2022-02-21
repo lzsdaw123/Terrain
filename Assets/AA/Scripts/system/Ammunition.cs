@@ -10,19 +10,19 @@ public class Ammunition : MonoBehaviour
     public Text text;
     static Color Color;
     public Animator animator;
-    public Image[] image;
-    public Texture2D[] Texture2D;
+    public RawImage[] RawImages;
+    public Texture2D[] Texture2D = new Texture2D[3];
     static bool Weapswitch;
     static int Type;
-    int[] weapon_of_Pos;
+    [SerializeField] int[] weapon_of_Pos;
     int[] Equipment;
 
     void Start()
     {
         Color = text.color;
         Color.a = 0;
-        image[0].gameObject.SetActive(false);
-        image[1].gameObject.SetActive(false);
+        RawImages[0].gameObject.SetActive(false);
+        RawImages[1].gameObject.SetActive(false);
         animator.SetFloat("WeapSW", -1);
 
     }
@@ -58,18 +58,20 @@ public class Ammunition : MonoBehaviour
 
         weapon_of_Pos = Shooting.Weapon_of_Pos;
         Equipment = Shooting.Equipment;
-
-        if (weapon_of_Pos[0] == 1)
+        if (weapon_of_Pos[0] == 0)
         {
-            image[0].gameObject.SetActive(true);
+            RawImages[0].gameObject.SetActive(true);
+            RawImages[0].GetComponent<RawImage>().texture = Texture2D[0];
         }
         if (weapon_of_Pos[1] == 1)
         {
-            image[1].gameObject.SetActive(true);
+            RawImages[1].gameObject.SetActive(true);
+            RawImages[1].GetComponent<RawImage>().texture = Texture2D[1];
         }
-        if (Equipment[0] == 1)
+        if (weapon_of_Pos[0] == 2)
         {
-            //image[0].GetComponent<RawImage>().texture = Texture2D[0];
+            RawImages[0].gameObject.SetActive(true);
+            RawImages[0].GetComponent<RawImage>().texture = Texture2D[2];
         }
     }
     public static void showUI()

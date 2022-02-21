@@ -7,12 +7,14 @@ public class PickUpWeapons : MonoBehaviour
 {
     public GameObject TextG;
     [SerializeField] GameObject Take;
+    GameObject play;
     public int WeaponsType;  // 0=步槍,1=電磁手槍, 2=霰彈槍
     string[] WeaponsText = new string[] { "自動步槍", "電磁手槍", "霰彈槍" };
+    public int[] Weapon_of_Pos = new int[2];  //武器放置位置 {主武器,副武器}
     public WeaponValue[] Weapons;
     int _WeaponType; //玩家身上武器類型
     int WeaponPos;  //同武器類型
-    int[] Equipment;
+    int[] Equipment;  //玩家身上擁有的武器
     string WaveText;
     bool WT;
 
@@ -55,11 +57,31 @@ public class PickUpWeapons : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
             {
+                Weapon_of_Pos = Shooting.Weapon_of_Pos;
+
+                if (Shooting.WeaponsPosOb[WeaponPos] != null)  //武器位置不為空
+                {
+                    if (Equipment[WeaponsType] == 1)
+                    {
+                        return;
+                    }
+                    //print(Shooting.WeaponsPosOb[WeaponPos]);
+                    GameObject OriGameObject = Shooting.WeaponsPosOb[WeaponPos];
+
+                    OriGameObject.SetActive(true);
+                    OriGameObject.transform.parent = gameObject.gameObject.transform;
+                    OriGameObject.transform.position = gameObject.transform.position;
+                    OriGameObject.transform.parent = null;
+
+                }
+
                 if (Equipment[WeaponsType] == 0)
                 {
-                    Shooting.PickUpWeapons(WeaponsType, WeaponPos);
+                    Shooting.PickUpWeapons(WeaponsType, WeaponPos, gameObject);
                     AudioManager.PickUp(0);
+                    play = GameObject.Find("POPP").gameObject;
                     gameObject.SetActive(false);
+                    gameObject.transform.parent = play.gameObject.transform;
                 }
             }
         }

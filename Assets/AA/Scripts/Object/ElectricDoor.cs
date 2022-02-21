@@ -7,15 +7,16 @@ public class ElectricDoor : MonoBehaviour
 {
     public GameObject TextG;
     public bool Botton;
-    public int Type;
+    public int Type;  //門類型
     public Vector3[] pos;
-    public GameObject[] Door;
+    public GameObject[] Door;  //哪扇門
     [SerializeField] bool OpenDoor;
     [SerializeField] private float time;
     float speed;
     bool SourcePause;
     [SerializeField] bool PlayAudio;
     public AudioSource AudioS;
+    public bool AutoDoor; 
 
     void Start()
     {
@@ -41,11 +42,11 @@ public class ElectricDoor : MonoBehaviour
                 {
                     if (Botton)
                     {
-                        pos[Type].y -= speed * Time.deltaTime;
+                        pos[0].y -= speed * Time.deltaTime;
                     }
-                    if (pos[Type].y <= -0.58)
+                    if (pos[0].y <= -0.58)
                     {
-                        pos[Type].y = -0.58f;
+                        pos[0].y = -0.58f;
                         Botton = false;
                     }
                 }
@@ -53,15 +54,15 @@ public class ElectricDoor : MonoBehaviour
                 {
                     if (Botton)
                     {
-                        pos[Type].y += speed * Time.deltaTime;
+                        pos[0].y += speed * Time.deltaTime;
                     }
-                    if (pos[Type].y >= 1.29)
+                    if (pos[0].y >= 1.29)
                     {
-                        pos[Type].y = 1.29f;
+                        pos[0].y = 1.29f;
                         Botton = false;
                     }
                 }
-                Door[Type].transform.localPosition = pos[Type];
+                Door[0].transform.localPosition = pos[0];
                 break;
             case 1:
                 if (OpenDoor) //進行開門
@@ -98,18 +99,49 @@ public class ElectricDoor : MonoBehaviour
                     Door[i].transform.localPosition = pos[i];
                 }
                 break;
+            case 2:
+                if (OpenDoor)
+                {
+                    if (Botton)
+                    {
+                        pos[0].y -= speed * Time.deltaTime;
+                    }
+                    if (pos[0].y <= -0.444f)
+                    {
+                        pos[0].y = -0.444f;
+                        Botton = false;
+                    }
+                }
+                else
+                {
+                    if (Botton)
+                    {
+                        pos[0].y += speed * Time.deltaTime;
+                    }
+                    if (pos[0].y >= 2.827f)
+                    {
+                        pos[0].y = 2.827f;
+                        Botton = false;
+                    }
+                }
+                Door[0].transform.localPosition = pos[0];
+                break;
         }
-        if (OpenDoor && !Botton)  //時間到自動關門
+        if (AutoDoor)
         {
-            time += Time.deltaTime;
-            if (time>=2.6)
+            if (OpenDoor && !Botton)  //時間到自動關門
             {
-                time = 0;
-                Botton = true;
-                PlayAudio = true;
-                OpenDoor = false;
+                time += Time.deltaTime;
+                if (time >= 2.6)
+                {
+                    time = 0;
+                    Botton = true;
+                    PlayAudio = true;
+                    OpenDoor = false;
+                }
             }
         }
+
         SourcePause = AudioManager.SourcePause;
         if (Botton)
         {

@@ -65,7 +65,7 @@ public class DialogueOptions : MonoBehaviour
         Settings.con();
         if (Task == 0)   //跳過教學
         {
-            Shooting.PickUpWeapons(0, 0);
+            Shooting.PickUpWeapons(0, 0, gameObject);
             Shooting.FirstAmm = true;
             Shooting.SkipTeach = true;
             PlayerView.missionLevel = 5;  //對話階段

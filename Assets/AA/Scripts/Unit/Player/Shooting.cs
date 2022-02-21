@@ -35,6 +35,7 @@ public class Shooting : MonoBehaviour
     public static int PickUpWeapon;  //取得的武器類型
     public static int[] Equipment = new int[3]; //身上持有的武器 {步槍,左輪, 霰彈槍}
     public static int[] Weapon_of_Pos = new int[2];  //武器放置位置 {主武器,副武器}
+    public static GameObject[] WeaponsPosOb = new GameObject[2];
     public static bool SwitchWeapon;  //取得武器後切換
     public Animator Weapon;   //動畫控制器
     public static Animator st_Weapon;   //static用動畫控制器
@@ -66,6 +67,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] private WeaponValue[] SF_Weapons;  //序列化用
     [SerializeField] private int[] SF_Equipment;
     [SerializeField] private int[] SF_Weapon_of_Pos;
+    [SerializeField] private GameObject[] SF_WeaponsPosOb;
     bool Fire1st = false;  
     public bool TargetWall;
     public GameObject[] GunFlashlight; //槍枝手電筒
@@ -88,7 +90,9 @@ public class Shooting : MonoBehaviour
     {
         SF_Weapons = Weapons;
         SF_Equipment = Equipment;
-        SF_Weapon_of_Pos = Weapon_of_Pos; 
+        SF_Weapon_of_Pos = Weapon_of_Pos;
+        SF_WeaponsPosOb = WeaponsPosOb; 
+
     }
     void Awake()
     {
@@ -104,7 +108,7 @@ public class Shooting : MonoBehaviour
         _Animator[1].SetActive(false);
 
         Equipment = new int[] { 0, 0, 0};  //身上持有的武器
-        Weapon_of_Pos = new int[] { 0, 0};  //武器放置位置
+        Weapon_of_Pos = new int[] { -1, -1};  //武器放置位置
         Reload = false;
         DontShooting = false;
         LayDown = true;
@@ -160,7 +164,6 @@ public class Shooting : MonoBehaviour
         {
             SwitchWeapon = false;
             NextWeaponType = PickUpWeapon;
-            
             WeapSwitching();  //開始換武器
         }
         if ( AniTime >=2)  //切換武器
@@ -729,23 +732,33 @@ public class Shooting : MonoBehaviour
     {
         FireButtle = 1;
     }
-    public static void PickUpWeapons(int _WeaponsType, int WeaponPos)  //拾取武器
+    public static void PickUpWeapons(int _WeaponsType, int WeaponPos, GameObject Object)  //拾取武器 (武器類型 ,武器位置)
     {
-        if (Equipment[_WeaponsType] != 1)  //身上武器是否已有同個武器
+        if (Weapon_of_Pos[WeaponPos] == -1)  //武器位置為空
         {
-            PickUpWeapon = _WeaponsType;
-            Equipment[_WeaponsType] = 1;
+            Weapon_of_Pos[WeaponPos] = _WeaponsType; //武器欄位變新武器
+            Equipment[_WeaponsType] = 1;  //取得該武器類型
+        }
+        else if (Weapon_of_Pos[WeaponPos] != -1) //武器位置已有武器
+        {
+            if(_WeaponsType == Weapon_of_Pos[WeaponPos])  //該武器是否已擁有
+            {
+                //print("同武器");
+                return;
+            }
+            else
+            {
+                //print("放下"+Weapon_of_Pos[WeaponPos]);
+                Equipment[Weapon_of_Pos[WeaponPos]] = 0; //放下該武器類型
+                Weapon_of_Pos[WeaponPos] = _WeaponsType;  //武器欄位變新武器
+                Equipment[_WeaponsType] = 1;
+                //print("拿取" + _WeaponsType);
+            }
+        }
+        WeaponsPosOb[WeaponPos] = Object;
 
-            if (Weapon_of_Pos[WeaponPos] == 0)  //武器位置是否為空
-            {
-                Weapon_of_Pos[WeaponPos] = 1;
-            }
-            else if (Weapon_of_Pos[WeaponPos] == 1)
-            {
-                Weapon_of_Pos[WeaponPos] = 1;
-            }
-            SwitchWeapon = true;
-        }   
+        PickUpWeapon = _WeaponsType;
+        SwitchWeapon = true;
     }
     public static void PickUpAmm()  //第一次拿彈藥
     {

@@ -379,7 +379,7 @@ public class MonsterAI02 : MonoBehaviour
 
 
             //取得角色與目標的距離
-            print(oriTarget[defense]);
+            //print(oriTarget[defense]);
             float dn = Vector3.Distance(transform.position, oriTarget[defense].position);
             moving = true;
             if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
