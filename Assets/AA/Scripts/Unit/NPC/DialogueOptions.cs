@@ -8,6 +8,7 @@ public class DialogueOptions : MonoBehaviour
     public DialogueEditor DialogueEditor;  //任務對話控制器
     public DailyDialogue DailyDialogue;  //NPC對話控制器
     public GameObject DialogueOptionsUI;  //對話選擇UI
+    public int missionLevel;  //任務關卡
     public Text[] OptionText;
     public string[] OptionA;
     public string[] OptionB;
@@ -39,6 +40,7 @@ public class DialogueOptions : MonoBehaviour
                 OptionText[1].text = OptionB[0];
                 break;
         }
+        //missionLevel = PlayerView.missionLevel;
     }
     public static void StartOption(int task, int Who)  //開始選項(0 任務 / 1 非任務, NPC)
     {
@@ -68,11 +70,12 @@ public class DialogueOptions : MonoBehaviour
             Shooting.PickUpWeapons(0, 0, gameObject);
             Shooting.FirstAmm = true;
             Shooting.SkipTeach = true;
-            PlayerView.missionLevel = 5;  //對話階段
+            PlayerView.missionLevel = 1;
+            PlayerView.missionStage = 0;  //對話階段
             DialogueEditor.TextLine = 0;  //對話句子數歸零
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
             Level_1.UiOpen = true;
-            DialogueEditor.StartConversation(PlayerView.missionLevel, 0);  //跳到對應的對話階段
+            DialogueEditor.StartConversation(PlayerView.missionLevel, PlayerView.missionStage, 0);  //跳到對應的對話階段
         }
         if (Task == 1) //No
         {

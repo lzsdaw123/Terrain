@@ -195,7 +195,7 @@ public class Shooting : MonoBehaviour
                 {
                     FirstWeapon = true;
                     Ammunition.showUI();
-                    if (FirstWeapon && FirstAmm && !SkipTeach)  //第一次取得武器和彈藥
+                    if (FirstWeapon && !SkipTeach)  //第一次取得武器和沒跳教學
                     {
                         Level_1.NextTask(2);
                     }
@@ -605,6 +605,10 @@ public class Shooting : MonoBehaviour
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
                     //Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
+                    if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Default"))  //彈孔噴黑煙
+                    {
+                        HitType = 0;
+                    }
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Ground"))  //彈孔噴黑煙
                     {
                         HitType = 0;
@@ -764,9 +768,9 @@ public class Shooting : MonoBehaviour
     {
         FirstAmm = true; 
         Ammunition.showUI();
-        if (FirstWeapon && FirstAmm && !SkipTeach)  //第一次取得武器和彈藥
+        if (FirstAmm && !SkipTeach)  //第一次取得彈藥並且沒跳教學
         {
-            Level_1.NextTask(2);
+            Level_1.NextTask(3);
         }
         st_Weapon.SetTrigger("Reload");
         Reload = true;

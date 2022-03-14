@@ -39,14 +39,14 @@ public class Defense : MonoBehaviour
                     defenseOb[0].SetActive(false);
                     defenseOb[1].SetActive(true);
                     PlayerView.TagetChange();
-                    DialogueEditor.StartConversation(7, 0);
+                    DialogueEditor.StartConversation(2, 1, 0);
                     break;
                 case 1:
                     A_defense = 2;
                     defenseOb[1].SetActive(false);
                     defenseOb[2].SetActive(true);
                     PlayerView.TagetChange();
-                    DialogueEditor.StartConversation(8, 0);
+                    DialogueEditor.StartConversation(2, 2, 0);
                     break;
                 case 2:
                     //defenseOb[2].SetActive(false);

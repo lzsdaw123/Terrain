@@ -10,7 +10,8 @@ public class ElectricDoor : MonoBehaviour
     public int Type;  //門類型
     public Vector3[] pos;
     public GameObject[] Door;  //哪扇門
-    [SerializeField] bool OpenDoor;
+    [SerializeField] bool OpenDoor = false;
+    public bool OriDoor;
     [SerializeField] private float time;
     float speed;
     bool SourcePause;
@@ -22,9 +23,9 @@ public class ElectricDoor : MonoBehaviour
     {
         TextG = GameObject.Find("ObjectText");
         Botton = false;
-        OpenDoor = false;
         time = 0;
         speed = 5;
+
     }
 
     void Update()
@@ -33,6 +34,11 @@ public class ElectricDoor : MonoBehaviour
         for(int i=0; i< pos.Length; i++)
         {
             pos[i] = Door[i].transform.localPosition;
+        }
+        if (Type == 2 && OriDoor == true)
+        {
+            OriDoor = false;
+            pos[0].y = -0.444f;
         }
 
         switch (Type)

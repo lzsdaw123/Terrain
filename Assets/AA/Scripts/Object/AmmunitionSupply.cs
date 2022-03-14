@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class AmmunitionSupply : MonoBehaviour
 {
     public GameObject TextG;
-    int[] T_WeapAmm = new int[] { 300, 30 }; //武器總彈藥量
-    public int AmmSupply;
-    public GameObject ASupply;  //彈藥
+    public int Type;
+    int[] T_WeapAmm = new int[2] ; //武器總彈藥量
+    public int[] AmmSupply =new int[2];
+    public GameObject[] ASupply;  //彈藥
     public GameObject Cover;  //蓋子
     public bool CoverOn;
     public bool Open;
@@ -26,44 +27,103 @@ public class AmmunitionSupply : MonoBehaviour
     void Start()
     {
         TextG = GameObject.Find("ObjectText");
-        AmmSupply = 480;
-        Rotation = Cover.transform.localRotation.x;
-        if (CoverOn)
+        AmmSupply = new int[] { 480, 6 };
+        T_WeapAmm = new int[] { 300, 30 };
+
+        switch (Type)
         {
-            Cover.transform.localRotation = Quaternion.Euler(94, 0, 0);
-        }
-        else
-        {
-            Cover.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        }
+            case 0:
+                Rotation = Cover.transform.localRotation.x;
+                if (CoverOn)
+                {
+                    Cover.transform.localRotation = Quaternion.Euler(94, 0, 0);
+                }
+                else
+                {
+                    Cover.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                }
+                break;
+            case 1:
+                Rotation = Cover.transform.localRotation.x;
+                if (CoverOn)
+                {
+                    Cover.transform.localRotation = Quaternion.Euler(-85f, 0, 0);
+                }
+                else
+                {
+                    Cover.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                }
+                break;
+        }       
     }
     void Update()
     {
         WeaponType = Shooting.WeaponType;
-
-        if (AmmSupply <= 0)
+        switch (Type)
         {
-            AmmSupply = 0;
-            ASupply.SetActive(false);
+            case 0:
+                if (AmmSupply[0] <= 0)
+                {
+                    AmmSupply[0] = 0;
+                    ASupply[0].SetActive(false);
+                }
+                break;
+            case 1:
+                if (AmmSupply[1] != 6)
+                {
+                    int D = 6 - AmmSupply[1];
+                    for(int i=0; i<D; i++)
+                    {
+                        ASupply[i].SetActive(false);
+                    }
+                }
+                break;
         }
+
         if (interactive)
         {
             if (Open)
             {
-                Rotation += 240 * Time.deltaTime;
-                if (Rotation >= 94)
+                switch (Type)
                 {
-                    CoverOn = true;
-                    Rotation = 94;
+                    case 0:
+                        Rotation += 240 * Time.deltaTime;
+                        if (Rotation >= 94)
+                        {
+                            CoverOn = true;
+                            Rotation = 94;
+                        }
+                        break;
+                    case 1:
+                        Rotation -= 240 * Time.deltaTime;
+                        if (Rotation <= -85)
+                        {
+                            CoverOn = true;
+                            Rotation = -85;
+                        }
+                        break;
                 }
             }
             else
             {
-                Rotation -= 240 * Time.deltaTime;
-                if (Rotation <= 0)
+                switch (Type)
                 {
-                    CoverOn = false;
-                    Rotation = 0;
+                    case 0:
+                        Rotation -= 240 * Time.deltaTime;
+                        if (Rotation <= 0)
+                        {
+                            CoverOn = false;
+                            Rotation = 0;
+                        }
+                        break;
+                    case 1:
+                        Rotation += 240 * Time.deltaTime;
+                        if (Rotation >= 0)
+                        {
+                            CoverOn = false;
+                            Rotation = 0;
+                        }
+                        break;
                 }
             }
             Cover.transform.localRotation = Quaternion.Euler(Rotation, 0, 0);
@@ -73,11 +133,19 @@ public class AmmunitionSupply : MonoBehaviour
     {
         if (interactive || CoverOn)
         {
-            TextG.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply;
+            TextG.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply[Type];
         }
         else
         {
-            TextG.GetComponent<Text>().text = "按「E」打開彈藥箱 ";
+            switch (Type)
+            {
+                case 0:
+                    TextG.GetComponent<Text>().text = "按「E」打開步槍彈藥盒 ";
+                    break;
+                case 1:
+                    TextG.GetComponent<Text>().text = "按「E」打開左輪彈藥盒 ";
+                    break;
+            }
         }
         QH_interactive.thing();  //呼叫QH_拾取圖案
 
@@ -93,19 +161,37 @@ public class AmmunitionSupply : MonoBehaviour
             {
                 //Open = false;
             }
-            if (Shooting.Weapons[WeaponType].T_WeapAm < T_WeapAmm[WeaponType] && CoverOn)  //玩家總彈藥量是否滿的
+            switch (Type)
             {
-                Am_zero_Warn.SetActive(false);
-                AudioManager.PickUp(0);
-                if (!FirstAmm)
-                {
-                    FirstAmm = true;
-                    Shooting.PickUpAmm();
-                }
-                //print("彈藥補給");
-                AmmSupply = AmmSupply - (T_WeapAmm[WeaponType] - Shooting.Weapons[WeaponType].T_WeapAm);
-                Shooting.Weapons[WeaponType].T_WeapAm = T_WeapAmm[WeaponType];
+                case 0:
+                    if (AmmSupply[0] <= 0) return;
+                    if (Shooting.Weapons[0].T_WeapAm < T_WeapAmm[0] && CoverOn)  //玩家總彈藥量是否滿的
+                    {
+                        Am_zero_Warn.SetActive(false);
+                        AudioManager.PickUp(0);
+                        if (!FirstAmm)
+                        {
+                            FirstAmm = true;
+                            Shooting.PickUpAmm();
+                        }
+                        //print("彈藥補給");
+                        AmmSupply[0] = AmmSupply[0] - (T_WeapAmm[0] - Shooting.Weapons[0].T_WeapAm);
+                        Shooting.Weapons[0].T_WeapAm = T_WeapAmm[0];
+                    }
+                    break;
+                case 1:
+                    if (AmmSupply[1] <= 0) return;
+                    if (Shooting.Weapons[1].T_WeapAm < T_WeapAmm[1] && CoverOn)  //玩家總彈藥量是否滿的
+                    {
+                        Am_zero_Warn.SetActive(false);
+                        AudioManager.PickUp(0);
+                        //print("彈藥補給");
+                        AmmSupply[1] = AmmSupply[1] - (T_WeapAmm[1] - Shooting.Weapons[1].T_WeapAm);
+                        Shooting.Weapons[1].T_WeapAm = T_WeapAmm[1];
+                    }
+                    break;
             }
+           
         }
     }
 }

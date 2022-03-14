@@ -10,6 +10,7 @@ public class Ammunition : MonoBehaviour
     public Text text;
     static Color Color;
     public Animator animator;
+    public Image[] Images;
     public RawImage[] RawImages;
     public Texture2D[] Texture2D = new Texture2D[3];
     static bool Weapswitch;

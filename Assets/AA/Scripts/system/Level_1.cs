@@ -23,12 +23,18 @@ public class Level_1 : MonoBehaviour
     public static bool start=false;
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
-    static int missionLevel;  //任務階段
+    public int missionLevel=0;  //任務關卡
+    public static int[] missionNumb= new int[] {7,5 };  //任務數量
+    static int missionStage;  //任務階段
+    [SerializeField] int SF_missionStage;  //任務階段
     bool Mission_L1;
     public GameObject DialogBox;
     public Text MissonTxet;
     bool MissT;
-    public string[] MissonString;
+    public string[] MissonStringL1; //L1任務標題
+    public string[] MissonStringL1_2; //L1任務標題
+    public string[] MissonStringL2; //L2任務標題
+    public string[] MissonString; //當前任務標題
     [SerializeField] float UiTime;
     public static float MissionTime;  //任務切換時間
    public static bool UiOpen;
@@ -42,6 +48,7 @@ public class Level_1 : MonoBehaviour
     public static bool StartDialogue;
     public static bool MissionEnd=false;
     bool Lv1End;
+    public GameObject[] Objects; 
 
     void Awake()
     {
@@ -63,44 +70,70 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonString = new string[] { "管理與監控", "物資儲存", "取得武器與彈藥", "修理與升級", "電力供應",  "到工作崗位", "大門防線", "第二防線", "保護發電廠", "任務完成"};
-        MissonTxet.text = MissonString[0];
+        MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "取得彈藥", "修理與升級", "電力供應",  "到工作崗位"};
+        MissonStringL1_2 = new string[] { "到工作崗位"};
+        MissonStringL2 = new string[] { "大門防線", "第二防線", "保護發電廠", "任務完成" };
+
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
     }
     void Update()
     {
-        missionLevel = PlayerView.missionLevel;  //跟換目標
+        missionLevel = PlayerView.missionLevel;
+        missionStage = PlayerView.missionStage;  //跟換目標
+        SF_missionStage = missionStage;
         Taget_distance = PlayerView.pu_distance;
         SF_stageTime = stageTime;
         if (!MissionEnd)  //任務目標是否結束
         {
-            if (missionLevel != 2 && missionLevel != 6 && missionLevel != 7)  //靠近任務點
+            switch (missionLevel)
             {
-                if (MissionTime >= 3 && LevelA_!=2)  //任務UI浮現時間
-                {
-                    MissionTime = 3;
-                    if (Taget_distance <= 0.9f)
+                case 0:
+                    MissonString = MissonStringL1;
+                    if (missionStage != 2 && missionStage != 3)  //靠近任務點
                     {
-                        if (StartDialogue)
+                        if (MissionTime >= 3 && LevelA_ != 2)  //任務UI浮現時間
                         {
-                            StartDialogue = false;
-                            DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
+                            MissionTime = 3;
+                            if (Taget_distance <= 1f)
+                            {
+                                if (StartDialogue)
+                                {
+                                    StartDialogue = false;
+                                    DialogueEditor.StartConversation(missionLevel, missionStage, 0);  //開始對話
+                                }
+                            }
                         }
+                        else MissionTime += Time.deltaTime;
                     }
-                }
-                else MissionTime += Time.deltaTime;
+                    if (missionStage==3)
+                    {
+                        Objects[0].GetComponent<BoxCollider>().enabled = true;
+                        Objects[1].GetComponent<BoxCollider>().enabled = true;
+                    }
+                    if (missionStage == 6 && LevelA_ == 0)
+                    {
+                        LevelA_ = 1;
+                        Level_A_Start = true;
+                    }
+                    break;
+                case 1:
+                    MissonString = MissonStringL1_2;
+                    if (missionStage == 0 && LevelA_ == 0)
+                    {
+                        LevelA_ = 1;
+                        Level_A_Start = true;
+                    }                   
+                    break;
+                case 2:
+                    MissonString = MissonStringL2;
+                    break;
             }
-            if(missionLevel == 5 && LevelA_==0)
-            {
-                LevelA_ = 1;
-                Level_A_Start = true;
-                DialogueEditor.StartConversation(missionLevel, 0);  //開始對話
-            }
+            
             if (UiOpen)
             {
                 UiOpen = false;
-                MissonTxet.text = MissonString[missionLevel];
+                MissonTxet.text = MissonString[missionStage];
                 MissionWarn.SetActive(true);  // 開啟任務UI
                 tagetUI.SetActive(true);
                 PlayAu = true;
@@ -108,7 +141,7 @@ public class Level_1 : MonoBehaviour
             }
             if (MissionWarn.activeSelf)  //任務UI開啟
             {
-                if (UiTime >= 3.3)  //UI浮現時間
+                if (UiTime >= 3.6)  //UI浮現時間
                 {
                     MissionWarn.SetActive(false);
                     UiTime = 0;
@@ -123,8 +156,11 @@ public class Level_1 : MonoBehaviour
                 if (MissionTime >= 4)
                 {
                     LevelA_ = 3;
-                    PlayerView.TagetChange();  //任務目標切換
-                    DialogueEditor.StartConversation(6, 0);  //開始對話
+                    PlayerView.missionLevel = 2;
+                    PlayerView.missionStage = 0;
+                    DialogueEditor.StartConversation(2, 0, 0);  //開始對話
+                    MissionTime = 0;
+                    UiOpen = true;
                 }
                 else
                 {
@@ -210,8 +246,8 @@ public class Level_1 : MonoBehaviour
                 if(!Lv1End && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)
                 {
                     Lv1End = true;
-                    DialogueEditor.StartConversation(9, 0);
-                    PlayerView.missionLevel = 8;
+                    //DialogueEditor.StartConversation(missionLevel, 9, 0);
+                    PlayerView.missionStage = 8;
                 }
             }
         }
@@ -258,7 +294,7 @@ public class Level_1 : MonoBehaviour
 
     public static void NextTask(int nextTask)
     {
-        DialogueEditor.StartConversation(nextTask, 0);  //開始對話
+        DialogueEditor.StartConversation(0, nextTask, 0);  //開始對話
     }
 }
 

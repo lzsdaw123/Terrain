@@ -7,15 +7,21 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerView : MonoBehaviour
 {
+    public Level_1 Level_1;
     public DialogueEditor DialogueEditor;
     bool isRendering;
     float curtTime = 0f;
     float lastTime = 0f;
     public Camera Camera;
     public Transform camTransform;
+    public  GameObject[] MissionTaget_L1;  //L1任務目標物件
+    public  GameObject[] MissionTaget_L1_2;  //L1任務目標物件
+    public  GameObject[] MissionTaget_L2;  //L2任務目標物件
     public  GameObject[] MissionTaget;  //任務目標物件
-    public static int missionLevel;  //任務階段
-    [SerializeField] private int st_missionLevel;  //任務階段
+    public static int missionLevel;  //任務關卡
+    public int missionNumb;  //任務數量
+    public static int missionStage;  //任務階段
+    [SerializeField] private int st_missionStage;  //任務階段
     public float Rdot;
     public float Fdot;
     public Image targetUI;  //任務目標UI
@@ -53,14 +59,16 @@ public class PlayerView : MonoBehaviour
     }
     public static void TagetChange()  //改變目標
     {
-        if (missionLevel == 10)
+        if (missionStage > Level_1.missionNumb[missionLevel])
         {
-            Level_1.MissionEnd = true;
-            MissionEnd = true;
+            missionLevel++;
+            missionStage = 0;
+            //Level_1.MissionEnd = true;
+            //MissionEnd = true;
         }
         else
         {
-            missionLevel++;
+            missionStage++;
         }
         Level_1.MissionTime = 0;
         Level_1.UiOpen = true;
@@ -68,11 +76,23 @@ public class PlayerView : MonoBehaviour
     }
     void Start()
     {
-        missionLevel = 0;
+        missionStage = 0;
     }
     void Update()
     {
-        st_missionLevel = missionLevel;
+        switch (missionLevel)
+        {
+            case 0:
+                MissionTaget = MissionTaget_L1;
+                break;
+            case 1:
+                MissionTaget = MissionTaget_L1_2;
+                break;
+            case 2:
+                MissionTaget = MissionTaget_L2;
+                break;
+        }
+        st_missionStage = missionStage;
         if (MissionEnd)  //任務目標結束
         {
             targetUI.color = new Color(1, 1, 1, 0);
@@ -81,7 +101,7 @@ public class PlayerView : MonoBehaviour
         }
         //Vector2 vec2 = Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
         camTransform = Camera.transform;  //相機座標
-        distance = (camTransform.position - MissionTaget[missionLevel].transform.position).magnitude / 3.5f;
+        distance = (camTransform.position - MissionTaget[missionStage].transform.position).magnitude / 3.5f;
 
         pu_distance = distance;
         d = (int)distance;
@@ -98,10 +118,10 @@ public class PlayerView : MonoBehaviour
         targetUI.color = UIcolor;
         text.color = new Color(1, 1, 1, UIcolor.a);
 
-        if (IsInView(MissionTaget[missionLevel].transform.position))
+        if (IsInView(MissionTaget[missionStage].transform.position))
         {
             //Debug.Log("目前本物體在攝像機範圍內");
-            Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionLevel].transform.position);  //世界座標到視口座標
+            Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionStage].transform.position);  //世界座標到視口座標
             Vector2 ScreenPos = Camera.ViewportToScreenPoint(viewPos);  //視口座標→螢幕座標
             Vector2 SP = new Vector2(ScreenPos.x - 960, ScreenPos.y - 540);
             //畫面左右邊界
@@ -114,7 +134,7 @@ public class PlayerView : MonoBehaviour
         }
         else
         {
-            Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionLevel].transform.position);  //世界座標到視口座標
+            Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionStage].transform.position);  //世界座標到視口座標
             Vector2 ScreenPos = Camera.ViewportToScreenPoint(viewPos);  //視口座標→螢幕座標
             Vector2 SP = new Vector2(ScreenPos.x - 960, ScreenPos.y - 540);
 
@@ -179,7 +199,7 @@ public class PlayerView : MonoBehaviour
             else if (SP.y >= 350) SP.y = 350;
 
             camTransform = Camera.transform; //相機座標
-            Vector3 dirForward = (MissionTaget[missionLevel].transform.position - camTransform.position).normalized;
+            Vector3 dirForward = (MissionTaget[missionStage].transform.position - camTransform.position).normalized;
             dot = Vector3.Dot(camTransform.forward, dirForward);     //判斷物體是否在相機前面
             if (dot >= 0f)
             {
@@ -189,7 +209,7 @@ public class PlayerView : MonoBehaviour
             }
             else if(dot < 0f)
             {
-                Vector3 Bdir = MissionTaget[missionLevel].transform.position - camTransform.position; //位置差，方向  
+                Vector3 Bdir = MissionTaget[missionStage].transform.position - camTransform.position; //位置差，方向  
                 Rdot = Vector3.Dot(camTransform.right, Bdir.normalized);//點乘判斷左右： Rdot >0在右，<0在左
                 Fdot = Vector3.Dot(camTransform.forward, Bdir.normalized);//點乘判斷前後：Fdot >0在前，<0在後
                 //UI_y = 700 * Fdot;
