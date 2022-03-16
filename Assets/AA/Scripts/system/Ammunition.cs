@@ -24,7 +24,7 @@ public class Ammunition : MonoBehaviour
         Color.a = 0;
         RawImages[0].gameObject.SetActive(false);
         RawImages[1].gameObject.SetActive(false);
-        animator.SetFloat("WeapSW", -1);
+        animator.SetInteger("WeapSW", -1);
 
     }
 

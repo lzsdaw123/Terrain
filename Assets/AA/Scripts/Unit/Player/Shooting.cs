@@ -626,9 +626,10 @@ public class Shooting : MonoBehaviour
                         AudioManager.Hit(0);  //擊中音效
                         //Debug.DrawLine(ray1[n].origin, hit1[n].point, Color.blue, 0.3f, false);
                     }
-                    if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
+                    if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴血
                     {
                         HitType = 1;
+                        AudioManager.Hit(2);  //擊中音效
                         //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
                         if (hit[n].collider.tag == "Enemy")  //綠血
                         {
@@ -694,7 +695,18 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx[WeaponType].SetActive(true);
             MuFire_Light.SetActive(true);
-            GunshotsAudio();
+            switch (WeaponType)
+            {
+                case 0:
+                    GunshotsAudio(1);
+                    break;
+                case 1:
+                    GunshotsAudio(4);
+                    break;
+                case 2:
+                    GunshotsAudio(1);
+                    break;
+            }
             MuSmoke[WeaponType].transform.position = muzzlePOS;
             MuSmoke[WeaponType].Play();
             BFire = false;
@@ -713,9 +725,9 @@ public class Shooting : MonoBehaviour
         Reload = false;
         FireButtle = 1;
     }
-    void GunshotsAudio()  //開槍音效
+    void GunshotsAudio(int Type)  //開槍音效
     {
-        AudioManager.PlayGunshotsAudio(1);
+        AudioManager.PlayGunshotsAudio(Type);
     }
     void GussetMachine()  //扣板機
     {

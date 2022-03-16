@@ -244,13 +244,17 @@ public class AudioManager : MonoBehaviour
     }
     public static void Reload(int Nub)  //換彈
     {
-        if (Nub == 0)
+        switch (Nub)
         {
-            current.GunSource.clip = current.GunshotsClip[2];
-        }
-        else
-        {
-            current.GunSource.clip = current.GunshotsClip[3];
+            case 0:
+                current.GunSource.clip = current.GunshotsClip[2];
+                break;
+            case 1:
+                current.GunSource.clip = current.GunshotsClip[3];
+                break;
+            case 2:
+                current.GunSource.clip = current.GunshotsClip[5];
+                break;
         }
         current.GunSource.Play();
     }
@@ -305,6 +309,12 @@ public class AudioManager : MonoBehaviour
         {
             case 0:
                 current.HitSource.pitch = 0.8f;
+                break;
+            case 1:
+                current.HitSource.pitch = 1f;
+                break;
+            case 2:
+                current.HitSource.pitch = 1f;
                 break;
         }
         current.HitSource.Play();

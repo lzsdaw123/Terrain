@@ -78,7 +78,7 @@ public class PickUpWeapons : MonoBehaviour
                 if (Equipment[WeaponsType] == 0)
                 {
                     Shooting.PickUpWeapons(WeaponsType, WeaponPos, gameObject);
-                    AudioManager.PickUp(0);
+                    AudioManager.PickUp(2);
                     play = GameObject.Find("POPP").gameObject;
                     gameObject.SetActive(false);
                     gameObject.transform.parent = play.gameObject.transform;
