@@ -15,6 +15,7 @@ public class DialogueOptions : MonoBehaviour
     public static int Task=0;
     public static int Name;
     public static bool StartOp;
+    public GameObject Weap;
 
     void Start()
     {
@@ -67,15 +68,18 @@ public class DialogueOptions : MonoBehaviour
         Settings.con();
         if (Task == 0)   //跳過教學
         {
-            Shooting.PickUpWeapons(0, 0, gameObject);
-            Shooting.FirstAmm = true;
+            Shooting.PickUpWeapons(0, 0, Weap);
+            Weap.SetActive(false);
+            GameObject play = GameObject.Find("POPP").gameObject;
+            Weap.transform.parent = play.gameObject.transform;  //變為子物件到玩家身上
+            Weap.transform.position = play.gameObject.transform.position;  //位置歸零
+            AudioManager.PickUp(2);
+            Shooting.PickUpAmm(1);
             Shooting.SkipTeach = true;
-            PlayerView.missionLevel = 1;
-            PlayerView.missionStage = 0;  //對話階段
             DialogueEditor.TextLine = 0;  //對話句子數歸零
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
-            Level_1.UiOpen = true;
-            DialogueEditor.StartConversation(PlayerView.missionLevel, PlayerView.missionStage, 0);  //跳到對應的對話階段
+            PlayerView.missionChange(1, 0);  //改變關卡
+            DialogueEditor.StartConversation(1, 0, 0);  //跳到對應的對話階段
         }
         if (Task == 1) //No
         {

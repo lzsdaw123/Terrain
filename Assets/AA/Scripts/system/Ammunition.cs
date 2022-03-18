@@ -36,7 +36,7 @@ public class Ammunition : MonoBehaviour
         text.color = Color;
         text.text = ammunition+"/"+ Total_ammunition;
 
-        if (Shooting.FirstWeapon)
+        if (Shooting.FirstWeapon[0])
         {
             if (Weapswitch)
             {

@@ -277,11 +277,19 @@ public class AudioManager : MonoBehaviour
             return;
         }
         current.ActionSource.clip = current.ActionCilp[Nub];
-        if (Nub == 0)
+        switch (Nub)
         {
-            current.ActionSource.pitch = 2;
+            case 0:  //拾取道具
+                current.ActionSource.pitch = 2;
+                break;
+            case 1:  //修理
+                current.ActionSource.pitch = 1;
+                break;
+            case 2:  //拾取武器
+                current.ActionSource.pitch = 1;
+                break;
         }
-        current.ActionSource.Play();     
+        current.ActionSource.Play();
     }
     public static void Warn(int Nub)  //警告 提示
     {

@@ -7,12 +7,13 @@ public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
     public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B;  //物件池集中位置
-    public GameObject[] Monster;	// 可生的怪種類
+    public GameObject[] Monster;    // 可生的怪種類
+    public MonsterAttributes[] MonsterAttributes = new MonsterAttributes[3];
     public GameObject MBullet ;	// 怪物子彈
     public SpawnRay _SpawnRay;
 
     public int inttailSize;  //預置物件數量
-    public int[] inttailSizeMS;  //預置物件數量
+    public int[] inttailSizeMS;  //怪物預置物件數量
     Vector3 muzzlePOS;
 
     private int[] uid =new int[] { 0, 0};								// 怪物編號
@@ -32,6 +33,8 @@ public class ObjectPool : MonoBehaviour
         inttailSize = 8;  //物件池大小
         inttailSizeMS[0] = 16;  //物件池大小
         inttailSizeMS[1] = 10;  //物件池大小
+        MonsterAttributes[0] = new MonsterAttributes(0.6f, 1.1f);
+        MonsterAttributes[1] = new MonsterAttributes(1, 1.5f);
 
         for (int cut =0;cut< inttailSize; cut++)
         {
@@ -138,13 +141,16 @@ public class ObjectPool : MonoBehaviour
     }
 
     //怪物1
-    public void ReUseMonster01(Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
+    public void ReUseMonster01(Vector3 positon, Quaternion rotation)  //取出存放在怪物池01中的怪物01
     {
+        float Size = Random.Range(MonsterAttributes[0].MinSize, MonsterAttributes[0].MaxSize);  //怪物01大小0.6~ 1.1
+
         if (Monster_poolA.Count > 0)
         {
             GameObject reuse = Monster_poolA.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
+            reuse.transform.localScale = new Vector3(Size, Size, Size);  //怪物隨機大小
             reuse.SetActive(true);
         }
         else
@@ -158,6 +164,7 @@ public class ObjectPool : MonoBehaviour
             Mo1.SendMessage("Init", new MonterInfo(uid[0], _SpawnRay, 0));
             Mo1.transform.position = positon;
             Mo1.transform.rotation = rotation;
+            Mo1.transform.localScale = new Vector3(Size, Size, Size);  //怪物隨機大小
             Monster_poolA.Enqueue(Mo1);  //Queue.Enqueue() 將怪物1放入結構中
         }
     }
@@ -167,13 +174,16 @@ public class ObjectPool : MonoBehaviour
         recovery.SetActive(false);
     }
     //怪物2
-    public void ReUseMonster02(Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
+    public void ReUseMonster02(Vector3 positon, Quaternion rotation)  //取出存放在怪物池02中的怪物02
     {
+        float Size = Random.Range(MonsterAttributes[1].MinSize, MonsterAttributes[1].MaxSize);  //怪物02大小1~ 1.5
+
         if (Monster_poolB.Count > 0)
         {
             GameObject reuse = Monster_poolB.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
+            reuse.transform.localScale = new Vector3(Size, Size, Size + 0.1f);  //怪物隨機大小
             reuse.SetActive(true);
         }
         else
@@ -187,6 +197,7 @@ public class ObjectPool : MonoBehaviour
             Mo2.SendMessage("Init", new MonterInfo(uid[1], _SpawnRay, 1));
             Mo2.transform.position = positon;
             Mo2.transform.rotation = rotation;
+            Mo2.transform.localScale = new Vector3(Size, Size, Size + 0.1f);  //怪物隨機大小
             Monster_poolB.Enqueue(Mo2);  //Queue.Enqueue() 將怪物2放入結構中
         }
     }
@@ -218,6 +229,4 @@ public class ObjectPool : MonoBehaviour
         M_Bullet_pool.Enqueue(recovery);
         recovery.SetActive(false);
     }
-
-
 }

@@ -172,7 +172,7 @@ public class AmmunitionSupply : MonoBehaviour
                         if (!FirstAmm)
                         {
                             FirstAmm = true;
-                            Shooting.PickUpAmm();
+                            Shooting.PickUpAmm(0);
                         }
                         //print("彈藥補給");
                         AmmSupply[0] = AmmSupply[0] - (T_WeapAmm[0] - Shooting.Weapons[0].T_WeapAm);

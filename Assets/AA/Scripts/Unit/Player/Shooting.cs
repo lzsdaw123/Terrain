@@ -39,7 +39,8 @@ public class Shooting : MonoBehaviour
     public static bool SwitchWeapon;  //取得武器後切換
     public Animator Weapon;   //動畫控制器
     public static Animator st_Weapon;   //static用動畫控制器
-    public static bool FirstWeapon;  //第一把武器
+    public static bool[] FirstWeapon= new bool[2];  //第一把武器
+    [SerializeField] bool[] SF_FirstWeapon;  //第一把武器
     public static bool FirstAmm;  //第一次拿彈藥
     public GameObject[] _Animator;  //槍枝物件
     public Vector3 muzzlePOS;  //槍口座標
@@ -76,9 +77,9 @@ public class Shooting : MonoBehaviour
 
     public static void StartAll()
     {
-        if(!FirstAmm && !FirstWeapon) Weapons[0] = new WeaponValue(0, 2, 400, 0, 0); //沒槍沒子彈
+        if(!FirstAmm && !FirstWeapon[0]) Weapons[0] = new WeaponValue(0, 2, 400, 0, 0); //沒槍沒子彈
         else if (!FirstAmm) Weapons[0] = new WeaponValue(0, 2, 400, 30, 0);  //只有槍
-        else if (!FirstWeapon) Weapons[0] = new WeaponValue(0, 2, 400, 0, 300);  //只有子彈
+        //else if (!FirstWeapon) Weapons[0] = new WeaponValue(0, 2, 400, 0, 300);  //只有子彈
         else
         {
             Weapons[0] = new WeaponValue(0, 2, 400, 30, 300);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量)           
@@ -116,7 +117,7 @@ public class Shooting : MonoBehaviour
         FireButtle = 1;
         PickUpWeapon = 0;
         SwitchWeapon = false;
-        FirstWeapon = false;
+        FirstWeapon = new bool[] { false, false };
     }
     void Start()
     {
@@ -163,7 +164,7 @@ public class Shooting : MonoBehaviour
         if (SwitchWeapon)  //拾取武器並切換
         {
             SwitchWeapon = false;
-            NextWeaponType = PickUpWeapon;
+            NextWeaponType = PickUpWeapon;  //下把武器
             WeapSwitching();  //開始換武器
         }
         if ( AniTime >=2)  //切換武器
@@ -187,26 +188,34 @@ public class Shooting : MonoBehaviour
                 WeapSwitching();
             }
         }
+        SF_FirstWeapon = FirstWeapon;
         void WeapSwitching()  //武器切換
         {
-            if (!WeapSwitch)
+            if (!WeapSwitch)  //是否切換武器
             {
-                if (!FirstWeapon )
+                if (!FirstWeapon[NextWeaponType] )
                 {
-                    FirstWeapon = true;
-                    Ammunition.showUI();
-                    if (FirstWeapon && !SkipTeach)  //第一次取得武器和沒跳教學
+                    FirstWeapon[NextWeaponType] = true;
+                    if (FirstWeapon[0] && !SkipTeach)  //第一次取得步槍和沒跳教學
                     {
-                        Level_1.NextTask(2);
+                        Ammunition.showUI();
+                        DialogueEditor.StartConversation(0, 2, 0);  //開始對話
+                        StartAll();
+                    }
+                    if (FirstWeapon[1])  //第一次取得左輪
+                    {
+                        Level_1.UiOpen = true;  //開啟任務UI與音效
+                        Level_1.StopAttack = false;  //怪物繼續進攻
+                        PlayerView.missionChange(2, 0);  //改變關卡
+                        DialogueEditor.StartConversation(2, 2, 0);  //開始對話
                     }
                     LayDown = false;
-                    StartAll();
                 }
                 else
                 {
                     Weapon.SetTrigger("LayDownT");
                 }
-                AniTime = STtime - 1.6f;
+                AniTime = STtime - 1.6f;  //換武器時間
                 WeapSwitch = true;
                 Ammunition.Switch(NextWeaponType);
             }
@@ -444,7 +453,7 @@ public class Shooting : MonoBehaviour
             coolDownTimer += Time.deltaTime;
             //Weapon.SetBool("Fire", false);
         }      
-        if (Input.GetKeyDown(KeyCode.T) && FirstWeapon)       //收槍
+        if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
         {
             Reload = false;
             if (LayDown == false)
@@ -484,10 +493,10 @@ public class Shooting : MonoBehaviour
         {
             Weapons[WeaponType].WeapAm = 0;
         }
-        if (Weapons[WeaponType].T_WeapAm <= 0 && FirstWeapon && FirstAmm)  //總彈藥最小為0
+        if (Weapons[WeaponType].T_WeapAm <= 0 && FirstWeapon[0] && FirstAmm)  //總彈藥最小為0
         {
             Weapons[WeaponType].T_WeapAm = 0;
-            Am_zero_Warn.SetActive(true);
+            //Am_zero_Warn.SetActive(true);  //總彈藥不足警告
         }
 
         void ZoomIn()  //鏡頭拉近
@@ -732,7 +741,7 @@ public class Shooting : MonoBehaviour
     void GussetMachine()  //扣板機
     {
         AudioManager.PlayGunshotsAudio(0);
-        ReloadWarn.SetActive(true);
+        ReloadWarn.SetActive(true);  //換彈警告
     }
     public static void PlayerRe()  //玩家重生
     {
@@ -748,7 +757,7 @@ public class Shooting : MonoBehaviour
     {
         FireButtle = 1;
     }
-    public static void PickUpWeapons(int _WeaponsType, int WeaponPos, GameObject Object)  //拾取武器 (武器類型 ,武器位置)
+    public static void PickUpWeapons(int _WeaponsType, int WeaponPos, GameObject Object)  //拾取武器 (武器類型 , 武器位置, 武器物件)
     {
         if (Weapon_of_Pos[WeaponPos] == -1)  //武器位置為空
         {
@@ -776,19 +785,30 @@ public class Shooting : MonoBehaviour
         PickUpWeapon = _WeaponsType;
         SwitchWeapon = true;
     }
-    public static void PickUpAmm()  //第一次拿彈藥
+    public static void PickUpAmm(int T)  //第一次拿彈藥
     {
-        FirstAmm = true; 
-        Ammunition.showUI();
-        if (FirstAmm && !SkipTeach)  //第一次取得彈藥並且沒跳教學
+        switch (T)
         {
-            Level_1.NextTask(3);
+            case 0:
+                FirstAmm = true;
+                Ammunition.showUI();
+                if (FirstAmm && !SkipTeach)  //第一次取得彈藥並且沒跳教學
+                {
+                    DialogueEditor.StartConversation(0, 3, 0);  //開始對話
+                }
+                st_Weapon.SetTrigger("Reload");
+                Reload = true;
+                FireButtle = 0;
+                ReloadWarn.SetActive(false);
+                StartAll();
+                break;
+            case 1:
+                FirstAmm = true;
+                Ammunition.showUI();
+                FireButtle = 0;
+                StartAll();
+                break;
         }
-        st_Weapon.SetTrigger("Reload");
-        Reload = true;
-        FireButtle = 0;
-        ReloadWarn.SetActive(false);
-        StartAll();
     }
     public void OnTriggerEnter(Collider other)
     {

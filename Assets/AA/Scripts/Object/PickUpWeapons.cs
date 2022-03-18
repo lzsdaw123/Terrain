@@ -66,12 +66,12 @@ public class PickUpWeapons : MonoBehaviour
                         return;
                     }
                     //print(Shooting.WeaponsPosOb[WeaponPos]);
-                    GameObject OriGameObject = Shooting.WeaponsPosOb[WeaponPos];
+                    GameObject OriGameObject = Shooting.WeaponsPosOb[WeaponPos];  //換下玩家身上的武器
 
                     OriGameObject.SetActive(true);
-                    OriGameObject.transform.parent = gameObject.gameObject.transform;
+                    OriGameObject.transform.parent = gameObject.gameObject.transform; 
                     OriGameObject.transform.position = gameObject.transform.position;
-                    OriGameObject.transform.parent = null;
+                    OriGameObject.transform.parent = null;  //從玩家身上離開
 
                 }
 
@@ -81,7 +81,7 @@ public class PickUpWeapons : MonoBehaviour
                     AudioManager.PickUp(2);
                     play = GameObject.Find("POPP").gameObject;
                     gameObject.SetActive(false);
-                    gameObject.transform.parent = play.gameObject.transform;
+                    gameObject.transform.parent = play.gameObject.transform;  //變為子物件到玩家身上
                 }
             }
         }

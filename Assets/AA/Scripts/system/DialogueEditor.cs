@@ -93,9 +93,9 @@ public class DialogueEditor : MonoBehaviour
         {
             TextLine = 0;
             EndDialogue = false;
-            if (Level_1.LevelA_ <=0)
+            if (Level_1.LevelA_ <=0)  //自動切換
             {
-                PlayerView.TagetChange();  //任務目標切換
+                PlayerView.TagetChange(0);  //切換任務目標
             }
         }
     }
@@ -176,15 +176,34 @@ public class DialogueEditor : MonoBehaviour
                         break;
                     case 1:
                         Dialogue = new string[1];
-                        Dialogue[0] = "大門防線被突破了，快退到第二防線。";
+                        Dialogue[0] = "開放新武器使用許可。";
                         break;
                     case 2:
-                        Dialogue = new string[1];
-                        Dialogue[0] = "第二防線失守，請保護好發電廠。";
+                        Dialogue = new string[2];
+                        Dialogue[0] = "每隔一段時間就會開放新武器許可。";
+                        Dialogue[1] = "之後都能過來取得。";
                         break;
                     case 3:
                         Dialogue = new string[1];
                         Dialogue[0] = "成功保衛發電廠了。";
+                        break;
+                }
+                break;
+            case 3:
+                switch (missionStage)
+                {
+                    case 0:
+                        Dialogue = new string[1];
+                        Dialogue[0] = "大門防線被突破了，快退到第二防線。";
+                        break;
+                    case 1:
+                        Dialogue = new string[1];
+                        Dialogue[0] = "第二防線失守，請保護好發電廠。";
+                        break;
+                    case 2:
+                        Dialogue = new string[2];
+                        Dialogue[0] = "發電廠被摧毀了。";
+                        Dialogue[1] = "撤退。";
                         break;
                 }
                 break;

@@ -17,6 +17,7 @@ public class PlayerView : MonoBehaviour
     public  GameObject[] MissionTaget_L1;  //L1任務目標物件
     public  GameObject[] MissionTaget_L1_2;  //L1任務目標物件
     public  GameObject[] MissionTaget_L2;  //L2任務目標物件
+    public  GameObject[] MissionTaget_L2_2;  //L2任務目標物件
     public  GameObject[] MissionTaget;  //任務目標物件
     public static int missionLevel;  //任務關卡
     public int missionNumb;  //任務數量
@@ -57,22 +58,37 @@ public class PlayerView : MonoBehaviour
         else
             return false;
     }
-    public static void TagetChange()  //改變目標
+    public static void missionChange(int _missionLevel, int _missionStage)  //改變關卡
     {
-        if (missionStage > Level_1.missionNumb[missionLevel])
+        missionLevel = _missionLevel;
+        missionStage = _missionStage;
+    }
+    public static void TagetChange(int Type)  //改變目標
+    {
+        switch (Type)
         {
-            missionLevel++;
-            missionStage = 0;
-            //Level_1.MissionEnd = true;
-            //MissionEnd = true;
+            case 0:
+                if (missionStage > Level_1.missionNumb[missionLevel])  //關卡切換
+                {
+                    missionLevel++;
+                    missionStage = 0;
+                    //Level_1.MissionEnd = true;
+                    //MissionEnd = true;
+                }
+                else  //階段切換
+                {
+                    missionStage++;
+                }
+                Level_1.MissionTime = 0;
+                Level_1.UiOpen = true;
+                Level_1.StartDialogue = true;
+                break;
+            case 1:
+                Level_1.MissionTime = 0;
+                Level_1.UiOpen = true;
+                break;
         }
-        else
-        {
-            missionStage++;
-        }
-        Level_1.MissionTime = 0;
-        Level_1.UiOpen = true;
-        Level_1.StartDialogue = true;
+
     }
     void Start()
     {
@@ -90,6 +106,9 @@ public class PlayerView : MonoBehaviour
                 break;
             case 2:
                 MissionTaget = MissionTaget_L2;
+                break;
+            case 3:
+                MissionTaget = MissionTaget_L2_2;
                 break;
         }
         st_missionStage = missionStage;

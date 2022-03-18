@@ -6,8 +6,9 @@ using System;
 
 public class Level_1 : MonoBehaviour
 {
-    public static bool Level_A_Start=false;
-    public static int LevelA_;
+    public static bool Level_A_Start = false;  //任務觸發碰撞
+    public static int LevelA_;  //關卡判定
+    [SerializeField] int SF_LevelA_;  //關卡判定
     GameObject SpawnRay;
     public SpawnRay _SpawnRay;
     [SerializeField] GameObject explode;
@@ -16,39 +17,39 @@ public class Level_1 : MonoBehaviour
     float time = 0;
     [SerializeField] bool Lv1;
     int stage;  //關卡階段
-    public int EnemyWave=0;  //敵人波數
-    public static float stageTime=-1;
+    public int EnemyWave = 0;  //敵人波數
+    public static float stageTime = -1;  //下次來襲時間
     [SerializeField] float SF_stageTime;
     public LayerMask LayerMask;
-    public static bool start=false;
+    public static bool start = false;  //進攻開始
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
-    public int missionLevel=0;  //任務關卡
-    public static int[] missionNumb= new int[] {7,5 };  //任務數量
+    public int missionLevel = 0;  //任務關卡
+    public static int[] missionNumb = new int[] { 7, 5 };  //任務數量
     static int missionStage;  //任務階段
-    [SerializeField] int SF_missionStage;  //任務階段
-    bool Mission_L1;
+    [SerializeField] int SF_missionStage;  //顯示任務階段
+    bool Mission_L1;  //關卡重生點
     public GameObject DialogBox;
     public Text MissonTxet;
-    bool MissT;
     public string[] MissonStringL1; //L1任務標題
     public string[] MissonStringL1_2; //L1任務標題
     public string[] MissonStringL2; //L2任務標題
+    public string[] MissonStringL2_2; //L2_2任務標題
     public string[] MissonString; //當前任務標題
     [SerializeField] float UiTime;
     public static float MissionTime;  //任務切換時間
    public static bool UiOpen;
     [SerializeField]public static int MonsterLevel;
     [SerializeField] float MLtime = 0;
-    int Level;
+    int DifficultyLevel;  //難度等級
     public RectTransform DiffUI, DiffUI_s;
     [SerializeField] float StartTime;
-    bool PlayAu;
-    [SerializeField] float Taget_distance;
-    public static bool StartDialogue;
+    bool PlayAu;  //音效
+    [SerializeField] float Taget_distance;  //目標距離
+    public static bool StartDialogue;  //開始對話
     public static bool MissionEnd=false;
-    bool Lv1End;
-    public GameObject[] Objects; 
+    public static bool StopAttack; //暫停怪物進攻
+    public GameObject[] Objects;  //開放使用物件
 
     void Awake()
     {
@@ -70,12 +71,14 @@ public class Level_1 : MonoBehaviour
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
-        MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "取得彈藥", "修理與升級", "電力供應",  "到工作崗位"};
+        MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "補充彈藥", "修理與升級", "電力供應",  "到工作崗位"};
         MissonStringL1_2 = new string[] { "到工作崗位"};
-        MissonStringL2 = new string[] { "大門防線", "第二防線", "保護發電廠", "任務完成" };
+        MissonStringL2 = new string[] { "大門防線", "武器開放", "任務完成" };
+        MissonStringL2_2 = new string[] { "第二防線", "保護發電廠", "任務失敗" };
 
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
+        StopAttack = false;
     }
     void Update()
     {
@@ -84,18 +87,20 @@ public class Level_1 : MonoBehaviour
         SF_missionStage = missionStage;
         Taget_distance = PlayerView.pu_distance;
         SF_stageTime = stageTime;
+        SF_LevelA_ = LevelA_;
+
         if (!MissionEnd)  //任務目標是否結束
         {
-            switch (missionLevel)
+            switch (missionLevel)  //任務關卡
             {
                 case 0:
-                    MissonString = MissonStringL1;
+                    MissonString = MissonStringL1;  //第一階段
                     if (missionStage != 2 && missionStage != 3)  //靠近任務點
                     {
                         if (MissionTime >= 3 && LevelA_ != 2)  //任務UI浮現時間
                         {
                             MissionTime = 3;
-                            if (Taget_distance <= 1f)
+                            if (Taget_distance <= 1.5f)  //觸發距離
                             {
                                 if (StartDialogue)
                                 {
@@ -118,7 +123,7 @@ public class Level_1 : MonoBehaviour
                     }
                     break;
                 case 1:
-                    MissonString = MissonStringL1_2;
+                    MissonString = MissonStringL1_2;  //第一之一階段
                     if (missionStage == 0 && LevelA_ == 0)
                     {
                         LevelA_ = 1;
@@ -126,11 +131,14 @@ public class Level_1 : MonoBehaviour
                     }                   
                     break;
                 case 2:
-                    MissonString = MissonStringL2;
+                    MissonString = MissonStringL2;  //第二階段
+                    break;
+                case 3:
+                    MissonString = MissonStringL2_2;  //第二之二階段
                     break;
             }
             
-            if (UiOpen)
+            if (UiOpen)  //UI開啟
             {
                 UiOpen = false;
                 MissonTxet.text = MissonString[missionStage];
@@ -156,8 +164,7 @@ public class Level_1 : MonoBehaviour
                 if (MissionTime >= 4)
                 {
                     LevelA_ = 3;
-                    PlayerView.missionLevel = 2;
-                    PlayerView.missionStage = 0;
+                    PlayerView.missionChange(2, 0);  //改變關卡
                     DialogueEditor.StartConversation(2, 0, 0);  //開始對話
                     MissionTime = 0;
                     UiOpen = true;
@@ -216,9 +223,9 @@ public class Level_1 : MonoBehaviour
                 MLtime += Time.deltaTime;
                 //MLtime += 10*Time.deltaTime;
             }
-            Level = Settings.Level;
-            Level = 90 / (Level + 1);
-            if (MLtime >= Level)  //難度設定 90 / 45 / 30 秒升級
+            DifficultyLevel = Settings.Level;
+            DifficultyLevel = 90 / (DifficultyLevel + 1);
+            if (MLtime >= DifficultyLevel)  //難度設定 90 / 45 / 30 秒升級
             {
                 MLtime = 0;
                 MonsterLevel++;
@@ -229,9 +236,10 @@ public class Level_1 : MonoBehaviour
         {                
             if(EnemyWave <2)  //進攻波數
             {
-                if (stageTime>= 25)  //進階時間
+                if (StopAttack) return;  //處於暫停進攻狀態
+                if (stageTime>= 25)  //下次來襲時間
                 {
-                    _SpawnRay.StartBorn = true;
+                    _SpawnRay.StartBorn = true;  //怪物開始生成
                     EnemyWave++;
                     _SpawnRay.EnemyWaveNum(EnemyWave);
                     stageTime = -1;
@@ -239,15 +247,24 @@ public class Level_1 : MonoBehaviour
                 else if(stageTime >=0)
                 {
                     stageTime += Time.deltaTime;
-                }
+                }              
             }
             else
             {
-                if(!Lv1End && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)
+
+            }
+            if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)  //當前波數結束
+            {
+                switch (LevelA_)
                 {
-                    Lv1End = true;
-                    //DialogueEditor.StartConversation(missionLevel, 9, 0);
-                    PlayerView.missionStage = 8;
+                    case 3:
+                        LevelA_ = 4;
+                        StopAttack = true;
+                        UiOpen = true;
+                        PlayerView.missionChange(2, 1);  //改變關卡
+                        DialogueEditor.StartConversation(2, 1, 0);  //開放左輪使用
+                        Objects[2].GetComponent<BoxCollider>().enabled = true;
+                        break;
                 }
             }
         }
@@ -292,10 +309,10 @@ public class Level_1 : MonoBehaviour
         }
     }
 
-    public static void NextTask(int nextTask)
-    {
-        DialogueEditor.StartConversation(0, nextTask, 0);  //開始對話
-    }
+    //public static void NextTask(int nextTask)
+    //{
+    //    DialogueEditor.StartConversation(0, nextTask, 0);  //開始對話
+    //}
 }
 
 
@@ -316,5 +333,24 @@ public class EnemyWaveNum  //敵人每波數量
     {
         EnemyNumA = enemyNumA;
         EnemyNumB = enemyNumB;
+    }
+}
+[Serializable]
+public class MonsterAttributes  //怪物屬性
+{
+    public float MinSize;  //怪物1波數
+    public float MaxSize;  //怪物2波數
+                           //public int EnemyNumC;  //怪物3波數
+
+    /// <summary>
+    /// 怪物屬性
+    /// </summary>
+    /// <param name="minSize">怪物1波數</param>
+    /// <param name="maxSize">怪物2波數</param>
+    /// <returns></returns>
+    public MonsterAttributes(float minSize, float maxSize)
+    {
+        MinSize = minSize;
+        MaxSize = maxSize;
     }
 }

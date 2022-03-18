@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
+//using System;
 
 public class SpawnRay : MonoBehaviour {
 
@@ -13,7 +14,8 @@ public class SpawnRay : MonoBehaviour {
 	[SerializeField] private float bornTimespanMax = 10f;
 	private float[] nextBornTime = new float[] { 0, 0 };
 	private float[] timer =new float[] {0, 0 };                         // 計數器
-    public int[] counter { get; set; } = new int[] { 0, 0 };		// 目前場上怪物數量
+	public int[] counter { get; set; } = new int[] { 0, 0 };		// 目前場上怪物數量
+    [SerializeField] int[] SF_counter;		// 目前場上怪物數量
 	private int uid = 0;                                // 怪物編號
 
 	[SerializeField] private LayerMask rayHitLayer = -1;	// 射線判斷的圖層，-1表示全部圖層
@@ -81,15 +83,19 @@ public class SpawnRay : MonoBehaviour {
 	{
 		maxNumber[0] = EnemyNum[EnemyWave].EnemyNumA;
 		maxNumber[1] = EnemyNum[EnemyWave].EnemyNumB;
+		SF_counter = counter;
 
 		if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
         {
-			if (BornTime >= 20)  //停止復活生成
+			if (BornTime >= 20)  //停止復活生成  
 			{
 				BornTime = 0;
 				StartBorn = false;
 				StartBool[0] = false;
-				Level_1.stageTime = 0;  //開始進階冷卻
+                if (Level_1.LevelA_ > 3)
+                {
+					Level_1.stageTime = 0;  //開始進階冷卻
+				}
 			}
 			else if (BornTime >= 0)
 			{
@@ -134,6 +140,7 @@ public class SpawnRay : MonoBehaviour {
 
 			}
 		}else StartBool[0] = true;
+
 		if (counter[1] < EnemyNum[EnemyWave].EnemyNumB)    // 若已達生怪上限，返回
 		{
 			timer[1] += Time.deltaTime;
@@ -218,9 +225,6 @@ public class SpawnRay : MonoBehaviour {
 	}
 
 }
-
-
-
 
 public struct MonterInfo{
 	public int uniqueID;	// 怪物編號

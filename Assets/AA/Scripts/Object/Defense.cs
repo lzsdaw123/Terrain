@@ -38,15 +38,15 @@ public class Defense : MonoBehaviour
                     A_defense = 1;
                     defenseOb[0].SetActive(false);
                     defenseOb[1].SetActive(true);
-                    PlayerView.TagetChange();
-                    DialogueEditor.StartConversation(2, 1, 0);
+                    PlayerView.missionChange(3, 0);  //改變關卡
+                    DialogueEditor.StartConversation(3, 0, 0);
                     break;
                 case 1:
                     A_defense = 2;
                     defenseOb[1].SetActive(false);
                     defenseOb[2].SetActive(true);
-                    PlayerView.TagetChange();
-                    DialogueEditor.StartConversation(2, 2, 0);
+                    PlayerView.missionChange(3, 1);  //改變關卡
+                    DialogueEditor.StartConversation(3, 1, 0);
                     break;
                 case 2:
                     //defenseOb[2].SetActive(false);
