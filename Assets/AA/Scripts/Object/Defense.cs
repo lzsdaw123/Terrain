@@ -9,6 +9,7 @@ public class Defense : MonoBehaviour
     public int A_defense;
     public GameObject[] defenseOb;
 
+
     void Awake()
     {
         defenseOb = new GameObject[3];
@@ -26,7 +27,7 @@ public class Defense : MonoBehaviour
     }
     void Update()
     {
-        
+
     }
     void OnTriggerEnter(Collider other)
     {

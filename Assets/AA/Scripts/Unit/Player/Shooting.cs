@@ -74,6 +74,7 @@ public class Shooting : MonoBehaviour
     public GameObject[] GunFlashlight; //槍枝手電筒
     public BoxCollider GunCollider;
     public static bool SkipTeach;
+    Image Aim;
 
     public static void StartAll()
     {
@@ -146,6 +147,7 @@ public class Shooting : MonoBehaviour
         {
             GunFlashlight[i].SetActive(true);
         }
+        Aim =  GameObject.Find("Aim").gameObject.GetComponent<Image>();
     }
     void Update()
     {
@@ -467,6 +469,14 @@ public class Shooting : MonoBehaviour
                 LayDown = false;  
                 Weapon.SetBool("LayDown", false);
             }         
+        }
+        if (LayDown)
+        {
+            Aim.enabled = true;
+        }
+        else
+        {
+            Aim.enabled = false;
         }
         if (Input.GetKeyDown(KeyCode.F))  //槍枝手電筒
         {

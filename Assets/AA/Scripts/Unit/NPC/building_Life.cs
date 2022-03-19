@@ -14,13 +14,15 @@ public class building_Life : MonoBehaviour
     public GameObject DamageVer;  //損毀
     public GameObject BaseVer;  //位移
     public BoxCollider BoxCollider1;
-    public GameObject Exp, BigExp;  //爆炸,大爆炸
-    float DeadTime;
+    public GameObject Exp, BigExp, Smoke;  //爆炸,大爆炸
+    ParticleSystem ParticleSystem;
+    public float DeadTime;
+    public Animator Animator;
 
     void Awake()
     {
         time = 0;
-        DeadTime = 0;
+        DeadTime = -1;
         if (BaseVer != null) BaseVer.transform.localRotation = Quaternion.Euler(0,0,0);
     }
     void Start()
@@ -32,6 +34,12 @@ public class building_Life : MonoBehaviour
         NormalVer.SetActive(true);
         if(DamageVer!=null) DamageVer.SetActive(false);
         BoxCollider1.enabled = true;
+        if (Animator != null) Animator.SetBool("Dead", false);
+        if (Smoke != null) 
+        {
+            ParticleSystem = Smoke.GetComponent<ParticleSystem>();      
+            Smoke.SetActive(false);
+        }
     }
 
     public void Damage(float Power) // 接受傷害
@@ -59,16 +67,33 @@ public class building_Life : MonoBehaviour
         //    gameObject.SetActive(false);
         //    DeadTime = 2;
         //}
-        //if (DeadTime >= 6)
-        //{
-        //    DeadTime = 10;
-        //}
+        if (DeadTime >= 0)
+        {
+            DeadTime += Time.deltaTime;
+        }
+        if (DeadTime >= 8)
+        {
+            ParticleSystem.Stop();
+        }
+        if (DeadTime >= 18)
+        {
+            DeadTime = -1;
+            Smoke.SetActive(false);
+        }
+
     }
     void Destroyed()
     {
         NormalVer.SetActive(false);
         if (DamageVer != null) DamageVer.SetActive(true);
         BoxCollider1.enabled = false;
+        if (Animator != null)  Animator.SetBool("Dead", true);
+        if (Smoke != null) 
+        {
+            ParticleSystem.Play();
+            Smoke.SetActive(true);
+            DeadTime = 0;
+        }
 
 
         if (!Dead)
