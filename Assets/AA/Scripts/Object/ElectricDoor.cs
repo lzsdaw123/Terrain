@@ -7,6 +7,7 @@ public class ElectricDoor : MonoBehaviour
 {
     public GameObject TextG;
     public bool Botton;
+    public Animator Animator;
     public int Type;  //門類型
     public Vector3[] pos;
     public GameObject[] Door;  //哪扇門
@@ -25,7 +26,7 @@ public class ElectricDoor : MonoBehaviour
         Botton = false;
         time = 0;
         speed = 5;
-
+        Animator.SetInteger("Type", Type);
     }
 
     void Update()
@@ -48,61 +49,31 @@ public class ElectricDoor : MonoBehaviour
                 {
                     if (Botton)
                     {
-                        pos[0].y -= speed * Time.deltaTime;
-                    }
-                    if (pos[0].y <= -0.58)
-                    {
-                        pos[0].y = -0.58f;
-                        Botton = false;
+                        Animator.SetBool("Open", true);
                     }
                 }
                 else
                 {
                     if (Botton)
                     {
-                        pos[0].y += speed * Time.deltaTime;
-                    }
-                    if (pos[0].y >= 1.29)
-                    {
-                        pos[0].y = 1.29f;
-                        Botton = false;
+                        Animator.SetBool("Open", false);
                     }
                 }
-                Door[0].transform.localPosition = pos[0];
                 break;
             case 1:
                 if (OpenDoor) //進行開門
                 {
-                    //關門 115.71 /  97.8 -/- 開門 102.71 / 110.8  打開距離13
                     if (Botton)
                     {
-                        pos[0].x -= speed * Time.deltaTime;
-                        pos[1].x += speed * Time.deltaTime;
-                    }
-                    if (pos[0].x <= 102.71 && pos[1].x >= 110.8)
-                    {
-                        pos[0].x = 102.71f;
-                        pos[1].x = 110.8f;
-                        Botton = false;
+                        Animator.SetBool("Open", true);
                     }
                 }
                 else  //進行關門
                 {
                     if (Botton)
                     {
-                        pos[0].x += speed * Time.deltaTime;
-                        pos[1].x -= speed * Time.deltaTime;
+                        Animator.SetBool("Open", false);
                     }
-                    if(pos[0].x >= 115.71 && pos[1].x <= 97.8)
-                    {
-                        pos[0].x = 115.71f;
-                        pos[1].x = 97.8f;
-                        Botton = false;
-                    }
-                }
-                for (int i = 0; i < pos.Length; i++)
-                {
-                    Door[i].transform.localPosition = pos[i];
                 }
                 break;
             case 2:
@@ -110,27 +81,16 @@ public class ElectricDoor : MonoBehaviour
                 {
                     if (Botton)
                     {
-                        pos[0].y -= speed * Time.deltaTime;
-                    }
-                    if (pos[0].y <= -0.444f)
-                    {
-                        pos[0].y = -0.444f;
-                        Botton = false;
+                        Animator.SetBool("Open", true);
                     }
                 }
                 else
                 {
                     if (Botton)
                     {
-                        pos[0].y += speed * Time.deltaTime;
-                    }
-                    if (pos[0].y >= 2.827f)
-                    {
-                        pos[0].y = 2.827f;
-                        Botton = false;
+                        Animator.SetBool("Open", false);
                     }
                 }
-                Door[0].transform.localPosition = pos[0];
                 break;
         }
         if (AutoDoor)
@@ -167,6 +127,11 @@ public class ElectricDoor : MonoBehaviour
         }
 
     }
+    void end()
+    {
+        Botton = false;
+    }
+
     void HitByRaycast() //被射線打到時會進入此方法
     {
         if (OpenDoor)  //門開的

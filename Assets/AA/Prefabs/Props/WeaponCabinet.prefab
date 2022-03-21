@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 1036935471425808986}
   - component: {fileID: 2084503804961083847}
   - component: {fileID: 1303264114574036459}
-  - component: {fileID: 1303264114574036457}
   - component: {fileID: 1303264114574036458}
+  - component: {fileID: 5639573276240259461}
+  - component: {fileID: 1303264114574036457}
   m_Layer: 15
   m_Name: door
   m_TagString: Untagged
@@ -99,6 +100,52 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.020948986, y: 0.008717664, z: 0.035813875}
   m_Center: {x: -2.5947543e-11, y: -0.0017410719, z: 0.000000055879354}
+--- !u!114 &1303264114574036458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296832137985493298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac55f441f192ac34594a1e194deb0625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextG: {fileID: 0}
+  Botton: 0
+  Animator: {fileID: 5639573276240259461}
+  Type: 2
+  pos:
+  - {x: 0, y: 0, z: 0}
+  Door:
+  - {fileID: 1296832137985493298}
+  OpenDoor: 0
+  OriDoor: 0
+  time: 0
+  PlayAudio: 0
+  AudioS: {fileID: 1303264114574036457}
+  AutoDoor: 0
+--- !u!95 &5639573276240259461
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296832137985493298}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 37187557b17041a49a4a7a8f30ae67ac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!82 &1303264114574036457
 AudioSource:
   m_ObjectHideFlags: 0
@@ -195,31 +242,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1303264114574036458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1296832137985493298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac55f441f192ac34594a1e194deb0625, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TextG: {fileID: 0}
-  Botton: 0
-  Type: 2
-  pos:
-  - {x: 0, y: 0, z: 0}
-  Door:
-  - {fileID: 1296832137985493298}
-  OpenDoor: 0
-  OriDoor: 0
-  time: 0
-  PlayAudio: 0
-  AudioS: {fileID: 1303264114574036457}
-  AutoDoor: 0
 --- !u!1 &1303264115626338806
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +335,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 25, w: 25.0025}
   m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
+  m_UseViewFrustumForShadowCasterCull: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!114 &1303264115626338808
