@@ -16,10 +16,11 @@ public class Level_1 : MonoBehaviour
     [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
     [SerializeField] bool Lv1;
-    int stage;  //關卡階段
+    int TotalStage;  //關卡階段
     public int EnemyWave = 0;  //敵人波數
     public static float stageTime = -1;  //下次來襲時間
     [SerializeField] float SF_stageTime;
+    public Text stageTimeText;
     public LayerMask LayerMask;
     public static bool start = false;  //進攻開始
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
@@ -38,8 +39,8 @@ public class Level_1 : MonoBehaviour
     public string[] MissonString; //當前任務標題
     [SerializeField] float UiTime;
     public static float MissionTime;  //任務切換時間
-   public static bool UiOpen;
-    [SerializeField]public static int MonsterLevel;
+    public static bool UiOpen;
+    [SerializeField] public static int MonsterLevel;
     [SerializeField] float MLtime = 0;
     int DifficultyLevel;  //難度等級
     public RectTransform DiffUI, DiffUI_s;
@@ -47,7 +48,7 @@ public class Level_1 : MonoBehaviour
     bool PlayAu;  //音效
     [SerializeField] float Taget_distance;  //目標距離
     public static bool StartDialogue;  //開始對話
-    public static bool MissionEnd=false;
+    public static bool MissionEnd = false;
     public static bool StopAttack; //暫停怪物進攻
     public GameObject[] Objects;  //開放使用物件
 
@@ -202,7 +203,7 @@ public class Level_1 : MonoBehaviour
         }
         if (Lv1)
         {
-            stage = 1;
+            TotalStage = 1;
             time += Time.deltaTime;
             if (time >= 3)
             {
@@ -232,27 +233,42 @@ public class Level_1 : MonoBehaviour
                 //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
             }
         }
-        if (stage==1)
+        if (TotalStage==1)
         {                
             if(EnemyWave <2)  //進攻波數
             {
                 if (StopAttack) return;  //處於暫停進攻狀態
-                if (stageTime>= 25)  //下次來襲時間
+                if (stageTime<= 0 && stageTime>-1)  //下次來襲時間
                 {
                     _SpawnRay.StartBorn = true;  //怪物開始生成
                     EnemyWave++;
                     _SpawnRay.EnemyWaveNum(EnemyWave);
                     stageTime = -1;
                 }
-                else if(stageTime >=0)
+                else if(stageTime >0)
                 {
-                    stageTime += Time.deltaTime;
-                }              
+                    stageTime -= Time.deltaTime;
+                }
+                int Minute = 0;
+                int Second = 0;
+                string srtMinute = "";
+                string srtSecond="";
+                if (stageTime <= -1)
+                {
+                    stageTimeText.text = "?? : ??";
+                }
+                else
+                {
+                    Minute = (int)stageTime / 60;
+                    Second = (int)stageTime - (Minute * 60);
+                    srtMinute = "" + Minute;
+                    srtSecond = "" + Second;
+                    if(Minute < 10) srtMinute = "0" + Minute;
+                    if(Second <10) srtSecond = "0" + Second;
+                    stageTimeText.text = srtMinute + " : " + srtSecond;
+                }
             }
-            else
-            {
 
-            }
             if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)  //當前波數結束
             {
                 switch (LevelA_)

@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 3144357757865010118}
   - component: {fileID: 8023720822121262826}
   - component: {fileID: 6946407286499307060}
+  - component: {fileID: 4101437465944587991}
   - component: {fileID: 6964108302416198746}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Cube.132
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,6 +86,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4101437465944587991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677602790799597534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9fed261b79349d4d8835c5d24fbeb90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullHp: 1
+  hp: 0
+  hp_R: 0
+  TeamDa: 1
+  Dead: 0
+  UItime: 0
+  NormalVer: {fileID: 1677602790799597534}
+  DamageVer: {fileID: 0}
+  BaseVer: {fileID: 0}
+  BoxCollider:
+  - {fileID: 6964108302416198746}
+  TeamBoxCollider:
+  - {fileID: 5545282067066913641}
+  Exp: {fileID: 0}
+  BigExp: {fileID: 0}
+  Smoke: {fileID: 0}
+  DeadTime: 0
+  Animator: {fileID: 0}
 --- !u!65 &6964108302416198746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,9 +141,9 @@ GameObject:
   - component: {fileID: 2940235570456066649}
   - component: {fileID: 91803197950899395}
   - component: {fileID: 5537740795341259686}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Metal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -243,7 +274,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 12000000
-  m_Range: 60
+  m_Range: 50
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -491,14 +522,21 @@ MonoBehaviour:
   fullHp: 1
   hp: 0
   hp_R: 0
+  TeamDa: 0
   Dead: 0
   UItime: 0
   NormalVer: {fileID: 1677602790799597534}
   DamageVer: {fileID: 0}
   BaseVer: {fileID: 0}
-  BoxCollider1: {fileID: 5545282067066913641}
+  BoxCollider:
+  - {fileID: 5545282067066913641}
+  TeamBoxCollider:
+  - {fileID: 6964108302416198746}
   Exp: {fileID: 0}
   BigExp: {fileID: 0}
+  Smoke: {fileID: 0}
+  DeadTime: 0
+  Animator: {fileID: 0}
 --- !u!65 &5545282067066913641
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -510,5 +548,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 6.16, z: 0}
+  m_Size: {x: 2, y: 1.9999999, z: 1.0168917}
+  m_Center: {x: 0.000000007774846, y: 6.160001, z: -0.49155378}

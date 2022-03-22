@@ -11,7 +11,10 @@ public class MonsterAI02 : MonoBehaviour
     private SpawnRay spawnRay;  //生怪后蟲
     private Vector3 target; // 尋徑目標點
     public GameObject[] MissionTarget;  //任務目標點
-    public Defense Defense;
+    [SerializeField] GameObject 目前攻擊目標;
+    public GameObject[] defenseOb;
+    //public Defense Defense;
+    public int A_defense;
     GameObject tagObject;
     public ObjectPool pool;
     [SerializeField] private AnimEvents AnimEvents;
@@ -42,7 +45,6 @@ public class MonsterAI02 : MonoBehaviour
     [TagSelector] public string[] playerTags = { "Player" };
     public static Transform attackTarget; // 搜尋到最近的攻擊目標
     public static Transform[] oriTarget = new Transform[3]; // 任務的攻擊目標
-    public int defense;
     public static Vector3 AAT; // 搜尋到最近的攻擊目標
     public static int aTN;
     private float targetDistance = 2000; // 與最近攻擊目標的距離
@@ -54,7 +56,6 @@ public class MonsterAI02 : MonoBehaviour
     public static bool AttackPlay;
     bool TrPlayer;
     [SerializeField] private bool Fire;
-    [SerializeField] GameObject 目前攻擊目標;
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
@@ -109,11 +110,12 @@ public class MonsterAI02 : MonoBehaviour
         //{
         //    ani = GetComponent<Animator>(); //自動取得動畫控制器
         //}
-        Defense = GameObject.Find("defense_1").GetComponent<Defense>();
-        defense = Defense.defense;
-        MissionTarget[0] = Defense.defenseOb[0];
-        MissionTarget[1] = Defense.defenseOb[1];
-        MissionTarget[2] = Defense.defenseOb[2];
+
+        defenseOb = Defense.st_defenseOb;
+        A_defense = Defense.ST_A_defense;
+        MissionTarget[0] = defenseOb[0];
+        MissionTarget[1] = defenseOb[1];
+        MissionTarget[2] = defenseOb[2];
         oriTarget[0] = MissionTarget[0].transform;
         oriTarget[1] = MissionTarget[1].transform;
         oriTarget[2] = MissionTarget[2].transform;
@@ -340,7 +342,8 @@ public class MonsterAI02 : MonoBehaviour
     void Update()
     {
         if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
-        
+        if (oriTarget[A_defense] != null) 目前攻擊目標 = oriTarget[A_defense].gameObject;
+
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
@@ -380,7 +383,7 @@ public class MonsterAI02 : MonoBehaviour
 
             //取得角色與目標的距離
             //print(oriTarget[defense]);
-            float dn = Vector3.Distance(transform.position, oriTarget[defense].position);
+            float dn = Vector3.Distance(transform.position, oriTarget[A_defense].position);
             moving = true;
             if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
             {
@@ -429,7 +432,7 @@ public class MonsterAI02 : MonoBehaviour
         }
         else
         {
-            agent.destination = oriTarget[defense].position; // 設為尋徑目標
+            agent.destination = oriTarget[A_defense].position; // 設為尋徑目標
         }
         attacking = false; // 追踪玩家,不在攻擊狀態
         //print("追擊" + attackTarget);  
@@ -442,7 +445,7 @@ public class MonsterAI02 : MonoBehaviour
         }
         else
         {
-            AAT = oriTarget[defense].position;
+            AAT = oriTarget[A_defense].position;
         }
         if (Fire)
         {

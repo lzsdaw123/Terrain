@@ -14,8 +14,8 @@ public class LightingSettings : MonoBehaviour
     public bool _IsInView;
     public float c_dot;
     [SerializeField] Vector2 _viewPos;
-    [SerializeField] float[] minDistance = new float[] {7, 105};
-    [SerializeField] float[] MaxDistance = new float[] {7.7f, 105};
+    [SerializeField] float[] minDistance;
+    [SerializeField] float[] MaxDistance;
 
     public Light Light;
     public HDAdditionalLightData HDAdditionalLightData;
@@ -24,11 +24,13 @@ public class LightingSettings : MonoBehaviour
     {
         camTransform = GameObject.Find("Gun_Camera").GetComponent<Transform>();
         Gun_Camera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
+        Light = GetComponent<Light>(); ;
+        HDAdditionalLightData = GetComponent<HDAdditionalLightData>(); ;
     }
     void Start()
     {
-
-        
+        minDistance = new float[] { 7, 105, 40 };
+        MaxDistance = new float[] { 7.7f, 105.5f, 60 };
     }
     void OnWillRenderObject()
     {

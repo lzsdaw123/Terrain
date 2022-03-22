@@ -6,9 +6,11 @@ public class Defense : MonoBehaviour
 {
     public Collider target;
     public int defense;
+    public static int ST_A_defense;
     public int A_defense;
     public GameObject[] defenseOb;
-
+    public static GameObject[] st_defenseOb;
+    public static int s_Level, s_Stage;
 
     void Awake()
     {
@@ -17,6 +19,7 @@ public class Defense : MonoBehaviour
         defenseOb[1] = GameObject.Find("defense_2").gameObject;
         //defenseOb[2] = GameObject.Find("defense_3").gameObject;
         defenseOb[2] = GameObject.Find("defense_3 (1)").gameObject;
+        st_defenseOb = defenseOb;
     }
     void Start()
     {
@@ -27,7 +30,9 @@ public class Defense : MonoBehaviour
     }
     void Update()
     {
-
+        ST_A_defense = A_defense;
+        s_Level = 2;
+        s_Stage = 0;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -39,6 +44,8 @@ public class Defense : MonoBehaviour
                     A_defense = 1;
                     defenseOb[0].SetActive(false);
                     defenseOb[1].SetActive(true);
+                    s_Level = 3;
+                    s_Stage = 0;
                     PlayerView.missionChange(3, 0);  //改變關卡
                     DialogueEditor.StartConversation(3, 0, 0);
                     break;
@@ -46,6 +53,8 @@ public class Defense : MonoBehaviour
                     A_defense = 2;
                     defenseOb[1].SetActive(false);
                     defenseOb[2].SetActive(true);
+                    s_Level = 3;
+                    s_Stage = 1;
                     PlayerView.missionChange(3, 1);  //改變關卡
                     DialogueEditor.StartConversation(3, 1, 0);
                     break;

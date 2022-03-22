@@ -8,6 +8,7 @@ public class PlayerResurrection : MonoBehaviour
 {
     public Transform R1, R2;
     public GameObject Player;
+    public GameObject Gun;
     public GameObject DeadUI;  //死亡UI
     public GameObject FailUI;  //失敗UI
     public GameObject Black;
@@ -23,17 +24,21 @@ public class PlayerResurrection : MonoBehaviour
     {
         DeadUI.SetActive(false);
         Mission_L1 = SF_Mission_L1;
+        //Gun = GameObject.Find("Gun").gameObject;
         if (StartGame)
         {
             Player.SetActive(false);
             Player.transform.position = R1.position;
-            Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+            //Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+            //Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+            print("0");
         }
-        if(Mission_L1)
+        if (Mission_L1)
         {
             Player.SetActive(false);
             Player.transform.position = R2.position;
             Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+            Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
         Black.SetActive(false);
         Dead = true;
@@ -44,6 +49,8 @@ public class PlayerResurrection : MonoBehaviour
     {
         Player.SetActive(true);
         Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
+        Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
     void Update()

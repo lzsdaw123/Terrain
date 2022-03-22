@@ -208,7 +208,8 @@ public class Shooting : MonoBehaviour
                     {
                         Level_1.UiOpen = true;  //開啟任務UI與音效
                         Level_1.StopAttack = false;  //怪物繼續進攻
-                        PlayerView.missionChange(2, 0);  //改變關卡
+                        Level_1.stageTime = 25;  //怪物繼續倒數開始
+                        PlayerView.missionChange(Defense.s_Level, Defense.s_Stage);  //改變關卡
                         DialogueEditor.StartConversation(2, 2, 0);  //開始對話
                     }
                     LayDown = false;
@@ -623,6 +624,10 @@ public class Shooting : MonoBehaviour
                 }
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
+                    if (hit[n].collider.tag == "NPC")
+                    {
+                        hit[n].transform.SendMessage("TeamDamage", Weapons[WeaponType].power);  //造成傷害
+                    }
                     //Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Default"))  //彈孔噴黑煙
                     {
@@ -688,6 +693,7 @@ public class Shooting : MonoBehaviour
                                 }
                             }
                         }
+
                     }
                 }
                 //在到物體上產生彈孔
