@@ -22,13 +22,18 @@ public class HeroLife : MonoBehaviour
         DeBugT = GameObject.Find("DeBugT").gameObject;
         DeBugT.SetActive(false);
         S_HIT.Stop();
+        S_HIT.gameObject.SetActive(false);
     }
 
     public void Damage(float Power) // 接受傷害
     {
         hp -= Power; // 扣血
+    }
+    public void DamageEffects()
+    {
         S_HIT.gameObject.SetActive(true);
         S_HIT.Play();
+        playing = true;
     }
     public static void DownDamage(int Dps)
     {
@@ -44,6 +49,12 @@ public class HeroLife : MonoBehaviour
             hp = 0; // 不要扣到負值
             Dead = true;
         }
+        if (S_HIT.isStopped && playing)  //粒子結束時關掉
+        {
+            playing = false;
+            S_HIT.gameObject.SetActive(false);
+        }
+
 
         HP_W.fillAmount = hp / fullHp; //顯示血球
         HP_R.fillAmount = hp_R / fullHp; //顯示血球
@@ -65,6 +76,7 @@ public class HeroLife : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L)) //開發者模式
         {
             Damage(5);
+            DamageEffects();
         }
         if (hp >= fullHp)
         {

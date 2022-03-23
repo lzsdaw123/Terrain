@@ -442,7 +442,6 @@ public class MonsterAI02 : MonoBehaviour
     {
         if (AttackPlay)
         {
-            AAT = attackTarget.position;
             Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y + 0.9f, attackTarget.position.z);
             AAT = atP;
             //AAT = attackTarget.position;
