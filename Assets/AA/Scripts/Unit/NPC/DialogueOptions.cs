@@ -79,7 +79,7 @@ public class DialogueOptions : MonoBehaviour
             DialogueEditor.TextLine = 0;  //對話句子數歸零
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
             PlayerView.missionChange(1, 0);  //改變關卡
-            DialogueEditor.StartConversation(1, 0, 0);  //跳到對應的對話階段
+            DialogueEditor.StartConversation(1, 0, 0, false, 0);  //跳到對應的對話階段
         }
         if (Task == 1) //No
         {

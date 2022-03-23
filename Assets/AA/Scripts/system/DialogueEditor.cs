@@ -21,8 +21,14 @@ public class DialogueEditor : MonoBehaviour
     public GameObject DialogueOptionsUI;  //對話選擇UI
     bool teaching;
     public bool StartTrach;
-    public bool Delay=false;  //對話延遲
+    public static int Delay;  //對話延遲
+    [SerializeField] int SF_Delay;  //對話延遲
+    static int DelayTextLine;
     public int Length;   //字串字元數
+    static bool Auto;
+    static float ChangeName; //改變對話者
+    static int ChangeTextLine;  //第幾句改變
+    static int NewName;  //新的對話者
 
     void Start()
     {
@@ -39,6 +45,7 @@ public class DialogueEditor : MonoBehaviour
     }
     void Update()
     {
+        SF_Delay = Delay;
         SF_TextLine = TextLine;
         if (StartDialogue)  //開始對話
         {
@@ -55,13 +62,23 @@ public class DialogueEditor : MonoBehaviour
                     }
                 }              
                 Add_Dialogue();  //呼叫對話文本
-                if (missionStage == 4 && TextLine==4  && !Delay)  //延遲對話
+                if (Delay==1)  //延遲對話
                 {
-                    dialogueText.text = "";
-                    coolDownTimer = 1f;  //再冷卻一次
-                    Delay = true;
-                    return;
+                    if(DelayTextLine== TextLine)
+                    {
+                        dialogueText.text = "";
+                        coolDownTimer = 1f;  //再冷卻一次
+                        Delay = 2;
+                        return;
+                    }                 
                 }
+                //if (missionLevel == 0 && missionStage == 4 && TextLine==4  && !Delay)  //延遲對話
+                //{
+                //    dialogueText.text = "";
+                //    coolDownTimer = 1f;  //再冷卻一次
+                //    Delay = true;
+                //    return;
+                //}
                 coolDownTimer = 0;  //重置短對話冷卻
                 if (TextLine < Dialogue.Length)
                 {
@@ -78,9 +95,14 @@ public class DialogueEditor : MonoBehaviour
                 }
                 else
                 {
-                    Delay = false;
-                    dialogueText.text = Name[NpcName] + Dialogue[TextLine];
-                    
+                    if (ChangeName != 0)
+                    {
+                        if (ChangeTextLine == TextLine)  //第幾句改變對話者
+                        {
+                            NpcName = NewName;
+                        }
+                    }
+                    dialogueText.text = Name[NpcName] + Dialogue[TextLine];  //對話輸出                    
                     TextLine++;
                 }
             }
@@ -91,25 +113,43 @@ public class DialogueEditor : MonoBehaviour
         }
         if (EndDialogue)  //結束對話
         {
+            Delay = 0;
             TextLine = 0;
             EndDialogue = false;
-            if (Level_1.LevelA_ <=0)  //自動切換
+            if (Auto)  //自動切換
             {
                 PlayerView.TagetChange(0);  //切換任務目標
             }
         }
     }
-    public static void StartConversation(int Level , int Stage, int Who)  //任務關卡, 任務階段, 對話者
+    //任務關卡, 任務階段, 對話者, 是否自動對話, 改變對話者(第幾句. 哪位)
+    public static void StartConversation(int Level , int Stage, int Who, bool auto, float changeName) 
     {
         StartDialogue = true;
         NpcName = Who;
         missionLevel = Level;
         missionStage = Stage;
+        Auto = auto;     
+        if (changeName != 0)
+        {
+            ChangeName = changeName;
+            ChangeTextLine = (int)ChangeName;
+            NewName = (int)(ChangeName - ChangeTextLine) * 10;
+        }
+    }
+    public static void Delayed(int delayTextLine)  //延遲對話(第幾句)
+    {
+        if (Delay==0)
+        {
+            Delay = 1;
+            DelayTextLine = delayTextLine;
+        }
     }
     void Add_Dialogue()  //添加文本
     {
-        Name = new string[1];
+        Name = new string[2];
         Name[0] = "探勘地主管 : ";
+        Name[1] = "偵查系統 : ";
         switch (missionLevel) 
         {
             case 0:
@@ -170,13 +210,15 @@ public class DialogueEditor : MonoBehaviour
                 switch (missionStage)
                 {
                     case 0:
-                        Dialogue = new string[2];
-                        Dialogue[0] = "任務變更，現在開始阻擋怪物入侵。";
-                        Dialogue[1] = "要防住大門防線。";
+                        Dialogue = new string[3];
+                        Dialogue[0] = "緊急狀態!! 緊急狀態!!";
+                        Dialogue[1] = "大門外偵測到大規模怪物入侵。";
+                        Dialogue[2] = "變更任務，阻擋怪物入侵。";
                         break;
                     case 1:
-                        Dialogue = new string[1];
+                        Dialogue = new string[2];
                         Dialogue[0] = "開放新武器使用許可。";
+                        Dialogue[1] = "前往武器庫領取。";
                         break;
                     case 2:
                         Dialogue = new string[2];

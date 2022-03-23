@@ -100,7 +100,7 @@ public class MissionTarget_Life : MonoBehaviour
         }
         if (DeadTime >= 3)
         {
-            DialogueEditor.StartConversation(3, 2, 0);
+            DialogueEditor.StartConversation(3, 2, 0, false, 0);
             BigExp.SetActive(false);
         }
         if (DeadTime >= 6)

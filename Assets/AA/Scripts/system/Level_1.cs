@@ -22,7 +22,7 @@ public class Level_1 : MonoBehaviour
     [SerializeField] float SF_stageTime;
     public Text stageTimeText;
     public LayerMask LayerMask;
-    public static bool start = false;  //進攻開始
+    public static bool AttackStart = false;  //進攻開始
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
     public int missionLevel = 0;  //任務關卡
@@ -80,6 +80,7 @@ public class Level_1 : MonoBehaviour
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
         StartDialogue = true;
         StopAttack = false;
+        Objects[3].GetComponent<Animator>().enabled = false;
     }
     void Update()
     {
@@ -106,7 +107,7 @@ public class Level_1 : MonoBehaviour
                                 if (StartDialogue)
                                 {
                                     StartDialogue = false;
-                                    DialogueEditor.StartConversation(missionLevel, missionStage, 0);  //開始對話
+                                    DialogueEditor.StartConversation(missionLevel, missionStage, 0, true, 0);  //開始對話
                                 }
                             }
                         }
@@ -116,6 +117,10 @@ public class Level_1 : MonoBehaviour
                     {
                         Objects[0].GetComponent<BoxCollider>().enabled = true;
                         Objects[1].GetComponent<BoxCollider>().enabled = true;
+                    }
+                    if (missionStage == 5)
+                    {
+                        DialogueEditor.Delayed(4); //延遲對話
                     }
                     if (missionStage == 6 && LevelA_ == 0)
                     {
@@ -160,21 +165,32 @@ public class Level_1 : MonoBehaviour
                     UiTime += Time.deltaTime;
                 }
             }
-            if (LevelA_ == 2)
+            switch (LevelA_)
             {
-                if (MissionTime >= 4)
-                {
-                    LevelA_ = 3;
-                    PlayerView.missionChange(2, 0);  //改變關卡
-                    DialogueEditor.StartConversation(2, 0, 0);  //開始對話
-                    MissionTime = 0;
-                    UiOpen = true;
-                }
-                else
-                {
-                    MissionTime += Time.deltaTime;
-                }
-            }
+                case 2:
+                    if (MissionTime >= 6)
+                    {
+                        PlayerView.missionChange(2, 0);  //改變關卡
+                        DialogueEditor.StartConversation(2, 0, 1, false, 2.0f);  //開始對話
+                        DialogueEditor.Delayed(2); //延遲對話
+                        UiOpen = true;
+                        LevelA_ = 3;
+                        MissionTime = 0;
+                    }
+                    else MissionTime += Time.deltaTime;
+                    break;
+                case 3:
+                    if (MissionTime >= 9)
+                    {
+                        LevelA_ = 4;
+                        MissionTime = 0;
+                        Objects[3].GetComponent<Animator>().enabled = false;  //關閉警報
+                        GameObject.Find("Alarm").GetComponent<AudioSource>().enabled = false;
+                        AttackStart = true;
+                    }
+                    else MissionTime += Time.deltaTime;
+                    break;
+            }      
         }
         else
         {
@@ -191,7 +207,7 @@ public class Level_1 : MonoBehaviour
             {
                 StartTime += 2 * Time.deltaTime;
             }
-            if (Input.GetKeyDown(KeyCode.F1) || start)
+            if (Input.GetKeyDown(KeyCode.F1) || AttackStart)
             {
                 AudioManager.explode();
                 explode.SetActive(true);
@@ -273,12 +289,12 @@ public class Level_1 : MonoBehaviour
             {
                 switch (LevelA_)
                 {
-                    case 3:
-                        LevelA_ = 4;
+                    case 4:
+                        LevelA_ = 5;
                         StopAttack = true;
                         UiOpen = true;
                         PlayerView.missionChange(2, 1);  //改變關卡
-                        DialogueEditor.StartConversation(2, 1, 0);  //開放左輪使用
+                        DialogueEditor.StartConversation(2, 1, 0, false, 0);  //開放左輪使用
                         Objects[2].GetComponent<BoxCollider>().enabled = true;
                         break;
                 }
@@ -317,20 +333,14 @@ public class Level_1 : MonoBehaviour
             {
                 if (other.tag == "Player")
                 {
-                    start = true;
+                    Objects[3].GetComponent<Animator>().enabled = true;  //開起警報
                     LevelA_ = 2;
                     MissionTime = 0;
                 }
             }
         }
     }
-
-    //public static void NextTask(int nextTask)
-    //{
-    //    DialogueEditor.StartConversation(0, nextTask, 0);  //開始對話
-    //}
 }
-
 
 [Serializable]
 public class EnemyWaveNum  //敵人每波數量

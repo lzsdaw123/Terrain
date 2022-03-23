@@ -92,7 +92,7 @@ public class SpawnRay : MonoBehaviour {
 				BornTime = 0;
 				StartBorn = false;
 				StartBool[0] = false;
-                if (Level_1.LevelA_ > 3)
+                if (Level_1.LevelA_ > 4)  //第四階段
                 {
 					Level_1.stageTime = 0;  //開始進階冷卻
 				}
