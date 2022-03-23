@@ -13,6 +13,7 @@ public class HeroLife : MonoBehaviour
     GameObject DeBugT;
     public ParticleSystem S_HIT;
     public float HP_R_speed =0.8f;
+    bool playing ;
 
     void Start()
     {

@@ -9,6 +9,7 @@ public class Shop : MonoBehaviour
     public Text KillPointsT;
     public Text[] Lv;
     public Text[] Points;
+    public GameObject[] UpgradeObject;
 
     public static int HpLv;  //血量等級
     public static int DpsLv;  //傷害等級

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2787271869903129623}
   - component: {fileID: 6384959726675426644}
   - component: {fileID: 2207481056027855084}
+  - component: {fileID: 4476657167224287217}
   m_Layer: 2
   m_Name: Damage
   m_TagString: Untagged
@@ -97,8 +98,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.02650648, y: 0.064041376, z: 0}
-  m_Center: {x: 0.07563819, y: -0.000000059604645, z: 1.4717373e-22}
+  m_Size: {x: 0.02226571, y: 0.064041376, z: 0}
+  m_Center: {x: 0.07916047, y: 0.0000000030386247, z: 0.000000011642188}
 --- !u!65 &2207481056027855084
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,8 +111,21 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.04834583, y: 0.064041376, z: 0}
-  m_Center: {x: -0.06471857, y: -0.000000059604645, z: 1.4717373e-22}
+  m_Size: {x: 0.03563176, y: 0.02171554, z: 0}
+  m_Center: {x: -0.071075544, y: -0.021163013, z: -0.000000015299557}
+--- !u!65 &4476657167224287217
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2847134122349111419}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.023959922, y: 0.019424448, z: 7.219364e-10}
+  m_Center: {x: -0.07691135, y: 0.022308396, z: -0.000000017776292}
 --- !u!1 &4294013346409878569
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +234,7 @@ MonoBehaviour:
   DamageVer: {fileID: 2847134122349111419}
   BaseVer: {fileID: 7037269586382002683}
   BoxCollider:
-  - {fileID: 2852344574519843516}
+  - {fileID: 6740213014893668764}
   TeamBoxCollider:
   - {fileID: 0}
   Exp: {fileID: 0}
