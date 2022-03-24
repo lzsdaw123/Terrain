@@ -120,7 +120,6 @@ public class AnimEvents : MonoBehaviour
                 AudioManager.PlayFootstepAudio(0);
             }
         }
-
     }
     public void JumpAudio()
     {

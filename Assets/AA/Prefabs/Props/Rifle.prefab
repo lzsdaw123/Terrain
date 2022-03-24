@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7908961803058581537}
   - component: {fileID: 4150606437495734206}
   - component: {fileID: 3766927205353259862}
-  - component: {fileID: 6480727205261103942}
   - component: {fileID: 418084485719701647}
+  - component: {fileID: 6480727205261103942}
   m_Layer: 15
   m_Name: Rifle
   m_TagString: Untagged
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6480727205261103942
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2716211286119650865}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.807271, y: 0.08648764, z: 0.4742537}
-  m_Center: {x: -0.44770992, y: -0.006723009, z: 0.16972592}
 --- !u!114 &418084485719701647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,3 +102,16 @@ MonoBehaviour:
   WeaponsType: 0
   Weapon_of_Pos: 0000000000000000
   Weapons: []
+--- !u!65 &6480727205261103942
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716211286119650865}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.807271, y: 0.08648764, z: 0.4742537}
+  m_Center: {x: -0.44770992, y: -0.006723009, z: 0.16972592}

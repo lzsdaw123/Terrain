@@ -53,7 +53,7 @@ public class DialogueOptions : MonoBehaviour
     public void DialogueOptionA()  //選項A
     {
         Settings.con();
-        if (Task == 0)  //進行教學
+        if (Task == 0)  //當然 (進行教學)
         {
             Shooting.SkipTeach = false;
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
@@ -66,7 +66,7 @@ public class DialogueOptions : MonoBehaviour
     public void DialogueOptionB()  //選項B
     {
         Settings.con();
-        if (Task == 0)   //跳過教學
+        if (Task == 0)   //下次一定 (跳過教學)
         {
             Shooting.PickUpWeapons(0, 0, Weap);
             Weap.SetActive(false);

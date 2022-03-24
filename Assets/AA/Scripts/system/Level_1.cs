@@ -97,7 +97,7 @@ public class Level_1 : MonoBehaviour
             {
                 case 0:
                     MissonString = MissonStringL1;  //第一階段
-                    if (missionStage != 2 && missionStage != 3)  //靠近任務點
+                    if (missionStage != 2 && missionStage != 3 && missionStage != 4)  //靠近任務點
                     {
                         if (MissionTime >= 3 && LevelA_ != 2)  //任務UI浮現時間
                         {
