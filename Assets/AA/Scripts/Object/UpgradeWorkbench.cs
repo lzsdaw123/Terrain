@@ -101,17 +101,18 @@ public class UpgradeWorkbench : MonoBehaviour
                 }
                 UpCamTransform.localPosition = Vector3.SmoothDamp(UpCamTransform.localPosition, tagTranPos, ref currentVelocity, smoothTime, maxSpeed);
                 UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, tagTranQu, 5f * Time.deltaTime);
-            }      
+            }
+            if (FieldOfView <= 55)
+            {
+                FieldOfView = 55;
+            }
+            if (FieldOfView >= 60)
+            {
+                FieldOfView = 60;
+            }
+            GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
-        if (FieldOfView <= 55)
-        {
-            FieldOfView = 55;
-        }
-        if (FieldOfView >= 60)
-        {
-            FieldOfView = 60;
-        }
-        GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
+
 
         if (Input.GetKeyDown(KeyCode.E))  //«ö [E] Â÷¶}
         {

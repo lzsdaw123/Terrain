@@ -15,7 +15,7 @@ public class NPC_AI : MonoBehaviour
     public ObjectPool pool;
     [SerializeField] private AnimEvents AnimEvents;
     public Animator ani; //動畫控制器
-    public GameObject Weap;
+    public GameObject Weap;  //控制武器上下
     public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
@@ -71,6 +71,9 @@ public class NPC_AI : MonoBehaviour
     public static float power; //子彈威力
     public ObjectPool pool_Hit;  //物件池
     bool LayDown;  //收槍bool
+    [SerializeField] bool Aim;  //收槍bool
+    public float MonTime;
+    public bool 有怪;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
@@ -78,6 +81,7 @@ public class NPC_AI : MonoBehaviour
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
     [SerializeField] GameObject 目前攻擊目標;
+    public GameObject[] skeleton;
 
     private AttackUtility attackUtility = new AttackUtility();
 
@@ -110,7 +114,7 @@ public class NPC_AI : MonoBehaviour
         coolDownTimer = coolDown + 1;
         agent.enabled = true;
         LayDown = false;
-
+        MonTime = -1;
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
 
@@ -240,6 +244,8 @@ public class NPC_AI : MonoBehaviour
                 if (actors[i].tag == PlayerTags[pt])
                 {
                     isPlayer = true;
+                    有怪 = true;
+                    MonTime = 0;
                     break;
                 }
             }
@@ -254,8 +260,7 @@ public class NPC_AI : MonoBehaviour
                     if (NoObstacle(actors[i].transform)) // 若中間沒有障礙物
                     {
                         // 判斷距離看是否是最近的一個玩家
-                        float d = Vector3.Distance(transform.position,
-                       actors[i].transform.position);
+                        float d = Vector3.Distance(transform.position,actors[i].transform.position);
 
                         if (d < nd)  //比原本還近
                         {
@@ -286,7 +291,7 @@ public class NPC_AI : MonoBehaviour
                                 rotate.x = rotate.z = 0;
                                 Weaprotate.y = Weaprotate.z = 0;
                                 Weap.transform.localRotation = Quaternion.Slerp(Weap.transform.localRotation, Weaprotate, 120f * Time.smoothDeltaTime);
-                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 60f * Time.smoothDeltaTime);  //轉向敵人
+                                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 30f * Time.smoothDeltaTime);  //轉向敵人
                             }
                         }
                         fined = true;                     
@@ -335,14 +340,35 @@ public class NPC_AI : MonoBehaviour
 
     void Update()
     {
+        if (MonTime >= 5f)
+        {
+            有怪 = false;
+            MonTime = -1;
+            if (Aim)  //收槍
+            {
+                Aim = false;
+                ani.SetBool("Aim", false);
+            }
+        }
+        else if (MonTime >= 0)
+        {
+            MonTime += Time.deltaTime;
+        }
         if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
 
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
-            if (LayDown)
+            //if (LayDown)
+            //{
+            //    LayDown = false;
+            //    ani.SetBool("LayDown", false);
+            //}
+
+            if (!Aim)
             {
-                LayDown = false;
-                ani.SetBool("LayDown", false);
+                Aim = true;
+                ani.SetTrigger("AimUP");
+                ani.SetBool("Aim", true);
             }
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
@@ -376,12 +402,12 @@ public class NPC_AI : MonoBehaviour
             //    //print("警戒");
             //}
             Fire = false;
-            if (!LayDown && !Reload)
-            {
-                LayDown = true;
-                ani.SetTrigger("LayDownT");
-                ani.SetBool("LayDown", true);
-            }
+            //if (Aim && !Reload)  //收槍
+            //{
+            //    print("1");
+            //    Aim = false;
+            //    ani.SetBool("Aim", false);
+            //}
                 
             if (MissionTarget.activeSelf)
             {
@@ -431,12 +457,13 @@ public class NPC_AI : MonoBehaviour
                 }
                 else  //沒子彈
                 {
-                    if (Reload == false)
-                    {
-                        FireButtle = 0;
-                        Reload = true;
-                        ani.SetTrigger("Reload");
-                    }
+                    WeapAm = 30;
+                    //if (Reload == false)
+                    //{
+                    //    FireButtle = 0;
+                    //    Reload = true;
+                    //    ani.SetTrigger("Reload");
+                    //}
                 }
                 coolDownTimer = 0.87f;  //開火冷卻時間，與coolDown 1差越小越快
             }
@@ -531,8 +558,8 @@ public class NPC_AI : MonoBehaviour
             {
                 pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
             }
-            Muzzle_vfx.transform.position = muzzlePOS;
-            Muzzle_vfx.transform.rotation = transform.rotation;
+            //Muzzle_vfx.transform.position = muzzlePOS;
+            //Muzzle_vfx.transform.rotation = transform.rotation;
             Muzzle_vfx.SetActive(true);
             AnimEvents.NPC_Audio(2);  //開火音效
             MuSmoke.Play();
@@ -541,7 +568,7 @@ public class NPC_AI : MonoBehaviour
     }
     private void TrackingPlayer()
     {
-        ani.SetBool("Move", true);
+        //ani.SetBool("Move", true);
         ani.SetBool("Fire", false);
         if (Move)
         {
