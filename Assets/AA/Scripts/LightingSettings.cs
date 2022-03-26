@@ -30,7 +30,7 @@ public class LightingSettings : MonoBehaviour
     void Start()
     {
         minDistance = new float[] { 7, 105, 40 };
-        MaxDistance = new float[] { 7.7f, 105.5f, 60 };
+        MaxDistance = new float[] { 7.7f, 110f, 60 };
     }
     void OnWillRenderObject()
     {

@@ -10,7 +10,7 @@ public class NPC_AI : MonoBehaviour
     private SpawnRayReg reg;    //生怪註冊器
     private SpawnRay spawnRay;  //生怪后蟲
     private Vector3 target; // 尋徑目標點
-    public GameObject MissionTarget;  //任務目標點
+    public GameObject[] MissionTarget;  //任務目標點
     GameObject tagObject;
     public ObjectPool pool;
     [SerializeField] private AnimEvents AnimEvents;
@@ -82,6 +82,9 @@ public class NPC_AI : MonoBehaviour
     public float targetHP;
     [SerializeField] GameObject 目前攻擊目標;
     public GameObject[] skeleton;
+    public int 當前巡邏點;
+    public bool Patrol;  //是否在巡邏
+    public float PatrolTime;  //是否在巡邏等待
 
     private AttackUtility attackUtility = new AttackUtility();
 
@@ -114,7 +117,8 @@ public class NPC_AI : MonoBehaviour
         coolDownTimer = coolDown + 1;
         agent.enabled = true;
         LayDown = false;
-        MonTime = -1;
+        MonTime = PatrolTime = -1;
+        當前巡邏點 = 0;
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
 
@@ -129,8 +133,8 @@ public class NPC_AI : MonoBehaviour
         //{
         //    ani = GetComponent<Animator>(); //自動取得動畫控制器
         //}
-        MissionTarget = GameObject.Find("MissionTarget").gameObject;
-        oriTarget = MissionTarget.transform;
+        //MissionTarget = GameObject.Find("MissionTarget").gameObject;
+        if(MissionTarget.Length > 0) oriTarget = MissionTarget[當前巡邏點].transform;
     }
 
     public void AttackLv1()
@@ -363,6 +367,7 @@ public class NPC_AI : MonoBehaviour
             //    LayDown = false;
             //    ani.SetBool("LayDown", false);
             //}
+            ani.SetBool("Move", false);
 
             if (!Aim)
             {
@@ -408,26 +413,37 @@ public class NPC_AI : MonoBehaviour
             //    Aim = false;
             //    ani.SetBool("Aim", false);
             //}
-                
-            if (MissionTarget.activeSelf)
+            if (Move)
             {
-                //取得角色與目標的距離
-                float dn = Vector3.Distance(transform.position, oriTarget.position);
-                //moving = true;
-                if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+                if (MissionTarget[當前巡邏點].activeSelf)
                 {
-                    AttackPlay = false;
-                    Attack();                   
+                    oriTarget = MissionTarget[當前巡邏點].transform;
+                    //取得角色與目標的距離
+                    float dn = Vector3.Distance(transform.position, oriTarget.position);
+                    //moving = true;
+                    if (有怪)
+                    {
+                        if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+                        {
+                            AttackPlay = false;
+                            Attack();
+                        }
+                        else // 玩家距離大於攻擊距離,進行追踪
+                        {
+                            TrPlayer = true;
+                            TrackingPlayer();
+                        }
+                    }
+                    else
+                    {
+                        TrPlayer = false;
+                        TrackingPlayer();
+                    }
                 }
-                else // 玩家距離大於攻擊距離,進行追踪
+                else
                 {
-                    TrPlayer = false;
-                    TrackingPlayer();
+                    MissionTarget = null;
                 }
-            }
-            else
-            {
-                MissionTarget = null;
             }
 
         }
@@ -457,13 +473,12 @@ public class NPC_AI : MonoBehaviour
                 }
                 else  //沒子彈
                 {
-                    WeapAm = 30;
-                    //if (Reload == false)
-                    //{
-                    //    FireButtle = 0;
-                    //    Reload = true;
-                    //    ani.SetTrigger("Reload");
-                    //}
+                    if (Reload == false)
+                    {
+                        FireButtle = 0;
+                        Reload = true;
+                        ani.SetTrigger("Reload");
+                    }
                 }
                 coolDownTimer = 0.87f;  //開火冷卻時間，與coolDown 1差越小越快
             }
@@ -568,16 +583,6 @@ public class NPC_AI : MonoBehaviour
     }
     private void TrackingPlayer()
     {
-        //ani.SetBool("Move", true);
-        ani.SetBool("Fire", false);
-        if (Move)
-        {
-            agent.speed = 9;  //移動速度
-        }
-        else
-        {
-            agent.speed = 0;  //移動速度
-        }
         if (TrPlayer)
         {
             agent.destination = attackTarget.position; // 設為尋徑目標
@@ -585,7 +590,47 @@ public class NPC_AI : MonoBehaviour
         else
         {
             agent.destination = oriTarget.position; // 設為尋徑目標
+            Vector3 oTpos = new Vector3(oriTarget.position.x, transform.position.y, oriTarget.position.z);
+            if (transform.position == oTpos && PatrolTime ==-1)
+            {
+                PatrolTime = 0;
+            }
+            if (PatrolTime >= 3)
+            {
+                PatrolTime = -1;
+                當前巡邏點 += 1;
+                if (當前巡邏點 >= MissionTarget.Length)
+                {
+                    當前巡邏點 = 0;
+
+                }
+                return;
+            }
+            else if (PatrolTime >= 0)
+            {
+                PatrolTime += Time.deltaTime;
+            }
         }
+
+        //ani.SetBool("Move", true);
+        ani.SetBool("Fire", false);
+        if (Move)
+        {
+            if (PatrolTime==-1)
+            {
+                ani.SetBool("Move", true);
+            }
+            else
+            {
+                ani.SetBool("Move", false);
+            }
+            agent.speed = 3;  //移動速度
+        }
+        else
+        {
+            agent.speed = 0;  //移動速度
+        }
+
         speed = 1;// 跑向目標
         ani.SetFloat("Speed", speed);       
         attacking = false; // 追踪玩家,不在攻擊狀態

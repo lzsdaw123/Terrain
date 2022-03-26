@@ -8,6 +8,7 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
     [SerializeField] private int NpcName;  //對話者
     static int st_NpcName;  //對話者
     [SerializeField] string[] Name;  //對話者名子
+    [SerializeField] private bool AutoDialogue;  //是否自動對話
     [SerializeField] private bool RaDialogue;  //隨機對話
     static bool st_RaDialogue;  //隨機對話
     [SerializeField] private bool interact;  //是否可互動
@@ -46,7 +47,7 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
     {
         TextG = GameObject.Find("ObjectText");
         Take = GameObject.Find("Take");
-        Name = new string[] { "武器庫管理員", "核電廠工程師" };
+        Name = new string[] { "武器庫管理員", "核電廠工程師", "探勘地主管", "守衛" };
     }
     void Update()
     {
@@ -61,25 +62,29 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
         distance = (camTransform.position - this.transform.position).magnitude / 3.5f;
         st_distance = distance;
 
-        if (distance <= 1.2f)  //靠近NPC
+        if (AutoDialogue)  //是否自動對話
         {
-            if (StartDialogue)
+            if (distance <= 1.2f)  //靠近NPC
             {
-                StartDialogue = false;
-                Beside = true;
-                DailyDialogue.NearNPC(NpcName,  true);
-                DailyDialogue.StartConversation(0, NpcName, RaDialogue, false);  //開始對話
+                if (StartDialogue)
+                {
+                    StartDialogue = false;
+                    Beside = true;
+                    DailyDialogue.NearNPC(NpcName, true);
+                    DailyDialogue.StartConversation(0, NpcName, RaDialogue, false);  //開始對話
+                }
+            }
+            else
+            {
+                if (Beside)
+                {
+                    Beside = false;
+                    DailyDialogue.NearNPC(NpcName, false);
+                }
+
             }
         }
-        else
-        {
-            if (Beside)
-            {
-                Beside = false;
-                DailyDialogue.NearNPC(NpcName, false);
-            }
-            
-        }
+
     }
     public static void EndDialogue()
     {

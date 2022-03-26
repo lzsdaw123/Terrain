@@ -2,30 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class NPC_Life : MonoBehaviour
 {
     public float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
     //public Image hpImage, HP_R; //血球的UI物件
     [SerializeField] bool Dead;  //是否死亡
+    [SerializeField] bool Explode;  //是否死亡
     float time;
+    [SerializeField] float Deadtime;
     public float UItime;
     public NPC_AI NPC_AI;
+    public Animator ani; //動畫控制器
     public GameObject Exp, BigExp;  //爆炸,大爆炸
-    float DeadTime;
 
     void Awake()
     {
         time = 0;
-        DeadTime = 0;
+        Deadtime = -1;
     }
     void Start()
     {
         hp = fullHp= hp_R = 20; //遊戲一開始時先填滿血
-        Dead = false;
+        Dead = Explode = false;
         UItime = 0;
         if (Exp != null) Exp.SetActive(false);
         if(NPC_AI!=null) NPC_AI.enabled = true;
+        GetComponent<CapsuleCollider>().enabled = true;
+        GetComponent<NavMeshAgent>().enabled = true;
+        GetComponent<Rigidbody>().isKinematic = true;
+        gameObject.layer = LayerMask.NameToLayer("Actor");
     }
 
     public void Damage(float Power) // 接受傷害
@@ -34,16 +41,23 @@ public class NPC_Life : MonoBehaviour
         //AudioManager.Warn(0);
         if (hp <= 0)
         {
+            if (!Dead)
+            {
+                ani.SetTrigger("Dead");
+                gameObject.layer = LayerMask.NameToLayer("Default");
+                Dead = true;
+            }
             hp = 0; // 不要扣到負值
-            //gameObject.SetActive(false);
-            Destroyed();
         }      
     }
     void Update()
     {
         //hpImage.fillAmount = hp / fullHp; //顯示血球
         //HP_R.fillAmount = hp_R / fullHp; //顯示血球
-
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Damage(20);
+        }
         //if (hp != hp_R)
         //{
         //    time += 4 * Time.deltaTime;
@@ -58,40 +72,44 @@ public class NPC_Life : MonoBehaviour
         //    hp_R = hp;
         //    time = 0;
         //}
-        //if (!Dead)
-        //{
-        //    if (hp <= fullHp * 0.12f)  //血量低於安全值
-        //    {
-        //        if (WarnT)
-        //        {
-        //            WarnT = false;
-        //            AudioManager.Warn(0);
-        //        }
-        //    }
-        //}
-        if (Dead)
+        if (hp <= 0 && !Dead)
         {
-            DeadTime += Time.deltaTime;
-            //AudioManager.Warn(-1);
-        }
-        if (DeadTime >= 1.6f)
-        {
-            //BigExp.SetActive(false);
-            if (Exp != null)  Exp.SetActive(false);
-            gameObject.SetActive(false);
-            DeadTime = 2;
-        }
-        //if (DeadTime >= 6)
-        //{
-        //    DeadTime = 10;
-        //}
-    }
-    void Destroyed()
-    {
-        if (!Dead)
-        {
+            ani.SetTrigger("Dead");
+            gameObject.layer = LayerMask.NameToLayer("Default");
             Dead = true;
-            //print("守衛已被摧毀");
+        }
+        if (Deadtime >= 1)  //關閉整個NPC
+        {
+            GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<CapsuleCollider>().enabled = false;
+
+            Deadtime = -1;
+            //gameObject.SetActive(false);
+        }else if (Deadtime >= 0)
+        {
+            Deadtime += Time.deltaTime;
+        }
+    }
+    public void DeadExp(int N)
+    {
+        switch (N)
+        {
+            case 0:
+                Destroyed();
+                break;
+            case 1:
+                if (Exp != null) Exp.SetActive(false);
+                Deadtime = 0;
+                break;
+        }
+    }
+    void Destroyed()  //爆炸特效
+    {
+        if (!Explode)
+        {
+            GetComponent<Rigidbody>().isKinematic = false;
+            GetComponent<NavMeshAgent>().enabled = false;
+            Explode = true;
             if (Exp != null) Exp.SetActive(true);
             if (NPC_AI != null)  NPC_AI.enabled = false;  //關閉AI腳本
             //AudioManager.explode();   

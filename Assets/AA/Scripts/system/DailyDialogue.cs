@@ -151,6 +151,8 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
                     Dialogue[6] = "「冷凝器」則不斷抽取「水泵」的水進行降溫。";                
                 }
                 break;
+            case 2:
+                break;
         }
     }
 }

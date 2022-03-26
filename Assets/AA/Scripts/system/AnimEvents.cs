@@ -12,6 +12,7 @@ public class AnimEvents : MonoBehaviour
 
     public MonsterAI02 MonsterAI02;
     public MonsterAI03 MonsterAI03;
+    public NPC_Life NPC_Life;
     public float h, v;
 
 
@@ -54,7 +55,7 @@ public class AnimEvents : MonoBehaviour
             DontShooting = false;
         }    
     }
-    void FireEnd()
+    void FireEnd()  //開火結束
     {
         switch (UnitType)
         {
@@ -98,6 +99,10 @@ public class AnimEvents : MonoBehaviour
                 NPC_AI.ReLoad_E();
                 break;
         }
+    }
+    void NPC_Dead(int N)
+    {
+        NPC_Life.DeadExp(N);
     }
 
     //怪物用
@@ -144,7 +149,7 @@ public class AnimEvents : MonoBehaviour
         MonsterSource.mute = AudioManager.muteState[2];
         MonsterSource.Play();   
     }
-    void ReloadAudio(int Nub)
+    void ReloadAudio(int Nub)  //換彈音效
     {
         switch (UnitType)
         {
