@@ -11,7 +11,7 @@ public class Shooting : MonoBehaviour
     public GameObject bullet;  //子彈  
     public GameObject[] Muzzle_vfx;  //槍口火光  
     public ParticleSystem[] MuSmoke;  //槍口煙霧
-    public GameObject MuFire_Light;
+    public GameObject[] MuFire_Light;  //開火光影
     public GameObject[] muzzle;  //槍口類型
     public GameObject GunAimR_x;  //X軸瞄準晃動  原Camera
     private Vector3 GA_R;  //槍枝Rotation瞄準偏移修正
@@ -118,7 +118,7 @@ public class Shooting : MonoBehaviour
         FireButtle = 1;
         PickUpWeapon = 0;
         SwitchWeapon = false;
-        FirstWeapon = new bool[] { false, false };
+        FirstWeapon = new bool[] { false, false, false };
     }
     void Start()
     {
@@ -140,12 +140,12 @@ public class Shooting : MonoBehaviour
         AniTime = STtime = 2f;
 
         Muzzle_vfx[WeaponType].SetActive(false);
-        MuFire_Light.SetActive(false);
         MuSmoke[WeaponType].Stop();
         Weapon.SetBool("LayDown", true);
         for (int i = 0; i < GunFlashlight.Length; i++)  //預設關手電筒
         {
             GunFlashlight[i].SetActive(true);
+            MuFire_Light[i].SetActive(false);
         }
         Aim =  GameObject.Find("Aim").gameObject.GetComponent<Image>();
     }
@@ -555,14 +555,15 @@ public class Shooting : MonoBehaviour
             }
         }
         TargetWall = ShootingRange.TargetWall;
-        if (MuFire_Light.activeSelf)
+        if (MuFire_Light[WeaponType].activeSelf && WeaponType !=0)
         {
-            MuFire_Light.GetComponent<Light>().range -= 80 * Time.deltaTime;
-            float Range = MuFire_Light.GetComponent<Light>().range;
+            print(MuFire_Light[WeaponType].name);
+            MuFire_Light[WeaponType].GetComponent<Light>().range -= 80 * Time.deltaTime;
+            float Range = MuFire_Light[WeaponType].GetComponent<Light>().range;
             if (Range <= 0)
             {
-                MuFire_Light.SetActive(false);
-                MuFire_Light.GetComponent<Light>().range = 20;
+                MuFire_Light[WeaponType].SetActive(false);
+                MuFire_Light[WeaponType].GetComponent<Light>().range = 30;
             }
         }
     } 
@@ -719,7 +720,7 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx[WeaponType].transform.position = muzzlePOS;
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx[WeaponType].SetActive(true);
-            MuFire_Light.SetActive(true);
+            MuFire_Light[WeaponType].SetActive(true);
             switch (WeaponType)
             {
                 case 0:

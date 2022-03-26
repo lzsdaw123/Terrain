@@ -586,7 +586,8 @@ MonoBehaviour:
   - {fileID: 3250799378802924937}
   - {fileID: 7794056175795303112}
   - {fileID: 8994250278922986495}
-  MuFire_Light: {fileID: 475071380251318582}
+  MuFire_Light:
+  - {fileID: 0}
   muzzle:
   - {fileID: 7529279468987154909}
   - {fileID: 622874815737184802}
@@ -652,7 +653,7 @@ MonoBehaviour:
   HP_W: {fileID: 0}
   HP_R: {fileID: 0}
   time: 0
-  S_HIT: {fileID: 6908591796056220230}
+  S_HIT: {fileID: 7581782527234306868}
   HP_R_speed: 2
 --- !u!1 &622874816555596344
 GameObject:
@@ -7109,9 +7110,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 237851073221309336}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &6908591796056220230 stripped
+--- !u!198 &7581782527234306868 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6678059693951603166, guid: 0d8824e81756ff745b56274270de6a7e,
+  m_CorrespondingSourceObject: {fileID: 7672694794847338668, guid: 0d8824e81756ff745b56274270de6a7e,
     type: 3}
   m_PrefabInstance: {fileID: 237851073221309336}
   m_PrefabAsset: {fileID: 0}
@@ -7289,12 +7290,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d095513ba462bc346a8176918c9ca855, type: 3}
---- !u!1 &475071380251318582 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4600443633947847788, guid: d095513ba462bc346a8176918c9ca855,
-    type: 3}
-  m_PrefabInstance: {fileID: 4129737066701305178}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6080148185883515140 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7867440506293988446, guid: d095513ba462bc346a8176918c9ca855,
@@ -7364,6 +7359,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 69.785
       objectReference: {fileID: 0}
+    - target: {fileID: 3462749257474783172, guid: 2332ff2c73430c947bf1390eefb3959f,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7717083332165542158, guid: 2332ff2c73430c947bf1390eefb3959f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.555
+      objectReference: {fileID: 0}
     - target: {fileID: 7867440506293988446, guid: 2332ff2c73430c947bf1390eefb3959f,
         type: 3}
       propertyPath: m_RootOrder
@@ -7427,7 +7432,7 @@ PrefabInstance:
     - target: {fileID: 9168048851376862222, guid: 2332ff2c73430c947bf1390eefb3959f,
         type: 3}
       propertyPath: ShapeModule.angle
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2332ff2c73430c947bf1390eefb3959f, type: 3}
