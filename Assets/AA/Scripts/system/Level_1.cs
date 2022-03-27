@@ -7,6 +7,7 @@ using System;
 public class Level_1 : MonoBehaviour
 {
     public static bool Level_A_Start = false;  //任務觸發碰撞
+    [SerializeField] bool SF_Level_A_Start;  //任務觸發碰撞
     public static int LevelA_;  //關卡判定
     [SerializeField] int SF_LevelA_;  //關卡判定
     GameObject SpawnRay;
@@ -26,7 +27,7 @@ public class Level_1 : MonoBehaviour
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject tagetUI;  //任務目標UI
     public int missionLevel = 0;  //任務關卡
-    public static int[] missionNumb = new int[] { 7, 5 };  //任務數量
+    public static int[] missionNumb = new int[] { 7,1,3,3 };  //任務數量
     static int missionStage;  //任務階段
     [SerializeField] int SF_missionStage;  //顯示任務階段
     bool Mission_L1;  //關卡重生點
@@ -86,6 +87,7 @@ public class Level_1 : MonoBehaviour
     {
         missionLevel = PlayerView.missionLevel;
         missionStage = PlayerView.missionStage;  //跟換目標
+        SF_Level_A_Start = Level_A_Start;
         SF_missionStage = missionStage;
         Taget_distance = PlayerView.pu_distance;
         SF_stageTime = stageTime;
@@ -168,7 +170,7 @@ public class Level_1 : MonoBehaviour
             switch (LevelA_)
             {
                 case 2:
-                    if (MissionTime >= 6)
+                    if (MissionTime >= 2)
                     {
                         PlayerView.missionChange(2, 0);  //改變關卡
                         DialogueEditor.StartConversation(2, 0, 1, false, 2.0f);  //開始對話
@@ -180,7 +182,7 @@ public class Level_1 : MonoBehaviour
                     else MissionTime += Time.deltaTime;
                     break;
                 case 3:
-                    if (MissionTime >= 9)
+                    if (MissionTime >= 8)
                     {
                         LevelA_ = 4;
                         MissionTime = 0;
@@ -328,11 +330,11 @@ public class Level_1 : MonoBehaviour
     {
         if (Level_A_Start)
         {
-            Level_A_Start = false;
             if (other.gameObject.layer == LayerMask.NameToLayer("Actor"))
             {
                 if (other.tag == "Player")
                 {
+                    Level_A_Start = false;
                     Objects[3].GetComponent<Animator>().enabled = true;  //開起警報
                     LevelA_ = 2;
                     MissionTime = 0;

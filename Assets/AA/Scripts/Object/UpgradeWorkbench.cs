@@ -35,7 +35,7 @@ public class UpgradeWorkbench : MonoBehaviour
     public static int 部件ID;
     public string 部件名稱;
     public Text text;
-    bool FirstWork;
+    public static bool FirstWork;
 
     void Start()
     {

@@ -371,7 +371,7 @@ public class Shooting : MonoBehaviour
                     transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f) *Time.deltaTime;  //水平晃動
                     float oriX= GunAimR_x.GetComponent<MouseLook>().rotationX;  //原本位置
                     float newX= GunAimR_x.GetComponent<MouseLook>().rotationX- FireRotateX;  //後座力位置
-                    print("舊的" + oriX + "  / 新的" + newX + " /  X :" + FireRotateX + " / Y :" + FireRotateY);
+                    //print("舊的" + oriX + "  / 新的" + newX + " /  X :" + FireRotateX + " / Y :" + FireRotateY);
                     if(oriX > newX)
                     {
                         GunAimR_x.GetComponent<MouseLook>().rotationX -= 10f * Time.deltaTime;  //垂直晃動
@@ -560,7 +560,7 @@ public class Shooting : MonoBehaviour
         TargetWall = ShootingRange.TargetWall;
         if (MuFire_Light[WeaponType].activeSelf && WeaponType !=0)
         {
-            print(MuFire_Light[WeaponType].name);
+            //print(MuFire_Light[WeaponType].name);
             MuFire_Light[WeaponType].GetComponent<Light>().range -= 80 * Time.deltaTime;
             float Range = MuFire_Light[WeaponType].GetComponent<Light>().range;
             if (Range <= 0)
@@ -629,7 +629,7 @@ public class Shooting : MonoBehaviour
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
                     float PowerAdd = 武器欄位[WeaponType].Power;
-                    print(PowerAdd);
+                    //print(PowerAdd);
                     if (hit[n].collider.tag == "NPC")
                     {
                         hit[n].transform.SendMessage("TeamDamage", Weapons[WeaponType].power * PowerAdd);  //造成傷害

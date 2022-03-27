@@ -75,7 +75,8 @@ public class DialogueOptions : MonoBehaviour
             Weap.transform.position = play.gameObject.transform.position;  //位置歸零
             AudioManager.PickUp(2);
             Shooting.PickUpAmm(1);
-            Shooting.SkipTeach = true;
+            Shooting.SkipTeach = true;  //跳過教學
+            UpgradeWorkbench.FirstWork = true;  //關閉第一次工作台
             DialogueEditor.TextLine = 0;  //對話句子數歸零
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;  //重置對話冷卻時間
             PlayerView.missionChange(1, 0);  //改變關卡
