@@ -32,7 +32,7 @@ public class UpgradeWorkbench : MonoBehaviour
     public int DropdownType;
     public int FieldType;
     public int PartType;
-    public int 场ンID;
+    public static int 场ンID;
     public string 场ン嘿;
     public Text text;
     bool FirstWork;
@@ -52,10 +52,12 @@ public class UpgradeWorkbench : MonoBehaviour
         场ン嘿 = "ぃㄏノ";
         time = -1;
         FirstWork = false;
+        Shooting.UseWork(猌竟逆);
     }
 
     void Update()
     {
+
         if (CamMove)
         {
             if (Move)  //┰
@@ -113,7 +115,10 @@ public class UpgradeWorkbench : MonoBehaviour
             GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
         }
 
-
+        if (UpgradeMenu.activeSelf)
+        {
+            Shooting.UseWork(猌竟逆);
+        }
         if (Input.GetKeyDown(KeyCode.E))  // [E] 瞒秨
         {
             if (Move)
@@ -189,6 +194,8 @@ public class UpgradeWorkbench : MonoBehaviour
                 if (!猌竟逆[FieldType].场[PartType].Part[dropdown.value].activeSelf)
                 {
                     猌竟逆[FieldType].场[PartType].Part[dropdown.value].SetActive(true);
+                    猌竟逆[FieldType].Power = 猌竟逆[FieldType].场[PartType].Power[dropdown.value];  //猌竟端甡
+                    猌竟逆[FieldType].Recoil = 猌竟逆[FieldType].场[PartType].Recoil[dropdown.value];  //猌竟畒
                     场ンID = 猌竟逆[FieldType].场[PartType].ID[dropdown.value];
                     场ン嘿 = 猌竟逆[FieldType].场[PartType].PartName[dropdown.value];
                 }
@@ -253,6 +260,7 @@ public class UpgradeValue
     public 场[] 场;  //猌竟场ン
     public int Lvevl;  //单
     public float Power;  //
+    public float Recoil;  //畒
     public float Price; //基
 
     /// <summary>
@@ -265,13 +273,14 @@ public class UpgradeValue
     /// <param name="Power"></param>
     /// <param name="Price">基</param>
     /// <returns></returns>
-    public UpgradeValue(String _摸, GameObject gameObject, 场[] _场, int lvevl, float power, float price)
+    public UpgradeValue(String _摸, GameObject gameObject, 场[] _场, int lvevl, float power, float recoil, float price)
     {
         摸 = _摸;
         Object = gameObject;
         场 = _场;
         Lvevl = lvevl;
         Power = power;
+        Recoil = recoil;
         Price = price;
     }
 }
@@ -285,6 +294,7 @@ public class 场
     public GameObject[] Part;  //猌竟场ン
     public int[] Lvevl;  //单
     public float[] Power;  //
+    public float[] Recoil;  //畒
     public float[] Price; //基
 
     /// <summary>
@@ -299,7 +309,7 @@ public class 场
     /// <param name="Power"></param>
     /// <param name="Price">基</param>
     /// <returns></returns>
-    public 场(String _摸, GameObject[] partObject, int[] id, String[] partName, GameObject[] part, int[] lvevl, float[] power, float[] price)
+    public 场(String _摸, GameObject[] partObject, int[] id, String[] partName, GameObject[] part, int[] lvevl, float[] power, float[] recoil, float[] price)
     {
         摸 = _摸;
         ID = id;
@@ -308,6 +318,7 @@ public class 场
         Part = part;
         Lvevl = lvevl;
         Power = power;
+        Recoil = recoil;
         Price = price;
     }
 }

@@ -75,6 +75,7 @@ public class Shooting : MonoBehaviour
     public BoxCollider GunCollider;
     public static bool SkipTeach;
     Image Aim;
+    static UpgradeValue[] 武器欄位;
 
     public static void StartAll()
     {
@@ -346,13 +347,14 @@ public class Shooting : MonoBehaviour
                         OriFireRotateX = GunAimR_x.GetComponent<MouseLook>().rotationX;
                     }
                     MuSmoke[WeaponType].Stop();  //關閉槍口煙霧
+                    //--開火後座力--
                     float[] FRxMin = new float[] { 6*2, 14*2, 16*2 };  //最小垂直晃動 x
                     float[] FRxMax = new float[] {12*2, 26*2, 30*2 };  //最大垂直晃動 x
                     float rangeY = Random.Range(-40+20f, 40+20f);  //射擊水平晃動範圍
                     float rangeX = Random.Range(FRxMin[WeaponType], FRxMax[WeaponType]);  //射擊垂直晃動範圍
-                    FireRotateY = (noise * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100;
+                    FireRotateY = (武器欄位[WeaponType].Recoil * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100; //水平後座力(槍口部件* rangeX)
                     //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
-                    FireRotateX = rangeX;
+                    FireRotateX = rangeX * 武器欄位[WeaponType].Recoil;  //垂直後座力(rangeX * 槍口部件)
                     if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
                     if (AimIng || PlayerMove.Squat)  //瞄準或蹲下
                     {                      
@@ -367,8 +369,9 @@ public class Shooting : MonoBehaviour
                     // Debug.Log("後" + " / " + FireRotateX);
                     //print(FireRotateX + "," + FireRotateY);
                     transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f) *Time.deltaTime;  //水平晃動
-                    float oriX= GunAimR_x.GetComponent<MouseLook>().rotationX;
-                    float newX= GunAimR_x.GetComponent<MouseLook>().rotationX- FireRotateX;
+                    float oriX= GunAimR_x.GetComponent<MouseLook>().rotationX;  //原本位置
+                    float newX= GunAimR_x.GetComponent<MouseLook>().rotationX- FireRotateX;  //後座力位置
+                    print("舊的" + oriX + "  / 新的" + newX + " /  X :" + FireRotateX + " / Y :" + FireRotateY);
                     if(oriX > newX)
                     {
                         GunAimR_x.GetComponent<MouseLook>().rotationX -= 10f * Time.deltaTime;  //垂直晃動
@@ -625,9 +628,11 @@ public class Shooting : MonoBehaviour
                 }
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
+                    float PowerAdd = 武器欄位[WeaponType].Power;
+                    print(PowerAdd);
                     if (hit[n].collider.tag == "NPC")
                     {
-                        hit[n].transform.SendMessage("TeamDamage", Weapons[WeaponType].power);  //造成傷害
+                        hit[n].transform.SendMessage("TeamDamage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
                     }
                     //Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Default"))  //彈孔噴黑煙
@@ -664,16 +669,16 @@ public class Shooting : MonoBehaviour
                             {
                                 if (n == 0)
                                 {
-                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 2 +1);  //造成傷害
+                                    hit[0].transform.SendMessage("Damage", (Weapons[WeaponType].power / 2 +1) * PowerAdd);  //造成傷害
                                 }
                                 else
                                 {
-                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 10);  //造成範圍傷害
+                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 10 * PowerAdd);  //造成範圍傷害
                                 }
                             }
                             else
                             {
-                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power);  //造成傷害
+                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
                             }
                             //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                         }
@@ -686,11 +691,11 @@ public class Shooting : MonoBehaviour
                                 hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
                                 if (n == 0)
                                 {
-                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 5);  //造成一半傷害
+                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 5 * PowerAdd);  //造成一半傷害
                                 }
                                 else
                                 {
-                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 20);  //造成一半範圍傷害
+                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 20 * PowerAdd);  //造成一半範圍傷害
                                 }
                             }
                         }
@@ -838,5 +843,9 @@ public class Shooting : MonoBehaviour
 
             }
         }
+    }
+    public static void UseWork(UpgradeValue[] _武器欄位)
+    {
+        武器欄位 = _武器欄位;
     }
 }
