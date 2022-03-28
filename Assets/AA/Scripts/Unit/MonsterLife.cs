@@ -149,7 +149,7 @@ public class MonsterLife : MonoBehaviour
                     break;
             }           
             agent.enabled = false; // 立即關閉尋徑功能
-            ani.SetTrigger("Die");           
+            //ani.SetTrigger("Die");           
         }
 
         RefreshLifebar(); // 更新血條
@@ -187,9 +187,11 @@ public class MonsterLife : MonoBehaviour
         {
             case 0:
                 monster02.enabled = true;
+                monster02.ani.SetBool("Attack", true);
                 break;
             case 1: 
                 monster03.enabled = true;
+                monster03.ani.SetBool("Attack", true);
                 break;
         }
         agent.enabled = true; // 開啟尋徑功能

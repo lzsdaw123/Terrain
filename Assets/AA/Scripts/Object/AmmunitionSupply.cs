@@ -72,9 +72,12 @@ public class AmmunitionSupply : MonoBehaviour
                 if (AmmSupply[1] != 6)
                 {
                     int D = 6 - AmmSupply[1];
-                    for(int i=0; i<D; i++)
+                    for (int i = 0; i < D; i++)
                     {
-                        ASupply[i].SetActive(false);
+                        if (D != 6)
+                        {
+                            ASupply[i].SetActive(false);
+                        }
                     }
                 }
                 break;
@@ -175,8 +178,13 @@ public class AmmunitionSupply : MonoBehaviour
                             Shooting.PickUpAmm(0);
                         }
                         //print("彈藥補給");
-                        AmmSupply[0] = AmmSupply[0] - (T_WeapAmm[0] - Shooting.Weapons[0].T_WeapAm);
-                        Shooting.Weapons[0].T_WeapAm = T_WeapAmm[0];
+                        int NeedAmm = T_WeapAmm[0] - Shooting.Weapons[0].T_WeapAm;  //需求彈藥數
+                        if (NeedAmm > AmmSupply[0])
+                        {
+                            NeedAmm = AmmSupply[0];
+                        }
+                        AmmSupply[0] = AmmSupply[0] - NeedAmm;
+                        Shooting.Weapons[0].T_WeapAm += NeedAmm;
                     }
                     break;
                 case 1:
@@ -186,8 +194,13 @@ public class AmmunitionSupply : MonoBehaviour
                         Am_zero_Warn.SetActive(false);
                         AudioManager.PickUp(0);
                         //print("彈藥補給");
-                        AmmSupply[1] = AmmSupply[1] - (T_WeapAmm[1] - Shooting.Weapons[1].T_WeapAm);
-                        Shooting.Weapons[1].T_WeapAm = T_WeapAmm[1];
+                        int NeedAmm = T_WeapAmm[1] - Shooting.Weapons[1].T_WeapAm;  //需求彈藥數
+                        if (NeedAmm > AmmSupply[1])
+                        {
+                            NeedAmm = AmmSupply[1];
+                        }
+                        AmmSupply[1] = AmmSupply[1] - NeedAmm;
+                        Shooting.Weapons[1].T_WeapAm += NeedAmm;
                     }
                     break;
             }

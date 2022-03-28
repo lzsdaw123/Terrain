@@ -18,7 +18,8 @@ public class ElectricDoor : MonoBehaviour
     bool SourcePause;
     [SerializeField] bool PlayAudio;
     public AudioSource AudioS;
-    public bool AutoDoor; 
+    public bool AutoDoor;
+    public bool 任務=false; 
 
     void Start()
     {

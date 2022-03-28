@@ -25,9 +25,10 @@ public class Level_1 : MonoBehaviour
     public LayerMask LayerMask;
     public static bool AttackStart = false;  //進攻開始
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
+    public GameObject[] MissionUI;
     public GameObject tagetUI;  //任務目標UI
     public int missionLevel = 0;  //任務關卡
-    public static int[] missionNumb = new int[] { 7,1,3,3 };  //任務數量
+    public static int[] missionNumb = new int[] { 7, 1, 3, 3 };  //任務數量
     static int missionStage;  //任務階段
     [SerializeField] int SF_missionStage;  //顯示任務階段
     bool Mission_L1;  //關卡重生點
@@ -51,6 +52,7 @@ public class Level_1 : MonoBehaviour
     public static bool StartDialogue;  //開始對話
     public static bool MissionEnd = false;
     public static bool StopAttack; //暫停怪物進攻
+    [SerializeField] bool SF_StopAttack; //暫停怪物進攻
     public GameObject[] Objects;  //開放使用物件
 
     void Awake()
@@ -70,6 +72,7 @@ public class Level_1 : MonoBehaviour
         SpawnRay.SetActive(false);
         explode.SetActive(false);
         MissionTarget.SetActive(false);
+        MissionUI[0].SetActive(false);
         tagetUI.SetActive(false);
         DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
@@ -92,6 +95,7 @@ public class Level_1 : MonoBehaviour
         Taget_distance = PlayerView.pu_distance;
         SF_stageTime = stageTime;
         SF_LevelA_ = LevelA_;
+        SF_StopAttack = StopAttack;
 
         if (!MissionEnd)  //任務目標是否結束
         {
@@ -140,6 +144,18 @@ public class Level_1 : MonoBehaviour
                     break;
                 case 2:
                     MissonString = MissonStringL2;  //第二階段
+                    if (missionStage == 3 || LevelA_==9)
+                    {
+                        //print(missionStage + " // " + LevelA_);
+                        Objects[4].GetComponent<BoxCollider>().enabled = true;
+                        ElectricDoor electricDoor = Objects[4].GetComponent<ElectricDoor>();
+                        if (electricDoor.Botton)
+                        {
+                            print("END");
+                            Objects[5].SetActive(true);
+                            Settings.pause();
+                        }
+                    }
                     break;
                 case 3:
                     MissonString = MissonStringL2_2;  //第二之二階段
@@ -232,6 +248,7 @@ public class Level_1 : MonoBehaviour
                 var main = PSsmoke.main;
                 main.loop = false;
                 MissionTarget.SetActive(true);
+                MissionUI[0].SetActive(true);
             }
             if (time >= 25f)
             {
@@ -256,12 +273,19 @@ public class Level_1 : MonoBehaviour
             if(EnemyWave <2)  //進攻波數
             {
                 if (StopAttack) return;  //處於暫停進攻狀態
-                if (stageTime<= 0 && stageTime>-1)  //下次來襲時間
+                if (stageTime<= 0 && stageTime>-1)  //下次來襲時間  開始進攻
                 {
                     _SpawnRay.StartBorn = true;  //怪物開始生成
+                    _SpawnRay.BornTime = 0;  //怪物開始生成
                     EnemyWave++;
                     _SpawnRay.EnemyWaveNum(EnemyWave);
                     stageTime = -1;
+                    if (LevelA_>4)
+                    {
+                        MissionUI[1].SetActive(true);
+                        PlayAu = true;
+                        PlayAudio();
+                    }
                 }
                 else if(stageTime >0)
                 {
@@ -273,7 +297,7 @@ public class Level_1 : MonoBehaviour
                 string srtSecond="";
                 if (stageTime <= -1)
                 {
-                    stageTimeText.text = "?? : ??";
+                    stageTimeText.text = "  ";
                 }
                 else
                 {
@@ -298,6 +322,20 @@ public class Level_1 : MonoBehaviour
                         PlayerView.missionChange(2, 1);  //改變關卡
                         DialogueEditor.StartConversation(2, 1, 0, false, 0);  //開放左輪使用
                         Objects[2].GetComponent<BoxCollider>().enabled = true;
+                        break;
+                    case 6:
+                        print("2");
+                        LevelA_ = 7;
+                        //UiOpen = true;  //開啟任務UI與音效
+                        stageTime = 25;  //怪物繼續倒數開始
+                        break;
+                    case 8:
+                        print("8");
+                        LevelA_ = 9;
+                        StopAttack = true;
+                        UiOpen = true;
+                        PlayerView.missionChange(2, 3);
+                        DialogueEditor.StartConversation(2, 3, 0, false, 0);
                         break;
                 }
             }

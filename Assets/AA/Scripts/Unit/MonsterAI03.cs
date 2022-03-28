@@ -92,7 +92,8 @@ public class MonsterAI03 : MonoBehaviour
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
-
+        attacking = false;
+        bulletAttack = 1;
         reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體  //暫時關閉
 
@@ -434,5 +435,9 @@ public class MonsterAI03 : MonoBehaviour
     {
         attacking = attackingB;
         bulletAttack = BulletAttackNub;
+    }
+    void OnDisable()  //禁用時
+    {
+        attacking = false;
     }
 }

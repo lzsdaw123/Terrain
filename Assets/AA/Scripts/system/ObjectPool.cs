@@ -32,7 +32,7 @@ public class ObjectPool : MonoBehaviour
         //DontDestroyOnLoad(gameObject);  //切換場景時保留
         inttailSize = 8;  //物件池大小
         inttailSizeMS[0] = 16;  //物件池大小
-        inttailSizeMS[1] = 10;  //物件池大小
+        inttailSizeMS[1] = 12;  //物件池大小
         MonsterAttributes[0] = new MonsterAttributes(0.6f, 1.1f);
         MonsterAttributes[1] = new MonsterAttributes(1, 1.5f);
 

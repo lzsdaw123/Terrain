@@ -9,7 +9,7 @@ public class SpawnRay : MonoBehaviour {
 
 	[SerializeField] bool DisplayField = true;
 	public GameObject[] monsters = new GameObject[1];	// 可生的怪種類
-	public int[] maxNumber = new int[] {5, 5 };							// 生怪上限
+	public int[] maxNumber = new int[] {7, 5 };							// 生怪上限
 	[SerializeField] private float bornTimespanMin = 3f;	// 下次生怪時間間隔
 	[SerializeField] private float bornTimespanMax = 10f;
 	private float[] nextBornTime = new float[] { 0, 0 };
@@ -85,16 +85,24 @@ public class SpawnRay : MonoBehaviour {
 		maxNumber[1] = EnemyNum[EnemyWave].EnemyNumB;
 		SF_counter = counter;
 
-		if (StartBool[0] && StartBool[1] && StartBorn)  //復活生成
+		if (StartBool[0] || StartBool[1] && StartBorn)  //復活生成
         {
 			if (BornTime >= 20)  //停止復活生成  
 			{
-				BornTime = 0;
+				BornTime = -1;
 				StartBorn = false;
 				StartBool[0] = false;
-                if (Level_1.LevelA_ > 4)  //第四階段
+                switch (Level_1.LevelA_)
                 {
-					Level_1.stageTime = 0;  //開始進階冷卻
+					//case 4:
+					//	Level_1.stageTime = 25;  //開始進階冷卻
+					//	break;
+					case 5:
+						Level_1.LevelA_ = 6;
+						break;
+					case 7:
+						Level_1.LevelA_ = 8;
+						break;
 				}
 			}
 			else if (BornTime >= 0)

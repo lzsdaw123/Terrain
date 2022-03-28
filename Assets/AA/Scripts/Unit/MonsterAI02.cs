@@ -11,6 +11,7 @@ public class MonsterAI02 : MonoBehaviour
     private SpawnRay spawnRay;  //生怪后蟲
     private Vector3 target; // 尋徑目標點
     public GameObject[] MissionTarget;  //任務目標點
+    [SerializeField] GameObject 目前進攻目標;
     [SerializeField] GameObject 目前攻擊目標;
     public GameObject[] defenseOb;
     //public Defense Defense;
@@ -53,6 +54,7 @@ public class MonsterAI02 : MonoBehaviour
     bool AttackAngleT = false;
     [SerializeField] private bool attacking;
     private int bulletAttack;
+    [SerializeField] int SF_bulletAttack;
     public static bool AttackPlay;
     bool TrPlayer;
     [SerializeField] private bool Fire;
@@ -93,6 +95,7 @@ public class MonsterAI02 : MonoBehaviour
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
         attacking = false;
+        bulletAttack = 1;
         Fire = false;
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
@@ -119,6 +122,7 @@ public class MonsterAI02 : MonoBehaviour
         oriTarget[0] = MissionTarget[0].transform;
         oriTarget[1] = MissionTarget[1].transform;
         oriTarget[2] = MissionTarget[2].transform;
+        ani.SetBool("Attack", true);
     }
 
     public void AttackLv1()
@@ -341,9 +345,10 @@ public class MonsterAI02 : MonoBehaviour
 
     void Update()
     {
+        SF_bulletAttack = bulletAttack;
         if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         A_defense = Defense.ST_A_defense;
-        if (oriTarget[A_defense] != null) 目前攻擊目標 = oriTarget[A_defense].gameObject;
+        if (oriTarget[A_defense] != null) 目前進攻目標 = oriTarget[A_defense].gameObject;
 
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
@@ -406,7 +411,7 @@ public class MonsterAI02 : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        //目前攻擊目標 = attackTarget.gameObject;
+        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
     }
     void FixedUpdate()
     {
@@ -414,7 +419,7 @@ public class MonsterAI02 : MonoBehaviour
         {
             attacking = false;
             bulletAttack = 0;
-            //目前攻擊目標 = attackTarget.gameObject;
+            if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             muzzlePOS = muzzle.transform.position;
@@ -465,5 +470,9 @@ public class MonsterAI02 : MonoBehaviour
     {
         attacking = attackingB;
         bulletAttack = BulletAttackNub;
+    }
+    void OnDisable()  //禁用時
+    {
+        attacking = false;
     }
 }

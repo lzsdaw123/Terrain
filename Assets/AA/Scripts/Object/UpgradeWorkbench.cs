@@ -198,6 +198,7 @@ public class UpgradeWorkbench : MonoBehaviour
                     武器欄位[FieldType].Recoil = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  //武器後座力
                     部件ID = 武器欄位[FieldType].部位[PartType].ID[dropdown.value];
                     部件名稱 = 武器欄位[FieldType].部位[PartType].PartName[dropdown.value];
+                    Shooting.換部件 = true;
                 }
                 break;
         }   

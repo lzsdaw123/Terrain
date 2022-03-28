@@ -76,6 +76,9 @@ public class Shooting : MonoBehaviour
     public static bool SkipTeach;
     Image Aim;
     static UpgradeValue[] 武器欄位;
+    public 部位 部位;
+    int 部件ID;
+    public static bool 換部件;
 
     public static void StartAll()
     {
@@ -152,6 +155,16 @@ public class Shooting : MonoBehaviour
     }
     void Update()
     {
+        if (換部件)
+        {
+            換部件 = false;
+            部件ID = UpgradeWorkbench.部件ID;
+            for (int i = 0; i < 部位.Part.Length; i++)
+            {
+                部位.Part[i].SetActive(false);
+            }
+            部位.Part[部件ID].SetActive(true);
+        }
         if (Time.timeScale == 0) {return;}
         FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
         gFieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;
@@ -348,8 +361,8 @@ public class Shooting : MonoBehaviour
                     }
                     MuSmoke[WeaponType].Stop();  //關閉槍口煙霧
                     //--開火後座力--
-                    float[] FRxMin = new float[] { 6*2, 14*2, 16*2 };  //最小垂直晃動 x
-                    float[] FRxMax = new float[] {12*2, 26*2, 30*2 };  //最大垂直晃動 x
+                    float[] FRxMin = new float[] { 4*2, 14*2, 16*2 };  //最小垂直晃動 x
+                    float[] FRxMax = new float[] {8*2, 26*2, 30*2 };  //最大垂直晃動 x
                     float rangeY = Random.Range(-40+20f, 40+20f);  //射擊水平晃動範圍
                     float rangeX = Random.Range(FRxMin[WeaponType], FRxMax[WeaponType]);  //射擊垂直晃動範圍
                     FireRotateY = (武器欄位[WeaponType].Recoil * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100; //水平後座力(槍口部件* rangeX)
@@ -458,7 +471,7 @@ public class Shooting : MonoBehaviour
         {
             coolDownTimer += Time.deltaTime;
             //Weapon.SetBool("Fire", false);
-        }      
+        }
         if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
         {
             Reload = false;

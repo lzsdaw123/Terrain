@@ -74,6 +74,7 @@ public class NPC_AI : MonoBehaviour
     [SerializeField] bool Aim;  //收槍bool
     public float MonTime;
     public bool 有怪;
+    int HitNub=0;
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
@@ -532,7 +533,7 @@ public class NPC_AI : MonoBehaviour
                 if (hit.collider.tag == "Metal")  //金屬
                 {
                     HitType = 3;
-                    AudioManager.Hit(0);
+                    //AudioManager.Hit(0);
                     //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                 }
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴紅血
@@ -571,7 +572,12 @@ public class NPC_AI : MonoBehaviour
             }
             else
             {
-                pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                HitNub++;
+                if (HitNub >= 10)
+                {
+                    HitNub = 0;
+                    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                }
             }
             //Muzzle_vfx.transform.position = muzzlePOS;
             //Muzzle_vfx.transform.rotation = transform.rotation;

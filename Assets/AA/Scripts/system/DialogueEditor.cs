@@ -226,8 +226,10 @@ public class DialogueEditor : MonoBehaviour
                         Dialogue[1] = "之後都能過來取得。";
                         break;
                     case 3:
-                        Dialogue = new string[1];
+                        Dialogue = new string[3];
                         Dialogue[0] = "成功保衛發電廠了。";
+                        Dialogue[1] = "剛剛探勘隊的傳來重大發現。";
+                        Dialogue[2] = "接下來請前往研究室。";
                         break;
                 }
                 break;
