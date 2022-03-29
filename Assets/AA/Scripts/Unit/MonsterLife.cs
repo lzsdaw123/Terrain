@@ -13,6 +13,7 @@ public class MonsterLife : MonoBehaviour
     private Collider cld;
 
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
+    public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public float[] hpFull = new float[] { 14, 20 }; // 血量上限
     public float hp; // 血量
     int HpLv;  //生命等級
@@ -53,7 +54,7 @@ public class MonsterLife : MonoBehaviour
         HitUITime = 0;
         Dead = false;
         //ani = GetComponent<Animator>();
-
+        PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
     }
 

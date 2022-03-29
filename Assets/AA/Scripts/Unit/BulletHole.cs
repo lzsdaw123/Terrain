@@ -5,12 +5,14 @@ using UnityEngine;
 public class BulletHole : MonoBehaviour
 {
     public float BulletHoleTime;  //彈孔持續時間
-    public float[] InputTime;
+    public float[] InputTime;  //輸入生命時間
     public ObjectPool pool_Hit;
     [SerializeField] private int WeaponType; //武器類型
     [SerializeField] private GameObject Light;
     float LightRange;
-
+    public bool AutoDead=true;
+    public bool Dead;
+    public GameObject father;
 
     // Start is called before the first frame update
     void Awake()
@@ -21,50 +23,75 @@ public class BulletHole : MonoBehaviour
     {
         WeaponType = Shooting.WeaponType;
         BulletHoleTime = InputTime[WeaponType];
+        if (!AutoDead) BulletHoleTime = -1;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
-        if (WeaponType == 1)
+        if(Light.gameObject != null)
         {
-            Light.GetComponent<Light>().range = 10;
-            Light.SetActive(true);
+            if (WeaponType == 1)
+            {
+                Light.GetComponent<Light>().range = 10;
+                Light.SetActive(true);
+            }
+            else
+            {
+                Light.SetActive(false);
+            }
         }
-        else
-        {
-            Light.SetActive(false);
-        }
+        father = transform.parent.gameObject;
+        Dead = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        BulletHoleTime -= Time.deltaTime;
-        if (BulletHoleTime <= 0)
+        //transform.parent = gameObject.transform;
+        if (ShootingRange.TargetWall && !Dead)
+        {
+            BulletHoleTime = -1;
+        }
+        else if (!ShootingRange.TargetWall)
+        {
+            BulletHoleTime = 0;
+        }
+        if (BulletHoleTime > 0)
+        {
+            BulletHoleTime -= Time.deltaTime;
+        }
+        if (BulletHoleTime <= 0 && BulletHoleTime>-1)
         {
             pool_Hit.RecoveryHit(gameObject);     
         }
-        if (Light.activeSelf)
+        if (Light.gameObject != null)
         {
-            Light.GetComponent<Light>().range -= 16 * Time.deltaTime;
-            LightRange = Light.GetComponent<Light>().range;
-
-            if (LightRange <= 0)
+            if (Light.activeSelf)
             {
-                Light.GetComponent<Light>().range = 0;
-                Light.SetActive(false);
+                Light.GetComponent<Light>().range -= 16 * Time.deltaTime;
+                LightRange = Light.GetComponent<Light>().range;
+
+                if (LightRange <= 0)
+                {
+                    Light.GetComponent<Light>().range = 0;
+                    Light.SetActive(false);
+                }
             }
         }
     }
     void OnDisable()
     {
         WeaponType = Shooting.WeaponType;
-        if (WeaponType == 1)
+        if (Light.gameObject != null)
         {
-            Light.GetComponent<Light>().range = 10;
-            Light.SetActive(true);
-        }
-        else
-        {
-            Light.SetActive(false);
+            if (WeaponType == 1)
+            {
+                Light.GetComponent<Light>().range = 10;
+                Light.SetActive(true);
+            }
+            else
+            {
+                Light.SetActive(false);
+            }
         }
         BulletHoleTime = InputTime[WeaponType];
+        if (!AutoDead) BulletHoleTime = -1;
+        Dead = false;
     }
 }

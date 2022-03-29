@@ -417,7 +417,7 @@ Light:
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
+  m_UseViewFrustumForShadowCasterCull: 0
   m_ShadowRadius: 0.75
   m_ShadowAngle: 0
 --- !u!114 &7112799266426849917
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_LightAngle: 1
   m_MaxDepthBias: 0.001
   m_ShadowResolution:
-    m_Override: 512
+    m_Override: 256
     m_UseOverride: 1
     m_Level: 0
   m_ShadowDimmer: 1
@@ -558,7 +558,10 @@ MonoBehaviour:
   camTransform: {fileID: 0}
   Gun_Camera: {fileID: 0}
   distance: 0
+  Low: 1
   _IsInView: 0
+  LightB: 1
+  ShadowsB: 0
   c_dot: 0
   _viewPos: {x: 0, y: 0}
   minDistance:

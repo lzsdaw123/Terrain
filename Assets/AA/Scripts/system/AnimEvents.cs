@@ -52,6 +52,8 @@ public class AnimEvents : MonoBehaviour
     {
         if (UnitType == 0)
         {
+            Shooting.FireButtle = 1;
+            Shooting.Reload = false;
             DontShooting = false;
         }    
     }

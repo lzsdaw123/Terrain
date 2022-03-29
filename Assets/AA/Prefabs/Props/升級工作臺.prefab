@@ -917,6 +917,7 @@ GameObject:
   - component: {fileID: 5405461867090030799}
   - component: {fileID: 5405461867090030769}
   - component: {fileID: 5405461867090030768}
+  - component: {fileID: 3490015165554645141}
   m_Layer: 8
   m_Name: Spot Light (2)
   m_TagString: Untagged
@@ -1073,7 +1074,7 @@ MonoBehaviour:
   m_LightAngle: 1
   m_MaxDepthBias: 0.001
   m_ShadowResolution:
-    m_Override: 512
+    m_Override: 256
     m_UseOverride: 1
     m_Level: 0
   m_ShadowDimmer: 1
@@ -1123,6 +1124,32 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
+--- !u!114 &3490015165554645141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5405461867090030798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c8b068eeb46b084d829a58e8746c45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 0
+  camTransform: {fileID: 0}
+  Gun_Camera: {fileID: 0}
+  distance: 0
+  Low: 1
+  _IsInView: 0
+  LightB: 1
+  ShadowsB: 0
+  c_dot: 0
+  _viewPos: {x: 0, y: 0}
+  minDistance: []
+  MaxDistance: []
+  Light: {fileID: 5405461867090030769}
+  HDAdditionalLightData: {fileID: 5405461867090030768}
 --- !u!1 &5405461867211114389
 GameObject:
   m_ObjectHideFlags: 0

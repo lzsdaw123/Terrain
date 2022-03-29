@@ -82,7 +82,7 @@ public class NPC_Life : MonoBehaviour
         {
             GetComponent<Rigidbody>().isKinematic = true;
             GetComponent<CapsuleCollider>().enabled = false;
-
+            if (Exp != null) Exp.SetActive(false);
             Deadtime = -1;
             //gameObject.SetActive(false);
         }else if (Deadtime >= 0)
@@ -98,7 +98,6 @@ public class NPC_Life : MonoBehaviour
                 Destroyed();
                 break;
             case 1:
-                if (Exp != null) Exp.SetActive(false);
                 Deadtime = 0;
                 break;
         }

@@ -11,12 +11,14 @@ public class LightingSettings : MonoBehaviour
     public Transform camTransform;
     public Camera Gun_Camera;
     public float distance;
+    public bool Low;
     public bool _IsInView;
+    public bool LightB=true;  //是否關閉燈光
+    public bool ShadowsB=false;   //是否關閉陰影
     public float c_dot;
     [SerializeField] Vector2 _viewPos;
     [SerializeField] float[] minDistance;
     [SerializeField] float[] MaxDistance;
-
     public Light Light;
     public HDAdditionalLightData HDAdditionalLightData;
 
@@ -61,46 +63,66 @@ public class LightingSettings : MonoBehaviour
         distance = (camTransform.position - transform.position).magnitude;
         _IsInView = IsInView(transform.position);
 
-        if (IsInView(transform.position))
+        if (IsInView(transform.position))  //在視角內
         {
-            if (distance <= minDistance[Type])
+            if (distance <= minDistance[Type])  //在範圍內
             {
-                HDAdditionalLightData.SetShadowResolution(512);
-                Light.enabled = true;
-                //HDAdditionalLightData.SetShadowResolutionOverride(true);
+                if (Low)
+                {
+                    HDAdditionalLightData.SetShadowResolution(256);
+                }
+                else
+                {
+                    HDAdditionalLightData.SetShadowResolution(512);
+                }
+                On(LightB, ShadowsB);
             }
-            //else if (distance > minDistance[Type] && distance < MaxDistance[Type])
-            //{
-            //    HDAdditionalLightData.SetShadowResolution(512);
-            //    Light.enabled = true;
-            //    //HDAdditionalLightData.SetShadowResolutionOverride(true);
-            //}
-            else if (distance >= MaxDistance[Type])
+            else if (distance >= MaxDistance[Type])  //在範圍之外
             {
-                //HDAdditionalLightData.SetShadowResolution(128);
-                Light.enabled = false;
-                //HDAdditionalLightData.SetShadowResolutionOverride(false);
+                off(LightB, ShadowsB);
             }
         }
-        else if (!IsInView(transform.position))
+        else if (!IsInView(transform.position))  //不在視角內
         {
-            if (distance <= minDistance[Type])
+            if (distance <= minDistance[Type])   //在範圍內
             {
                 HDAdditionalLightData.SetShadowResolution(256);
-                Light.enabled = true;
+                //Light.enabled = true;
+                On(LightB, ShadowsB);
             }
-            else if (distance > minDistance[Type] && distance < MaxDistance[Type])
+            else if (distance > minDistance[Type] && distance < MaxDistance[Type])  //在範圍緩衝內
             {
-                HDAdditionalLightData.SetShadowResolution(128);
-                Light.enabled = true;
-                //HDAdditionalLightData.SetShadowResolutionOverride(false);
+                //HDAdditionalLightData.SetShadowResolution(128);
+                On(LightB, ShadowsB);
             }
-            else if (distance >= MaxDistance[Type])
+            else if (distance >= MaxDistance[Type]) //在範圍之外
             {
-                Light.enabled = false;
-                //HDAdditionalLightData.SetShadowResolutionOverride(false);
-                //HDAdditionalLightData.SetShadowResolution(16);
+                off(LightB, ShadowsB);
             }
+        }
+    }
+
+    void On(bool light, bool shadows)
+    {
+        if (light)
+        {
+            this.Light.enabled = true;
+        }
+        if (shadows)
+        {
+            HDAdditionalLightData.EnableShadows(true);  //開啟陰影
+        }
+
+    }
+    void off(bool light, bool shadows)
+    {
+        if (light)
+        {
+            this.Light.enabled = false;
+        }
+        if (shadows)
+        {
+            HDAdditionalLightData.EnableShadows(false);  //關閉陰影
         }
     }
 }

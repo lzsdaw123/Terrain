@@ -26,7 +26,7 @@ public class Shooting : MonoBehaviour
 
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
-    static int FireButtle;  //開火動畫冷卻
+    public static int FireButtle;  //開火動畫冷卻
     public PlayerMove controller;  //角色控制腳本
     public float AniTime, STtime;
     bool WeapSwitch; //武器切換bool
@@ -676,7 +676,30 @@ public class Shooting : MonoBehaviour
                         //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
                         if (hit[n].collider.tag == "Enemy")  //綠血
                         {
-                            HitType = 2;
+                            int MonsterType=0;
+                            FindUpParent(hit[n].transform);  //找有HP的父物件
+                            Transform FindUpParent(Transform zi)  //找最大父物件
+                            {
+                                if (zi.GetComponent<MonsterLife>())
+                                {
+                                    MonsterType = zi.gameObject.GetComponent<MonsterLife>().MonsterType;
+                                    return zi;
+                                }
+                                else
+                                {
+                                    if (zi.parent == null) return zi;
+                                    else return FindUpParent(zi.parent);
+                                }
+                            }
+                            switch (MonsterType)
+                            {
+                                case 0:
+                                    HitType = 2;  //綠血
+                                    break;
+                                case 1:
+                                    HitType = 6;  //紫血
+                                    break;
+                            }
                             hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
                             if (WeaponType == 1)  //電磁手槍傷害
                             {
@@ -718,12 +741,12 @@ public class Shooting : MonoBehaviour
                 //在到物體上產生彈孔
                 rot = Quaternion.FromToRotation(Vector3.up, hit[n].normal);
                 pos = hit[n].point;
-                if (TargetWall) HitType = 0;
                 if (WeaponType == 1)
                 {            
                     rot = Quaternion.FromToRotation(Vector3.up, hit[0].normal);
                     pos = hit[n].point;
                     HitType = 5;
+                    if (TargetWall) HitType = 7;  //靶場彈孔;
                     if (!Fire1st)
                     {
                         pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
@@ -732,6 +755,7 @@ public class Shooting : MonoBehaviour
                 }
                 else
                 {
+                    if (TargetWall) HitType = 7;  //靶場彈孔;
                     pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
                 }            
             }
@@ -783,6 +807,8 @@ public class Shooting : MonoBehaviour
         StartAll();
         ReloadWarn.SetActive(false);
         Am_zero_Warn.SetActive(false);
+        Reload = false;
+        FireButtle = 1;
     }
     public static void DpsUp()
     {

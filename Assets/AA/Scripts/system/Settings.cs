@@ -103,6 +103,7 @@ public class Settings : MonoBehaviour
                 {
                     if (!SettingsUI.activeSelf)
                     {
+                        //print("暫停");
                         SettingsUI.SetActive(true);
                         pause();
                     }

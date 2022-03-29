@@ -5,16 +5,17 @@ using UnityEngine.UI;
 
 public class ShootingRange : MonoBehaviour
 {
-    public static bool TargetWall;
+    public static bool TargetWall; //啟動標靶
     public GameObject UI;
     public GameObject UIT;
     public GameObject Cam;
+    public GameObject[] RangeWall;
 
     void Start()
     {
         TargetWall = false;
-        UI.SetActive(false);
-        UIT.SetActive(true);
+        //UI.SetActive(false);
+        //UIT.SetActive(true);
         Cam.SetActive(false);
     }
 
@@ -22,23 +23,23 @@ public class ShootingRange : MonoBehaviour
     {
         
     }
-    public void OnTriggerEnter(Collider other) 
+    public void OnTriggerEnter(Collider other)  //進入靶場
     {
         if(other.tag == "Player")
         {
             TargetWall = true;
-            UI.SetActive(true);
-            UIT.SetActive(false);
+            //UI.SetActive(true);
+            //UIT.SetActive(false);
             Cam.SetActive(true);
         }        
     }
-    public void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)  //離開靶場
     {
         if (other.tag == "Player")
         {
             TargetWall = false;
             UI.SetActive(false);
-            UIT.SetActive(true);
+            //UIT.SetActive(true);
             Cam.SetActive(false);
         }
     }

@@ -232,6 +232,7 @@ GameObject:
   - component: {fileID: 3546353230792113260}
   - component: {fileID: 1570741406599087448}
   - component: {fileID: 4468320759671254782}
+  - component: {fileID: 2880542423200880457}
   m_Layer: 8
   m_Name: Billboard (2)Spot Light (7)
   m_TagString: Untagged
@@ -388,7 +389,7 @@ MonoBehaviour:
   m_LightAngle: 1
   m_MaxDepthBias: 0.001
   m_ShadowResolution:
-    m_Override: 512
+    m_Override: 256
     m_UseOverride: 1
     m_Level: 0
   m_ShadowDimmer: 1
@@ -438,6 +439,32 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
+--- !u!114 &2880542423200880457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552990577419580119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c8b068eeb46b084d829a58e8746c45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2
+  camTransform: {fileID: 0}
+  Gun_Camera: {fileID: 0}
+  distance: 0
+  Low: 1
+  _IsInView: 0
+  LightB: 1
+  ShadowsB: 0
+  c_dot: 0
+  _viewPos: {x: 0, y: 0}
+  minDistance: []
+  MaxDistance: []
+  Light: {fileID: 1570741406599087448}
+  HDAdditionalLightData: {fileID: 4468320759671254782}
 --- !u!1 &5980243024691302609
 GameObject:
   m_ObjectHideFlags: 0

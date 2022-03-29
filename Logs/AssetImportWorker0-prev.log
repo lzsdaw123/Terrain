@@ -1,23 +1,23 @@
 Using pre-set license
 Built from '2021.2/staging' branch; Version is '2021.2.8f1 (d0e5f0a7b06a) revision 13690352'; Using compiler version '192829333'; Build Type 'Release'
-OS: 'Windows 10  (10.0.19044) 64bit Professional' Language: 'zh' Physical Memory: 16300 MB
+OS: 'Windows 10  (10.0.19044) 64bit Core' Language: 'zh' Physical Memory: 8103 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
 COMMAND LINE ARGUMENTS:
-D:\Unity\2021.2.8f1\Editor\Unity.exe
+C:\Program Files\Unity\Hub\Editor\2021.2.8f1\Editor\Unity.exe
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-C:/Users/GOD/Desktop/Terrain
+J:/QWQ
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-55235
-Successfully changed project path to: C:/Users/GOD/Desktop/Terrain
-C:/Users/GOD/Desktop/Terrain
+51444
+Successfully changed project path to: J:/QWQ
+J:/QWQ
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -47,183 +47,58 @@ C:/Users/GOD/Desktop/Terrain
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 95.08 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 7194.96 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.2.8f1 (d0e5f0a7b06a)
-[Subsystems] Discovering subsystems at path D:/Unity/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path C:/Users/GOD/Desktop/Terrain/Assets
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path J:/QWQ/Assets
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: NVIDIA GeForce RTX 2060 SUPER (ID=0x1f06)
-    Vendor:   NVIDIA
-    VRAM:     8031 MB
-    Driver:   30.0.15.1215
+    Renderer: AMD Radeon (TM) R9 380 Series (ID=0x6939)
+    Vendor:   ATI
+    VRAM:     2022 MB
+    Driver:   27.20.20903.8001
 Initialize mono
-Mono path[0] = 'D:/Unity/2021.2.8f1/Editor/Data/Managed'
-Mono path[1] = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
-Mono config path = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56232
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56140
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
-Register platform support module: D:/Unity/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002893 seconds.
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.014078 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 90.72 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 170.79 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.604 seconds
+- Completed reload, in  1.376 seconds
 Domain Reload Profiling:
-	ReloadAssembly (605ms)
-		BeginReloadAssembly (83ms)
+	ReloadAssembly (1377ms)
+		BeginReloadAssembly (289ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (451ms)
-			LoadAssemblies (82ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (106ms)
+		EndReloadAssembly (959ms)
+			LoadAssemblies (286ms)
+			RebuildTransferFunctionScriptingTraits (3ms)
+			SetupTypeCache (195ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (26ms)
-			SetupLoadedEditorAssemblies (268ms)
+			RebuildScriptCaches (47ms)
+			SetupLoadedEditorAssemblies (605ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (14ms)
+				InitializePlatformSupportModulesInManaged (29ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (91ms)
-				BeforeProcessingInitializeOnLoad (1ms)
-				ProcessInitializeOnLoadAttributes (118ms)
-				ProcessInitializeOnLoadMethodAttributes (43ms)
+				RefreshPlugins (171ms)
+				BeforeProcessingInitializeOnLoad (3ms)
+				ProcessInitializeOnLoadAttributes (202ms)
+				ProcessInitializeOnLoadMethodAttributes (198ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.007066 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 94.37 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  1.680 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1681ms)
-		BeginReloadAssembly (118ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (6ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (19ms)
-		EndReloadAssembly (1469ms)
-			LoadAssemblies (91ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (253ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (78ms)
-			SetupLoadedEditorAssemblies (1024ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (10ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (94ms)
-				BeforeProcessingInitializeOnLoad (85ms)
-				ProcessInitializeOnLoadAttributes (790ms)
-				ProcessInitializeOnLoadMethodAttributes (42ms)
-				AfterProcessingInitializeOnLoad (3ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (6ms)
-Platform modules already initialized, skipping
-========================================================================
-Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.07 seconds
-Refreshing native plugins compatible for Editor in 1.47 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4779 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 80 unused Assets / (6.1 MB). Loaded Objects now: 5251.
-Memory consumption went from 346.7 MB to 340.6 MB.
-Total: 6.431400 ms (FindLiveObjects: 0.599000 ms CreateObjectMapping: 0.524700 ms MarkObjects: 3.534100 ms  DeleteObjects: 1.771400 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Import Request.
-  Time since last request: 695111.670064 seconds.
-  path: Assets/AA/Model/Oldrobot_Idle.fbx
-  artifactKey: Guid(52de5df4b4d9aef498936f143334776f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Model/Oldrobot_Idle.fbx using Guid(52de5df4b4d9aef498936f143334776f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6ee44d0f5e4bdc08595ea9ff5424a33b') in 1.250540 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000040 seconds.
-  path: Assets/AA/Player/霰彈槍
-  artifactKey: Guid(798b54acb5f626a4baa7a21aae771a56) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍 using Guid(798b54acb5f626a4baa7a21aae771a56) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb4107c81d5e2e1ded484e5a83298cbc') in 0.004927 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000035 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun-Fire-Prepare.fbx
-  artifactKey: Guid(424fb16b88e900c4486babef4096af32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun-Fire-Prepare.fbx using Guid(424fb16b88e900c4486babef4096af32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2f17a5398575d59d109bf8b3aa898448') in 0.091446 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 1.456533 seconds.
-  path: Assets/AA/Player/霰彈槍/Animation
-  artifactKey: Guid(21ef796e926165a47aa8c57dc581bc30) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Animation using Guid(21ef796e926165a47aa8c57dc581bc30) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ca44f301ed5a1fac7aaf771841e5346') in 0.005181 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 20.393323 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun Model.fbx
-  artifactKey: Guid(b9f35cc084ed49c488536aec2ae1214c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun Model.fbx using Guid(b9f35cc084ed49c488536aec2ae1214c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96c9294ebe836a464c3447d5efc53c7d') in 0.047523 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000036 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_BaseMap.png
-  artifactKey: Guid(e1a42f3e5b27f014ab4b9840f17fd312) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_BaseMap.png using Guid(e1a42f3e5b27f014ab4b9840f17fd312) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '900d84dcdfefc9348cea3acf8b19dc78') in 0.033249 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000040 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_Emissive.png
-  artifactKey: Guid(01432f89e44220541ac80031b7c4b2b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_Emissive.png using Guid(01432f89e44220541ac80031b7c4b2b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4e60cc64b5c48db4b2888cb06b6bec07') in 0.019118 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000054 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_MaskMap.png
-  artifactKey: Guid(0fd9cc80581ef6042b7391d7c92ab9a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_MaskMap.png using Guid(0fd9cc80581ef6042b7391d7c92ab9a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '65fd0ee6e0ca2b4bac21337ef6aaa6b9') in 0.019044 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(02343f374c31da6428dad33fdcc17558) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(02343f374c31da6428dad33fdcc17558) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '53f6cfeffc9f9ae3487b235b3afe31b4') in 0.012366 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 41.086500 seconds.
-  path: Assets/AA/Player/霰彈槍/New Material.mat
-  artifactKey: Guid(4857cf4ba278530498abd3d516270ae6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/New Material.mat using Guid(4857cf4ba278530498abd3d516270ae6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e4d729ac313121a7d91218bb0fb4e9d3') in 0.053367 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 4.310350 seconds.
-  path: Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(02343f374c31da6428dad33fdcc17558) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/Shotgun_Model_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(02343f374c31da6428dad33fdcc17558) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4f2c3ccda4681045040c250caac16536') in 0.031343 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 53.791612 seconds.
-  path: Assets/AA/Player/霰彈槍/New Material.mat
-  artifactKey: Guid(4857cf4ba278530498abd3d516270ae6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/霰彈槍/New Material.mat using Guid(4857cf4ba278530498abd3d516270ae6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6e70c1a04dbb8f3dee9dbbd143c7bb0c') in 0.045348 seconds 
+Registered in 0.006308 seconds.

@@ -542,7 +542,30 @@ public class NPC_AI : MonoBehaviour
                     //Debug.DrawLine(ray.origin, hit.point, Color.red, 1f, false);
                     if (hit.collider.tag == "Enemy")  //綠血
                     {
-                        HitType = 2;
+                        int MonsterType = 0;
+                        FindUpParent(hit.transform);  //找有HP的父物件
+                        Transform FindUpParent(Transform zi)  //找最大父物件
+                        {
+                            if (zi.GetComponent<MonsterLife>())
+                            {
+                                MonsterType = zi.gameObject.GetComponent<MonsterLife>().MonsterType;
+                                return zi;
+                            }
+                            else
+                            {
+                                if (zi.parent == null) return zi;
+                                else return FindUpParent(zi.parent);
+                            }
+                        }
+                        switch (MonsterType)
+                        {
+                            case 0:
+                                HitType = 2;  //綠血
+                                break;
+                            case 1:
+                                HitType = 6;  //紫血
+                                break;
+                        }
                         power = 1;
                         hit.transform.SendMessage("Unit", false);  //攻擊者是否為玩家
                         hit.transform.SendMessage("Damage", power) ;  //造成傷害
