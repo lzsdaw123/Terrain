@@ -26,7 +26,7 @@ public class UpgradeWorkbench : MonoBehaviour
     public Quaternion tagTranQu;
     float FieldOfView;  //相機視野
     GameObject Aim;
-    GameObject Take;
+    public GameObject Take;
     public GameObject AllObject;  //全物件
     public UpgradeValue[] 武器欄位;  //(武器類型, 編號, 名稱, 圖片, 等級, 威力)
     public int DropdownType;
@@ -37,6 +37,10 @@ public class UpgradeWorkbench : MonoBehaviour
     public Text text;
     public static bool FirstWork;
 
+    private void Awake()
+    {
+        Take = GameObject.Find("Take").gameObject;
+    }
     void Start()
     {
         TextG = GameObject.Find("ObjectText");
@@ -47,7 +51,6 @@ public class UpgradeWorkbench : MonoBehaviour
         FieldOfView = UpgradeCamera.GetComponent<Camera>().fieldOfView ;
         GunCamTransform = GunCamera.gameObject.transform;
         Aim = GameObject.Find("Aim").gameObject;
-        Take = GameObject.Find("Take").gameObject;
         部件ID = 0;
         部件名稱 = "不使用";
         time = -1;

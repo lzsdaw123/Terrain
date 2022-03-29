@@ -40,6 +40,8 @@ public class Settings : MonoBehaviour
     public static int Level;
 
     [SerializeField] GameObject Player;
+    public GameObject ExitUI;
+    public static bool 離開遊戲=false;
 
     void Awake()
     {
@@ -88,6 +90,7 @@ public class Settings : MonoBehaviour
     void Start()
     {
         ReStart();
+        ExitUI.SetActive(false);
     }
     void Update()
     {
@@ -110,7 +113,10 @@ public class Settings : MonoBehaviour
                     else
                     {
                         SettingsUI.SetActive(false);
-                        con();
+                        if (!DialogueOptions.Do_UI)
+                        {
+                            con();
+                        }
                     }
                 }
             }
@@ -125,6 +131,10 @@ public class Settings : MonoBehaviour
                     ReStart();
                 }
             }
+        }
+        if (離開遊戲)
+        {
+            ExitUI.SetActive(true);
         }
         //if (Input.GetKeyDown(KeyCode.M))
         //{
@@ -159,7 +169,10 @@ public class Settings : MonoBehaviour
     {
         ButtonAudio();
         SettingsUI.SetActive(false);
-        con();
+        if (!DialogueOptions.Do_UI)
+        {
+            con();
+        }
     }
     public void Set()  //設定
     {
@@ -180,6 +193,10 @@ public class Settings : MonoBehaviour
             }          
             deSetUI.SetActive(false);
         }
+    }
+    public static void ExitGame()  //其他關 回到標題
+    {
+        離開遊戲 = true;
     }
     public void Exit()  //回到標題
     {

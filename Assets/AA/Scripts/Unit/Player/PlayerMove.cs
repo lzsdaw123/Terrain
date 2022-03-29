@@ -65,11 +65,11 @@ public class PlayerMove : MonoBehaviour
             Player_h = Input.GetAxis("Horizontal");  //取得輸入橫軸
             Player_v = Input.GetAxis("Vertical");    //取得輸入縱軸            
 
-            if (Input.GetButtonDown("Jump") && !m_Jump && Shooting.Reload==false && isGrounded)   //按下跳躍
-            {
-                m_Jump = true;
-                //m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-            }
+            //if (Input.GetButtonDown("Jump") && !m_Jump && Shooting.Reload==false && !m_Jumping)   //按下跳躍
+            //{
+            //    m_Jump = true;
+            //    //m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+            //}
             if (!isGrounded && controller.isGrounded)
             {
                 if (m_Jumping && velocity.y != -2)
@@ -206,15 +206,29 @@ public class PlayerMove : MonoBehaviour
                 inside = false;
             }
         }
+      
     }
 
 
     void FixedUpdate()  //移動用 固定偵數
     {
+        if (Input.GetButtonDown("Jump") && !m_Jump && Shooting.Reload == false && !m_Jumping)   //按下跳躍
+        {
+            m_Jump = true;
+            //m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+            Vector3 fwd = transform.TransformDirection(Vector3.down);
+            RaycastHit hit; //射線擊中資訊
+            if (Physics.Raycast(groundCheck.position, fwd, out hit, 1f))
+            {
+                isGrounded = true;
+            }
+        }
+
+        groundDistance = 1.2f;
         //物理.球體檢查(地面檢查.位置,球體半徑,地面圖層)
         //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
         isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);      
-        if (controller.isGrounded)
+        if (controller.isGrounded || isGrounded)
         {
             if (m_Jump)
             {
@@ -234,10 +248,10 @@ public class PlayerMove : MonoBehaviour
                     }
                 }
             }
-
         }
         m_CollisionFlags = controller.Move(move * Time.fixedDeltaTime);
-        velocity.y += gravity * Time.deltaTime;  //重力物理
+
+        velocity.y += gravity*1.1f * Time.deltaTime;  //重力物理
         float Vy = velocity.y;
         int Dhp;  //墜落傷害
         if (isGrounded && velocity.y < 0)
@@ -245,7 +259,7 @@ public class PlayerMove : MonoBehaviour
             if (Vy <= -20)  //墜落傷害
             {
                 Dhp = (int)Vy * -1 - 20;
-                HeroLife.DownDamage(Dhp);
+                HeroLife.DownDamage(Dhp /2);
             }
             velocity.y = -2f;
         }

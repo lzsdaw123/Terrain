@@ -649,6 +649,58 @@ BlendTree:
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
+--- !u!1102 &-2016755074066645177
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Scene
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 6a8867edee8d2334f834de9796fd689c, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &-1694713313242376973
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Scene 1
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: e1a591f582b5fb04bb6729d2232d66fb, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1101 &-1602694492767727847
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1394,6 +1446,12 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -6873414493158301848}
     m_Position: {x: 510, y: -210, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -2016755074066645177}
+    m_Position: {x: 130.23053, y: -365.16412, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -1694713313242376973}
+    m_Position: {x: 36.253357, y: -273.18646, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 2960852155318536494}
@@ -1411,7 +1469,7 @@ AnimatorStateMachine:
   m_EntryPosition: {x: -170, y: 110, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: -8549817986744402526}
+  m_DefaultState: {fileID: -2016755074066645177}
 --- !u!1101 &4513801958032675119
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

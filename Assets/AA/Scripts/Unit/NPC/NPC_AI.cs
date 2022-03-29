@@ -595,12 +595,12 @@ public class NPC_AI : MonoBehaviour
             }
             else
             {
-                HitNub++;
-                if (HitNub >= 10)
-                {
-                    HitNub = 0;
-                    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
-                }
+                //HitNub++;
+                //if (HitNub >= 10)
+                //{
+                //    HitNub = 0;
+                //    pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
+                //}
             }
             //Muzzle_vfx.transform.position = muzzlePOS;
             //Muzzle_vfx.transform.rotation = transform.rotation;

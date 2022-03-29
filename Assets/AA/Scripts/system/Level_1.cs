@@ -153,7 +153,7 @@ public class Level_1 : MonoBehaviour
                         {
                             print("END");
                             Objects[5].SetActive(true);
-                            Settings.pause();
+                            ExitGame();
                         }
                     }
                     break;
@@ -379,6 +379,11 @@ public class Level_1 : MonoBehaviour
                 }
             }
         }
+    }
+    public void ExitGame()
+    {
+        Settings.pause();
+        Settings.ExitGame();
     }
 }
 

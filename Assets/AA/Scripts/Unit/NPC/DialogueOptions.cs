@@ -8,6 +8,7 @@ public class DialogueOptions : MonoBehaviour
     public DialogueEditor DialogueEditor;  //任務對話控制器
     public DailyDialogue DailyDialogue;  //NPC對話控制器
     public GameObject DialogueOptionsUI;  //對話選擇UI
+    public static bool Do_UI;  //對話選擇UI
     public int missionLevel;  //任務關卡
     public Text[] OptionText;
     public string[] OptionA;
@@ -21,6 +22,7 @@ public class DialogueOptions : MonoBehaviour
     {
         OptionA = new string[2] { "當然", "說來聽聽" };
         OptionB = new string[1] { "下次一定" };
+        Do_UI = false;
     }
 
     void Update()
@@ -45,6 +47,7 @@ public class DialogueOptions : MonoBehaviour
     }
     public static void StartOption(int task, int Who)  //開始選項(0 任務 / 1 非任務, NPC)
     {
+        Do_UI = true;
         Settings.pause();
         StartOp = true;        
         Task = task;
@@ -62,6 +65,7 @@ public class DialogueOptions : MonoBehaviour
         {
             DailyDialogue.coolDownTimer = DailyDialogue.coolDown;
         }
+        finished();
     }
     public void DialogueOptionB()  //選項B
     {
@@ -89,5 +93,11 @@ public class DialogueOptions : MonoBehaviour
             DailyDialogue.dialogueText.text = "";
             NPC_interaction.EndDialogue();
         }
+        finished();
+    }
+
+     void finished()  //選完了
+    {
+        Do_UI = false;
     }
 }

@@ -46,10 +46,12 @@ public class BulletHole : MonoBehaviour
         //transform.parent = gameObject.transform;
         if (ShootingRange.TargetWall && !Dead)
         {
+            Dead = true;
             BulletHoleTime = -1;
         }
-        else if (!ShootingRange.TargetWall)
+        else if (!ShootingRange.TargetWall && Dead)
         {
+            Dead = false;
             BulletHoleTime = 0;
         }
         if (BulletHoleTime > 0)
