@@ -77,7 +77,7 @@ public class Shooting : MonoBehaviour
     Image Aim;
     static UpgradeValue[] 武器欄位;
     public 部位 部位;
-    int 部件ID;
+    [SerializeField] int 部件ID;
     public static bool 換部件;
 
     public static void StartAll()
@@ -165,6 +165,34 @@ public class Shooting : MonoBehaviour
             }
             部位.Part[部件ID].SetActive(true);
         }
+        switch (部件ID)
+        {
+            case 0:  //不使用
+                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().intensity = 1875000;  // =( intensity * At* At)
+                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().range = 20;
+                ParticleSystem ps0 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
+                var sh0 = ps0.shape;
+                sh0.angle = 12;
+                Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(1.5f, 2.756f, 1.5f);
+                break;
+            case 1:  //消焰器
+                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().intensity = 625000;
+                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().range = 5;
+                ParticleSystem ps1 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
+                var sh1 = ps1.shape;
+                sh1.angle = 3;
+                Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(0.4f, 2.756f, 0.4f);
+                break;
+            case 2:  //補償器
+                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().intensity = 1250000;
+                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().range = 15;
+                ParticleSystem ps2 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
+                var sh2 = ps2.shape;
+                sh2.angle = 8;
+                Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(1.1f, 2.756f, 1.1f);
+                break;
+        }
+
         if (Time.timeScale == 0) {return;}
         FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;
         gFieldOfView = GunCamera.GetComponent<Camera>().fieldOfView;

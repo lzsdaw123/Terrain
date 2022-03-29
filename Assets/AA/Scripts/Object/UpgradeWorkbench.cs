@@ -8,7 +8,7 @@ public class UpgradeWorkbench : MonoBehaviour
 {
     public GameObject TextG;
     public int Type;
-    public Shop Shop; 
+    public Shop Shop;
     public GameObject UpgradeMenu;  //升級UI
     public GameObject play;
     public Camera GunCamera;  //玩家相機
@@ -28,6 +28,7 @@ public class UpgradeWorkbench : MonoBehaviour
     GameObject Aim;
     public GameObject Take;
     public GameObject AllObject;  //全物件
+    public GameObject[] 升級UI;
     public UpgradeValue[] 武器欄位;  //(武器類型, 編號, 名稱, 圖片, 等級, 威力)
     public int DropdownType;
     public int FieldType;
@@ -124,7 +125,7 @@ public class UpgradeWorkbench : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.E))  //按 [E] 離開
         {
-            if (Move)
+            if (Move && UpgradeMenu.activeSelf)
             {
                 Exit();
                 UpgradeMenu.SetActive(false);
@@ -251,6 +252,8 @@ public class UpgradeWorkbench : MonoBehaviour
             if (!FirstWork)
             {
                 FirstWork = true;
+                武器欄位[0].Object.SetActive(true);
+                升級UI[0].SetActive(true);
                 DialogueEditor.StartConversation(0, 4, 0, true, 0);  //開始對話
             }
         }
