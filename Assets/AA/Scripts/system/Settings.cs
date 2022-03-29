@@ -33,6 +33,7 @@ public class Settings : MonoBehaviour
     int SceneNub;  //當前場景編號
     int SceneCount;  //當前場景編號
     public bool EnterStart;  //起始場景切換開關
+    public int 關卡選擇;
 
     public static float smoothSpeed;  //滑鼠速度
     public Slider mouse_Slider;  //滑鼠靈敏度
@@ -59,7 +60,15 @@ public class Settings : MonoBehaviour
                 }
                 else
                 {
-                    SceneManager.LoadSceneAsync(2);
+                    switch (關卡選擇)
+                    {
+                        case 1:
+                            SceneManager.LoadSceneAsync(2);
+                            break;
+                        case 2:
+                            SceneManager.LoadSceneAsync(3);
+                            break;
+                    }
                 }
                 SceneManager.UnloadSceneAsync(0);
                 print("進入關卡");
@@ -204,8 +213,9 @@ public class Settings : MonoBehaviour
         START_bool = false;
         SettingsUI.SetActive(false);
         Cursor.lockState = CursorLockMode.None; //游標無狀態模式    
+        int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         operation = SceneManager.LoadSceneAsync(1);
-        SceneManager.UnloadSceneAsync(2);
+        SceneManager.UnloadSceneAsync(SceneNub);
         //Settings.LoadScene("Start");
     }
     public void Yes()  //設定確定
