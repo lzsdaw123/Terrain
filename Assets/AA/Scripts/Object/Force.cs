@@ -14,6 +14,7 @@ public class Force : MonoBehaviour
     float groundDistance = 5f;
     public LayerMask Ground;
     public GameObject G;
+    MeshCollider meshCollider;
 
     void Start()
     {
@@ -25,6 +26,8 @@ public class Force : MonoBehaviour
         foreach (var r in rigidbodies) {
             r.isKinematic = true;
         }
+        meshCollider = GetComponent<MeshCollider>();
+        meshCollider.enabled = true;
     }
 
     // Update is called once per frame
@@ -36,11 +39,13 @@ public class Force : MonoBehaviour
             {
                 r.isKinematic = false;
                 r.AddForce(new Vector3((Random.value*2-1)* 破門力道,0, (Random.value * 2 - 1)* 破門力道),ForceMode.Impulse);
+
                 if (time >= 5)
                 {
+                    meshCollider.enabled = false;
                     if (isGrounded)
                     {
-                        r.isKinematic = true;
+                        //r.isKinematic = true;
 
                         foreach (var c in meshcollider)
                         {

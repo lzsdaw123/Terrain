@@ -71,6 +71,7 @@ public class UpgradeWorkbench : MonoBehaviour
                     AllObject.SetActive(true);
                     CamMove = false;
                     UpgradeMenu.SetActive(true);
+                    print("0");
                     FieldOfView = 60;
                     Cursor.lockState = CursorLockMode.None; //游標無狀態模式
                 }
@@ -128,7 +129,6 @@ public class UpgradeWorkbench : MonoBehaviour
             if (Move && UpgradeMenu.activeSelf)
             {
                 Exit();
-                UpgradeMenu.SetActive(false);
             }
         }
 
@@ -214,6 +214,7 @@ public class UpgradeWorkbench : MonoBehaviour
 
     public void Exit( )  //離開
     {
+        UpgradeMenu.SetActive(false);
         AllObject.SetActive(false);  //關閉全部升級部件
         time = 0;
         CamMove = true;
@@ -249,11 +250,11 @@ public class UpgradeWorkbench : MonoBehaviour
             CamMove = true;
             Move = true;
             time = 0;
+            武器欄位[0].Object.SetActive(true);
+            升級UI[0].SetActive(true);
             if (!FirstWork)
             {
                 FirstWork = true;
-                武器欄位[0].Object.SetActive(true);
-                升級UI[0].SetActive(true);
                 DialogueEditor.StartConversation(0, 4, 0, true, 0);  //開始對話
             }
         }

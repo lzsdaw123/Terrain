@@ -327,7 +327,7 @@ public class Level_1 : MonoBehaviour
                         print("2");
                         LevelA_ = 7;
                         //UiOpen = true;  //開啟任務UI與音效
-                        stageTime = 25;  //怪物繼續倒數開始
+                        stageTime = 5;  //怪物繼續倒數開始
                         break;
                     case 8:
                         print("8");
