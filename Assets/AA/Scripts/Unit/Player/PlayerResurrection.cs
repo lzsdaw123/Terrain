@@ -31,7 +31,7 @@ public class PlayerResurrection : MonoBehaviour
             Player.transform.position = R1.position;
             //Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
             //Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-            print("0");
+            //print("0");
         }
         if (Mission_L1)
         {

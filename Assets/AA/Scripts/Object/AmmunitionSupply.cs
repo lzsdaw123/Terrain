@@ -18,6 +18,9 @@ public class AmmunitionSupply : MonoBehaviour
     [SerializeField] GameObject Am_zero_Warn;
     int WeaponType; //武器類型
     bool FirstAmm = false;
+    public Material material;
+    public Shader shader;
+    public float intensity;
 
     void Awake()
     {
@@ -29,6 +32,7 @@ public class AmmunitionSupply : MonoBehaviour
         TextG = GameObject.Find("ObjectText");
         AmmSupply = new int[] { 480, 6 };
         T_WeapAmm = new int[] { 300, 30 };
+
 
         switch (Type)
         {
@@ -58,6 +62,31 @@ public class AmmunitionSupply : MonoBehaviour
     }
     void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    for (int i = 0; i < shader.GetPropertyCount(); i++)
+        //    {
+        //        string name = shader.GetPropertyName(i);
+        //        int id = shader.GetPropertyNameId(i);
+        //        //if (name == "_Glow_Speed")
+        //        //{
+        //        //    material.SetFloat(id, 10);
+        //        //    break;
+        //        //}
+        //        if (name == "_EmissionColor")
+        //        {
+        //            Color color = material.GetColor(id);
+        //            //Color color = material.GetColor("_EmissionColor");
+        //            float factor = Mathf.Pow(2, intensity);
+        //            color = new Color(color.r * factor, color.g * factor, color.b * factor, color.a);
+        //            material.SetColor(id, color);
+        //            print(color);
+        //            break;
+        //        }
+        //    }
+        //}
+        
+
         WeaponType = Shooting.WeaponType;
         switch (Type)
         {
@@ -87,6 +116,7 @@ public class AmmunitionSupply : MonoBehaviour
         {
             if (Open)
             {
+
                 switch (Type)
                 {
                     case 0:
