@@ -103,7 +103,7 @@ public class AmmunitionSupply : MonoBehaviour
                     int D = 6 - AmmSupply[1];
                     for (int i = 0; i < D; i++)
                     {
-                        if (D != 6)
+                        if (D <=6)
                         {
                             ASupply[i].SetActive(false);
                         }

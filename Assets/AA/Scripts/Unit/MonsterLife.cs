@@ -14,7 +14,7 @@ public class MonsterLife : MonoBehaviour
 
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
-    public float[] hpFull = new float[] { 14, 20 }; // 血量上限
+    public float[] hpFull = new float[] { 14, 22 }; // 血量上限
     public float hp; // 血量
     int HpLv;  //生命等級
     int Level;  //難度等級
