@@ -705,6 +705,7 @@ public class Shooting : MonoBehaviour
                         if (hit[n].collider.tag == "Enemy")  //綠血
                         {
                             int MonsterType=0;
+                            AudioManager.Hit(3);  //擊中音效
                             FindUpParent(hit[n].transform);  //找有HP的父物件
                             Transform FindUpParent(Transform zi)  //找最大父物件
                             {

@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Force : MonoBehaviour
 {
+    public int Type;
     public static bool 破門;
-    Rigidbody[] rigidbodies = null;
-    MeshCollider[] meshcollider = null;
+    [SerializeField] bool SF_破門;
+    [SerializeField] Rigidbody[] rigidbodies = null;
+    [SerializeField] MeshCollider[] meshcollider = null;
     [Range(0, 50)]
-    public float 破門力道;
+    public float 破門力道=2;
     float time;
     bool isGrounded;
     float groundDistance = 5f;
@@ -18,22 +20,27 @@ public class Force : MonoBehaviour
 
     void Start()
     {
-        破門 = false;
-        破門力道 = 2;
         rigidbodies = GetComponentsInChildren<Rigidbody>();
-        meshcollider = GetComponentsInChildren<MeshCollider>();
         //G = GetComponent<GameObject>();
         foreach (var r in rigidbodies) {
             r.isKinematic = true;
         }
-        meshCollider = GetComponent<MeshCollider>();
-        meshCollider.enabled = true;
+        if (GetComponent<MeshCollider>())
+        {
+            meshcollider = GetComponentsInChildren<MeshCollider>();
+            meshCollider = GetComponent<MeshCollider>();
+            meshCollider.enabled = true;
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(破門) {
+
+        SF_破門 = 破門;
+
+        if (破門) {
             time += 0.8f * Time.deltaTime;
             foreach (var r in rigidbodies)
             {
@@ -42,7 +49,10 @@ public class Force : MonoBehaviour
 
                 if (time >= 5)
                 {
-                    meshCollider.enabled = false;
+                    if (GetComponent<MeshCollider>())
+                    {
+                        meshCollider.enabled = false;
+                    }
                     if (isGrounded)
                     {
                         //r.isKinematic = true;
@@ -55,11 +65,10 @@ public class Force : MonoBehaviour
                                 time = 5.2f;
                                 r.isKinematic = false;
                             }
-                        }
-                        
+                        }                      
                     }                               
                 }
-             }       
+            }       
         }
         if (time >= 5.1f && !isGrounded)
         {

@@ -25,6 +25,7 @@ public class MonsterLife : MonoBehaviour
     public MonsterAI03 monster03;
 
     public GameObject PS_Dead;
+    public GameObject Model;  //模型
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
@@ -71,6 +72,8 @@ public class MonsterLife : MonoBehaviour
             DeadTime += 1.6f * Time.deltaTime;
             if (DeadTime >= 1)
             {
+                agent.enabled = false; // 立即關閉尋徑功能
+
                 switch (MonsterType)
                 {
                     case 0:
@@ -140,6 +143,7 @@ public class MonsterLife : MonoBehaviour
             }           
             hp = 0; // 不要扣到負值
             PS_Dead.SetActive(true);
+            if (Model !=null) Model.SetActive(false);
             switch (MonsterType)  //關閉怪物AI 腳本
             {
                 case 0:
@@ -149,7 +153,6 @@ public class MonsterLife : MonoBehaviour
                     monster03.enabled = false;
                     break;
             }           
-            agent.enabled = false; // 立即關閉尋徑功能
             //ani.SetTrigger("Die");           
         }
 
@@ -196,5 +199,6 @@ public class MonsterLife : MonoBehaviour
                 break;
         }
         agent.enabled = true; // 開啟尋徑功能
+        if (Model != null) Model.SetActive(true);
     }
 }

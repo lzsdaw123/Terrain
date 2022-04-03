@@ -225,9 +225,15 @@ public class AudioManager : MonoBehaviour
     public static void PlayJumpAudio(int Nub)  //跳躍落地
     {
         current.PlayerSource.clip = current.JumpClip[Nub];
-        if (Nub == 1)
+        switch (Nub)
         {
-            current.PlayerSource.pitch = 0.65f;
+            case 0:
+                current.PlayerSource.pitch = 1f;
+                break;
+            case 1:
+                //current.PlayerSource.pitch = 0.65f;
+                current.PlayerSource.pitch = 1f;
+                break;
         }
         current.PlayerSource.Play();
     }

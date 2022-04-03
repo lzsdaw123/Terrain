@@ -12,6 +12,7 @@ public class AnimEvents : MonoBehaviour
 
     public MonsterAI02 MonsterAI02;
     public MonsterAI03 MonsterAI03;
+    public Boss01_AI boss01_AI;
     public NPC_Life NPC_Life;
     public float h, v;
 
@@ -115,6 +116,10 @@ public class AnimEvents : MonoBehaviour
     void M2_AttackEnd()
     {
         MonsterAI03.AttackAning(true, 1);
+    }
+    void Boss1_Exp()
+    {
+        boss01_AI.ani.SetBool("Start", true);
     }
 
     //音效用
