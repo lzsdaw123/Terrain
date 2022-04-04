@@ -396,26 +396,30 @@ public class Shooting : MonoBehaviour
                     FireRotateY = (武器欄位[WeaponType].Recoil * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100; //水平後座力(槍口部件* rangeX)
                     //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
                     FireRotateX = rangeX * 武器欄位[WeaponType].Recoil;  //垂直後座力(rangeX * 槍口部件)
+                    float rotationY = Random.Range(-5f, 5f);  //開火後相機水平晃動範圍
                     if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
                     if (AimIng || PlayerMove.Squat)  //瞄準或蹲下
                     {                      
                         FireRotateY /= 2;
-                        FireRotateX /= 4;
+                        FireRotateX /= 5;
+                        rotationY /= 2;
                     }
                     if (AimIng && PlayerMove.Squat)  //瞄準並蹲下
                     {
                         FireRotateY /= 4;
-                        FireRotateX /= 8;
+                        FireRotateX /= 10;
+                        rotationY /= 3;
                     }
                     // Debug.Log("後" + " / " + FireRotateX);
                     //print(FireRotateX + "," + FireRotateY);
                     transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f) *Time.deltaTime;  //水平晃動
-                    float oriX= GunAimR_x.GetComponent<MouseLook>().rotationX;  //原本位置
+                    GunAimR_x.GetComponent<MouseLook>().rotationY = rotationY * 2 * Time.deltaTime;  //鏡頭水平晃動
+                    float oriX = GunAimR_x.GetComponent<MouseLook>().rotationX;  //原本位置
                     float newX= GunAimR_x.GetComponent<MouseLook>().rotationX- FireRotateX;  //後座力位置
                     //print("舊的" + oriX + "  / 新的" + newX + " /  X :" + FireRotateX + " / Y :" + FireRotateY);
                     if(oriX > newX)
                     {
-                        GunAimR_x.GetComponent<MouseLook>().rotationX -= 10f * Time.deltaTime;  //垂直晃動
+                        GunAimR_x.GetComponent<MouseLook>().rotationX -= Random.Range(8f, 14f) * Time.deltaTime;  //垂直晃動
                     }
                     Weapons[WeaponType].WeapAm--;
                     if (FireButtle==1)
@@ -423,6 +427,7 @@ public class Shooting : MonoBehaviour
                         Weapon.SetBool("Fire", true);
                         FireButtle = 0;
                     }
+                    MouseLook.Shaking();
                     BFire = true;  //生成子彈
                     //Weapon.SetBool("Aim", false);                    
                 }
@@ -468,7 +473,7 @@ public class Shooting : MonoBehaviour
                                 shooting = false;
                                 return;
                             }
-                            GunAimR_x.GetComponent<MouseLook>().rotationX += speed * 2f * Time.deltaTime;  //垂直晃動
+                            GunAimR_x.GetComponent<MouseLook>().rotationX += speed * 2f * Time.deltaTime;  //垂直晃動回歸
                         }
                         else
                         {

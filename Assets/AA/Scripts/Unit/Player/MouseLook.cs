@@ -9,7 +9,7 @@ public class MouseLook : MonoBehaviour
     public float mouseSpeed = 100f;
     public float smoothSpeed;
     public Transform playerBody, m_transform,Gun;
-    public float rotationX = 0f;
+    public float rotationX, rotationY = 0f;
     float camY = 2.865f;
     float camZ = 0.089f;
     public Vector3 m_camRot;
@@ -21,7 +21,7 @@ public class MouseLook : MonoBehaviour
     Vector3 newPos; //當前幀
     float chaX,chaY;  //兩幀的螢幕座標差值結果
 
-    public GameObject UI;
+    public GameObject UI;  //邊框UI
     RectTransform oriTransform;   // UI位置
     Vector3 currentVelocity = Vector3.zero;     // 當前速度，這個值由你每次呼叫這個函式時被修改
     float UD_Speed = 50;    // 介面上下位移速度
@@ -29,7 +29,7 @@ public class MouseLook : MonoBehaviour
     float minSpeed = 620;    // 介面回復速度
     float smoothTime = 0.35f;      // 達到目標大約花費的時間。 一個較小的值將更快達到目標。
     Vector3 oriRTPos,newRTPos;
-
+    static bool shake;
     public float mouseX, mouseY;
 
     public float smooth = 3;          // 相機移動的平穩程度
@@ -47,6 +47,22 @@ public class MouseLook : MonoBehaviour
     }
     void Update()
     {
+        if (shake)
+        {
+            shake = false;
+            //newRTPos = UI.GetComponent<RectTransform>().position;  //UI晃動
+            //float[] FRxMin = new float[] { 20, 14 * 2, 16 * 2 };  //最小垂直晃動 x
+            //float[] FRxMax = new float[] { 40, 26 * 2, 30 * 2 };  //最大垂直晃動 x
+            //float rangeY = Random.Range(-10f, 10f);  //射擊水平晃動範圍
+            //float rangeX = Random.Range(FRxMin[0], FRxMax[0]);  //射擊垂直晃動範圍
+            //newRTPos.x += rangeX;
+            //newRTPos.y += rangeY;
+            //oriTransform.transform.position = newRTPos;
+
+            //rotationX -= Random.Range(0.4f, 1f);  //開火後鏡頭垂直晃動範圍
+            //rotationY = Random.Range(-8f, 8f) * Time.deltaTime;  //開火後鏡頭水平晃動範圍
+        }
+
     }
     void LateUpdate()
     {
@@ -124,9 +140,9 @@ public class MouseLook : MonoBehaviour
         rotationX -= mouseY * smoothSpeed * Time.smoothDeltaTime;  //滑鼠控制鏡頭上下
         rotationX = Mathf.Clamp(rotationX, -85f, 80f);
 
-		Gun.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+        Gun.transform.localRotation = Quaternion.Euler(rotationX, rotationY, 0f);  //相機位移
         playerBody.Rotate(Vector3.up * mouseX * smoothSpeed * Time.smoothDeltaTime);  //滑鼠控制鏡頭左右
-
+        rotationY = 0;  //相機Y軸歸零
         Vector3 playerBodyP = new Vector3(Gun.position.x, Gun.position.y, Gun.position.z);
 
         // 設置攝像機的旋轉方向與主角一致
@@ -141,5 +157,9 @@ public class MouseLook : MonoBehaviour
         //Vector3 camrot = playerBody.transform.eulerAngles;
         //camrot.x = 0; camrot.z = 0;
         //playerBody.eulerAngles = camrot;      
+    }
+    public static void Shaking()
+    {
+        shake = true;
     }
 }
