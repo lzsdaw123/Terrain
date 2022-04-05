@@ -17,6 +17,7 @@ public class Force : MonoBehaviour
     public LayerMask Ground;
     public GameObject G;
     MeshCollider meshCollider;
+    [SerializeField] CapsuleCollider CapsuleCollider=null;
 
     void Start()
     {
@@ -28,9 +29,10 @@ public class Force : MonoBehaviour
         if (GetComponent<MeshCollider>())
         {
             meshcollider = GetComponentsInChildren<MeshCollider>();
-            meshCollider = GetComponent<MeshCollider>();
-            meshCollider.enabled = true;
+            //meshCollider = GetComponent<MeshCollider>();
+            //meshCollider.enabled = true;
         }
+        CapsuleCollider = GetComponent<CapsuleCollider>();
 
     }
 
@@ -51,7 +53,7 @@ public class Force : MonoBehaviour
                 {
                     if (GetComponent<MeshCollider>())
                     {
-                        meshCollider.enabled = false;
+                        //meshCollider.enabled = false;
                     }
                     if (isGrounded)
                     {

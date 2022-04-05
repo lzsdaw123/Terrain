@@ -48,6 +48,7 @@ public class AudioManager : MonoBehaviour
     public Button[] MuteButton;  //BSE靜音按鈕
     public Text[] Nub;  //BSE
     public bool[] muteState;
+    static bool Re;
 
     int SceneNub;  //當前場景編號
     int OriSceneNub;  //當前場景編號
@@ -85,19 +86,25 @@ public class AudioManager : MonoBehaviour
             OriSceneNub = SceneNub;
             StartLevelAudio();
         }
-
-        AmbientSource.volume = Slider[1].value;
-        PlayerSource.volume = Slider[2].value;
-        GunSource.volume = Slider[2].value;
-        HitSource.volume = Slider[2].value;
-        EffectsSource.volume = Slider[2].value;
-        ButtonSource.volume = Slider[2].value;
-        ActionSource.volume = Slider[2].value;
-        WarnSource.volume = Slider[2].value;
-        if (ElevatorSource !=null)
+        if (Re)
         {
-            ElevatorSource.volume = Slider[2].value;
+            Re = false;
+            //float[] Val;
+            //Val[0]=
+            AmbientSource.volume = Slider[1].value;
+            PlayerSource.volume = Slider[2].value;
+            GunSource.volume = GunSource.volume * Slider[2].value;
+            HitSource.volume = Slider[2].value;
+            EffectsSource.volume = Slider[2].value;
+            ButtonSource.volume = Slider[2].value;
+            ActionSource.volume = Slider[2].value;
+            WarnSource.volume = Slider[2].value;
+            if (ElevatorSource != null)
+            {
+                ElevatorSource.volume = Slider[2].value;
+            }
         }
+
 
         for (int i =0; i< Nub.Length ; i++)
         {          
@@ -133,6 +140,11 @@ public class AudioManager : MonoBehaviour
         }
         
     }
+    public static void OnClick()
+    {
+        Re = true;
+    }
+
     public void AudioSetUI()  //點開聲音設定UI
     {
         AudioManager.Button();
@@ -189,6 +201,7 @@ public class AudioManager : MonoBehaviour
         }
         current.AmbientSource.loop = true;
         current.AmbientSource.Play();
+        OnClick();
     }
     public static void MechanicalAudio(GameObject gameObject)  //機械音效 (電梯&開門)
     {
@@ -219,6 +232,7 @@ public class AudioManager : MonoBehaviour
                 }
             }
             current.PlayerSource.Play();
+            OnClick();
         }
 
     }
@@ -236,17 +250,25 @@ public class AudioManager : MonoBehaviour
                 break;
         }
         current.PlayerSource.Play();
+        OnClick();
     }
     public static void PlayGunshotsAudio(int Nub)  //開火
     {
         current.GunSource.clip = current.GunshotsClip[Nub];
         current.GunSource.volume = 0.6f;
         current.GunSource.pitch = 1.3f;
-        if (Nub == 0)
+        current.GunSource.volume = 1f;
+        switch (Nub)
         {
-            current.GunSource.volume = 1.2f;
+            case 0:
+                current.GunSource.volume = 1.2f;
+                break;
+            case 1:
+                current.GunSource.volume = 0.7f;
+                break;
         }
         current.GunSource.Play();
+        OnClick();
     }
     public static void Reload(int Nub)  //換彈
     {
@@ -263,17 +285,20 @@ public class AudioManager : MonoBehaviour
                 break;
         }
         current.GunSource.Play();
+        OnClick();
     }
     public static void explode()  //爆炸
     {
         current.EffectsSource.clip = current.ExplodeCilp;
         current.EffectsSource.Play();
+        OnClick();
     }
     public static void Button()  //按鈕
     {
         current.ButtonSource.clip = current.ButtonCilp;
         current.ButtonSource.loop = false;
         current.ButtonSource.Play();
+        OnClick();
     }
     public static void PickUp(int Nub)  //互動
     {
@@ -296,6 +321,7 @@ public class AudioManager : MonoBehaviour
                 break;
         }
         current.ActionSource.Play();
+        OnClick();
     }
     public static void Warn(int Nub)  //警告 提示
     {
@@ -315,22 +341,23 @@ public class AudioManager : MonoBehaviour
             current.WarnSource.loop = false;
         }     
         current.WarnSource.Play();
+        OnClick();
     }
     public static void Hit(int Nub)  //擊中
     {
         current.HitSource.clip = current.HitClip[Nub];
+        current.HitSource.pitch = 1f;
         switch (Nub)
         {
             case 0:
                 current.HitSource.pitch = 0.8f;
                 break;
-            case 1:
-                current.HitSource.pitch = 1f;
-                break;
-            case 2:
+            case 4:
+                current.HitSource.Pause();
                 current.HitSource.pitch = 1f;
                 break;
         }
         current.HitSource.Play();
+        OnClick();
     }
 }

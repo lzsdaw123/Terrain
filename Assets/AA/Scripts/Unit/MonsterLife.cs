@@ -11,6 +11,7 @@ public class MonsterLife : MonoBehaviour
     public Animator ani;
     private Rigidbody rigid;
     private Collider cld;
+    public AnimEvents AnimEvents;
 
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
@@ -140,9 +141,10 @@ public class MonsterLife : MonoBehaviour
                     HitUI.GetComponent<Image>().color = Color.red;
                 }
                 Dead = true;
+                AudioManager.Hit(4);
             }           
             hp = 0; // 不要扣到負值
-            PS_Dead.SetActive(true);
+            PS_Dead.SetActive(true);  //死亡爆炸
             if (Model !=null) Model.SetActive(false);
             switch (MonsterType)  //關閉怪物AI 腳本
             {

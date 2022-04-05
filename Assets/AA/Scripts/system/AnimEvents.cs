@@ -149,7 +149,7 @@ public class AnimEvents : MonoBehaviour
         NPC_Source.pitch = 1.3f;
         NPC_Source.Play();
     }
-    void MonsterAudio(int Nub)
+    void MonsterAudio(int Nub)  //怪物音效
     {
         MonsterSource.clip = MonsterClip[Nub];
         MonsterSource.volume = AudioManager.Slider[2].value;

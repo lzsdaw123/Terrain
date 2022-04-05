@@ -201,6 +201,7 @@ public class Settings : MonoBehaviour
                 StartUI.GetComponent<RawImage>().texture = Start_image[0];
             }          
             deSetUI.SetActive(false);
+            AudioManager.OnClick();
         }
     }
     public static void ExitGame()  //其他關 回到標題
