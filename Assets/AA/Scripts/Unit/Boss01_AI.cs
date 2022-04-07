@@ -62,7 +62,7 @@ public class Boss01_AI : MonoBehaviour
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
-    [SerializeField] private GameObject muzzle;
+    [SerializeField]private GameObject[] muzzle;  //槍口
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
 
