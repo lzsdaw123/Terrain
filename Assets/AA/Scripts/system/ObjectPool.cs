@@ -6,10 +6,11 @@ using UnityEditor;
 public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
-    public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B;  //物件池集中位置
+    public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B, B1_BulletPool;  //物件池集中位置
     public GameObject[] Monster;    // 可生的怪種類
     public MonsterAttributes[] MonsterAttributes = new MonsterAttributes[3];
     public GameObject MBullet ;	// 怪物子彈
+    public GameObject B1_Bullet ;	// 水晶BOSS子彈
     public SpawnRay _SpawnRay;
 
     public int inttailSize;  //預置物件數量
@@ -25,6 +26,7 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> Monster_poolA = new Queue<GameObject>();
     private Queue<GameObject> Monster_poolB = new Queue<GameObject>();
     private Queue<GameObject> M_Bullet_pool = new Queue<GameObject>();
+    private Queue<GameObject> B1_Bullet_pool = new Queue<GameObject>();
 
 
     void Awake()
@@ -42,15 +44,18 @@ public class ObjectPool : MonoBehaviour
             GameObject go = Instantiate(Bullet, BulletPool.transform) as GameObject; //生成子彈於子彈池
             GameObject go2 = Instantiate(Hit, HitPool.transform) as GameObject;   //生成彈孔於彈孔池
             GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //怪物子彈於怪物子彈池
+            GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;   //Boss1子彈於怪物子彈池
 
 
             _pool.Enqueue(go);  //Queue.Enqueue() 將物件放入結構中
             _pool_Hit.Enqueue(go2);  //Queue.Enqueue() 將物件放入結構中
 
             M_Bullet_pool.Enqueue(Mo1B);  //Queue.Enqueue() 將怪物1子彈放入結構中
+            B1_Bullet_pool.Enqueue(Boss1B);  //Queue.Enqueue() 將Boss1子彈放入結構中
             go.SetActive(false);
             go2.SetActive(false);
-            Mo1B.SetActive(false);                       
+            Mo1B.SetActive(false);
+            Boss1B.SetActive(false);                       
         }
         for (int cut = 0; cut < inttailSizeMS[0]; cut++)
         {
@@ -227,6 +232,29 @@ public class ObjectPool : MonoBehaviour
     public void RecoveryM01Bullet(GameObject recovery)  //用來回收物件
     {
         M_Bullet_pool.Enqueue(recovery);
+        recovery.SetActive(false);
+    }
+
+    //Boss1 子彈
+    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
+    {
+        if (B1_Bullet_pool.Count > 0)
+        {
+            GameObject reuse = B1_Bullet_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
+            reuse.transform.position = positon;
+            reuse.transform.rotation = rotation;
+            reuse.SetActive(true);
+        }
+        else
+        {
+            GameObject Boss1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;  //怪物子彈於怪物子彈池
+            Boss1B.transform.position = positon;
+            Boss1B.transform.rotation = rotation;
+        }
+    }
+    public void RecoveryBoss1Bullet(GameObject recovery)  //用來回收物件
+    {
+        B1_Bullet_pool.Enqueue(recovery);
         recovery.SetActive(false);
     }
 }

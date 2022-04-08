@@ -285,9 +285,9 @@ public class Boss01_AI : MonoBehaviour
                                 else
                                 {
                                     //若不在攻擊角度內轉向目標
-                                    Vector3 targetDir = tagObject.transform.position - transform.position;
-                                    Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                    transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
+                                    //Vector3 targetDir = tagObject.transform.position - transform.position;
+                                    //Quaternion rotate = Quaternion.LookRotation(targetDir);
+                                    //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
                                     //print("轉向" + tagObject);
                                 }
                                 coolDown = 1f;
@@ -314,8 +314,7 @@ public class Boss01_AI : MonoBehaviour
 
         // 打一條射線看之間是否有障礙物
         Vector3 origin = transform.position + new Vector3(0, heightOfEye, 0);
-        Vector3 targetPos = targetActor.position + new Vector3(0,
-       heightOfTarget, 0);
+        Vector3 targetPos = targetActor.position + new Vector3(0, heightOfTarget, 0);
         Vector3 direct = targetPos - origin;
         Ray ray = new Ray(origin, direct);
         RaycastHit hit = new RaycastHit();
@@ -373,9 +372,10 @@ public class Boss01_AI : MonoBehaviour
             }
             else // 玩家距離大於攻擊距離,進行追踪
             {
-                TrPlayer = true;
-                Fire = false;
-                TrackingPlayer();
+                //TrPlayer = true;
+                //Fire = false;
+                //TrackingPlayer();
+                return;
             }
         }
         else 
@@ -422,15 +422,15 @@ public class Boss01_AI : MonoBehaviour
             if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
-            //muzzlePOS = muzzle.transform.position;
-            //pool.ReUseM01Bullet(muzzlePOS, rotate);  //生成子彈
+            muzzlePOS = muzzle[0].transform.position;
+            //pool.ReUseBoss1Bullet(muzzlePOS, rotate);  //生成子彈
             coolDown = 0;
         }
     }
     private void TrackingPlayer()
     {
-        ani.SetBool("Move", true);
-        ani.SetBool("Attack", false);
+        //ani.SetBool("Move", true);
+        //ani.SetBool("Attack", false);
         agent.speed = agentSpeed;  //移動速度
         if (TrPlayer)
         {
@@ -457,13 +457,14 @@ public class Boss01_AI : MonoBehaviour
         }
         if (Fire)
         {
-            ani.SetBool("Move", false);
+            //ani.SetBool("Move", false);
             AttackAngleT = false;
             agent.speed = 0;
-            ani.SetBool("Attack", true);
-            //Vector3 targetDir = AAT - transform.position;  
+            //ani.SetBool("Attack", true);
+            //Vector3 targetDir = AAT - transform.position;
             //Quaternion rotate = Quaternion.LookRotation(targetDir);
             //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+            AttackAning(true, 1);
         }
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)
