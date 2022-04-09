@@ -9,13 +9,13 @@ public class B1_BulletLife : MonoBehaviour
     public GameObject[] Hit_vfx;  //彈孔類型
     public ParticleSystem[] Pro;
     public int HitType;
-    public int ButtleType;
+    public int ButtleType;  //子彈類型
     public Transform target;
     public Transform OriTarger;
     public int aTN;
     public Vector3 Atarget;  //攻擊目標座標
     public float AtargetY;  //攻擊目標Y軸加成
-    public float speed = 10;//飛行速度
+    public float speed;//飛行速度
     public float liftTime = 5f; //生命時間
     public Vector3 OriSize; //預計尺寸
     public Vector3 bornSize; //生成尺寸
@@ -39,6 +39,7 @@ public class B1_BulletLife : MonoBehaviour
     public LayerMask layerMask;
     bool forwardFly = false;
     bool AttackPlay;  //攻擊目標是否為玩家
+    public bool Attacking;  //攻擊目標是否為玩家
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -47,7 +48,9 @@ public class B1_BulletLife : MonoBehaviour
     }
     void Start()
     {
-        //speed = 10f; //飛行速度
+        speed = 20f; //飛行速度
+        Attacking = false;
+        ButtleType = Boss01_AI.ButtleType;
         power = 1;
         AttackLv = 0;
         Pro[0].gameObject.SetActive(false);
@@ -185,7 +188,7 @@ public class B1_BulletLife : MonoBehaviour
             Get_ATarget = false;
         }
 
-        if (Atarget != Vector3.zero)
+        if (Atarget != Vector3.zero && Attacking)
         {
             float firstSpeed = Vector3.Distance(transform.position, Atarget);  //原本速度
             float orifirstSpeed = firstSpeed;

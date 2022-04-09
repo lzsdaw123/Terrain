@@ -13,6 +13,7 @@ public class AnimEvents : MonoBehaviour
     public MonsterAI02 MonsterAI02;
     public MonsterAI03 MonsterAI03;
     public Boss01_AI boss01_AI;
+    public B1_BulletLife b1_BulletLife;
     public NPC_Life NPC_Life;
     public float h, v;
 
@@ -120,6 +121,11 @@ public class AnimEvents : MonoBehaviour
     void Boss1_Exp()
     {
         boss01_AI.ani.SetBool("Start", true);
+        boss01_AI.AttackStatus = true;
+    }
+    void B1_gEnd()
+    {
+        b1_BulletLife.Attacking = true;
     }
 
     //音效用

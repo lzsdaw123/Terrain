@@ -52,13 +52,15 @@ public class Boss01_AI : MonoBehaviour
     private float targetDistance = 2000; // 與最近攻擊目標的距離
     [SerializeField] private float attackDistance; // 攻擊角度距離
     [SerializeField] private float ArangeDistance; // 攻擊範圍距離
-    bool AttackAngleT = false;
+    [SerializeField] bool AttackAngleT = false;
     [SerializeField] private bool attacking;
     private int bulletAttack;
     [SerializeField] int SF_bulletAttack;
     public static bool AttackPlay;
     bool TrPlayer;
     [SerializeField] private bool Fire;
+    public static int ButtleType;  //子彈類型
+    public bool AttackStatus;  //攻擊狀態
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
@@ -96,8 +98,10 @@ public class Boss01_AI : MonoBehaviour
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
         attacking = false;
-        bulletAttack = 1;
+        bulletAttack = 0;
         Fire = false;
+        AttackStatus = false;
+        coolDown = 0;
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
         //reg = GetComponent<SpawnRayReg>();
@@ -272,30 +276,32 @@ public class Boss01_AI : MonoBehaviour
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
-                            if (coolDown >= 1)
-                            {
-                                //判斷在攻擊角度內
-                                if (GetXZAngle(transform.forward, transform.position,
-                                    tagObject.transform.position, false) < AttackAngle)
-                                {
-                                    agent.speed = 0;
-                                    AttackAngleT = true;
-                                    //print("攻擊角度內" + tagObject);
-                                }
-                                else
-                                {
-                                    //若不在攻擊角度內轉向目標
-                                    //Vector3 targetDir = tagObject.transform.position - transform.position;
-                                    //Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                    //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
-                                    //print("轉向" + tagObject);
-                                }
-                                coolDown = 1f;
-                            }
-                            else
-                            {
-                                coolDown += Time.deltaTime;
-                            }
+                            agent.speed = 0;
+                            AttackAngleT = true;
+                            //if (coolDown >= 1)
+                            //{
+                            //    //判斷在攻擊角度內
+                            //    if (GetXZAngle(transform.forward, transform.position,
+                            //        tagObject.transform.position, false) < AttackAngle)
+                            //    {
+                            //        agent.speed = 0;
+                            //        AttackAngleT = true;
+                            //        //print("攻擊角度內" + tagObject);
+                            //    }
+                            //    else
+                            //    {
+                            //        //若不在攻擊角度內轉向目標
+                            //        //Vector3 targetDir = tagObject.transform.position - transform.position;
+                            //        //Quaternion rotate = Quaternion.LookRotation(targetDir);
+                            //        //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
+                            //        //print("轉向" + tagObject);
+                            //    }
+                            //    coolDown = 1f;
+                            //}
+                            //else
+                            //{
+                            //    //coolDown += Time.deltaTime;
+                            //}
                             
                         }
                         fined = true;                     
@@ -345,6 +351,17 @@ public class Boss01_AI : MonoBehaviour
     void Update()
     {
         SF_bulletAttack = bulletAttack;
+        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
+        if (coolDown >= 2)  //攻擊冷卻時間
+        {
+            Fire = true;
+            attacking = false;
+            coolDown = -1;
+        }
+        if (coolDown >= 0 && AttackStatus)
+        {
+            coolDown += Time.deltaTime;
+        }
         if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         A_defense = Defense.ST_A_defense;
         if (oriTarget[A_defense] != null) 目前進攻目標 = oriTarget[A_defense].gameObject;
@@ -360,14 +377,13 @@ public class Boss01_AI : MonoBehaviour
                 if (AttackAngleT)
                 {
                     AttackPlay = true;
-                    Fire = true;
                     attacking = true;
                     Attack();
-                    //print("小於攻擊距離 攻擊+"+ attackTarget);
+                    print("小於攻擊距離 攻擊+" + attackTarget);
                 }
                 else
                 {
-                    Fire = false;
+                    AttackPlay = false;
                 }
             }
             else // 玩家距離大於攻擊距離,進行追踪
@@ -411,20 +427,23 @@ public class Boss01_AI : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
+      
     }
     void FixedUpdate()
     {
         if (bulletAttack >= 1)
         {
+            Fire = false;
             attacking = false;
             bulletAttack = 0;
             if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             muzzlePOS = muzzle[0].transform.position;
-            //pool.ReUseBoss1Bullet(muzzlePOS, rotate);  //生成子彈
-            coolDown = 0;
+            pool.ReUseBoss1Bullet(muzzlePOS, rotate);  //生成子彈
+            ButtleType = Random.Range(0, 2);
+            coolDown = -1;
+            print("bulletAttack" + coolDown);
         }
     }
     private void TrackingPlayer()
@@ -465,10 +484,14 @@ public class Boss01_AI : MonoBehaviour
             //Quaternion rotate = Quaternion.LookRotation(targetDir);
             //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
             AttackAning(true, 1);
+            coolDown = 0;
+            print("Fire" + coolDown);
+
         }
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)
     {
+        print("AA");
         attacking = attackingB;
         bulletAttack = BulletAttackNub;
     }

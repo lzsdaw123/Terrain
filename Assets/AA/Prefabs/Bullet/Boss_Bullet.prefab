@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3054314581686142875}
   - component: {fileID: 9204926344011936254}
   - component: {fileID: 2840697118088834591}
+  - component: {fileID: 349132993310067927}
   m_Layer: 0
   m_Name: Boss_Bullet
   m_TagString: Untagged
@@ -50,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Muzzle_vfx: {fileID: 0}
+  ani: {fileID: 349132993310067927}
   Hit_vfx: []
   Pro:
   - {fileID: 4772899882334817215}
@@ -59,6 +61,7 @@ MonoBehaviour:
   - {fileID: 6325949424684057386}
   - {fileID: 8206136152109720478}
   HitType: 0
+  ButtleType: 0
   target: {fileID: 0}
   OriTarger: {fileID: 0}
   aTN: 0
@@ -66,6 +69,9 @@ MonoBehaviour:
   AtargetY: 0
   speed: 5
   liftTime: 5
+  OriSize: {x: 0, y: 0, z: 0}
+  bornSize: {x: 0, y: 0, z: 0}
+  bornT: 0
   ABPath: {x: 0, y: 0, z: 0}
   facingRight: 1
   power: 0
@@ -114,6 +120,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!95 &349132993310067927
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251314215627210432}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2fcf9bfbfdf0a6e41af24cfa24bd78ca, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &709529547476113798
 GameObject:
   m_ObjectHideFlags: 0
