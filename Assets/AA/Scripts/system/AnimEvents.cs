@@ -125,7 +125,7 @@ public class AnimEvents : MonoBehaviour
     }
     void B1_gEnd()
     {
-        b1_BulletLife.Attacking = true;
+        b1_BulletLife.StartAttack = true;
     }
 
     //音效用

@@ -17,9 +17,9 @@ public class B1_BulletLife : MonoBehaviour
     public float AtargetY;  //攻擊目標Y軸加成
     public float speed;//飛行速度
     public float liftTime = 5f; //生命時間
+    bool AFlyTrack = true;  //子彈飛行軌跡
     public Vector3 OriSize; //預計尺寸
     public Vector3 bornSize; //生成尺寸
-    public bool bornT;
     bool Get_ATarget = true;  //取得攻擊目標
     public Vector3 ABPath;
     Vector3 AAT;
@@ -39,7 +39,9 @@ public class B1_BulletLife : MonoBehaviour
     public LayerMask layerMask;
     bool forwardFly = false;
     bool AttackPlay;  //攻擊目標是否為玩家
-    public bool Attacking;  //攻擊目標是否為玩家
+    public bool Attacking;  //攻擊中
+    public bool StartAttack;  //開始攻擊
+    public float AttackCTime;  //攻擊倒數
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -48,11 +50,13 @@ public class B1_BulletLife : MonoBehaviour
     }
     void Start()
     {
-        speed = 20f; //飛行速度
+        speed = 160f; //飛行速度
         Attacking = false;
         ButtleType = Boss01_AI.ButtleType;
         power = 1;
         AttackLv = 0;
+        StartAttack = false;
+        AttackCTime = 0;
         Pro[0].gameObject.SetActive(false);
         Pro[1].gameObject.SetActive(false);
         Pro[2].gameObject.SetActive(false);
@@ -72,7 +76,6 @@ public class B1_BulletLife : MonoBehaviour
                 bornSize = Vector3.zero;
                 break;
         }
-        bornT = false;
 
         //for (int i=0; i< Pro.Length; i++)
         //{
@@ -156,12 +159,16 @@ public class B1_BulletLife : MonoBehaviour
         {
             bornSize = OriSize;
             ani.SetBool("gen_End",true);
-            bornT = true;
         }
         Pro[ButtleType + 3].transform.localScale = bornSize;
-        if (bornT)
+        if (StartAttack)
         {
-
+            AttackCTime += Time.deltaTime;
+            if (AttackCTime >= 2)
+            {
+                StartAttack = false;
+                Attacking = true;
+            }
         }
     }
     void FixedUpdate()
@@ -190,21 +197,20 @@ public class B1_BulletLife : MonoBehaviour
 
         if (Atarget != Vector3.zero && Attacking)
         {
-            float firstSpeed = Vector3.Distance(transform.position, Atarget);  //原本速度
-            float orifirstSpeed = firstSpeed;
-
+            float firstDistance = Vector3.Distance(transform.position, Atarget);  //初始距離
+            float oriDistance = firstDistance;  //舊距離
             if (forwardFly)
             {
                 transform.Translate(Vector3.forward * speed * Time.deltaTime); //往前移動
             }
             else
             {
-                if (firstSpeed != 0)
+                if (firstDistance != 0)
                 {
 
                     transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
-                    firstSpeed = Vector3.Distance(transform.position, Atarget);
-                    if (firstSpeed == orifirstSpeed)
+                    firstDistance = Vector3.Distance(transform.position, Atarget);
+                    if (firstDistance == oriDistance)
                     {
                         forwardFly = true;
                     }
@@ -227,12 +233,12 @@ public class B1_BulletLife : MonoBehaviour
         //transform.localPosition = Vector3.MoveTowards(transform.localPosition, AAT, step);
 
 
-        if (FlyDistance >= 0.08f)
-        {
-            //Ay = false;
-        }
+        //if (FlyDistance >= 0.08f)
+        //{
+        //    AFlyTrack = false;
+        //}
         //if (transform.position == Atarget)
-        //{          
+        //{
         //    GetComponent<Rigidbody>().useGravity = true;
         //}
     }
