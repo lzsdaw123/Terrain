@@ -15,21 +15,23 @@ public class B1_BulletLife : MonoBehaviour
     public int aTN;
     public Vector3 Atarget;  //攻擊目標座標
     public float AtargetY;  //攻擊目標Y軸加成
-    public float speed;//飛行速度
-    public float liftTime = 5f; //生命時間
+    public float[] speed;//飛行速度
+    public float liftTime; //生命時間
+    public float[] bornTime=new float[3]; //生成時間
     bool AFlyTrack = true;  //子彈飛行軌跡
     public Vector3 OriSize; //預計尺寸
     public Vector3 bornSize; //生成尺寸
-    bool Get_ATarget = true;  //取得攻擊目標
+    bool Get_ATarget;  //取得攻擊目標
     public Vector3 ABPath;
     Vector3 AAT;
-    float FlyDistance; //慣性飛行時間
     public bool facingRight = true; //是否面向右邊
     private Vector3 moveDir = Vector3.right;
     //public LayerMask collidLayers = -1; //射線判斷的圖層，-1表示全部圖層
-    public float power; //子彈威力
+    public float[] power; //子彈威力
     int AttackLv; //傷害等級
     int Level; //難度等級
+    public GameObject Muzzle;
+    public int cuMuGrid;  //占用槍口格子
     [TagSelector] public string[] damageTags; //要傷害的Tag
     [TagSelector] public string[] ignoreTags; //要忽略的Tag
 
@@ -37,41 +39,55 @@ public class B1_BulletLife : MonoBehaviour
     public float rayLength2 = 1f;
     public LayerMask[] Ground;  //射線偵測圖層
     public LayerMask layerMask;
-    bool forwardFly = false;
+    [SerializeField] bool forwardFly;  //是否向前飛
+    public float firstDistance;  //初始距離
+    public float oriDistance;  //舊距離
     bool AttackPlay;  //攻擊目標是否為玩家
     public bool Attacking;  //攻擊中
     public bool StartAttack;  //開始攻擊
     public float AttackCTime;  //攻擊倒數
+    public ObjectPool pool_Hit;  //物件池
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
         facingRight = FacingRight;
         //Destroy(gameObject, liftTime); //設置生命時間到自動刪除
     }
+    private void Awake()
+    {
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+    }
     void Start()
     {
-        speed = 160f; //飛行速度
+        speed = new float[] {160,80,40 }; //飛行速度
         Attacking = false;
         ButtleType = Boss01_AI.ButtleType;
-        power = 1;
+        power =new float[] {1,3,5 };
         AttackLv = 0;
+        liftTime = 10;
+        bornTime = new float[] {2,1, 1.5f};  //生成速度{快, 慢, 中}
+        Get_ATarget = true;
+        Atarget = Vector3.zero;
+        forwardFly = false;
+        Attacking = false;
         StartAttack = false;
         AttackCTime = 0;
+        cuMuGrid = Boss01_AI.cuMuGrid;
         Pro[0].gameObject.SetActive(false);
         Pro[1].gameObject.SetActive(false);
         Pro[2].gameObject.SetActive(false);
-        OriSize = Pro[ButtleType + 3].transform.localScale;
+        OriSize = Pro[ButtleType + 3].transform.localScale * Random.Range(0.5f,1f);
         switch (ButtleType)
         {
-            case 0:  //尖形
+            case 0:  //尖形 結晶
                 Pro[0].gameObject.SetActive(true);
-                bornSize= Vector3.zero;
+                bornSize = Vector3.zero;
                 break;
-            case 1:  //長方
+            case 1:  //長方 傳送
                 Pro[1].gameObject.SetActive(true);
-                bornSize= new Vector3(-0.2f, -0.2f, 0f);
+                bornSize = new Vector3(0f, 0f, 0.2f);
                 break;
-            case 2:  //多邊
+            case 2:  //多邊 爆炸
                 Pro[2].gameObject.SetActive(true);
                 bornSize = Vector3.zero;
                 break;
@@ -114,47 +130,46 @@ public class B1_BulletLife : MonoBehaviour
     {
         AttackLv = Level_1.MonsterLevel;
         Level = Settings.Level;
-        if (AttackLv > 0)
-        {          
-            if (Level <= 1)  //難度普通以下
-            {
-                speed = 60 + (AttackLv * 6);
-                if (speed >= 60 + (Level * 30))
-                {
-                    speed = 60 + (Level * 30);
-                    power = 1;
-                }
-            }
-            else  //難度困難
-            {
-                speed = 60 + (AttackLv * 12);
-                if (speed >= 60 + (Level * 30))
-                {
-                    speed = 120;
-                    power = 2;
-                }
-            }
-        }
+        //if (AttackLv > 0)
+        //{          
+        //    if (Level <= 1)  //難度普通以下
+        //    {
+        //        speed = 60 + (AttackLv * 6);
+        //        if (speed >= 60 + (Level * 30))
+        //        {
+        //            speed = 60 + (Level * 30);
+        //            power = 1;
+        //        }
+        //    }
+        //    else  //難度困難
+        //    {
+        //        speed = 60 + (AttackLv * 12);
+        //        if (speed >= 60 + (Level * 30))
+        //        {
+        //            speed = 120;
+        //            power = 2;
+        //        }
+        //    }
+        //}
         //print(speed + ": 速度+傷害 :"+ power);  //最終速度 60 / 90 / 120  最終傷害 1 / 1 / 2
     }
     void OnDisable()
     {
-        DifficultyUp();
-        liftTime = 5;
-        Get_ATarget = true;
-        Atarget = Vector3.zero;
-        forwardFly = false;
+        //DifficultyUp();
+        Start();
+
     }
     void Update()
     {
-        //liftTime -= Time.deltaTime;
-        FlyDistance += Time.deltaTime;
+        if (Attacking) liftTime -= Time.deltaTime;
         if (liftTime <= 0)
         {
-            //GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryM01Bullet(gameObject);
+            liftTime = 0;
+            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryBoss1Bullet(gameObject);  //回收子彈
+            Boss01_AI.BulletNub++;
         }
 
-        bornSize += new Vector3(0.1f, 0.1f, 0.1f) * Time.deltaTime;  //生成尺寸
+        bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime [ButtleType] * Time.deltaTime;  //生成尺寸
         if (bornSize.z >= OriSize.z)  
         {
             bornSize = OriSize;
@@ -164,12 +179,17 @@ public class B1_BulletLife : MonoBehaviour
         if (StartAttack)
         {
             AttackCTime += Time.deltaTime;
-            if (AttackCTime >= 2)
+            if (AttackCTime >= 2)  //發射前等待
             {
                 StartAttack = false;
                 Attacking = true;
+                Boss01_AI.ReMuzzleGrid(cuMuGrid);
+                Muzzle = Boss01_AI.PS_muzzle[cuMuGrid];
+                Muzzle.gameObject.transform.GetChild(ButtleType).gameObject.SetActive(true);
+                Muzzle.transform.localRotation = transform.localRotation;
             }
         }
+
     }
     void FixedUpdate()
     {
@@ -189,58 +209,52 @@ public class B1_BulletLife : MonoBehaviour
             {
                 Atarget = AAT;
             }
-           
-            //ABPath = Atarget - transform.position;
-            //ABPath = ABPath / 10;
-            Get_ATarget = false;
+            if (StartAttack)  //開始攻擊
+            {
+                Vector3 targetDir = Atarget - transform.position;
+                Quaternion rotate = Quaternion.LookRotation(targetDir);
+                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 20 * Time.deltaTime);
+            }
         }
 
-        if (Atarget != Vector3.zero && Attacking)
+        if (Attacking)
         {
-            float firstDistance = Vector3.Distance(transform.position, Atarget);  //初始距離
-            float oriDistance = firstDistance;  //舊距離
-            if (forwardFly)
+            Get_ATarget = false;
+            if (Atarget != Vector3.zero)
             {
-                transform.Translate(Vector3.forward * speed * Time.deltaTime); //往前移動
-            }
-            else
-            {
-                if (firstDistance != 0)
+                firstDistance = Vector3.Distance(transform.position, Atarget);  //初始距離
+                oriDistance = firstDistance;  //舊距離
+                if (forwardFly)
                 {
+                    transform.Translate(Vector3.forward * speed[ButtleType] * Time.deltaTime); //往前移動
+                }
+                else
+                {
+                    if (firstDistance != 0)
+                    {
 
-                    transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
-                    firstDistance = Vector3.Distance(transform.position, Atarget);
+                        transform.position = Vector3.MoveTowards(transform.position, Atarget, speed[ButtleType] * Time.deltaTime);
+                        firstDistance = Vector3.Distance(transform.position, Atarget);
+                    }
+                    else
+                    {
+                        //liftTime = 0;
+                    }
                     if (firstDistance == oriDistance)
                     {
                         forwardFly = true;
                     }
                 }
-                else
-                {
-                    liftTime = 0;
-                }
+            }
+            else
+            {
+                liftTime = 0;
             }
         }
-        else
-        {
-            liftTime = 0;
-        }
-       
+
         //    float step = speed * Time.deltaTime;
         //transform.localPosition += ABPath * speed * Time.deltaTime ;
 
-        //Vector3.MoveTowards(當前位置.目標位置.速度)
-        //transform.localPosition = Vector3.MoveTowards(transform.localPosition, AAT, step);
-
-
-        //if (FlyDistance >= 0.08f)
-        //{
-        //    AFlyTrack = false;
-        //}
-        //if (transform.position == Atarget)
-        //{
-        //    GetComponent<Rigidbody>().useGravity = true;
-        //}
     }
     bool InLayerMask(int layer, LayerMask layerMask) //判斷物件圖層是否在LayerMask內
     {
@@ -249,9 +263,6 @@ public class B1_BulletLife : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //ContactPoint contact = collision.contacts[0];      //在到物體上產生彈痕
-        //Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        //Vector3 pos = contact.point;
 
         //if (Hit_vfx != null)
         //{
@@ -284,7 +295,7 @@ public class B1_BulletLife : MonoBehaviour
             {
                 if (collision.gameObject.tag == damageTags[i])
                 {
-                    collision.gameObject.SendMessage("Damage", power); //傷害
+                    collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
                     break; //結束迴圈
                 }
             }
@@ -295,8 +306,29 @@ public class B1_BulletLife : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider collision)  //使用中
     {
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit; //射線擊中資訊
+        //偵測射線判斷，由 自身座標 的 前方 射出，以rayLength為長度，並且只偵測Ground圖層(記得改圖層
+        //Raycast(射線初始位置, 射線方向, 儲存所碰到物件, 射線長度(沒設置。無限長), 設定忽略物件)
+        if (Physics.Raycast(ray, out hit, layerMask)) //擊中牆壁
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //無視怪物
+            {
+                return;
+            }
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+            {
+                if (hit.collider.tag == "MissionTarget")  //目標
+                {
+                }
+            }
+        }
+        //在到物體上產生彈孔
+        Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+        Vector3 pos = hit.point;
+        pool_Hit.ReUseBoss1Hit(pos, rot, 0);  //從彈孔池取出彈孔
         //若碰撞體在作用圖層內才進行運算
         if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
@@ -315,7 +347,7 @@ public class B1_BulletLife : MonoBehaviour
                 {
                     if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
                     {
-                        collision.gameObject.SendMessage("Damage", power); //傷害
+                        collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
                             collision.gameObject.SendMessage("DamageEffects"); //傷害

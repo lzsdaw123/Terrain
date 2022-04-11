@@ -6,11 +6,12 @@ using UnityEditor;
 public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
-    public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B, B1_BulletPool;  //物件池集中位置
+    public  GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B, B1_BulletPool, B1_HitPool;  //物件池集中位置
     public GameObject[] Monster;    // 可生的怪種類
     public MonsterAttributes[] MonsterAttributes = new MonsterAttributes[3];
     public GameObject MBullet ;	// 怪物子彈
     public GameObject B1_Bullet ;	// 水晶BOSS子彈
+    public GameObject B1_Hit;	// 水晶BOSS彈孔
     public SpawnRay _SpawnRay;
 
     public int inttailSize;  //預置物件數量
@@ -27,6 +28,7 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> Monster_poolB = new Queue<GameObject>();
     private Queue<GameObject> M_Bullet_pool = new Queue<GameObject>();
     private Queue<GameObject> B1_Bullet_pool = new Queue<GameObject>();
+    private Queue<GameObject> B1_Hit_pool = new Queue<GameObject>();
 
 
     void Awake()
@@ -45,6 +47,7 @@ public class ObjectPool : MonoBehaviour
             GameObject go2 = Instantiate(Hit, HitPool.transform) as GameObject;   //生成彈孔於彈孔池
             GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //怪物子彈於怪物子彈池
             GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;   //Boss1子彈於怪物子彈池
+            GameObject Boss1BHit = Instantiate(B1_Hit, B1_HitPool.transform) as GameObject;   //Boss1彈孔於怪物子彈池
 
 
             _pool.Enqueue(go);  //Queue.Enqueue() 將物件放入結構中
@@ -52,10 +55,12 @@ public class ObjectPool : MonoBehaviour
 
             M_Bullet_pool.Enqueue(Mo1B);  //Queue.Enqueue() 將怪物1子彈放入結構中
             B1_Bullet_pool.Enqueue(Boss1B);  //Queue.Enqueue() 將Boss1子彈放入結構中
+            B1_Hit_pool.Enqueue(Boss1BHit);  //Queue.Enqueue() 將Boss1彈孔放入結構中
             go.SetActive(false);
             go2.SetActive(false);
             Mo1B.SetActive(false);
-            Boss1B.SetActive(false);                       
+            Boss1B.SetActive(false);
+            Boss1BHit.SetActive(false);                       
         }
         for (int cut = 0; cut < inttailSizeMS[0]; cut++)
         {
@@ -247,7 +252,7 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
-            GameObject Boss1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;  //怪物子彈於怪物子彈池
+            GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;  //Boss1子彈於怪物子彈池
             Boss1B.transform.position = positon;
             Boss1B.transform.rotation = rotation;
         }
@@ -255,6 +260,40 @@ public class ObjectPool : MonoBehaviour
     public void RecoveryBoss1Bullet(GameObject recovery)  //用來回收物件
     {
         B1_Bullet_pool.Enqueue(recovery);
+        recovery.SetActive(false);
+    }
+    //Boss1 彈孔
+    public void ReUseBoss1Hit(Vector3 positon, Quaternion rotation, int HitType)  //取出存放在物件池中的物件
+    {
+        if (B1_Hit_pool.Count > 0)
+        {
+            GameObject reuse = B1_Hit_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
+            reuse.transform.position = positon;
+            reuse.transform.rotation = rotation;
+            GameObject reHit;
+            reHit = reuse.transform.GetChild(HitType).gameObject;
+            reHit.SetActive(true);
+            reuse.SetActive(true);
+        }
+        else
+        {
+            GameObject Boss1BHit = Instantiate(B1_Hit, B1_HitPool.transform) as GameObject;  //Boss1彈孔於怪物子彈池
+            Boss1BHit.transform.position = positon;
+            Boss1BHit.transform.rotation = rotation;
+            GameObject reHit;
+            reHit = Boss1BHit.transform.GetChild(HitType).gameObject;
+            reHit.SetActive(true);
+        }
+    }
+    public void RecoveryBoss1Hit(GameObject recovery)  //用來回收物件
+    {
+        B1_Hit_pool.Enqueue(recovery);
+        GameObject reHit;
+        for (int i = 0; i < recovery.transform.childCount; i++)
+        {
+            reHit = recovery.transform.GetChild(i).gameObject;
+            reHit.SetActive(false);
+        }
         recovery.SetActive(false);
     }
 }

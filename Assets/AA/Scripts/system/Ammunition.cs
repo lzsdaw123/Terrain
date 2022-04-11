@@ -24,6 +24,8 @@ public class Ammunition : MonoBehaviour
         Color.a = 0;
         RawImages[0].gameObject.SetActive(false);
         RawImages[1].gameObject.SetActive(false);
+        RawImages[2].gameObject.SetActive(false);
+        RawImages[3].gameObject.SetActive(false);
         animator.SetInteger("WeapSW", -1);
 
     }
@@ -62,17 +64,23 @@ public class Ammunition : MonoBehaviour
         if (weapon_of_Pos[0] == 0)
         {
             RawImages[0].gameObject.SetActive(true);
+            RawImages[2].gameObject.SetActive(true);
             RawImages[0].GetComponent<RawImage>().texture = Texture2D[0];
+            RawImages[2].GetComponent<RawImage>().texture = Texture2D[0];
         }
         if (weapon_of_Pos[1] == 1)
         {
             RawImages[1].gameObject.SetActive(true);
+            RawImages[3].gameObject.SetActive(true);
             RawImages[1].GetComponent<RawImage>().texture = Texture2D[1];
+            RawImages[3].GetComponent<RawImage>().texture = Texture2D[1];
         }
         if (weapon_of_Pos[0] == 2)
         {
             RawImages[0].gameObject.SetActive(true);
+            RawImages[2].gameObject.SetActive(true);
             RawImages[0].GetComponent<RawImage>().texture = Texture2D[2];
+            RawImages[2].GetComponent<RawImage>().texture = Texture2D[2];
         }
     }
     public static void showUI()

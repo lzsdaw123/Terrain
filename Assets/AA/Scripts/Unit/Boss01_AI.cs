@@ -64,7 +64,14 @@ public class Boss01_AI : MonoBehaviour
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
     public GameObject bullet;
+    public static int BulletNub;  //子彈數量
+    [SerializeField] int SF_BulletNub;  //子彈數量
     [SerializeField]private GameObject[] muzzle;  //槍口
+    public static GameObject[] PS_muzzle;  //槍口
+    public static int[] muzzleGrid;  //槍口格子
+    [SerializeField] int[] SF_muzzleGrid;  //槍口格子
+    public static int cuMuGrid;  //當前槍口格子
+    int MaxMuGrid;  //最大槍口格子數
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
 
@@ -102,6 +109,9 @@ public class Boss01_AI : MonoBehaviour
         Fire = false;
         AttackStatus = false;
         coolDown = 0;
+        BulletNub = 3;  //子彈數
+        MaxMuGrid = muzzle.Length;
+        muzzleGrid = new int[MaxMuGrid];
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
         //reg = GetComponent<SpawnRayReg>();
@@ -350,19 +360,22 @@ public class Boss01_AI : MonoBehaviour
 
     void Update()
     {
+        SF_BulletNub = BulletNub;
         SF_bulletAttack = bulletAttack;
+        SF_muzzleGrid = muzzleGrid;
+        PS_muzzle = muzzle;
         if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
-        if (coolDown >= 2)  //攻擊冷卻時間
+        if (coolDown >= 2 && BulletNub>0)  //攻擊冷卻時間
         {
             Fire = true;
             attacking = false;
             coolDown = -1;
+            bulletAttack = 1;
         }
         if (coolDown >= 0 && AttackStatus)
         {
             coolDown += Time.deltaTime;
         }
-        if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         A_defense = Defense.ST_A_defense;
         if (oriTarget[A_defense] != null) 目前進攻目標 = oriTarget[A_defense].gameObject;
 
@@ -371,15 +384,20 @@ public class Boss01_AI : MonoBehaviour
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
             // 與攻擊目標的距離
             float d = Vector3.Distance(transform.position, attackTarget.position);
-            float random = Random.Range(0, 5);
-            if (d < attackDistance - random) // 玩家距離小於攻擊距離,攻擊玩家
+            if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
             {
+                if (attacking)  // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
+                {
+                    Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
+                    AAT = atP;
+                    return;
+                }
                 if (AttackAngleT)
                 {
                     AttackPlay = true;
                     attacking = true;
                     Attack();
-                    print("小於攻擊距離 攻擊+" + attackTarget);
+                    //print("小於攻擊距離 攻擊+" + attackTarget);
                 }
                 else
                 {
@@ -433,17 +451,32 @@ public class Boss01_AI : MonoBehaviour
     {
         if (bulletAttack >= 1)
         {
+            int muzzleRange = Random.Range(0, MaxMuGrid);
+            if (muzzleGrid[muzzleRange] <= 0)
+            {
+                muzzleGrid[muzzleRange] = 1;
+            }
+            else
+            {
+                return;
+            }
             Fire = false;
             attacking = false;
             bulletAttack = 0;
+            BulletNub --;  //消耗子彈數
             if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
-            muzzlePOS = muzzle[0].transform.position;
+            muzzlePOS = muzzle[muzzleRange].transform.position;
+            cuMuGrid = muzzleRange;
             pool.ReUseBoss1Bullet(muzzlePOS, rotate);  //生成子彈
-            ButtleType = Random.Range(0, 2);
-            coolDown = -1;
-            print("bulletAttack" + coolDown);
+            ButtleType = Random.Range(0, 2);  //子彈類型
+            for(int i=0; i< 2; i++)
+            {
+                muzzle[cuMuGrid].gameObject.transform.GetChild(i).gameObject.SetActive(false);
+            }
+            coolDown = 0;
+            //print("bulletAttack" + coolDown);
         }
     }
     private void TrackingPlayer()
@@ -466,7 +499,7 @@ public class Boss01_AI : MonoBehaviour
     {
         if (AttackPlay)
         {
-            Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y + 0.9f, attackTarget.position.z);
+            Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
             AAT = atP;
             //AAT = attackTarget.position;
         }
@@ -484,16 +517,18 @@ public class Boss01_AI : MonoBehaviour
             //Quaternion rotate = Quaternion.LookRotation(targetDir);
             //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
             AttackAning(true, 1);
-            coolDown = 0;
-            print("Fire" + coolDown);
+            //print("Fire" + coolDown);
 
         }
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)
     {
-        print("AA");
         attacking = attackingB;
         bulletAttack = BulletAttackNub;
+    }
+    public static void ReMuzzleGrid(int Grid)  //釋放槍口格子
+    {
+        muzzleGrid[Grid] = 0;
     }
     void OnDisable()  //禁用時
     {
