@@ -64,6 +64,7 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField] private GameObject muzzle;
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
+    public GameObject RigTarget;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -412,6 +413,7 @@ public class MonsterAI02 : MonoBehaviour
             transform.rotation = GetNavRotation(true, agent);
         }
         if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
+        RigTarget.transform.position = attackTarget.transform.position;
     }
     void FixedUpdate()
     {

@@ -17,11 +17,13 @@ public class InteriorSpace : MonoBehaviour
     public GameObject Player;
     public static float Pitch;
     [SerializeField] float SF_Pitch;
+    [SerializeField] float OirPitch;
 
     void Start()
     {
         Interior = false;
         Pitch = 1;
+        OirPitch = 0;
     }
 
     void Update()
@@ -40,7 +42,7 @@ public class InteriorSpace : MonoBehaviour
             {
                 Airtight = true;
                 Pitch = 0.55f;
-                AudioManager.StartLevelAudio();
+                PlayAudio();
             }
             else  
             {
@@ -57,7 +59,7 @@ public class InteriorSpace : MonoBehaviour
                         Pitch = 0.8f;
                         break;
                 }
-                AudioManager.StartLevelAudio();
+                PlayAudio();
             }
             if (distance >= 13) //在室內深處
             {
@@ -75,9 +77,18 @@ public class InteriorSpace : MonoBehaviour
         else
         {
             Airtight = false;
-            Pitch = 1; 
-            AudioManager.StartLevelAudio();
+            Pitch = 1;
+            PlayAudio();
         }
+        if (OirPitch != Pitch)
+        {
+            AudioManager.StartLevelAudio();
+            OirPitch = Pitch;
+        }
+    }
+    void PlayAudio()
+    {
+
     }
     private void OnTriggerEnter(Collider other)
     {
