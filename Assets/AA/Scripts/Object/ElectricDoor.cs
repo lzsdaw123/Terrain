@@ -12,6 +12,7 @@ public class ElectricDoor : MonoBehaviour
     public Vector3[] pos;
     public GameObject[] Door;  //哪扇門
     [SerializeField] bool OpenDoor = false;
+    public bool close;
     public bool OriDoor;
     [SerializeField] private float time;
     float speed;
@@ -32,8 +33,7 @@ public class ElectricDoor : MonoBehaviour
 
     void Update()
     {
-
-        for(int i=0; i< pos.Length; i++)
+        for (int i=0; i< pos.Length; i++)
         {
             pos[i] = Door[i].transform.localPosition;
         }
@@ -42,7 +42,6 @@ public class ElectricDoor : MonoBehaviour
             OriDoor = false;
             pos[0].y = -0.444f;
         }
-
         switch (Type)
         {
             case 0:
@@ -131,6 +130,17 @@ public class ElectricDoor : MonoBehaviour
     void end()
     {
         Botton = false;
+    }
+    void CloseDoor(int nub)
+    {
+        if (nub == 0)
+        {
+            close = true;
+        }
+        else
+        {
+            close = false;
+        }
     }
 
     void HitByRaycast() //被射線打到時會進入此方法

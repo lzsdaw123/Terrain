@@ -50,7 +50,8 @@ public class AudioManager : MonoBehaviour
     public bool[] muteState;
     static bool Re;
 
-    int SceneNub;  //當前場景編號
+    public static int SceneNub;  //當前場景編號
+    [SerializeField]int SF_SceneNub;  //當前場景編號
     int OriSceneNub;  //當前場景編號
 
     private void Awake()
@@ -86,6 +87,7 @@ public class AudioManager : MonoBehaviour
             OriSceneNub = SceneNub;
             StartLevelAudio();
         }
+        SF_SceneNub = SceneNub;
         if (Re)
         {
             Re = false;
@@ -184,16 +186,18 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    void StartLevelAudio()  //背景音效
+    public static void StartLevelAudio()  //背景音效
     {
         if (SceneNub == 1)
         {
             current.AmbientSource.clip = current.BgsCilp[0];
             current.AmbientSource.volume = 0.8f;
+            current.AmbientSource.pitch = 1;
         }
         else if(SceneNub == 2)
         {
             current.AmbientSource.clip = current.BgsCilp[1];
+            current.AmbientSource.pitch = InteriorSpace.Pitch;
         }
         else
         {
