@@ -7,6 +7,7 @@ public class Force : MonoBehaviour
     public int Type;
     public static bool 破門;
     [SerializeField] bool SF_破門;
+    [SerializeField] Transform[] OriTrans = null;
     [SerializeField] Rigidbody[] rigidbodies = null;
     [SerializeField] MeshCollider[] meshcollider = null;
     [Range(0, 50)]
@@ -18,25 +19,35 @@ public class Force : MonoBehaviour
     public GameObject G;
     MeshCollider meshCollider;
     [SerializeField] CapsuleCollider CapsuleCollider=null;
+    public Vector3 pos;
+    public Quaternion rot;
 
     void Start()
     {
+        time = 0;
+        if (Type == 0)
+        {
+            破門 = false;
+        }
+        else
+        {
+            破門 = true;
+        }
+        OriTrans = GetComponentsInChildren<Transform>();
+        pos = OriTrans[0].position;
+        rot = OriTrans[0].rotation;
         rigidbodies = GetComponentsInChildren<Rigidbody>();
-        //G = GetComponent<GameObject>();
         foreach (var r in rigidbodies) {
             r.isKinematic = true;
         }
         if (GetComponent<MeshCollider>())
         {
             meshcollider = GetComponentsInChildren<MeshCollider>();
-            //meshCollider = GetComponent<MeshCollider>();
-            //meshCollider.enabled = true;
         }
         CapsuleCollider = GetComponent<CapsuleCollider>();
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -82,5 +93,15 @@ public class Force : MonoBehaviour
     public static void 開始破門()
     {
         破門 = true;
+    }
+    void OnDisable()
+    {
+        OriTrans[0].position = pos;
+        OriTrans[0].rotation = rot;
+        foreach (var r in rigidbodies)
+        {
+            r.isKinematic = true;
+        }
+        time = 0;
     }
 }

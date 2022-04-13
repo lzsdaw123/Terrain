@@ -51,7 +51,7 @@ public class MonsterAI02 : MonoBehaviour
     private float targetDistance = 2000; // 與最近攻擊目標的距離
     [SerializeField] private float attackDistance; // 攻擊角度距離
     [SerializeField] private float ArangeDistance; // 攻擊範圍距離
-    bool AttackAngleT = false;
+    [SerializeField] private bool AttackAngleT = false;
     [SerializeField] private bool attacking;
     private int bulletAttack;
     [SerializeField] int SF_bulletAttack;
@@ -65,6 +65,7 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
     public GameObject RigTarget;
+    [SerializeField] private bool locking =false;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -123,7 +124,6 @@ public class MonsterAI02 : MonoBehaviour
         oriTarget[0] = MissionTarget[0].transform;
         oriTarget[1] = MissionTarget[1].transform;
         oriTarget[2] = MissionTarget[2].transform;
-        ani.SetBool("Attack", true);
     }
 
     public void AttackLv1()
@@ -258,38 +258,41 @@ public class MonsterAI02 : MonoBehaviour
                         {
                             nd = d;
                             player = actors[i].transform;
+
                         }
-                        tagObject = player.gameObject;
-                        //if (player.gameObject == tagObject)
-                        //{
-                        //    //print(tagObject + "__鎖定了");
-                        //}
-                        //else
-                        //{
-                        //    //print(player + "__非");
-                        //    tagObject = player.gameObject;
-                        //}
+                        if (!locking)
+                        {
+                            tagObject = player.gameObject;
+                        }
+                        //print("目標-    " + tagObject);
+
                         //判斷在攻擊範圍內
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
                             if (coolDown >= 1)
                             {
+                                //目前攻擊目標 = tagObject;
+                                locking = true;
                                 //判斷在攻擊角度內
                                 if (GetXZAngle(transform.forward, transform.position,
                                     tagObject.transform.position, false) < AttackAngle)
                                 {
                                     agent.speed = 0;
                                     AttackAngleT = true;
-                                    //print("攻擊角度內" + tagObject);
+                                    ani.SetBool("Rotate", false);
+                                    //print("攻擊角度內-  " + tagObject);
                                 }
-                                else
+                                else 
                                 {
+                                    ani.SetBool("Rotate", true);
+                                    ani.SetBool("Attack", false);
+                                    AttackAngleT = false;
                                     //若不在攻擊角度內轉向目標
                                     Vector3 targetDir = tagObject.transform.position - transform.position;
                                     Quaternion rotate = Quaternion.LookRotation(targetDir);
-                                    transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
-                                    //print("轉向" + tagObject);
+                                    transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 20f * Time.deltaTime);
+                                    //print("轉向-  " + tagObject);
                                 }
                                 coolDown = 1f;
                             }
@@ -347,7 +350,7 @@ public class MonsterAI02 : MonoBehaviour
     void Update()
     {
         SF_bulletAttack = bulletAttack;
-        if (attacking)return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
+        if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         A_defense = Defense.ST_A_defense;
         if (oriTarget[A_defense] != null) 目前進攻目標 = oriTarget[A_defense].gameObject;
 
@@ -364,6 +367,7 @@ public class MonsterAI02 : MonoBehaviour
                     AttackPlay = true;
                     Fire = true;
                     attacking = true;
+                    locking = true;
                     Attack();
                     //print("小於攻擊距離 攻擊+"+ attackTarget);
                 }
@@ -412,16 +416,17 @@ public class MonsterAI02 : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
-        RigTarget.transform.position = attackTarget.transform.position;
+        //if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
     }
     void FixedUpdate()
     {
-        if (bulletAttack >= 1)
+        if (bulletAttack >= 1)  //發射子彈
         {
-            attacking = false;
+            AttackAngleT = false;
+            attacking = locking = false;
             bulletAttack = 0;
             if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
+            RigTarget.transform.position = AAT;
             Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             muzzlePOS = muzzle.transform.position;
@@ -460,12 +465,12 @@ public class MonsterAI02 : MonoBehaviour
         if (Fire)
         {
             ani.SetBool("Move", false);
-            AttackAngleT = false;
             agent.speed = 0;
             ani.SetBool("Attack", true);
-            //Vector3 targetDir = AAT - transform.position;  
-            //Quaternion rotate = Quaternion.LookRotation(targetDir);
-            //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
+            Vector3 targetDir = AAT - transform.position;
+            Quaternion rotate = Quaternion.LookRotation(targetDir);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 20f * Time.smoothDeltaTime);
+            //print("Attack轉向-  " + attackTarget);
         }
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)
@@ -475,6 +480,9 @@ public class MonsterAI02 : MonoBehaviour
     }
     void OnDisable()  //禁用時
     {
+        agent.enabled = true;
         attacking = false;
+        bulletAttack = 1;
+        Fire = false;
     }
 }

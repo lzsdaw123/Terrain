@@ -71,6 +71,10 @@ public class AnimEvents : MonoBehaviour
                 break;
         }   
     }
+    void BumbEnd()
+    {
+        Shooting.BumbEnd();
+    }
     void ReLoad()
     {
         if (UnitType == 0)
@@ -155,8 +159,16 @@ public class AnimEvents : MonoBehaviour
         NPC_Source.pitch = 1.3f;
         NPC_Source.Play();
     }
-    void MonsterAudio(int Nub)  //怪物音效
+    public void MonsterAudio(int Nub)  //怪物音效
     {
+        if(Nub==0 || Nub == 1)
+        {
+            MonsterSource.pitch = 2;
+        }
+        if (Nub == 2)
+        {
+            MonsterSource.pitch = 1;
+        }
         MonsterSource.clip = MonsterClip[Nub];
         MonsterSource.volume = AudioManager.Slider[2].value;
         MonsterSource.mute = AudioManager.muteState[2];

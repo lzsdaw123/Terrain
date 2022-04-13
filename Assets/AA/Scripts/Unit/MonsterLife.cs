@@ -17,6 +17,7 @@ public class MonsterLife : MonoBehaviour
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public float[] hpFull = new float[] { 14, 22 }; // 血量上限
     public float hp; // 血量
+    public bool 無敵=false;
     int HpLv;  //生命等級
     int Level;  //難度等級
     //public Image hpImage;
@@ -70,7 +71,7 @@ public class MonsterLife : MonoBehaviour
         //}
         if (PS_Dead.activeSelf)
         {
-            DeadTime += 1.6f * Time.deltaTime;
+            DeadTime += 1.4f * Time.deltaTime;
             if (DeadTime >= 1)
             {
                 agent.enabled = false; // 立即關閉尋徑功能
@@ -123,6 +124,7 @@ public class MonsterLife : MonoBehaviour
     {
         //print(Power);
         hp -= Power; // 扣血
+        if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
         {        
             if (Player)
@@ -139,9 +141,10 @@ public class MonsterLife : MonoBehaviour
                 {
                     HitUI.SetActive(true);
                     HitUI.GetComponent<Image>().color = Color.red;
+                    //AudioManager.Hit(4);  //玩家擊殺音效
                 }
                 Dead = true;
-                AudioManager.Hit(4);
+                AnimEvents.MonsterAudio(2);  //怪物爆汁音效
             }           
             hp = 0; // 不要扣到負值
             PS_Dead.SetActive(true);  //死亡爆炸

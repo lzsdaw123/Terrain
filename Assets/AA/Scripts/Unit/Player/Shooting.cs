@@ -79,6 +79,7 @@ public class Shooting : MonoBehaviour
     public 部位 部位;
     [SerializeField] int 部件ID;
     public static bool 換部件;
+    static bool Bomb=true;
 
     public static void StartAll()
     {
@@ -505,6 +506,15 @@ public class Shooting : MonoBehaviour
             coolDownTimer += Time.deltaTime;
             //Weapon.SetBool("Fire", false);
         }
+        if (!Bomb)
+        {
+            Weapon.SetBool("Bomb", false);
+        }
+        if (Input.GetKeyDown(KeyCode.G) && Bomb)
+        {
+            Bomb = false;
+            Weapon.SetBool("Bomb", true);
+        }
         if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
         {
             Reload = false;
@@ -920,5 +930,9 @@ public class Shooting : MonoBehaviour
     public static void UseWork(UpgradeValue[] _武器欄位)
     {
         武器欄位 = _武器欄位;
+    }
+    public static void BumbEnd()
+    {
+        Bomb = true;
     }
 }

@@ -91,7 +91,6 @@ public class MonsterAI03 : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
-        //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
         attacking = false;
         bulletAttack = 1;
         reg = GetComponent<SpawnRayReg>();
@@ -439,5 +438,7 @@ public class MonsterAI03 : MonoBehaviour
     void OnDisable()  //禁用時
     {
         attacking = false;
+        agent.enabled = true;
+        bulletAttack = 1;
     }
 }
