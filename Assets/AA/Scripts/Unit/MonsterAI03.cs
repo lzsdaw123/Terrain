@@ -38,6 +38,7 @@ public class MonsterAI03 : MonoBehaviour
     [Range(0, 180)] public float lookAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
     [Range(0, 180)] public float AttackAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
     [Range(0, 180)] public float ArangeAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
+    public bool 關閉繪製;
     public LayerMask actorLayer = 0; // 角色所在的圖層
     [TagSelector] public string[] playerTags = { "Player" };
     public static Transform attackTarget; // 搜尋到最近的攻擊目標
@@ -65,6 +66,7 @@ public class MonsterAI03 : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (關閉繪製) return;
         Vector3 eyeHi = new Vector3(0, heightOfEye, 0); // 眼睛高度
         Gizmos.color = Color.cyan; // 設為青色
         Quaternion arcRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, -lookAngle, 0));// 計算弧線的起始角度

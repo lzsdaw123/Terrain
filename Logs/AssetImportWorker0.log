@@ -1,23 +1,23 @@
 Using pre-set license
 Built from '2021.2/staging' branch; Version is '2021.2.8f1 (d0e5f0a7b06a) revision 13690352'; Using compiler version '192829333'; Build Type 'Release'
-OS: 'Windows 10  (10.0.19044) 64bit Professional' Language: 'zh' Physical Memory: 16300 MB
+OS: 'Windows 10  (10.0.19044) 64bit Core' Language: 'zh' Physical Memory: 8103 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
 COMMAND LINE ARGUMENTS:
-D:\Unity\2021.2.8f1\Editor\Unity.exe
+C:\Program Files\Unity\Hub\Editor\2021.2.8f1\Editor\Unity.exe
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-C:/Users/GOD/Desktop/Terrain
+J:/QWQ
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-61095
-Successfully changed project path to: C:/Users/GOD/Desktop/Terrain
-C:/Users/GOD/Desktop/Terrain
+51377
+Successfully changed project path to: J:/QWQ
+J:/QWQ
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -47,289 +47,15 @@ C:/Users/GOD/Desktop/Terrain
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 99.95 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 14280.27 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.2.8f1 (d0e5f0a7b06a)
-[Subsystems] Discovering subsystems at path D:/Unity/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path C:/Users/GOD/Desktop/Terrain/Assets
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path J:/QWQ/Assets
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: NVIDIA GeForce RTX 2060 SUPER (ID=0x1f06)
-    Vendor:   NVIDIA
-    VRAM:     8031 MB
-    Driver:   30.0.15.1215
-Initialize mono
-Mono path[0] = 'D:/Unity/2021.2.8f1/Editor/Data/Managed'
-Mono path[1] = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
-Mono config path = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56576
-Begin MonoManager ReloadAssembly
-Registering precompiled unity dll's ...
-Register platform support module: D:/Unity/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.003244 seconds.
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 94.63 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.666 seconds
-Domain Reload Profiling:
-	ReloadAssembly (666ms)
-		BeginReloadAssembly (91ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (0ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (495ms)
-			LoadAssemblies (90ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (121ms)
-			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (26ms)
-			SetupLoadedEditorAssemblies (296ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (15ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (95ms)
-				BeforeProcessingInitializeOnLoad (1ms)
-				ProcessInitializeOnLoadAttributes (140ms)
-				ProcessInitializeOnLoadMethodAttributes (44ms)
-				AfterProcessingInitializeOnLoad (0ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (0ms)
-Platform modules already initialized, skipping
-Registering precompiled user dll's ...
-Registered in 0.006771 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 107.66 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  2.065 seconds
-Domain Reload Profiling:
-	ReloadAssembly (2066ms)
-		BeginReloadAssembly (271ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (50ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (22ms)
-		EndReloadAssembly (1698ms)
-			LoadAssemblies (102ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (305ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (96ms)
-			SetupLoadedEditorAssemblies (1168ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (11ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (108ms)
-				BeforeProcessingInitializeOnLoad (100ms)
-				ProcessInitializeOnLoadAttributes (899ms)
-				ProcessInitializeOnLoadMethodAttributes (48ms)
-				AfterProcessingInitializeOnLoad (3ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (6ms)
-Platform modules already initialized, skipping
-========================================================================
-Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 1.13 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4902 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 80 unused Assets / (6.1 MB). Loaded Objects now: 5375.
-Memory consumption went from 352.5 MB to 346.4 MB.
-Total: 5.696100 ms (FindLiveObjects: 0.660800 ms CreateObjectMapping: 0.513700 ms MarkObjects: 3.146100 ms  DeleteObjects: 1.373200 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Import Request.
-  Time since last request: 195486.517552 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/BismuthCrystal_Material.mat
-  artifactKey: Guid(7bff9b699a3ac0949a62e455a28a2e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/BismuthCrystal_Material.mat using Guid(7bff9b699a3ac0949a62e455a28a2e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c47bd45212a736b2196e1b20d88e7538') in 1.030726 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000037 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal6.fbx
-  artifactKey: Guid(72cbcc4c521a1c24abc09e070afdba29) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal6.fbx using Guid(72cbcc4c521a1c24abc09e070afdba29) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0f2f5ac8375c181259c05a6a6a0a4a64') in 0.117400 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000083 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/BismuthCrystal_Material 1.mat
-  artifactKey: Guid(0c21d2ee74b53c14e8dc6451e25fa4f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/BismuthCrystal_Material 1.mat using Guid(0c21d2ee74b53c14e8dc6451e25fa4f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2104fef1d035e67d87bd0c3172947d8') in 0.037672 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 9.394846 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123
-  artifactKey: Guid(e2b70113047fdb440b5c2169b30d6287) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123 using Guid(e2b70113047fdb440b5c2169b30d6287) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83a842d63ec528818e76aa43e668fbf8') in 0.007273 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 1.046661 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_BaseMap.png
-  artifactKey: Guid(a1603e67c714a4b4c9cb9185db540e3e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_BaseMap.png using Guid(a1603e67c714a4b4c9cb9185db540e3e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8eb9d8f918c036310cc8b627751508f1') in 0.067269 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000301 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_MaskMap.png
-  artifactKey: Guid(ab864ccbb8bd8204c824e74c51a8326f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_MaskMap.png using Guid(ab864ccbb8bd8204c824e74c51a8326f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '92263bb374be45e65cd144e7ea0bafbc') in 0.046637 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000044 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(d32a7799f1591a647bfeb3dd281ec8fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(d32a7799f1591a647bfeb3dd281ec8fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'acf61925efa21f9f1ff7941918f0042a') in 0.016325 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000038 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_Emissive.png
-  artifactKey: Guid(43632eba16456c648969dcbbd6344813) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_Emissive.png using Guid(43632eba16456c648969dcbbd6344813) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5f95fe46ac9045d239cfc7698ba79c05') in 0.017316 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 6.083460 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/New Material.mat
-  artifactKey: Guid(ed669036e7471164bb0db5d81a0a29fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/New Material.mat using Guid(ed669036e7471164bb0db5d81a0a29fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4b5c991f787261a36ecf2d9c01a1260d') in 0.019074 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 5.230702 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(d32a7799f1591a647bfeb3dd281ec8fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/Crystal123_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(d32a7799f1591a647bfeb3dd281ec8fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b3e548872a57d8c79a2344be7d0ee274') in 0.091581 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 210.965834 seconds.
-  path: Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/New Material.mat
-  artifactKey: Guid(ed669036e7471164bb0db5d81a0a29fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/CrystalBoss/Crystal123/New Material.mat using Guid(ed669036e7471164bb0db5d81a0a29fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '80c998e82c1e73637b97190529a67569') in 0.034524 seconds 
-========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.007212 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 1.02 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-InvalidCastException: Specified cast is not valid.
-  at UnityEngine.Rendering.VolumeComponent.FindParameters (System.Object o, System.Collections.Generic.List`1[T] parameters, System.Func`2[T,TResult] filter) [0x0006a] in C:\Users\GOD\Desktop\Terrain\Library\PackageCache\com.unity.render-pipelines.core@12.1.3\Runtime\Volume\VolumeComponent.cs:149 
-  at UnityEngine.Rendering.VolumeComponent.OnEnable () [0x00006] in C:\Users\GOD\Desktop\Terrain\Library\PackageCache\com.unity.render-pipelines.core@12.1.3\Runtime\Volume\VolumeComponent.cs:166 
-
-Mono: successfully reloaded assembly
-- Completed reload, in  1.675 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1675ms)
-		BeginReloadAssembly (197ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (29ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (49ms)
-		EndReloadAssembly (1386ms)
-			LoadAssemblies (98ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (445ms)
-			ReleaseScriptCaches (2ms)
-			RebuildScriptCaches (93ms)
-			SetupLoadedEditorAssemblies (614ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (12ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (89ms)
-				ProcessInitializeOnLoadAttributes (467ms)
-				ProcessInitializeOnLoadMethodAttributes (40ms)
-				AfterProcessingInitializeOnLoad (4ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (26ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 1.11 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4547 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 65 unused Assets / (6.1 MB). Loaded Objects now: 5628.
-Memory consumption went from 368.9 MB to 362.8 MB.
-Total: 5.295000 ms (FindLiveObjects: 0.453200 ms CreateObjectMapping: 0.435700 ms MarkObjects: 3.276200 ms  DeleteObjects: 1.128600 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.006311 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 1.35 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  2.331 seconds
-Domain Reload Profiling:
-	ReloadAssembly (2332ms)
-		BeginReloadAssembly (171ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (8ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (43ms)
-		EndReloadAssembly (2065ms)
-			LoadAssemblies (101ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (844ms)
-			ReleaseScriptCaches (4ms)
-			RebuildScriptCaches (127ms)
-			SetupLoadedEditorAssemblies (823ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (17ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (123ms)
-				ProcessInitializeOnLoadAttributes (631ms)
-				ProcessInitializeOnLoadMethodAttributes (45ms)
-				AfterProcessingInitializeOnLoad (5ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (32ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 1.95 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4529 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 65 unused Assets / (6.1 MB). Loaded Objects now: 5631.
-Memory consumption went from 367.9 MB to 361.8 MB.
-Total: 9.240000 ms (FindLiveObjects: 0.852400 ms CreateObjectMapping: 1.097200 ms MarkObjects: 5.847900 ms  DeleteObjects: 1.440700 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+    Renderer: AMD Radeon (TM) R9 380 Series (ID=0x6939)
+    Vendor:   ATI
+    VRAM:     2022 MB
+    Driver:   27.20.20903.8001

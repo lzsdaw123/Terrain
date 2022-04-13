@@ -325,10 +325,7 @@ public class B1_BulletLife : MonoBehaviour
                 }
             }
         }
-        //在到物體上產生彈孔
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-        Vector3 pos = hit.point;
-        pool_Hit.ReUseBoss1Hit(pos, rot, 0);  //從彈孔池取出彈孔
+
         //若碰撞體在作用圖層內才進行運算
         if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
@@ -360,6 +357,10 @@ public class B1_BulletLife : MonoBehaviour
         else if (InLayerMask(collision.gameObject.layer, Ground[1]))
         {
             liftTime = 0;
+            //在到物體上產生彈孔
+            Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            Vector3 pos = hit.point;
+            pool_Hit.ReUseBoss1Hit(pos, rot, 0);  //從彈孔池取出彈孔
         }
     }
 }

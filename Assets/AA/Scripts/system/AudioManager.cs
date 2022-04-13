@@ -49,6 +49,7 @@ public class AudioManager : MonoBehaviour
     public Text[] Nub;  //BSE
     public bool[] muteState;
     static bool Re;
+    public static float[] SaveVolume =new float[8];  //保存預設音量
 
     public static int SceneNub;  //當前場景編號
     [SerializeField]int SF_SceneNub;  //當前場景編號
@@ -77,7 +78,10 @@ public class AudioManager : MonoBehaviour
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         OriSceneNub = SceneNub;
         StartLevelAudio();
-
+        for (int i = 0; i < SaveVolume.Length; i++)
+        {
+            SaveVolume[i] = 0;
+        }
     }
     void Update()
     {
@@ -91,11 +95,9 @@ public class AudioManager : MonoBehaviour
         if (Re)
         {
             Re = false;
-            //float[] Val;
-            //Val[0]=
             AmbientSource.volume = Slider[1].value;
-            PlayerSource.volume = Slider[2].value;
-            GunSource.volume = GunSource.volume * Slider[2].value;
+            PlayerSource.volume = SaveVolume[1] * Slider[2].value;
+            GunSource.volume = SaveVolume[2] * Slider[2].value;
             HitSource.volume = Slider[2].value;
             EffectsSource.volume = Slider[2].value;
             ButtonSource.volume = Slider[2].value;
@@ -224,17 +226,20 @@ public class AudioManager : MonoBehaviour
             {
                 int index = Random.Range(0, current.WalkClip.Length);
                 current.PlayerSource.clip = current.WalkClip[index];
+                current.PlayerSource.volume = 0.7f;
                 current.PlayerSource.pitch = 1.5f;
             }
-            else
+            else  //走在金屬上
             {
                 current.PlayerSource.clip = current.JumpClip[1];
+                current.PlayerSource.volume = 0.7f;
                 current.PlayerSource.pitch = 0.75f;
                 if (PlayerMove.Speed <= 4)
                 {
                     current.PlayerSource.pitch = 0f;
                 }
             }
+            SaveVolume[1] = current.PlayerSource.volume;
             current.PlayerSource.Play();
             OnClick();
         }
@@ -245,21 +250,22 @@ public class AudioManager : MonoBehaviour
         current.PlayerSource.clip = current.JumpClip[Nub];
         switch (Nub)
         {
-            case 0:
+            case 0:  //土地
                 current.PlayerSource.pitch = 1f;
                 break;
-            case 1:
-                //current.PlayerSource.pitch = 0.65f;
-                current.PlayerSource.pitch = 1f;
+            case 1:  //金屬地
+                     //current.PlayerSource.pitch = 0.65f;
+                current.PlayerSource.volume = 0.8f;
+                current.PlayerSource.pitch = 0.8f;
                 break;
         }
+        SaveVolume[1] = current.PlayerSource.volume;
         current.PlayerSource.Play();
         OnClick();
     }
     public static void PlayGunshotsAudio(int Nub)  //開火
     {
         current.GunSource.clip = current.GunshotsClip[Nub];
-        current.GunSource.volume = 0.6f;
         current.GunSource.pitch = 1.3f;
         current.GunSource.volume = 1f;
         switch (Nub)
@@ -268,9 +274,10 @@ public class AudioManager : MonoBehaviour
                 current.GunSource.volume = 1.2f;
                 break;
             case 1:
-                current.GunSource.volume = 0.7f;
+                current.GunSource.volume = 0.6f;
                 break;
         }
+        SaveVolume[2] = current.GunSource.volume;
         current.GunSource.Play();
         OnClick();
     }
