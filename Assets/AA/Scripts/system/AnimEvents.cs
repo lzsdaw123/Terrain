@@ -125,6 +125,7 @@ public class AnimEvents : MonoBehaviour
     void Boss1_Exp()
     {
         boss01_AI.ani.SetBool("Start", true);
+        boss01_AI.Scenes_ani.SetBool("Start", true);
         boss01_AI.AttackStatus = true;
     }
     void B1_gEnd()

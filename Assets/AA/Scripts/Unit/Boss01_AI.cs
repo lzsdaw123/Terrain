@@ -21,6 +21,7 @@ public class Boss01_AI : MonoBehaviour
     [SerializeField] private AnimEvents AnimEvents;
     public Animator Total_ani; //動畫控制器
     public Animator ani; //動畫控制器
+    public Animator Scenes_ani; //場景動畫控制器
     public float arriveDistance = 4f; // 到達目的地的距離
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
@@ -62,7 +63,7 @@ public class Boss01_AI : MonoBehaviour
     public static int ButtleType;  //子彈類型
     public bool AttackStatus;  //攻擊狀態
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
-
+    public int SaveBT;
     public GameObject bullet;
     public static int BulletNub;  //子彈數量
     [SerializeField] int SF_BulletNub;  //子彈數量
@@ -469,9 +470,22 @@ public class Boss01_AI : MonoBehaviour
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             muzzlePOS = muzzle[muzzleRange].transform.position;
             cuMuGrid = muzzleRange;
-            pool.ReUseBoss1Bullet(muzzlePOS, rotate);  //生成子彈
+            pool.ReUseBoss1Bullet(muzzlePOS, rotate, cuMuGrid);  //生成子彈
             ButtleType = Random.Range(0, 2);  //子彈類型
-            for(int i=0; i< 2; i++)
+            if(ButtleType== SaveBT)
+            {
+                switch (ButtleType)
+                {
+                    case 0:
+                        ButtleType = Random.Range(1, 2);  //子彈類型
+                        break;
+                    case 1:
+                        ButtleType = 2;
+                        break;
+                }
+            }
+            SaveBT = ButtleType;
+            for (int i=0; i< 2; i++)
             {
                 muzzle[cuMuGrid].gameObject.transform.GetChild(i).gameObject.SetActive(false);
             }

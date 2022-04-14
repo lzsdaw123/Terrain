@@ -72,7 +72,7 @@ public class B1_BulletLife : MonoBehaviour
         Attacking = false;
         StartAttack = false;
         AttackCTime = 0;
-        cuMuGrid = Boss01_AI.cuMuGrid;
+        //cuMuGrid = Boss01_AI.cuMuGrid;
         Pro[0].gameObject.SetActive(false);
         Pro[1].gameObject.SetActive(false);
         Pro[2].gameObject.SetActive(false);
@@ -85,7 +85,7 @@ public class B1_BulletLife : MonoBehaviour
                 break;
             case 1:  //長方 傳送
                 Pro[1].gameObject.SetActive(true);
-                bornSize = new Vector3(0f, 0f, 0.2f);
+                bornSize = new Vector3(0, 0, 0.4f);
                 break;
             case 2:  //多邊 爆炸
                 Pro[2].gameObject.SetActive(true);
@@ -169,11 +169,14 @@ public class B1_BulletLife : MonoBehaviour
             Boss01_AI.BulletNub++;
         }
 
-        bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime [ButtleType] * Time.deltaTime;  //生成尺寸
         if (bornSize.z >= OriSize.z)  
         {
-            bornSize = OriSize;
+            //bornSize = OriSize;
             ani.SetBool("gen_End",true);
+        }
+        else
+        {
+            bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime[ButtleType] * Time.deltaTime;  //生成尺寸
         }
         Pro[ButtleType + 3].transform.localScale = bornSize;
         if (StartAttack)
@@ -186,6 +189,7 @@ public class B1_BulletLife : MonoBehaviour
                 Boss01_AI.ReMuzzleGrid(cuMuGrid);
                 Muzzle = Boss01_AI.PS_muzzle[cuMuGrid];
                 Muzzle.gameObject.transform.GetChild(ButtleType).gameObject.SetActive(true);
+                Muzzle.gameObject.transform.GetChild(ButtleType).GetComponent<ParticleSystem>().Play();
                 Muzzle.transform.localRotation = transform.localRotation;
             }
         }
@@ -360,7 +364,7 @@ public class B1_BulletLife : MonoBehaviour
             //在到物體上產生彈孔
             Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
             Vector3 pos = hit.point;
-            pool_Hit.ReUseBoss1Hit(pos, rot, 0);  //從彈孔池取出彈孔
+            pool_Hit.ReUseBoss1Hit(pos, rot, ButtleType);  //從彈孔池取出彈孔
         }
     }
 }

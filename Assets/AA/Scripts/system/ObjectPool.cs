@@ -241,13 +241,14 @@ public class ObjectPool : MonoBehaviour
     }
 
     //Boss1 子彈
-    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
+    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation, int Muzzle)  //取出存放在物件池中的物件
     {
         if (B1_Bullet_pool.Count > 0)
         {
             GameObject reuse = B1_Bullet_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
+            reuse.GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
             reuse.SetActive(true);
         }
         else
@@ -255,6 +256,7 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;  //Boss1子彈於怪物子彈池
             Boss1B.transform.position = positon;
             Boss1B.transform.rotation = rotation;
+            GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
         }
     }
     public void RecoveryBoss1Bullet(GameObject recovery)  //用來回收物件
@@ -270,9 +272,7 @@ public class ObjectPool : MonoBehaviour
             GameObject reuse = B1_Hit_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
-            GameObject reHit;
-            reHit = reuse.transform.GetChild(HitType).gameObject;
-            reHit.SetActive(true);
+            reuse.GetComponent<B1_BulletHole>().ButtleType = HitType;
             reuse.SetActive(true);
         }
         else
@@ -280,20 +280,18 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss1BHit = Instantiate(B1_Hit, B1_HitPool.transform) as GameObject;  //Boss1彈孔於怪物子彈池
             Boss1BHit.transform.position = positon;
             Boss1BHit.transform.rotation = rotation;
-            GameObject reHit;
-            reHit = Boss1BHit.transform.GetChild(HitType).gameObject;
-            reHit.SetActive(true);
+            GetComponent<B1_BulletHole>().ButtleType = HitType;
         }
     }
     public void RecoveryBoss1Hit(GameObject recovery)  //用來回收物件
     {
         B1_Hit_pool.Enqueue(recovery);
-        GameObject reHit;
-        for (int i = 0; i < recovery.transform.childCount; i++)
-        {
-            reHit = recovery.transform.GetChild(i).gameObject;
-            reHit.SetActive(false);
-        }
+        //GameObject reHit;
+        //for (int i = 0; i < recovery.transform.childCount; i++)
+        //{
+        //    reHit = recovery.transform.GetChild(i).gameObject;
+        //    reHit.SetActive(false);
+        //}
         recovery.SetActive(false);
     }
 }
