@@ -13,6 +13,12 @@ public class BulletHole : MonoBehaviour
     public bool AutoDead=true;
     public bool Dead;
     public GameObject father;
+    public GameObject[] AwardHit; //擊中怪物的獎勵特效
+    public GameObject PlayCam;
+    public float distance;
+    public Vector3 Size;
+    public Vector3 NewSize;
+    bool AutoSize;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,6 +31,7 @@ public class BulletHole : MonoBehaviour
         BulletHoleTime = InputTime[WeaponType];
         if (!AutoDead) BulletHoleTime = -1;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+        PlayCam = GameObject.Find("Gun_Camera").gameObject;
         if(Light.gameObject != null)
         {
             if (WeaponType == 1)
@@ -39,10 +46,36 @@ public class BulletHole : MonoBehaviour
         }
         father = transform.parent.gameObject;
         Dead = false;
+        AutoSize = true;
     }
 
     void Update()
     {
+        if (AutoSize)
+        {
+            for (int i = 0; i < AwardHit.Length; i++)
+            {
+                if (AwardHit[i].activeSelf)
+                {
+                    distance = Vector3.Distance(transform.position, PlayCam.transform.position);  //彈孔與玩家距離
+                    Size = new Vector3(1, 1, 1);
+                    if (distance >= 25)
+                    {
+                        float D = (distance - 25) * 0.1f;
+                        if (D >= 4.5f) D = 4.5f;
+                        Size *= D;
+                        AwardHit[i].transform.localScale = Size;
+                    }
+                    else
+                    {
+                        AwardHit[i].transform.localScale = new Vector3(1, 1, 1);
+                    }
+                    NewSize = AwardHit[i].transform.localScale;
+                    AutoSize = false;
+                }
+            }
+        }
+        
         //transform.parent = gameObject.transform;
         if (ShootingRange.TargetWall && !Dead)
         {
@@ -95,5 +128,6 @@ public class BulletHole : MonoBehaviour
         BulletHoleTime = InputTime[WeaponType];
         if (!AutoDead) BulletHoleTime = -1;
         Dead = false;
+        AutoSize = true;
     }
 }

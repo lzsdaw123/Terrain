@@ -15,7 +15,7 @@ public class MonsterLife : MonoBehaviour
 
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
-    public float[] hpFull = new float[] { 14, 22 }; // 血量上限
+    public float[] hpFull; // 血量上限
     public float hp; // 血量
     public bool 無敵=false;
     int HpLv;  //生命等級
@@ -48,7 +48,7 @@ public class MonsterLife : MonoBehaviour
     void Start()
     {
         PS_Dead.SetActive(false);
-        hpFull = new float[] { 14, 20 };
+        hpFull = new float[] { 14, 24 };  // 血量上限
         hp = hpFull[MonsterType];  //補滿血量
         DeadTime = 0;
         DifficultyUp();  //難度調整
@@ -124,6 +124,7 @@ public class MonsterLife : MonoBehaviour
     {
         //print(Power);
         hp -= Power; // 扣血
+        transform.position += new Vector3(0, 0, 0.5f);
         if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
         {        
@@ -132,6 +133,17 @@ public class MonsterLife : MonoBehaviour
                 HitUI.SetActive(true);
                 HitUI.GetComponent<Image>().color = Color.white;
             }
+        }
+        if (hp <= hpFull[MonsterType] /2)  //怪物血量低於一半
+        {
+            switch (MonsterType)
+            {
+                case 0:
+                    break;
+                case 1:
+                    monster03.ani.SetInteger("Level", 1);
+                    break;
+            }            
         }
         if (hp <= 0)
         {
@@ -201,6 +213,7 @@ public class MonsterLife : MonoBehaviour
             case 1: 
                 monster03.enabled = true;
                 monster03.ani.SetBool("Attack", true);
+                monster03.ani.SetInteger("Level", 0);
                 break;
         }
         agent.enabled = true; // 開啟尋徑功能

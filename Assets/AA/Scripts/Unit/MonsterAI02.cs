@@ -14,7 +14,6 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField] GameObject 目前進攻目標;
     [SerializeField] GameObject 目前攻擊目標;
     public GameObject[] defenseOb;
-    //public Defense Defense;
     public int A_defense;
     GameObject tagObject;
     public ObjectPool pool;
@@ -100,11 +99,8 @@ public class MonsterAI02 : MonoBehaviour
         attacking = false;
         bulletAttack = 1;
         Fire = false;
-        //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
-
         reg = GetComponent<SpawnRayReg>();
         spawnRay = reg.mother;  //取得怪物的母體
-
         //取得一個尋徑目標點
         //target = GetNavTarget();  //取得一個目標
         //agent.destination = target;  //把目標設到尋徑裡面
@@ -435,6 +431,11 @@ public class MonsterAI02 : MonoBehaviour
             coolDown = 0;
         }
     }
+    //public void BeingHit()  //被擊中
+    //{
+    //    Vector3 repel = new Vector3(0, 0, 1);
+    //    transform.position += repel;
+    //}
     private void TrackingPlayer()
     {
         ani.SetBool("Move", true);
