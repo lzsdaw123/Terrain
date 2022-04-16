@@ -58,17 +58,17 @@ public class BulletHole : MonoBehaviour
                 if (AwardHit[i].activeSelf)
                 {
                     distance = Vector3.Distance(transform.position, PlayCam.transform.position);  //彈孔與玩家距離
-                    Size = new Vector3(1, 1, 1);
-                    if (distance >= 25)
+                    Size = new Vector3(0.8f, 0.8f, 0.8f);
+                    if (distance >= 30)
                     {
-                        float D = (distance - 25) * 0.1f;
+                        float D = (distance - 30) * 0.15f;
                         if (D >= 4.5f) D = 4.5f;
                         Size *= D;
                         AwardHit[i].transform.localScale = Size;
                     }
                     else
                     {
-                        AwardHit[i].transform.localScale = new Vector3(1, 1, 1);
+                        AwardHit[i].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                     }
                     NewSize = AwardHit[i].transform.localScale;
                     AutoSize = false;

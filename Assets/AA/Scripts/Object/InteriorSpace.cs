@@ -21,6 +21,7 @@ public class InteriorSpace : MonoBehaviour
 
     void Start()
     {
+        Player = GameObject.Find("POPP").gameObject;
         Interior = false;
         Pitch = 1;
         OirPitch = 0;

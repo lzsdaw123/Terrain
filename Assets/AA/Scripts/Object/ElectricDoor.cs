@@ -42,57 +42,22 @@ public class ElectricDoor : MonoBehaviour
             OriDoor = false;
             pos[0].y = -0.444f;
         }
-        switch (Type)
+
+        if (OpenDoor)
         {
-            case 0:
-                if (OpenDoor)
-                {
-                    if (Botton)
-                    {
-                        Animator.SetBool("Open", true);
-                    }
-                }
-                else
-                {
-                    if (Botton)
-                    {
-                        Animator.SetBool("Open", false);
-                    }
-                }
-                break;
-            case 1:
-                if (OpenDoor) //進行開門
-                {
-                    if (Botton)
-                    {
-                        Animator.SetBool("Open", true);
-                    }
-                }
-                else  //進行關門
-                {
-                    if (Botton)
-                    {
-                        Animator.SetBool("Open", false);
-                    }
-                }
-                break;
-            case 2:
-                if (OpenDoor)
-                {
-                    if (Botton)
-                    {
-                        Animator.SetBool("Open", true);
-                    }
-                }
-                else
-                {
-                    if (Botton)
-                    {
-                        Animator.SetBool("Open", false);
-                    }
-                }
-                break;
+            if (Botton)
+            {
+                Animator.SetBool("Open", true);
+            }
         }
+        else
+        {
+            if (Botton)
+            {
+                Animator.SetBool("Open", false);
+            }
+        }
+        
         if (AutoDoor)
         {
             if (OpenDoor && !Botton)  //時間到自動關門
@@ -130,6 +95,7 @@ public class ElectricDoor : MonoBehaviour
     void end()
     {
         Botton = false;
+        AudioS.Stop();
     }
     void CloseDoor(int nub)
     {

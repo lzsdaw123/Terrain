@@ -747,8 +747,8 @@ GameObject:
   - component: {fileID: 2151153934182177256}
   - component: {fileID: 3405972723413429883}
   - component: {fileID: 6863350338353859676}
-  - component: {fileID: 3364810162441013626}
   - component: {fileID: 3566356382963536693}
+  - component: {fileID: 3364810162441013626}
   - component: {fileID: 1521065515752271774}
   - component: {fileID: 8928566633838639723}
   - component: {fileID: 1932601864907927301}
@@ -855,6 +855,35 @@ MonoBehaviour:
   targetHP: 0
   locking: 0
   coolDown: 0
+--- !u!114 &3566356382963536693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626291735349723986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10635d01839941e4a992e5e32d76f08e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  ani: {fileID: 8928566633838639723}
+  AnimEvents: {fileID: 3364810162441013626}
+  MonsterType: 1
+  hpFull:
+  - 0
+  - 0
+  hp: 0
+  "\u7121\u6575": 0
+  monster02: {fileID: 0}
+  monster03: {fileID: 6863350338353859676}
+  PS_Dead: {fileID: 4743483736138560644}
+  Model: {fileID: 4329513641423448962}
+  DeadTime: 0
+  HitUI: {fileID: 0}
+  SMeshR: {fileID: 0}
+  materials: []
 --- !u!114 &3364810162441013626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -884,33 +913,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: eccbcfb52b3329847b4005ee60bd036b, type: 3}
   NPC_Source: {fileID: 0}
   MonsterSource: {fileID: 8072660800169177417}
---- !u!114 &3566356382963536693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1626291735349723986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10635d01839941e4a992e5e32d76f08e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  root: {fileID: 0}
-  ani: {fileID: 8928566633838639723}
-  AnimEvents: {fileID: 3364810162441013626}
-  MonsterType: 1
-  hpFull:
-  - 0
-  - 0
-  hp: 0
-  "\u7121\u6575": 0
-  monster02: {fileID: 0}
-  monster03: {fileID: 6863350338353859676}
-  PS_Dead: {fileID: 4743483736138560644}
-  Model: {fileID: 4329513641423448962}
-  DeadTime: 0
-  HitUI: {fileID: 0}
 --- !u!195 &1521065515752271774
 NavMeshAgent:
   m_ObjectHideFlags: 0

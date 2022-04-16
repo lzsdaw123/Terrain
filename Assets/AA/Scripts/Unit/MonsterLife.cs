@@ -15,7 +15,7 @@ public class MonsterLife : MonoBehaviour
 
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
-    public float[] hpFull; // 血量上限
+    public float[] hpFull=new float[2]; // 血量上限
     public float hp; // 血量
     public bool 無敵=false;
     int HpLv;  //生命等級
@@ -35,6 +35,8 @@ public class MonsterLife : MonoBehaviour
     bool Player;
     Color UIcolor;
     bool Dead;
+    public SkinnedMeshRenderer SMeshR;
+    public Material[] materials;
 
     void Awake()
     {
@@ -48,10 +50,8 @@ public class MonsterLife : MonoBehaviour
     void Start()
     {
         PS_Dead.SetActive(false);
-        hpFull = new float[] { 14, 24 };  // 血量上限
-        hp = hpFull[MonsterType];  //補滿血量
         DeadTime = 0;
-        DifficultyUp();  //難度調整
+        DifficultyUp();  //難度調整 設定血量
         RefreshLifebar(); // 更新血條
         HitUI.SetActive(false);
         HitUITime = 0;
@@ -59,6 +59,15 @@ public class MonsterLife : MonoBehaviour
         //ani = GetComponent<Animator>();
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
+        switch (MonsterType)
+        {
+            case 0:
+                SMeshR.material = materials[0];
+                break;
+            case 1:
+                monster03.ani.SetInteger("Level", 0);
+                break;
+        }
     }
 
     void Update()
@@ -139,6 +148,7 @@ public class MonsterLife : MonoBehaviour
             switch (MonsterType)
             {
                 case 0:
+                    SMeshR.material = materials[1];
                     break;
                 case 1:
                     monster03.ani.SetInteger("Level", 1);
@@ -194,14 +204,15 @@ public class MonsterLife : MonoBehaviour
             }
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 14, 20 };
+
+        hpFull = new float[] { 16, 24 };  // 血量上限
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
     {
         Scoreboard.AddScore(true);  //怪物擊殺
         Shop.AddKillScore();  //怪物擊殺分數
-        DifficultyUp();      
+        DifficultyUp();
         PS_Dead.SetActive(false);
         DeadTime = 0;
         switch (MonsterType)  //開啟怪物AI 腳本
@@ -209,6 +220,7 @@ public class MonsterLife : MonoBehaviour
             case 0:
                 monster02.enabled = true;
                 monster02.ani.SetBool("Attack", true);
+                SMeshR.material = materials[0];
                 break;
             case 1: 
                 monster03.enabled = true;

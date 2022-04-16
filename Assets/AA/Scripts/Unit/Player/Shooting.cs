@@ -514,8 +514,8 @@ public class Shooting : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G) && Bomb)  //投擲手榴彈
         {
             Bomb = false;
-            GunMesh[0].enabled = false;
-            GunMesh[0].gameObject.SetActive(false);
+            //GunMesh[0].enabled = false;
+            //GunMesh[0].gameObject.SetActive(false);
             Weapon.SetBool("Bomb", true);
         }
         if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
@@ -730,6 +730,11 @@ public class Shooting : MonoBehaviour
                                 if (zi.GetComponent<MonsterLife>())
                                 {
                                     MonsterType = zi.gameObject.GetComponent<MonsterLife>().MonsterType;
+                                    return zi;
+                                }
+                                if (zi.GetComponent<Boss_Life>())
+                                {
+                                    MonsterType = zi.gameObject.GetComponent<Boss_Life>().MonsterType;
                                     return zi;
                                 }
                                 else
