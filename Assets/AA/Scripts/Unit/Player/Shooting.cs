@@ -80,6 +80,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] int 部件ID;
     public static bool 換部件;
     static bool Bomb=true;
+    public SkinnedMeshRenderer[] GunMesh;
 
     public static void StartAll()
     {
@@ -510,9 +511,11 @@ public class Shooting : MonoBehaviour
         {
             Weapon.SetBool("Bomb", false);
         }
-        if (Input.GetKeyDown(KeyCode.G) && Bomb)
+        if (Input.GetKeyDown(KeyCode.G) && Bomb)  //投擲手榴彈
         {
             Bomb = false;
+            GunMesh[0].enabled = false;
+            GunMesh[0].gameObject.SetActive(false);
             Weapon.SetBool("Bomb", true);
         }
         if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
