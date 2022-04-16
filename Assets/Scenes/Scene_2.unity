@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2669.2886, g: 3017.122, b: 3436.6704, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4323,6 +4323,8 @@ MonoBehaviour:
   MBulletPool: {fileID: 555637941}
   MonsterPool_A: {fileID: 724060925}
   MonsterPool_B: {fileID: 1379386253}
+  B1_BulletPool: {fileID: 0}
+  B1_HitPool: {fileID: 0}
   Monster:
   - {fileID: 4990210699203305952, guid: c0129b358dce1694e9b8ef9de81a4d66, type: 3}
   - {fileID: 1626291735349723986, guid: 39a47cf5bbe7cec4cbd2df29e20cb2c1, type: 3}
@@ -4334,6 +4336,8 @@ MonoBehaviour:
   - MinSize: 0
     MaxSize: 0
   MBullet: {fileID: 251314215627210432, guid: 66f48dbd1505cab4eaaa1a1a108d099e, type: 3}
+  B1_Bullet: {fileID: 0}
+  B1_Hit: {fileID: 0}
   _SpawnRay: {fileID: 0}
   inttailSize: 3
   inttailSizeMS: 0000000000000000
@@ -4354,7 +4358,7 @@ Transform:
   - {fileID: 555637942}
   - {fileID: 262844110}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261018446
 GameObject:
@@ -13056,7 +13060,7 @@ RectTransform:
   - {fileID: 1334981140}
   - {fileID: 1200659581}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -17487,7 +17491,7 @@ Transform:
   - {fileID: 1508636418}
   - {fileID: 268469862}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1123231532
 GameObject:
@@ -19770,6 +19774,90 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1215441607}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1220352801
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.431999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.431999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.431999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 521.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -35.99749
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 32c691816958b6f43966036082a83995,
+        type: 3}
+      propertyPath: m_Name
+      value: Corrider
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 32c691816958b6f43966036082a83995, type: 3}
 --- !u!1 &1220884640
 GameObject:
   m_ObjectHideFlags: 0
@@ -33987,7 +34075,7 @@ Transform:
   - {fileID: 1376940063}
   - {fileID: 1872835963}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2090960517
 GameObject:
@@ -34484,7 +34572,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2121744391
 GameObject:
@@ -35526,6 +35614,8 @@ MonoBehaviour:
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
+  boss01_AI: {fileID: 0}
+  b1_BulletLife: {fileID: 0}
   NPC_Life: {fileID: 0}
   h: 0
   v: 0
@@ -39684,6 +39774,7 @@ MonoBehaviour:
   m_transform: {fileID: 0}
   Gun: {fileID: 7854424862724691574}
   rotationX: 0
+  rotationY: 0
   m_camRot: {x: 0, y: 0, z: 0}
   CameraPos: {fileID: 997898461337812343}
   GunCamera: {fileID: 997898461337812338}
@@ -45442,6 +45533,8 @@ MonoBehaviour:
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
+  boss01_AI: {fileID: 0}
+  b1_BulletLife: {fileID: 0}
   NPC_Life: {fileID: 0}
   h: 0
   v: 0
@@ -45912,6 +46005,8 @@ MonoBehaviour:
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
+  boss01_AI: {fileID: 0}
+  b1_BulletLife: {fileID: 0}
   NPC_Life: {fileID: 0}
   h: 0
   v: 0
@@ -46942,7 +47037,7 @@ Transform:
   - {fileID: 353036525}
   - {fileID: 1507505211}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &7736836894247445098
 Transform:
@@ -47197,7 +47292,7 @@ Transform:
   - {fileID: 7854424862724691574}
   - {fileID: 7345961143380040785}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &7854424862639679017
 GameObject:
@@ -47311,6 +47406,7 @@ MonoBehaviour:
     Power: []
     Recoil: []
     Price: []
+  "\u90E8\u4EF6ID": 0
 --- !u!54 &7854424862639679021
 Rigidbody:
   m_ObjectHideFlags: 0
