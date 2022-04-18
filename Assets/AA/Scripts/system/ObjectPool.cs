@@ -241,13 +241,14 @@ public class ObjectPool : MonoBehaviour
     }
 
     //Boss1 子彈
-    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation, int Muzzle)  //取出存放在物件池中的物件
+    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation,int ButtleType, int Muzzle)  //取出存放在物件池中的物件
     {
         if (B1_Bullet_pool.Count > 0)
         {
             GameObject reuse = B1_Bullet_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
+            reuse.GetComponent<B1_BulletLife>().ButtleType = ButtleType;
             reuse.GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
             reuse.SetActive(true);
         }
@@ -256,7 +257,8 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;  //Boss1子彈於怪物子彈池
             Boss1B.transform.position = positon;
             Boss1B.transform.rotation = rotation;
-            GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
+            Boss1B.GetComponent<B1_BulletLife>().ButtleType = ButtleType;
+            Boss1B.GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
         }
     }
     public void RecoveryBoss1Bullet(GameObject recovery)  //用來回收物件
@@ -273,6 +275,8 @@ public class ObjectPool : MonoBehaviour
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
             reuse.GetComponent<B1_BulletHole>().ButtleType = HitType;
+            reuse.GetComponent<B1_BulletHole>().ani.SetInteger("Type", HitType);
+            //print(HitType+"  HitType   " + reuse.GetComponent<B1_BulletHole>().ButtleType);
             reuse.SetActive(true);
         }
         else
@@ -280,7 +284,8 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss1BHit = Instantiate(B1_Hit, B1_HitPool.transform) as GameObject;  //Boss1彈孔於怪物子彈池
             Boss1BHit.transform.position = positon;
             Boss1BHit.transform.rotation = rotation;
-            GetComponent<B1_BulletHole>().ButtleType = HitType;
+            Boss1BHit.GetComponent<B1_BulletHole>().ButtleType = HitType;
+            Boss1BHit.GetComponent<B1_BulletHole>().ani.SetInteger("Type", HitType);
         }
     }
     public void RecoveryBoss1Hit(GameObject recovery)  //用來回收物件

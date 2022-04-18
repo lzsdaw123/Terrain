@@ -9,23 +9,25 @@ public class B1_BulletHole : MonoBehaviour
     public ObjectPool pool_Hit;
     public Animator ani;
     public int ButtleType; //武器類型
+    public GameObject[] Hit;
     [SerializeField] private GameObject Light;
     float LightRange;
     public bool AutoDead=true;
     public bool Dead;
     public GameObject father;
+    public GameObject[] clusterBomb;
+    public bool clusterBombExp;
+    public bool PlayAni;
 
-    // Start is called before the first frame update
     void Awake()
     {
         InputTime = new float[] { 5f, 3f, 5f };
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
     }
     void Start()
     {
         BulletHoleTime = InputTime[ButtleType];
-        ani.SetInteger("Type", ButtleType);
         if (!AutoDead) BulletHoleTime = -1;
-        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         if(Light.gameObject != null)
         {
             if (ButtleType == 1)
@@ -38,24 +40,29 @@ public class B1_BulletHole : MonoBehaviour
                 Light.SetActive(false);
             }
         }
-        father = transform.parent.gameObject;
+        //father = transform.parent.gameObject;
         Dead = false;
+        //print("ani  "+ButtleType);
+        ani.SetInteger("Type", ButtleType);
     }
 
     void Update()
     {
+        if (!PlayAni)
+        {
+            PlayAni = true;
+            ani.SetInteger("Type", ButtleType);
+        }
         //transform.parent = gameObject.transform;
-        if (ShootingRange.TargetWall && !Dead)
+        if (clusterBombExp)  //子水晶爆炸
         {
-            Dead = true;
-            BulletHoleTime = -1;
+            for(int i=0; i< clusterBomb.Length; i++)
+            {
+                clusterBomb[i].GetComponent<clusterBomb_Lift>().StartAttack = true;
+            }
         }
-        else if (!ShootingRange.TargetWall && Dead)
-        {
-            Dead = false;
-            BulletHoleTime = 0;
-        }
-        if (BulletHoleTime > 0)
+
+        if (BulletHoleTime > 0)  //開始死亡倒數
         {
             BulletHoleTime -= Time.deltaTime;
         }
@@ -78,8 +85,28 @@ public class B1_BulletHole : MonoBehaviour
             }
         }
     }
+    public void Generate(int Type)
+    {
+        switch (Type)
+        {
+            case 0:
+                clusterBombExp = true;
+                BulletHoleTime = InputTime[ButtleType];
+                break;
+            case 1:
+                BulletHoleTime = InputTime[ButtleType];
+                break;
+            case 2:
+                BulletHoleTime = InputTime[ButtleType];
+                break;
+        }
+    } 
     void OnDisable()
     {
+        Hit[0].SetActive(false);
+        Hit[1].SetActive(false);
+        Hit[2].SetActive(false);
+        PlayAni = false;
         if (Light.gameObject != null)
         {
             if (ButtleType == 1)
@@ -95,5 +122,12 @@ public class B1_BulletHole : MonoBehaviour
         BulletHoleTime = InputTime[ButtleType];
         if (!AutoDead) BulletHoleTime = -1;
         Dead = false;
+        ani.enabled = true;
+        clusterBombExp = false;
+        for (int i = 0; i < clusterBomb.Length; i++)
+        {
+            clusterBomb[i].GetComponent<clusterBomb_Lift>().StartAttack = false;
+            clusterBomb[i].SetActive(true);
+        }
     }
 }

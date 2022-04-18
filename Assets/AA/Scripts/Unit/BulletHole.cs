@@ -20,7 +20,6 @@ public class BulletHole : MonoBehaviour
     public Vector3 NewSize;
     bool AutoSize;
 
-    // Start is called before the first frame update
     void Awake()
     {
         InputTime = new float[] { 5f, 3f, 5f };

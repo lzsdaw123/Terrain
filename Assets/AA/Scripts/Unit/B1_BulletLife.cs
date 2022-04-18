@@ -8,7 +8,6 @@ public class B1_BulletLife : MonoBehaviour
     public Animator ani;
     public GameObject[] Hit_vfx;  //彈孔類型
     public ParticleSystem[] Pro;
-    public int HitType;
     public int ButtleType;  //子彈類型
     public Transform target;
     public Transform OriTarger;
@@ -35,8 +34,6 @@ public class B1_BulletLife : MonoBehaviour
     [TagSelector] public string[] damageTags; //要傷害的Tag
     [TagSelector] public string[] ignoreTags; //要忽略的Tag
 
-    public float rayLength = 0.5f;  //1大約x:105-人物到槍口???射線長度??
-    public float rayLength2 = 1f;
     public LayerMask[] Ground;  //射線偵測圖層
     public LayerMask layerMask;
     [SerializeField] bool forwardFly;  //是否向前飛
@@ -60,8 +57,6 @@ public class B1_BulletLife : MonoBehaviour
     void Start()
     {
         speed = new float[] {160,80,40 }; //飛行速度
-        Attacking = false;
-        ButtleType = Boss01_AI.ButtleType;
         power =new float[] {1,3,5 };
         AttackLv = 0;
         liftTime = 10;
@@ -72,7 +67,6 @@ public class B1_BulletLife : MonoBehaviour
         Attacking = false;
         StartAttack = false;
         AttackCTime = 0;
-        //cuMuGrid = Boss01_AI.cuMuGrid;
         Pro[0].gameObject.SetActive(false);
         Pro[1].gameObject.SetActive(false);
         Pro[2].gameObject.SetActive(false);

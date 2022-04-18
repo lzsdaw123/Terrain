@@ -14,6 +14,7 @@ public class AnimEvents : MonoBehaviour
     public MonsterAI03 MonsterAI03;
     public Boss01_AI boss01_AI;
     public B1_BulletLife b1_BulletLife;
+    public B1_BulletHole b1_BulletHole;
     public NPC_Life NPC_Life;
     public float h, v;
 
@@ -131,6 +132,10 @@ public class AnimEvents : MonoBehaviour
     void B1_gEnd()
     {
         b1_BulletLife.StartAttack = true;
+    }
+    void B1_BH_gEnd(int Type)  //彈孔生成後
+    {
+        b1_BulletHole.Generate(Type);
     }
 
     //音效用

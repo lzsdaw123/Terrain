@@ -470,9 +470,8 @@ public class Boss01_AI : MonoBehaviour
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             muzzlePOS = muzzle[muzzleRange].transform.position;
             cuMuGrid = muzzleRange;
-            pool.ReUseBoss1Bullet(muzzlePOS, rotate, cuMuGrid);  //生成子彈
             ButtleType = Random.Range(0, 2);  //子彈類型
-            if(ButtleType== SaveBT)
+            if (ButtleType== SaveBT)
             {
                 switch (ButtleType)
                 {
@@ -484,6 +483,7 @@ public class Boss01_AI : MonoBehaviour
                         break;
                 }
             }
+            pool.ReUseBoss1Bullet(muzzlePOS, rotate, ButtleType, cuMuGrid);  //生成子彈
             SaveBT = ButtleType;
             for (int i=0; i< 2; i++)
             {
