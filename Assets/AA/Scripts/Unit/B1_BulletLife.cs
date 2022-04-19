@@ -345,7 +345,7 @@ public class B1_BulletLife : MonoBehaviour
                         collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
-                            collision.gameObject.SendMessage("DamageEffects"); //傷害
+                            collision.gameObject.SendMessage("DamageEffects", ButtleType); //傷害
                         }
                         break; //結束迴圈
                     }

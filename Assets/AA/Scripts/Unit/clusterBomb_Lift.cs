@@ -61,7 +61,7 @@ public class clusterBomb_Lift : MonoBehaviour
         power =new float[] {1,3,5 };
         AttackLv = 0;
         liftTime = 10;
-        bornTime = new float[] {2,1, 1.5f};  //生成速度{快, 慢, 中}
+        bornTime = new float[] {6,1, 1.5f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;
         Attacking = false;
         StartAttack = false;
@@ -384,7 +384,7 @@ public class clusterBomb_Lift : MonoBehaviour
                         collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
-                            collision.gameObject.SendMessage("DamageEffects"); //傷害
+                            collision.gameObject.SendMessage("DamageEffects", ButtleType); //傷害
                         }
                         break; //結束迴圈
                     }

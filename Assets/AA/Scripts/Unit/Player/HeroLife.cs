@@ -11,7 +11,8 @@ public class HeroLife : MonoBehaviour
     public float time=0;
     bool Invincible=false;
     GameObject DeBugT;
-    public ParticleSystem S_HIT;
+    public int HitType;
+    public ParticleSystem[] Hit_Player;
     public float HP_R_speed =0.8f;
     bool playing ;
 
@@ -21,18 +22,37 @@ public class HeroLife : MonoBehaviour
         Dead = false;
         DeBugT = GameObject.Find("DeBugT").gameObject;
         DeBugT.SetActive(false);
-        S_HIT.Stop();
-        S_HIT.gameObject.SetActive(false);
+        for(int i=0; i< Hit_Player.Length; i++)
+        {
+            if (Hit_Player[i] != null)
+            {
+                Hit_Player[i].Stop();
+                Hit_Player[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void Damage(float Power) // 接受傷害
     {
         hp -= Power; // 扣血
     }
-    public void DamageEffects()
+    public void DamageEffects(int hitType)
     {
-        S_HIT.gameObject.SetActive(true);
-        S_HIT.Play();
+        HitType = hitType;
+        switch (HitType)
+        {
+            case 0:  //水晶 尖
+                break;
+            case 1:  //水晶 長
+                break;
+            case 2:  //水晶 方
+                break;
+            case 3:  //蠍子
+
+                break;
+        }
+        Hit_Player[HitType].gameObject.SetActive(true);
+        Hit_Player[HitType].Play();
         playing = true;
     }
     public static void DownDamage(int Dps)
@@ -44,16 +64,20 @@ public class HeroLife : MonoBehaviour
     {
         if (hp <= 0)
         {
-            S_HIT.Stop();
-            S_HIT.gameObject.SetActive(false);
+            Hit_Player[HitType].Stop();
+            Hit_Player[HitType].gameObject.SetActive(false);
             hp = 0; // 不要扣到負值
             Dead = true;
         }
-        if (S_HIT.isStopped && playing)  //粒子結束時關掉
+        if (Hit_Player[HitType] != null)
         {
-            playing = false;
-            S_HIT.gameObject.SetActive(false);
+            if (Hit_Player[HitType].isStopped && playing)  //粒子結束時關掉
+            {
+                playing = false;
+                Hit_Player[HitType].gameObject.SetActive(false);
+            }
         }
+
 
 
         HP_W.fillAmount = hp / fullHp; //顯示血球
@@ -76,7 +100,7 @@ public class HeroLife : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L)) //開發者模式
         {
             Damage(5);
-            DamageEffects();
+            DamageEffects(0);
         }
         if (hp >= fullHp)
         {

@@ -270,7 +270,7 @@ public class S_BulletLife : MonoBehaviour
                         collision.gameObject.SendMessage("Damage", power); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
-                            collision.gameObject.SendMessage("DamageEffects"); //傷害
+                            collision.gameObject.SendMessage("DamageEffects", 3); //傷害
                         }
                         break; //結束迴圈
                     }

@@ -21,7 +21,7 @@ public class B1_BulletHole : MonoBehaviour
 
     void Awake()
     {
-        InputTime = new float[] { 5f, 3f, 5f };
+        InputTime = new float[] { 5f, 3f, 2f };
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
     }
     void Start()

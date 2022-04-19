@@ -201,6 +201,7 @@ MonoBehaviour:
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
+  b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   h: 0
   v: 0
@@ -672,7 +673,13 @@ MonoBehaviour:
   HP_W: {fileID: 0}
   HP_R: {fileID: 0}
   time: 0
-  S_HIT: {fileID: 7581782527234306868}
+  HitType: 0
+  Hit_Player:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 949891445215024522}
+  - {fileID: 7581782527234306868}
+  - {fileID: 0}
   HP_R_speed: 2
 --- !u!1 &622874816555596344
 GameObject:
@@ -3975,6 +3982,7 @@ MonoBehaviour:
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
+  b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   h: 0
   v: 0
@@ -5207,6 +5215,7 @@ MonoBehaviour:
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
+  b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   h: 0
   v: 0
@@ -7129,6 +7138,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d8824e81756ff745b56274270de6a7e, type: 3}
+--- !u!198 &949891445215024522 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1036871861661885970, guid: 0d8824e81756ff745b56274270de6a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 237851073221309336}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2676771530710060823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2767683849299639439, guid: 0d8824e81756ff745b56274270de6a7e,
