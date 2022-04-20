@@ -40,21 +40,21 @@ public class Shop : MonoBehaviour
     {
         KillPointsT.text = "怪物擊殺點數 : " + (KillPoints);
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (OpenT)
-            {                
-                OpenUI();
-            }
-            else
-            {                
-                closeUI();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.J))  //開發者模式
-        {
-            KillPoints += 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{
+        //    if (OpenT)
+        //    {                
+        //        OpenUI();
+        //    }
+        //    else
+        //    {                
+        //        closeUI();
+        //    }
+        //}
+        //if (Input.GetKeyDown(KeyCode.J))  //開發者模式
+        //{
+        //    KillPoints += 10;
+        //}
     }
     public static void AddKillScore()
     {

@@ -16,6 +16,8 @@ public class AnimEvents : MonoBehaviour
     public B1_BulletLife b1_BulletLife;
     public B1_BulletHole b1_BulletHole;
     public NPC_Life NPC_Life;
+    public HeroLife heroLife;
+    public CameraMove cameraMove;
     public float h, v;
 
 
@@ -113,6 +115,10 @@ public class AnimEvents : MonoBehaviour
     {
         NPC_Life.DeadExp(N);
     }
+    void InfectionEnd()  //感染生成結束
+    {
+        heroLife.Crystal_Infection = false;
+    }
 
     //怪物用
     void M1_Attack()
@@ -128,6 +134,7 @@ public class AnimEvents : MonoBehaviour
         boss01_AI.ani.SetBool("Start", true);
         boss01_AI.Scenes_ani.SetBool("Start", true);
         boss01_AI.AttackStatus = true;
+        cameraMove.StartBoos1();
     }
     void B1_gEnd()
     {

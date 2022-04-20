@@ -27,7 +27,8 @@ public class Shooting : MonoBehaviour
     public float coolDown; //冷卻結束時間
     public float coolDownTimer; //冷卻時間計時器
     public static int FireButtle;  //開火動畫冷卻
-    public PlayerMove controller;  //角色控制腳本
+    public PlayerMove playerMove;  //角色控制腳本
+    public HeroLife heroLife;
     public float AniTime, STtime;
     bool WeapSwitch; //武器切換bool
     public static int WeaponType; //武器類型
@@ -80,7 +81,6 @@ public class Shooting : MonoBehaviour
     [SerializeField] int 部件ID;
     public static bool 換部件;
     static bool Bomb=true;
-    public SkinnedMeshRenderer[] GunMesh;
 
     public static void StartAll()
     {
@@ -138,9 +138,9 @@ public class Shooting : MonoBehaviour
         Hit_vfx_S = null;
         Weapon.runtimeAnimatorController = controllers[0];
 
-        if (controller == null)
+        if (playerMove == null)
         {
-            controller = GetComponent<PlayerMove>();
+            playerMove = GetComponent<PlayerMove>();
         }
 
         AniTime = STtime = 2f;
@@ -237,6 +237,7 @@ public class Shooting : MonoBehaviour
         SF_FirstWeapon = FirstWeapon;
         void WeapSwitching()  //武器切換
         {
+            if (heroLife.Level >= 4) return;   //水晶感染末期
             if (!WeapSwitch)  //是否切換武器
             {
                 if (!FirstWeapon[NextWeaponType] )
@@ -350,6 +351,7 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx[WeaponType].SetActive(false); //關閉火光
             Weapon.SetBool("Fire", false);
             Weapon.SetBool("AimFire", false);
+            //if (heroLife.Level >= 4) return;  //水晶感染末期
             //若按下滑鼠右鍵瞄準
             if (Input.GetButton("Fire2") && !Reload && LayDown == false && !PlayerMove.m_Jumping && !WeapSwitch)  //架槍瞄準
             {
@@ -514,8 +516,6 @@ public class Shooting : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G) && Bomb)  //投擲手榴彈
         {
             Bomb = false;
-            //GunMesh[0].enabled = false;
-            //GunMesh[0].gameObject.SetActive(false);
             Weapon.SetBool("Bomb", true);
         }
         if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
@@ -720,10 +720,10 @@ public class Shooting : MonoBehaviour
                         HitType = 1;
                         AudioManager.Hit(2);  //擊中音效
                         //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
-                        if (hit[n].collider.tag == "Enemy")  //綠血
+                        if (hit[n].collider.tag == "Enemy")  //擊中怪物
                         {
-                            int MonsterType=0;
                             AudioManager.Hit(3);  //擊中音效
+                            int MonsterType=0;
                             FindUpParent(hit[n].transform);  //找有HP的父物件
                             Transform FindUpParent(Transform zi)  //找最大父物件
                             {
@@ -769,6 +769,11 @@ public class Shooting : MonoBehaviour
                                 hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
                             }
                             //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
+                        }
+                        if(hit[n].collider.tag == "Crystal")
+                        {
+                            AudioManager.Hit(5);  //擊中水晶音效
+
                         }
                         if (hit[n].collider.tag == "Carapace")  //甲殼
                         {

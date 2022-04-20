@@ -226,6 +226,11 @@ public class DialogueEditor : MonoBehaviour
                         Dialogue[1] = "之後都能過來取得。";
                         break;
                     case 3:
+                        Dialogue = new string[2];
+                        Dialogue[0] = "礦洞偵測到不明生物出現。";
+                        Dialogue[1] = "請準備接敵。";
+                        break;
+                    case 4:
                         Dialogue = new string[3];
                         Dialogue[0] = "成功保衛發電廠了。";
                         Dialogue[1] = "剛剛探勘隊的傳來重大發現。";

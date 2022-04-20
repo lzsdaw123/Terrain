@@ -19,9 +19,12 @@ public class InteriorSpace : MonoBehaviour
     [SerializeField] float SF_Pitch;
     [SerializeField] float OirPitch;
 
-    void Start()
+    private void Awake()
     {
         Player = GameObject.Find("POPP").gameObject;
+    }
+    void Start()
+    {
         Interior = false;
         Pitch = 1;
         OirPitch = 0;

@@ -58,7 +58,7 @@ public class ExplosionLift : MonoBehaviour
     void Start()
     {
         speed = new float[] {160,80,40 }; //飛行速度
-        power =new float[] {1,3,5 };
+        power =new float[] {1,3,7 };
         AttackLv = 0;
         bornTime = new float[] {2,1, 100f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;

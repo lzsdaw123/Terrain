@@ -69,6 +69,8 @@ public class MonsterAI02 : MonoBehaviour
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
+    public float OriSpeed;
+    public float angry;
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -98,6 +100,7 @@ public class MonsterAI02 : MonoBehaviour
         agent.enabled = true;
         attacking = false;
         bulletAttack = 1;
+        angry = 0;
         Fire = false;
         reg = GetComponent<SpawnRayReg>();
         spawnRay = reg.mother;  //取得怪物的母體
@@ -295,7 +298,7 @@ public class MonsterAI02 : MonoBehaviour
                             }
                             else
                             {
-                                coolDown += Time.deltaTime;
+                                coolDown +=  Time.deltaTime;
                             }
                             
                         }
@@ -440,7 +443,7 @@ public class MonsterAI02 : MonoBehaviour
     {
         ani.SetBool("Move", true);
         ani.SetBool("Attack", false);
-        agent.speed = agentSpeed;  //移動速度
+        agent.speed = agentSpeed + angry;  //移動速度
         if (TrPlayer)
         {
             agent.destination = attackTarget.position; // 設為尋徑目標
@@ -475,6 +478,13 @@ public class MonsterAI02 : MonoBehaviour
             //print("Attack轉向-  " + attackTarget);
         }
     }
+    public void AngeStater()
+    {
+        angry = 4;
+        OriSpeed = ani.speed;
+        ani.speed = 1.5f;
+
+    }
     public void AttackAning(bool attackingB, int BulletAttackNub)
     {
         attacking = attackingB;
@@ -486,5 +496,7 @@ public class MonsterAI02 : MonoBehaviour
         attacking = false;
         bulletAttack = 1;
         Fire = false;
+        angry = 0;
+        ani.speed = OriSpeed;
     }
 }

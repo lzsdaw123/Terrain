@@ -100,9 +100,9 @@ public class SpawnRay : MonoBehaviour {
 					case 5:
 						Level_1.LevelA_ = 6;
 						break;
-					case 7:
-						Level_1.LevelA_ = 8;
-						break;
+					//case 7:
+					//	Level_1.LevelA_ = 8;
+					//	break;
 				}
 			}
 			else if (BornTime >= 0)

@@ -7,9 +7,11 @@ public class PlayerMove : MonoBehaviour
     public Camera PlayCamera;  //原Camera
     public CharacterController controller;
     public Shooting _Shooting;
+    public HeroLife heroLife;
 
     private Rigidbody _rigidbody;
     public static float Speed=6.5f;
+    [SerializeField] float SF_Speed;
     public static float MoveSpeed=60f;
     public float gravity = -9.81f; //重力
     public float jumpHeigh; // 跳躍高度
@@ -53,6 +55,7 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()  //Input用
     {
+        SF_Speed = Speed;
         if (Time.timeScale == 0) { return; }
         rotationX = PlayCamera.GetComponent<MouseLook>().rotationX;
 
@@ -186,9 +189,11 @@ public class PlayerMove : MonoBehaviour
                         Weapon.SetBool("AimMove", false);
                     }
                     Speed -= 0.6f;
-                }             
-                Weapon.SetFloat("Speed", Speed);
-                controller.Move(move * Speed * Time.deltaTime);
+                }
+                float moveSpeed = Speed - heroLife.Level * 1.3f;  //水晶感染影響速度
+                if (moveSpeed <= 0) moveSpeed = 0;
+                Weapon.SetFloat("Speed", moveSpeed);
+                controller.Move(move * moveSpeed * Time.deltaTime);  //移動
                 //AudioManager.PlayFootstepAudio();
             }
             else

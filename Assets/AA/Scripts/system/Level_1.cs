@@ -6,6 +6,7 @@ using System;
 
 public class Level_1 : MonoBehaviour
 {
+    public CameraMove cameraMove;
     public static bool Level_A_Start = false;  //任務觸發碰撞
     [SerializeField] bool SF_Level_A_Start;  //任務觸發碰撞
     public static int LevelA_;  //關卡判定
@@ -74,11 +75,11 @@ public class Level_1 : MonoBehaviour
         MissionTarget.SetActive(false);
         MissionUI[0].SetActive(false);
         tagetUI.SetActive(false);
-        DialogBox.SetActive(false);
+        //DialogBox.SetActive(false);
         MissionWarn.SetActive(false);
         MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "補充彈藥", "修理與升級", "電力供應",  "到工作崗位"};
         MissonStringL1_2 = new string[] { "到工作崗位"};
-        MissonStringL2 = new string[] { "大門防線", "武器開放", "任務完成" };
+        MissonStringL2 = new string[] { "大門防線", "武器開放", "前往礦坑", "不明生物來襲", "任務完成" };
         MissonStringL2_2 = new string[] { "第二防線", "保護發電廠", "任務失敗" };
 
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
@@ -148,12 +149,24 @@ public class Level_1 : MonoBehaviour
                     {
                         //print(missionStage + " // " + LevelA_);
                         Objects[4].GetComponent<BoxCollider>().enabled = true;
-                        ElectricDoor electricDoor = Objects[4].GetComponent<ElectricDoor>();
-                        if (electricDoor.Botton)
+                        //ElectricDoor electricDoor = Objects[4].GetComponent<ElectricDoor>();
+                        if (Objects[4].GetComponent<ElectricDoor>().Botton)
                         {
-                            print("END");
-                            Objects[5].SetActive(true);
-                            ExitGame();
+                            //print("END");
+                            PlayerView.missionChange(2, 2);  //改變關卡
+                            //Objects[5].SetActive(true);
+                            //ExitGame();
+                        }
+                    }
+                    if (missionStage == 2)
+                    {
+                        if (Taget_distance <= 1.5f)  //觸發距離
+                        {
+                            if (StartDialogue)
+                            {
+                                StartDialogue = false;
+                                ExitGame();
+                            }
                         }
                     }
                     break;
@@ -268,7 +281,7 @@ public class Level_1 : MonoBehaviour
                 //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
             }
         }
-        if (TotalStage==1)
+        if (TotalStage==1)  //第一大關
         {                
             if(EnemyWave <2)  //進攻波數
             {
@@ -287,7 +300,7 @@ public class Level_1 : MonoBehaviour
                         PlayAudio();
                     }
                 }
-                else if(stageTime >0)
+                else if(stageTime >0)  //開始倒數
                 {
                     stageTime -= Time.deltaTime;
                 }
@@ -324,18 +337,22 @@ public class Level_1 : MonoBehaviour
                         Objects[2].GetComponent<BoxCollider>().enabled = true;
                         break;
                     case 6:
-                        print("2");
+                        print("6");
                         LevelA_ = 7;
+                        StopAttack = true;
+                        cameraMove.StartBoss1();
                         //UiOpen = true;  //開啟任務UI與音效
                         stageTime = 5;  //怪物繼續倒數開始
+                        PlayerView.missionChange(2, 3);
+                        DialogueEditor.StartConversation(2, 3, 1, false, 0);
                         break;
                     case 8:
                         print("8");
                         LevelA_ = 9;
                         StopAttack = true;
                         UiOpen = true;
-                        PlayerView.missionChange(2, 3);
-                        DialogueEditor.StartConversation(2, 3, 0, false, 0);
+                        PlayerView.missionChange(2, 4);
+                        DialogueEditor.StartConversation(2, 4, 0, false, 0);
                         break;
                 }
             }

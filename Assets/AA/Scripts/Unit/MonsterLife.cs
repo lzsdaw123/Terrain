@@ -133,7 +133,7 @@ public class MonsterLife : MonoBehaviour
     {
         //print(Power);
         hp -= Power; // 扣血
-        transform.position += new Vector3(0, 0, 0.5f);
+        transform.position += new Vector3(0, 0, 0.1f);  //擊退效果
         if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
         {        
@@ -149,6 +149,7 @@ public class MonsterLife : MonoBehaviour
             {
                 case 0:
                     SMeshR.material = materials[1];
+                    monster02.AngeStater();
                     break;
                 case 1:
                     monster03.ani.SetInteger("Level", 1);

@@ -41,8 +41,8 @@ public class Settings : MonoBehaviour
     public static int Level;
 
     [SerializeField] GameObject Player;
-    public GameObject ExitUI;
-    public static bool 離開遊戲=false;
+    public GameObject ExitUI;  //勝利UI
+    public static bool 離開遊戲;
 
     void Awake()
     {
@@ -98,6 +98,7 @@ public class Settings : MonoBehaviour
     }
     void Start()
     {
+        離開遊戲 = false;
         ReStart();
         ExitUI.SetActive(false);
     }

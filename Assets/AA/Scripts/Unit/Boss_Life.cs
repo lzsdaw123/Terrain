@@ -9,6 +9,7 @@ public class Boss_Life : MonoBehaviour
     [SerializeField] Transform root;
 
     public Animator ani;
+    public Animator CrystalAni;
     private Rigidbody rigid;
     private Collider cld;
     public AnimEvents AnimEvents;
@@ -24,6 +25,7 @@ public class Boss_Life : MonoBehaviour
 
     private NavMeshAgent agent;
     public Boss01_AI boss01_AI;
+    public Level_1 level_1;
 
     public GameObject PS_Dead;  //死亡特效
     public GameObject Model;  //模型
@@ -45,8 +47,8 @@ public class Boss_Life : MonoBehaviour
     void Start()
     {
         if(PS_Dead!=null) PS_Dead.SetActive(false);
-        hpFull = new float[] { 40, 24 };  // 血量上限
-        hp = hpFull[MonsterType];  //補滿血量
+        //hpFull = new float[] { 100, 24 };  // 血量上限
+        //hp = hpFull[MonsterType];  //補滿血量
         DeadTime = 0;
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
@@ -157,6 +159,8 @@ public class Boss_Life : MonoBehaviour
                 }
                 Dead = true;
                 //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
+                CrystalAni.SetTrigger("Dead");
+                Level_1.LevelA_ = 8;
             }           
             hp = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸
@@ -193,7 +197,7 @@ public class Boss_Life : MonoBehaviour
             }
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 14, 20 };
+        hpFull = new float[] { 220, 20 };
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()

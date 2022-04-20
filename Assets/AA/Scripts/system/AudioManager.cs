@@ -295,6 +295,8 @@ public class AudioManager : MonoBehaviour
                 current.GunSource.clip = current.GunshotsClip[5];
                 break;
         }
+        current.GunSource.volume = 1;
+        SaveVolume[2] = current.GunSource.volume;
         current.GunSource.Play();
         OnClick();
     }
@@ -357,7 +359,7 @@ public class AudioManager : MonoBehaviour
     public static void Hit(int Nub)  //擊中
     {
         current.HitSource.clip = current.HitClip[Nub];
-        current.HitSource.pitch = 1f;
+        //current.HitSource.pitch = 1f;
         switch (Nub)
         {
             case 0:

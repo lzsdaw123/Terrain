@@ -50,7 +50,7 @@ public class PlayerResurrection : MonoBehaviour
         Player.SetActive(true);
         Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
         Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-        Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        //Gun.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
     void Update()

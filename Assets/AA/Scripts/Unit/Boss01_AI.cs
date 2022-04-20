@@ -366,7 +366,7 @@ public class Boss01_AI : MonoBehaviour
         SF_muzzleGrid = muzzleGrid;
         PS_muzzle = muzzle;
         if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
-        if (coolDown >= 2 && BulletNub>0)  //攻擊冷卻時間
+        if (coolDown >= 1.5f && BulletNub>0)  //攻擊冷卻時間
         {
             Fire = true;
             attacking = false;
