@@ -25,11 +25,10 @@ public class AmmunitionSupply : MonoBehaviour
     void Awake()
     {
         Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;
-
+        TextG = GameObject.Find("ObjectText");
     }
     void Start()
     {
-        TextG = GameObject.Find("ObjectText");
         AmmSupply = new int[] { 480, 6 };
         T_WeapAmm = new int[] { 300, 30 };
 

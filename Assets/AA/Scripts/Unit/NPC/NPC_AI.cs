@@ -53,7 +53,7 @@ public class NPC_AI : MonoBehaviour
     public bool isEnemy = false;
     public static bool AttackPlay;
     bool TrPlayer;
-    public bool Fire = false;
+    public bool Fire;
     public static bool Reload;
     public static int WeapAm = 30;  //武器彈藥量
     [SerializeField] int SF_WeapAm; //武器總彈藥量
@@ -109,15 +109,18 @@ public class NPC_AI : MonoBehaviour
         GizmosExtension.DrawSector(transform.position + eyeHi, ArangeDistance, ArangeAngle * 2, ArangeRotation);// 畫扇形 
     }
 #endif
-
-    void Start()
+    void Awake()
     {
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+    }
+    void Start()
+    {
         agent = GetComponent<NavMeshAgent>();
         coolDown = 1f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
         agent.enabled = true;
+        Fire = false;
         LayDown = false;
         MonTime = PatrolTime = -1;
         當前巡邏點 = 0;
@@ -689,5 +692,15 @@ public class NPC_AI : MonoBehaviour
     public static void Loaded()
     {
         FireButtle = 1;
+    }
+    void OnDisable()  //禁用時
+    {
+        coolDown = 1f;  //冷卻結束時間
+        coolDownTimer = coolDown + 1;
+        agent.enabled = true;
+        attacking = false;
+        Fire = false;
+        LayDown = false;
+        MonTime = PatrolTime = -1;
     }
 }

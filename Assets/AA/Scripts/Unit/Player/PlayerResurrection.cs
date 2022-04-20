@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerResurrection : MonoBehaviour
 {
     public Transform R1, R2;
+    public Transform[] R_transform;
     public GameObject Player;
     public GameObject Gun;
     public GameObject DeadUI;  //死亡UI
@@ -19,6 +20,8 @@ public class PlayerResurrection : MonoBehaviour
     public Settings Settings;
     bool Dead;
     bool RePlay;
+    public MouseLook mouseLook;
+    public float StartTime;
 
     void Awake()
     {
@@ -47,14 +50,27 @@ public class PlayerResurrection : MonoBehaviour
 
     void Start()
     {
+        //Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
         Player.SetActive(true);
         Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
-        Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-        //Gun.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        mouseLook = GameObject.Find("Gun_Camera").GetComponent<MouseLook>();
+        //Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        Player.transform.rotation = R_transform[0].rotation;
+        mouseLook.enabled = false;
+        StartTime = 0;
     }
 
     void Update()
     {
+        if (StartTime >= 0)
+        {
+            StartTime += Time.deltaTime;
+            if (StartTime >= 1)
+            {
+                StartTime = -1;
+                mouseLook.enabled = true;
+            }
+        }
         if (HeroLife.Dead)
         {
             if (Dead)

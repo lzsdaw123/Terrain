@@ -29,6 +29,11 @@ public class HeroLife : MonoBehaviour
     public GameObject InfectionUI;
     public Image Infection_Image;
 
+    void Awake()
+    {
+        DeBugT = GameObject.Find("DeBugT").gameObject;  //開發模式文字
+    }
+
     void Start()
     {
         Level = InfectionValue = 0;
@@ -38,8 +43,7 @@ public class HeroLife : MonoBehaviour
         Crystal_Infection = false;
         hp = hp_R = fullHp = 20; //遊戲一開始時先填滿血
         Dead = false;
-        DeBugT = GameObject.Find("DeBugT").gameObject;  //開發模式文字
-        DeBugT.SetActive(false);
+
         for (int i=0; i< Hit_Player.Length; i++)
         {
             if (Hit_Player[i] != null)
@@ -49,6 +53,7 @@ public class HeroLife : MonoBehaviour
             }
         }
         InfectionUI.SetActive(false);
+        DeBugT.SetActive(false);
     }
     public void Damage(float Power) // 接受傷害
     {

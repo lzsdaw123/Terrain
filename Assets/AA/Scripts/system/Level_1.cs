@@ -19,7 +19,7 @@ public class Level_1 : MonoBehaviour
     float time = 0;
     [SerializeField] bool Lv1;
     int TotalStage;  //關卡階段
-    public int EnemyWave = 0;  //敵人波數
+    public int EnemyWave;  //敵人波數
     public static float stageTime = -1;  //下次來襲時間
     [SerializeField] float SF_stageTime;
     public Text stageTimeText;
@@ -28,7 +28,7 @@ public class Level_1 : MonoBehaviour
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
     public GameObject[] MissionUI;
     public GameObject tagetUI;  //任務目標UI
-    public int missionLevel = 0;  //任務關卡
+    public int missionLevel;  //任務關卡
     public static int[] missionNumb = new int[] { 7, 1, 3, 3 };  //任務數量
     static int missionStage;  //任務階段
     [SerializeField] int SF_missionStage;  //顯示任務階段
@@ -44,7 +44,7 @@ public class Level_1 : MonoBehaviour
     public static float MissionTime;  //任務切換時間
     public static bool UiOpen;
     [SerializeField] public static int MonsterLevel;
-    [SerializeField] float MLtime = 0;
+    [SerializeField] float MLtime;
     int DifficultyLevel;  //難度等級
     public RectTransform DiffUI, DiffUI_s;
     [SerializeField] float StartTime;
@@ -62,6 +62,9 @@ public class Level_1 : MonoBehaviour
         MonsterLevel = 0;
         PlayAu = true;
         LevelA_ = 0;
+        missionLevel = 0;
+        EnemyWave = 0;
+        MLtime = 0;
     }
     void Start()
     {

@@ -17,6 +17,10 @@ public class NPC_Life : MonoBehaviour
     public Animator ani; //動畫控制器
     public GameObject Exp, BigExp;  //爆炸,大爆炸
 
+    void OnDisable()
+    {
+        
+    }
     void Awake()
     {
         time = 0;

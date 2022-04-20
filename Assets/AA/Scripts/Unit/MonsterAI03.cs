@@ -64,7 +64,7 @@ public class MonsterAI03 : MonoBehaviour
     [SerializeField] private GameObject muzzle;
     [SerializeField] private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
-    [SerializeField] private bool locking = false;
+    [SerializeField] private bool locking;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -101,6 +101,7 @@ public class MonsterAI03 : MonoBehaviour
         agent.enabled = true;
         attacking = false;
         bulletAttack = 1;
+        locking = false;
         reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體  //暫時關閉
 
@@ -466,6 +467,7 @@ public class MonsterAI03 : MonoBehaviour
     {
         attacking = false;
         agent.enabled = true;
+        locking = false;
         bulletAttack = 1;
     }
 }

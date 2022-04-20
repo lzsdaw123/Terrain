@@ -65,7 +65,7 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
     public GameObject RigTarget;
-    [SerializeField] private bool locking =false;
+    [SerializeField] private bool locking;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -91,10 +91,12 @@ public class MonsterAI02 : MonoBehaviour
         GizmosExtension.DrawSector(transform.position + eyeHi, ArangeDistance, ArangeAngle * 2, ArangeRotation);// 畫扇形       
     }
 #endif
-
-    void Start()
+    void Awake()
     {
         pool = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+    }
+    void Start()
+    {
         agent = GetComponent<NavMeshAgent>();
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
@@ -102,6 +104,7 @@ public class MonsterAI02 : MonoBehaviour
         bulletAttack = 1;
         angry = 0;
         Fire = false;
+        locking = false;
         reg = GetComponent<SpawnRayReg>();
         spawnRay = reg.mother;  //取得怪物的母體
         //取得一個尋徑目標點
@@ -497,6 +500,8 @@ public class MonsterAI02 : MonoBehaviour
         bulletAttack = 1;
         Fire = false;
         angry = 0;
+        locking = false;
         ani.speed = OriSpeed;
+        //coolDown = 1;
     }
 }
