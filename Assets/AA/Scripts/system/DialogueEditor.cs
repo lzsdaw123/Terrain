@@ -29,6 +29,7 @@ public class DialogueEditor : MonoBehaviour
     static float ChangeName; //改變對話者
     static int ChangeTextLine;  //第幾句改變
     static int NewName;  //新的對話者
+    public static bool UI;  //是否出現任務訊息UI
 
     void Start()
     {
@@ -53,12 +54,15 @@ public class DialogueEditor : MonoBehaviour
             {
                 if (StartTrach)  //是否跳過開場教學
                 {
-                    if (!teaching && TextLine == 3)
+                    if(PlayerView.missionLevel == 0 && PlayerView.missionStage == 0)
                     {
-                        teaching = true;
-                        DialogueOptions.StartOption(0, NpcName);  //呼叫對話選項(0 任務, NPC)
-                        //DialogueOptionsUI.SetActive(true);
-                        //Settings.pause();
+                        if (!teaching && TextLine == 3)
+                        {
+                            teaching = true;
+                            DialogueOptions.StartOption(0, NpcName);  //呼叫對話選項(0 任務, NPC)
+                             //DialogueOptionsUI.SetActive(true);
+                             //Settings.pause();
+                        }
                     }
                 }              
                 Add_Dialogue();  //呼叫對話文本
@@ -118,18 +122,19 @@ public class DialogueEditor : MonoBehaviour
             EndDialogue = false;
             if (Auto)  //自動切換
             {
-                PlayerView.TagetChange(0);  //切換任務目標
+                PlayerView.TagetChange(0, UI);  //切換任務目標
             }
         }
     }
-    //任務關卡, 任務階段, 對話者, 是否自動對話, 改變對話者(第幾句. 哪位)
-    public static void StartConversation(int Level , int Stage, int Who, bool auto, float changeName) 
+    //任務關卡, 任務階段, 對話者, 是否自動換任務, 改變對話者(第幾句. 哪位), 是否顯示訊息UI
+    public static void StartConversation(int Level , int Stage, int Who, bool auto, float changeName, bool ui) 
     {
         StartDialogue = true;
         NpcName = Who;
         missionLevel = Level;
         missionStage = Stage;
-        Auto = auto;     
+        Auto = auto;
+        UI = ui;
         if (changeName != 0)
         {
             ChangeName = changeName;
@@ -147,9 +152,7 @@ public class DialogueEditor : MonoBehaviour
     }
     void Add_Dialogue()  //添加文本
     {
-        Name = new string[2];
-        Name[0] = "探勘地主管 : ";
-        Name[1] = "偵查系統 : ";
+        Name = new string[] { "探勘地主管 : ", "偵查系統 : ", "研究室主管 : " };
         switch (missionLevel) 
         {
             case 0:
@@ -235,6 +238,13 @@ public class DialogueEditor : MonoBehaviour
                         Dialogue[0] = "成功保衛發電廠了。";
                         Dialogue[1] = "剛剛探勘隊的傳來重大發現。";
                         Dialogue[2] = "接下來請前往研究室。";
+                        break;
+                    case 5:
+                        Dialogue = new string[4];
+                        Dialogue[0] = "來的正好,就在剛剛那個不明水晶出現後。";
+                        Dialogue[1] = "在下面的遺跡中發現裂口。";
+                        Dialogue[2] = "該出發去尋找遺跡的秘密了。";
+                        Dialogue[3] = "從研究室後門出去後，搭乘電梯下去吧。";
                         break;
                 }
                 break;

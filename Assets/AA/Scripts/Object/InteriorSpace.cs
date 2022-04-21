@@ -11,7 +11,9 @@ public class InteriorSpace : MonoBehaviour
     [SerializeField] bool ±K³¬;
     [SerializeField] int ²`³B;
     public GameObject Door;
+    public GameObject Door2;
     public ElectricDoor _ElectricDoor;
+    public ElectricDoor _ElectricDoor2;
     [SerializeField] bool CloseDoor;
     public float distance;
     public GameObject Player;

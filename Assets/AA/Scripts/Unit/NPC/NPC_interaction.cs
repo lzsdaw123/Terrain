@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class NPC_interaction : MonoBehaviour  //NPC互動
 {
     [SerializeField] private int NpcName;  //對話者
+    [SerializeField] private int Who;
     static int st_NpcName;  //對話者
     [SerializeField] string[] Name;  //對話者名子
     [SerializeField] private bool AutoDialogue;  //是否自動對話
@@ -47,7 +48,7 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
     {
         TextG = GameObject.Find("ObjectText");
         Take = GameObject.Find("Take");
-        Name = new string[] { "武器庫管理員", "核電廠工程師", "探勘地主管", "守衛" };
+        Name = new string[] { "武器庫管理員", "核電廠工程師", "探勘地主管", "守衛", "研究室主管", "研究人員" };
     }
     void Update()
     {
@@ -70,8 +71,8 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
                 {
                     StartDialogue = false;
                     Beside = true;
-                    DailyDialogue.NearNPC(NpcName, true);
-                    DailyDialogue.StartConversation(0, NpcName, RaDialogue, false);  //開始對話
+                    DailyDialogue.NearNPC(Who, true);
+                    DailyDialogue.StartConversation(0, Who, RaDialogue, false);  //開始對話
                 }
             }
             else
@@ -79,7 +80,7 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
                 if (Beside)
                 {
                     Beside = false;
-                    DailyDialogue.NearNPC(NpcName, false);
+                    DailyDialogue.NearNPC(Who, false);
                 }
 
             }

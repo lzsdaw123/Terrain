@@ -47,7 +47,7 @@ public class Defense : MonoBehaviour
                     s_Level = 3;
                     s_Stage = 0;
                     PlayerView.missionChange(3, 0);  //改變關卡
-                    DialogueEditor.StartConversation(3, 0, 0, false, 0);
+                    DialogueEditor.StartConversation(3, 0, 0, false, 0, true);
                     break;
                 case 1:
                     A_defense = 2;
@@ -56,7 +56,7 @@ public class Defense : MonoBehaviour
                     s_Level = 3;
                     s_Stage = 1;
                     PlayerView.missionChange(3, 1);  //改變關卡
-                    DialogueEditor.StartConversation(3, 1, 0, false, 0);
+                    DialogueEditor.StartConversation(3, 1, 0, false, 0, true);
                     break;
                 case 2:
                     //defenseOb[2].SetActive(false);

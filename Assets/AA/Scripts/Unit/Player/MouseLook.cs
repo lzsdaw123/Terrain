@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class MouseLook : MonoBehaviour
 {
     public float mouseSpeed = 100f;
-    public float smoothSpeed;
+    public float smoothSpeed;   //滑鼠靈敏度
     public Transform playerBody, m_transform,Gun;
     public float rotationX, rotationY = 0f;
     float camY = 2.865f;

@@ -249,7 +249,7 @@ public class Shooting : MonoBehaviour
                     if (FirstWeapon[0] && !SkipTeach)  //第一次取得步槍和沒跳教學
                     {
                         Ammunition.showUI();
-                        DialogueEditor.StartConversation(0, 2, 0, true, 0);  //開始對話
+                        DialogueEditor.StartConversation(0, 2, 0, true, 0, true);  //開始對話
                         StartAll();
                     }
                     if (FirstWeapon[1])  //第一次取得左輪
@@ -258,7 +258,7 @@ public class Shooting : MonoBehaviour
                         Level_1.StopAttack = false;  //怪物繼續進攻
                         Level_1.stageTime = 25;  //怪物繼續倒數開始
                         PlayerView.missionChange(Defense.s_Level, Defense.s_Stage);  //改變關卡
-                        DialogueEditor.StartConversation(2, 2, 0, false, 0);  //開始對話
+                        DialogueEditor.StartConversation(2, 2, 0, false, 0, true);  //開始對話
                     }
                     LayDown = false;
                 }
@@ -951,7 +951,7 @@ public class Shooting : MonoBehaviour
                 Ammunition.showUI();
                 if (FirstAmm && !SkipTeach)  //第一次取得彈藥並且沒跳教學
                 {
-                    DialogueEditor.StartConversation(0, 3, 0, true, 0);  //開始對話
+                    DialogueEditor.StartConversation(0, 3, 0, true, 0, true);  //開始對話
                 }
                 st_Weapon.SetTrigger("Reload");
                 Reload = true;

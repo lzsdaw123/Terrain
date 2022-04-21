@@ -42,6 +42,7 @@ public class Level_1 : MonoBehaviour
     public string[] MissonString; //當前任務標題
     [SerializeField] float UiTime;
     public static float MissionTime;  //任務切換時間
+    [SerializeField] float SF_MissionTime;  //任務切換時間
     public static bool UiOpen;
     [SerializeField] public static int MonsterLevel;
     [SerializeField] float MLtime;
@@ -84,7 +85,7 @@ public class Level_1 : MonoBehaviour
         MissionWarn.SetActive(false);
         MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "補充彈藥", "修理與升級", "電力供應",  "到工作崗位"};
         MissonStringL1_2 = new string[] { "到工作崗位"};
-        MissonStringL2 = new string[] { "大門防線", "武器開放", "前往礦坑", "不明生物來襲", "任務完成" };
+        MissonStringL2 = new string[] { "大門防線", "武器開放", "不明生物來襲", "前往研究室", "重大發現", "尋找遺跡" };
         MissonStringL2_2 = new string[] { "第二防線", "保護發電廠", "任務失敗" };
 
         MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 94, 0);
@@ -94,6 +95,16 @@ public class Level_1 : MonoBehaviour
     }
     void Update()
     {
+        //if (Input.GetKey(KeyCode.F5))
+        //{
+        //    PlayerView.missionLevel = 2;
+        //    //PlayerView.missionStage=5;
+        //    LevelA_ = 9;
+        //    UiOpen = true;
+        //    PlayerView.missionChange(2, 3);
+        //    DialogueEditor.StartConversation(2, 4, 0, false, 0, true);
+        //    Objects[4].GetComponent<BoxCollider>().enabled = true; //開放研究室
+        //}
         missionLevel = PlayerView.missionLevel;
         missionStage = PlayerView.missionStage;  //跟換目標
         SF_Level_A_Start = Level_A_Start;
@@ -102,6 +113,7 @@ public class Level_1 : MonoBehaviour
         SF_stageTime = stageTime;
         SF_LevelA_ = LevelA_;
         SF_StopAttack = StopAttack;
+        SF_MissionTime = MissionTime;
 
         if (!MissionEnd)  //任務目標是否結束
         {
@@ -114,12 +126,12 @@ public class Level_1 : MonoBehaviour
                         if (MissionTime >= 3 && LevelA_ != 2)  //任務UI浮現時間
                         {
                             MissionTime = 3;
-                            if (Taget_distance <= 1f)  //觸發距離 原1.5f
+                            if (Taget_distance <= 1.1f)  //觸發距離 原1.5f
                             {
                                 if (StartDialogue)
                                 {
                                     StartDialogue = false;
-                                    DialogueEditor.StartConversation(missionLevel, missionStage, 0, true, 0);  //開始對話
+                                    DialogueEditor.StartConversation(missionLevel, missionStage, 0, true, 0, true);  //開始對話
                                 }
                             }
                         }
@@ -152,26 +164,6 @@ public class Level_1 : MonoBehaviour
                     break;
                 case 2:
                     MissonString = MissonStringL2;  //第二階段
-                    if (missionStage == 3 || LevelA_==9)
-                    {
-                        //print(missionStage + " // " + LevelA_);
-                        Objects[4].GetComponent<BoxCollider>().enabled = true;
-                        //ElectricDoor electricDoor = Objects[4].GetComponent<ElectricDoor>();
-                        if (Objects[4].GetComponent<ElectricDoor>().Botton)
-                        {
-                            //print("END");
-                            PlayerView.missionChange(2, 2);  //改變關卡
-                            //Objects[5].SetActive(true);
-                            //ExitGame();
-                        }
-                    }
-                    if (missionStage == 2)
-                    {
-                        if (Taget_distance <= 1f)  //觸發距離
-                        {
-                            ExitGame();
-                        }
-                    }
                     break;
                 case 3:
                     MissonString = MissonStringL2_2;  //第二之二階段
@@ -206,7 +198,7 @@ public class Level_1 : MonoBehaviour
                     if (MissionTime >= 2)
                     {
                         PlayerView.missionChange(2, 0);  //改變關卡
-                        DialogueEditor.StartConversation(2, 0, 1, false, 2.0f);  //開始對話
+                        DialogueEditor.StartConversation(2, 0, 1, false, 2.0f, true);  //開始對話
                         DialogueEditor.Delayed(2); //延遲對話
                         UiOpen = true;
                         LevelA_ = 3;
@@ -228,6 +220,34 @@ public class Level_1 : MonoBehaviour
                 case 8:
                     _SpawnRay.BornTime = 20;  //怪物結束生成
                     _SpawnRay.StartBool[0] = true;  //怪物結束生成
+                    break;
+                case 9:
+                    if (Objects[4].GetComponent<ElectricDoor>().Botton)  //與研究室主管對話
+                    {
+                        LevelA_ = 10;
+                        UiOpen = true;
+                        PlayerView.missionChange(2, 4);  //改變關卡
+                    }
+                    break;
+                case 10:
+                    if (Taget_distance <= 1.5f)  //觸發距離
+                    {
+                        LevelA_ = 11;
+                        DialogueEditor.StartConversation(2, 5, 2, true, 0, false);  //開始對話
+                        Objects[5].GetComponent<BoxCollider>().enabled = true; //開放研究室後門
+                    }
+                    break;
+                case 11:
+                    if (MissionTime >= 10)
+                    {
+                        MissionTime = 10;
+                        if (Taget_distance <= 2f)  //觸發距離
+                        {
+                            LevelA_ = 12;
+                            ExitGame();
+                        }
+                    }
+                    else MissionTime += Time.deltaTime;
                     break;
             }      
         }
@@ -345,13 +365,14 @@ public class Level_1 : MonoBehaviour
                         case 7:  //出現水晶Boss
                             UiOpen = true;  //開啟任務UI與音效
                             stageTime = 5;  //怪物繼續倒數開始
-                            PlayerView.missionChange(2, 3);
-                            DialogueEditor.StartConversation(2, 3, 1, false, 0);
+                            PlayerView.missionChange(2, 2);
+                            DialogueEditor.StartConversation(2, 3, 1, false, 0, true);
                             break;
                         case 9:  //前往研究室
                             UiOpen = true;
-                            PlayerView.missionChange(2, 4);
-                            DialogueEditor.StartConversation(2, 4, 0, false, 0);
+                            PlayerView.missionChange(2, 3);
+                            DialogueEditor.StartConversation(2, 4, 0, false, 0, true);
+                            Objects[4].GetComponent<BoxCollider>().enabled = true; //開放研究室
                             break;
                     }
                 }
@@ -366,7 +387,7 @@ public class Level_1 : MonoBehaviour
                         StopAttack = true;
                         UiOpen = true;
                         PlayerView.missionChange(2, 1);  //改變關卡
-                        DialogueEditor.StartConversation(2, 1, 0, false, 0);  //開放左輪使用
+                        DialogueEditor.StartConversation(2, 1, 0, false, 0, true);  //開放左輪使用
                         Objects[2].GetComponent<BoxCollider>().enabled = true;
                         break;
                     case 6:  //第二波結束

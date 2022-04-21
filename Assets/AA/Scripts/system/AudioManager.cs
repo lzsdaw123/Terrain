@@ -209,7 +209,7 @@ public class AudioManager : MonoBehaviour
         current.AmbientSource.Play();
         OnClick();
     }
-    public static void MechanicalAudio(GameObject gameObject)  //機械音效 (電梯&開門)
+    public static void MechanicalAudio(GameObject gameObject, int Type)  //機械音效 (電梯&開門)
     {
         if (ElevatorSource == null)
         {       
@@ -220,30 +220,34 @@ public class AudioManager : MonoBehaviour
     }
     public static void PlayFootstepAudio(int Type)  //走路
     {
-        if (Type == 0)
+        switch (Type)
         {
-            if (PlayerMove.Metal == 0) //是否走在金屬上 0=否
-            {
-                int index = Random.Range(0, current.WalkClip.Length);
-                current.PlayerSource.clip = current.WalkClip[index];
-                current.PlayerSource.volume = 0.7f;
-                current.PlayerSource.pitch = 1.5f;
-            }
-            else  //走在金屬上
-            {
-                current.PlayerSource.clip = current.JumpClip[1];
-                current.PlayerSource.volume = 0.7f;
-                current.PlayerSource.pitch = 0.75f;
-                if (PlayerMove.Speed <= 4)
+            case -1:
+                current.PlayerSource.Stop();
+                break;
+            case 0:
+                if (PlayerMove.Metal == 0) //是否走在金屬上 0=否
                 {
-                    current.PlayerSource.pitch = 0f;
+                    int index = Random.Range(0, current.WalkClip.Length);
+                    current.PlayerSource.clip = current.WalkClip[index];
+                    current.PlayerSource.volume = 0.7f;
+                    current.PlayerSource.pitch = 1.5f;
                 }
-            }
-            SaveVolume[1] = current.PlayerSource.volume;
-            current.PlayerSource.Play();
-            OnClick();
+                else  //走在金屬上
+                {
+                    current.PlayerSource.clip = current.JumpClip[1];
+                    current.PlayerSource.volume = 0.7f;
+                    current.PlayerSource.pitch = 0.75f;
+                    if (PlayerMove.Speed <= 4)
+                    {
+                        current.PlayerSource.pitch = 0f;
+                    }
+                }
+                SaveVolume[1] = current.PlayerSource.volume;
+                current.PlayerSource.Play();
+                OnClick();
+                break;
         }
-
     }
     public static void PlayJumpAudio(int Nub)  //跳躍落地
     {
@@ -372,5 +376,9 @@ public class AudioManager : MonoBehaviour
         }
         current.HitSource.Play();
         OnClick();
+    }
+    public void StopPlayAudio()
+    {
+        PlayFootstepAudio(-1);
     }
 }

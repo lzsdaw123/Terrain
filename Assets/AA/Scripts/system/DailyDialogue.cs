@@ -31,7 +31,7 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
     {
         coolDown = 2.5f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
-        Beside = new bool[2];
+        Beside = new bool[3];
         dialogueText.text = "";
         //if (DialogueOptionsUI == null)
         //{
@@ -120,9 +120,7 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
     }
     void Add_Dialogue(bool Ra_Dialogue)
     {
-        Name = new string[2];
-        Name[0] = "武器庫管理員 : ";
-        Name[1] = "核電廠工程師 : ";
+        Name = new string[] { "武器庫管理員 : ", "核電廠工程師 : ", "研究人員 : " };
 
         switch (NpcName)
         {
@@ -152,7 +150,11 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
                     Dialogue[6] = "「冷凝器」則不斷抽取「水泵」的水進行降溫。";                
                 }
                 break;
-            case 2:
+            case 2:  //研究人員
+                Dialogue = new string[3];
+                Dialogue[0] = "到底還有多少Bug要修阿!!!";
+                Dialogue[1] = "兄弟，水晶真漂亮對吧。";
+                Dialogue[2] = "一個挖掘、兩個挖掘、三個挖掘...";
                 break;
         }
     }

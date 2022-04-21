@@ -255,7 +255,7 @@ public class UpgradeWorkbench : MonoBehaviour
             if (!FirstWork)
             {
                 FirstWork = true;
-                DialogueEditor.StartConversation(0, 4, 0, true, 0);  //開始對話
+                DialogueEditor.StartConversation(0, 4, 0, true, 0, true);  //開始對話
             }
         }
     }

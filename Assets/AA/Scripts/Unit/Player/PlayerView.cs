@@ -63,19 +63,26 @@ public class PlayerView : MonoBehaviour
         missionLevel = _missionLevel;
         missionStage = _missionStage;
     }
-    public static void TagetChange(int Type)  //改變目標
+    public static void TagetChange(int Type, bool UI)  //改變目標 (是否對話後換關卡, 是否顯示訊息UI)
     {
         switch (Type)
         {
             case 0:
-                if (missionStage > Level_1.missionNumb[missionLevel])  //關卡切換
+                if (UI)
                 {
-                    missionLevel++;
-                    missionStage = 0;
-                    //Level_1.MissionEnd = true;
-                    //MissionEnd = true;
+                    if (missionStage > Level_1.missionNumb[missionLevel])  //關卡切換
+                    {
+                        missionLevel++;
+                        missionStage = 0;
+                        //Level_1.MissionEnd = true;
+                        //MissionEnd = true;
+                    }
+                    else  //階段切換
+                    {
+                        missionStage++;
+                    }
                 }
-                else  //階段切換
+                else
                 {
                     missionStage++;
                 }
