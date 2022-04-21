@@ -116,15 +116,15 @@ public class Boss01_AI : MonoBehaviour
         MaxMuGrid = muzzle.Length;
         muzzleGrid = new int[MaxMuGrid];
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
-        for (int i=0; i< Rain.Length; i++)  //降低下雨量
-        {
-            ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
-            var emission = ps.emission;
-            float hSliderValue = emission.rateOverTime.constant;
-            RainV[i] = hSliderValue;
-            hSliderValue /= 4;
-            emission.rateOverTime = hSliderValue;
-        }
+        //for (int i=0; i< Rain.Length; i++)  //降低下雨量
+        //{
+        //    ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
+        //    var emission = ps.emission;
+        //    float hSliderValue = emission.rateOverTime.constant;
+        //    RainV[i] = hSliderValue;
+        //    hSliderValue /= 4;
+        //    emission.rateOverTime = hSliderValue;
+        //}
 
 
         //reg = GetComponent<SpawnRayReg>();
@@ -564,13 +564,13 @@ public class Boss01_AI : MonoBehaviour
     void OnDisable()  //禁用時
     {
         attacking = false;
-        for (int i = 0; i < Rain.Length; i++)  //降低下雨量
-        {
-            ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
-            var emission = ps.emission;
-            float hSliderValue = emission.rateOverTime.constant;
-            hSliderValue = RainV[i] /2;
-            emission.rateOverTime = hSliderValue;
-        }
+        //for (int i = 0; i < Rain.Length; i++)  //調回下雨量
+        //{
+        //    ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
+        //    var emission = ps.emission;
+        //    float hSliderValue = emission.rateOverTime.constant;
+        //    hSliderValue = RainV[i] /2;
+        //    emission.rateOverTime = hSliderValue;
+        //}
     }
 }
