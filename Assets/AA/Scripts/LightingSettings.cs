@@ -40,6 +40,11 @@ public class LightingSettings : MonoBehaviour
     }
     public bool IsInView(Vector3 worldPos)
     {
+        if (camTransform == null || Gun_Camera==null) 
+        {
+            camTransform = GameObject.Find("Gun_Camera").GetComponent<Transform>();
+            Gun_Camera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
+        }
         camTransform = Gun_Camera.transform;  //相機座標
         Vector2 viewPos = Gun_Camera.WorldToViewportPoint(worldPos);  //世界座標到視口座標
         Vector3 dir = (worldPos - camTransform.position).normalized;
@@ -59,7 +64,11 @@ public class LightingSettings : MonoBehaviour
     void Update()
     {
         Vector2 vec2 = Gun_Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
-
+        if (camTransform == null || Gun_Camera == null)
+        {
+            camTransform = GameObject.Find("Gun_Camera").GetComponent<Transform>();
+            Gun_Camera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
+        }
         distance = (camTransform.position - transform.position).magnitude;
         _IsInView = IsInView(transform.position);
 
