@@ -56,11 +56,11 @@ public class B1_BulletLife : MonoBehaviour
     }
     void Start()
     {
-        speed = new float[] {160,80,40 }; //飛行速度
+        speed = new float[] {160,80,60 }; //飛行速度
         power =new float[] {1,3,5 };
         AttackLv = 0;
         liftTime = 10;
-        bornTime = new float[] {2,1, 1.5f};  //生成速度{快, 慢, 中}
+        bornTime = new float[] {3,1.5f, 1};  //生成速度{快, 中, 慢}
         Get_ATarget = true;
         Atarget = Vector3.zero;
         forwardFly = false;

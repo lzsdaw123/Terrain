@@ -206,7 +206,7 @@ public class MonsterLife : MonoBehaviour
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
 
-        hpFull = new float[] { 16, 24 };  // 血量上限
+        hpFull = new float[] { 16, 28 };  // 血量上限
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()

@@ -32,6 +32,7 @@ public class Shooting : MonoBehaviour
     public float AniTime, STtime;
     bool WeapSwitch; //武器切換bool
     public static int WeaponType; //武器類型
+    [SerializeField] int SF_WeaponType; //武器類型
     public int NextWeaponType; //武器類型
     public static int PickUpWeapon;  //取得的武器類型
     public static int[] Equipment = new int[3]; //身上持有的武器 {步槍,左輪, 霰彈槍}
@@ -81,6 +82,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] int 部件ID;
     public static bool 換部件;
     static bool Bomb=true;
+    public bool hitDamage;
 
     public static void StartAll()
     {
@@ -91,7 +93,7 @@ public class Shooting : MonoBehaviour
         {
             Weapons[0] = new WeaponValue(0, 2, 400, 30, 300);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量)           
         }
-        Weapons[1] = new WeaponValue(1, 10, 200, 6, 30);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量)
+        Weapons[1] = new WeaponValue(1, 1, 200, 6, 30);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量)
         Weapons[2] = new WeaponValue(0, 1, 100, 5, 30);  //霰彈槍(武器位置,威力,射程,彈藥量,總彈藥量)
     }
     public void OnBeforeSerialize()  //序列化
@@ -157,6 +159,7 @@ public class Shooting : MonoBehaviour
     }
     void Update()
     {
+        SF_WeaponType = WeaponType;
         if (換部件)
         {
             換部件 = false;
@@ -287,6 +290,14 @@ public class Shooting : MonoBehaviour
             _Animator[WeaponType].SetActive(true);
             MuSmoke[WeaponType].Stop();
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
+            if (Weapons[WeaponType].WeapAm != 0)  //當前武器彈藥大於0
+            {
+                ReloadWarn.SetActive(false);  //彈藥足
+            }
+            if(Weapons[WeaponType].T_WeapAm != 0)  //當前武器彈藥大於0
+            {
+                Am_zero_Warn.SetActive(false);  //總彈藥足
+            }
             AniTime = STtime;
         }
         if (AniTime != STtime)  //換武器時間
@@ -566,12 +577,15 @@ public class Shooting : MonoBehaviour
         {
             Weapons[WeaponType].WeapAm = 0;
         }
-        if (Weapons[WeaponType].T_WeapAm <= 0 && FirstWeapon[0] && FirstAmm)  //總彈藥最小為0
+        if (Weapons[WeaponType].T_WeapAm <= 0)  //總彈藥最小為0
         {
             Weapons[WeaponType].T_WeapAm = 0;
-            //Am_zero_Warn.SetActive(true);  //總彈藥不足警告
+            if(Weapons[WeaponType].WeapAm <= 0 && FirstWeapon[0] && FirstAmm)
+            {
+                Am_zero_Warn.SetActive(true);  //總彈藥不足警告
+                Am_zero_Warn.gameObject.transform.GetChild(0).GetComponent<Animator>().SetInteger("Type", 1);
+            }
         }
-
         void ZoomIn()  //鏡頭拉近
         {
             if (gFieldOfView > 22f)
@@ -687,6 +701,7 @@ public class Shooting : MonoBehaviour
                 }
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
+                    hitDamage = false;
                     float PowerAdd = 武器欄位[WeaponType].Power;
                     //print(PowerAdd);
                     if (hit[n].collider.tag == "NPC")
@@ -718,12 +733,14 @@ public class Shooting : MonoBehaviour
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //彈孔噴血
                     {
                         HitType = 1;
-                        AudioManager.Hit(2);  //擊中音效
-                        //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
-                        if (hit[n].collider.tag == "Enemy")  //擊中怪物
+                        //AudioManager.Hit(2);  //擊中音效
+                                              //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
+
+                        if (hit[n].collider.tag == "Enemy")
                         {
-                            AudioManager.Hit(3);  //擊中音效
-                            int MonsterType=0;
+                            hitDamage = true;
+                            int MonsterType = 0;
+                            bool isBoss=false;
                             FindUpParent(hit[n].transform);  //找有HP的父物件
                             Transform FindUpParent(Transform zi)  //找最大父物件
                             {
@@ -734,7 +751,7 @@ public class Shooting : MonoBehaviour
                                 }
                                 if (zi.GetComponent<Boss_Life>())
                                 {
-                                    MonsterType = zi.gameObject.GetComponent<Boss_Life>().MonsterType;
+                                    isBoss = zi.gameObject.GetComponent<Boss_Life>().isBoss;
                                     return zi;
                                 }
                                 else
@@ -743,58 +760,79 @@ public class Shooting : MonoBehaviour
                                     else return FindUpParent(zi.parent);
                                 }
                             }
-                            switch (MonsterType)
+                            if (isBoss)
                             {
-                                case 0:
-                                    HitType = 2;  //綠血
-                                    break;
-                                case 1:
-                                    HitType = 6;  //紫血
-                                    break;
-                            }
-                            hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
-                            if (WeaponType == 1)  //電磁手槍傷害
-                            {
-                                if (n == 0)
+                                AudioManager.Hit(5);  //擊中音效
+                                switch (MonsterType)
                                 {
-                                    hit[0].transform.SendMessage("Damage", (Weapons[WeaponType].power / 2 +1) * PowerAdd);  //造成傷害
-                                }
-                                else
-                                {
-                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 10 * PowerAdd);  //造成範圍傷害
+                                    case 0:
+                                        HitType = 2;  //水晶
+                                        break;
+                                    case 1:
+                                        break;
                                 }
                             }
                             else
                             {
-                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
+                                AudioManager.Hit(3);  //擊中音效
+                                switch (MonsterType)
+                                {
+                                    case 0:
+                                        HitType = 2;  //綠血
+                                        break;
+                                    case 1:
+                                        HitType = 6;  //紫血
+                                        break;
+                                }
                             }
-                            //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
-                        }
-                        if(hit[n].collider.tag == "Crystal")
-                        {
-                            AudioManager.Hit(5);  //擊中水晶音效
-
-                        }
+                        }                                                
                         if (hit[n].collider.tag == "Carapace")  //甲殼
                         {
                             HitType = 4;
                             AudioManager.Hit(1);  //擊中音效
-                            if (WeaponType == 1)
+                            if (WeaponType == 1)  //電磁手槍傷害
                             {
                                 hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
                                 if (n == 0)
                                 {
-                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power / 5 * PowerAdd);  //造成一半傷害
+                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power *2 * PowerAdd);  //造成一半傷害
                                 }
                                 else
                                 {
-                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power / 20 * PowerAdd);  //造成一半範圍傷害
+                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power *0.6f * PowerAdd);  //造成一半範圍傷害
                                 }
                             }
                         }
+                    }
+                    if (hit[n].collider.tag == "Crystal")  //水晶
+                    {
+                        AudioManager.Hit(5);  //擊中水晶音效
+                        HitType = 8;
+                    }
+                    if (hitDamage)  //擊中怪物
+                    {
+                        hitDamage = false;
 
+                        hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
+                        if (WeaponType == 1)  //電磁手槍傷害
+                        {
+                            if (n == 0)
+                            {
+                                hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power * 5 * PowerAdd);  //造成中心傷害
+                            }
+                            else
+                            {
+                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * 1.2f * PowerAdd);  //造成範圍傷害
+                            }
+                        }
+                        else
+                        {
+                            hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
+                        }
+                        //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                     }
                 }
+               
                 //在到物體上產生彈孔
                 rot = Quaternion.FromToRotation(Vector3.up, hit[n].normal);
                 pos = hit[n].point;
@@ -843,10 +881,10 @@ public class Shooting : MonoBehaviour
         OnBeforeSerialize();
         st_Weapon = Weapon;
     }
-    public static void ReLoad_E()  //換彈結束
+    public static void ReLoad_E(int Ammo, int T_Ammo)  //換彈結束
     {
-        Weapons[WeaponType].WeapAm = AnimEvents.ammunition;
-        Weapons[WeaponType].T_WeapAm = AnimEvents.Total_ammunition;
+        Weapons[WeaponType].WeapAm = Ammo;
+        Weapons[WeaponType].T_WeapAm = T_Ammo;
         Reload = false;
         FireButtle = 1;
     }
@@ -858,6 +896,7 @@ public class Shooting : MonoBehaviour
     {
         AudioManager.PlayGunshotsAudio(0);
         ReloadWarn.SetActive(true);  //換彈警告
+        ReloadWarn.gameObject.transform.GetChild(0).GetComponent<Animator>().SetInteger("Type", 1);
     }
     public static void PlayerRe()  //玩家重生
     {

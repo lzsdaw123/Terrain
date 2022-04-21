@@ -483,9 +483,9 @@ public class MonsterAI02 : MonoBehaviour
     }
     public void AngeStater()
     {
-        angry = 4;
+        angry = 3;
         OriSpeed = ani.speed;
-        ani.speed = 1.5f;
+        ani.speed = 1.3f;
 
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)
@@ -501,7 +501,7 @@ public class MonsterAI02 : MonoBehaviour
         Fire = false;
         angry = 0;
         locking = false;
-        ani.speed = OriSpeed;
+        ani.speed = 1;
         //coolDown = 1;
     }
 }

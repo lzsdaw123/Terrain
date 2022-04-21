@@ -91,11 +91,12 @@ public class HeroLife : MonoBehaviour
     {
         if (PlayerRebirth)  //玩家重生
         {
-            PlayerAni[0].SetTrigger("InfectionDead");
-            PlayerAni[1].SetTrigger("InfectionDead");
-            BossHit_Ani.SetTrigger("Dead");
+            PlayerAni[0].SetTrigger("InfectionLift");
+            PlayerAni[1].SetTrigger("InfectionLift");
+            BossHit_Ani.SetTrigger("Lift");
             InfectionUI.SetActive(false);
             LiftTime = 0;
+            Level = 0;
             PlayerRebirth = false;
             Start();
         }
@@ -108,12 +109,16 @@ public class HeroLife : MonoBehaviour
                 Crystal_Infection = true;
             }
         }
+        else if(Level>=4)
+        {
+            LiftTime = 0;
+        }
         if (Level > 0)
         {
             Infection_Image.fillAmount = LiftTime / 12; //顯示血球
             InfectionUI.SetActive(true);
             LiftTime += Time.deltaTime;
-            if (LiftTime >= 12)
+            if (LiftTime >= 12)  //感染解除時間
             {
                 LiftTime = 0;
                 Level = 0;

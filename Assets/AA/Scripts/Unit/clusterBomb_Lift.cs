@@ -57,11 +57,11 @@ public class clusterBomb_Lift : MonoBehaviour
     }
     void Start()
     {
-        speed = new float[] {40,80,40 }; //飛行速度
+        speed = new float[] {60,80,40 }; //飛行速度
         power =new float[] {1,3,5 };
         AttackLv = 0;
         liftTime = 10;
-        bornTime = new float[] {6,1, 1.5f};  //生成速度{快, 慢, 中}
+        bornTime = new float[] {10,1, 1.5f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;
         Attacking = false;
         StartAttack = false;

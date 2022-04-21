@@ -22,11 +22,11 @@ public class Level_1 : MonoBehaviour
     public int EnemyWave;  //敵人波數
     public static float stageTime = -1;  //下次來襲時間
     [SerializeField] float SF_stageTime;
-    public Text stageTimeText;
+    public Text stageTimeText;  //怪物進攻倒數文字
     public LayerMask LayerMask;
     public static bool AttackStart = false;  //進攻開始
     public GameObject MissionTarget, MissionWarn;  //任務警告UI
-    public GameObject[] MissionUI;
+    public GameObject[] MissionUI;  //怪物進攻倒數
     public GameObject tagetUI;  //任務目標UI
     public int missionLevel;  //任務關卡
     public static int[] missionNumb = new int[] { 7, 1, 3, 3 };  //任務數量
@@ -55,6 +55,7 @@ public class Level_1 : MonoBehaviour
     public static bool StopAttack; //暫停怪物進攻
     [SerializeField] bool SF_StopAttack; //暫停怪物進攻
     public GameObject[] Objects;  //開放使用物件
+    public float DelayTime;  //延遲倒數
 
     void Awake()
     {
@@ -79,13 +80,14 @@ public class Level_1 : MonoBehaviour
         MissionUI[0].SetActive(false);
         tagetUI.SetActive(false);
         //DialogBox.SetActive(false);
+        DelayTime = -1;
         MissionWarn.SetActive(false);
         MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "補充彈藥", "修理與升級", "電力供應",  "到工作崗位"};
         MissonStringL1_2 = new string[] { "到工作崗位"};
         MissonStringL2 = new string[] { "大門防線", "武器開放", "前往礦坑", "不明生物來襲", "任務完成" };
         MissonStringL2_2 = new string[] { "第二防線", "保護發電廠", "任務失敗" };
 
-        MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
+        MissionWarn.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 94, 0);
         StartDialogue = true;
         StopAttack = false;
         Objects[3].GetComponent<Animator>().enabled = false;
@@ -112,7 +114,7 @@ public class Level_1 : MonoBehaviour
                         if (MissionTime >= 3 && LevelA_ != 2)  //任務UI浮現時間
                         {
                             MissionTime = 3;
-                            if (Taget_distance <= 1.5f)  //觸發距離
+                            if (Taget_distance <= 1f)  //觸發距離 原1.5f
                             {
                                 if (StartDialogue)
                                 {
@@ -139,11 +141,13 @@ public class Level_1 : MonoBehaviour
                     }
                     break;
                 case 1:
-                    MissonString = MissonStringL1_2;  //第一之一階段
+                    MissonString = MissonStringL1_2;  //第一之一階段  跳過教學
                     if (missionStage == 0 && LevelA_ == 0)
                     {
                         LevelA_ = 1;
                         Level_A_Start = true;
+                        Objects[0].GetComponent<BoxCollider>().enabled = true;
+                        Objects[1].GetComponent<BoxCollider>().enabled = true;
                     }                   
                     break;
                 case 2:
@@ -163,13 +167,9 @@ public class Level_1 : MonoBehaviour
                     }
                     if (missionStage == 2)
                     {
-                        if (Taget_distance <= 1.5f)  //觸發距離
+                        if (Taget_distance <= 1f)  //觸發距離
                         {
-                            if (StartDialogue)
-                            {
-                                StartDialogue = false;
-                                ExitGame();
-                            }
+                            ExitGame();
                         }
                     }
                     break;
@@ -183,13 +183,14 @@ public class Level_1 : MonoBehaviour
                 UiOpen = false;
                 MissonTxet.text = MissonString[missionStage];
                 MissionWarn.SetActive(true);  // 開啟任務UI
+                MissionWarn.gameObject.transform.GetChild(0).GetComponent<Animator>().SetInteger("Type", 0);
                 tagetUI.SetActive(true);
                 PlayAu = true;
                 PlayAudio();
             }
             if (MissionWarn.activeSelf)  //任務UI開啟
             {
-                if (UiTime >= 3.6)  //UI浮現時間
+                if (UiTime >= 6)  //UI浮現時間
                 {
                     MissionWarn.SetActive(false);
                     UiTime = 0;
@@ -223,6 +224,10 @@ public class Level_1 : MonoBehaviour
                         AttackStart = true;
                     }
                     else MissionTime += Time.deltaTime;
+                    break;
+                case 8:
+                    _SpawnRay.BornTime = 20;  //怪物結束生成
+                    _SpawnRay.StartBool[0] = true;  //怪物結束生成
                     break;
             }      
         }
@@ -264,25 +269,24 @@ public class Level_1 : MonoBehaviour
                 var main = PSsmoke.main;
                 main.loop = false;
                 MissionTarget.SetActive(true);
-                MissionUI[0].SetActive(true);
             }
             if (time >= 25f)
             {
                 explode.SetActive(false);
             }
-            if (MonsterLevel != 5)  //升級時間冷卻
-            {
-                MLtime += Time.deltaTime;
-                //MLtime += 10*Time.deltaTime;
-            }
-            DifficultyLevel = Settings.Level;
-            DifficultyLevel = 90 / (DifficultyLevel + 1);
-            if (MLtime >= DifficultyLevel)  //難度設定 90 / 45 / 30 秒升級
-            {
-                MLtime = 0;
-                MonsterLevel++;
-                //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
-            }
+            //if (MonsterLevel != 5)  //升級時間冷卻
+            //{
+            //    MLtime += Time.deltaTime;
+            //    //MLtime += 10*Time.deltaTime;
+            //}
+            //DifficultyLevel = Settings.Level;
+            //DifficultyLevel = 90 / (DifficultyLevel + 1);
+            //if (MLtime >= DifficultyLevel)  //難度設定 90 / 45 / 30 秒升級
+            //{
+            //    MLtime = 0;
+            //    MonsterLevel++;
+            //    //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
+            //}
         }
         if (TotalStage==1)  //第一大關
         {                
@@ -296,22 +300,26 @@ public class Level_1 : MonoBehaviour
                     EnemyWave++;
                     _SpawnRay.EnemyWaveNum(EnemyWave);
                     stageTime = -1;
-                    if (LevelA_>4)
+                    if (LevelA_>=5)
                     {
                         MissionUI[1].SetActive(true);
+                        MissionUI[0].GetComponent<Animator>().SetBool("Stop", true);
+                        MissionUI[0].GetComponent<Animator>().speed = 0;
                         PlayAu = true;
                         PlayAudio();
                     }
                 }
                 else if(stageTime >0)  //開始倒數
                 {
+                    MissionUI[0].GetComponent<Animator>().SetBool("Stop", false);
+                    MissionUI[0].GetComponent<Animator>().speed = 1;
                     stageTime -= Time.deltaTime;
                 }
                 int Minute = 0;
                 int Second = 0;
                 string srtMinute = "";
                 string srtSecond="";
-                if (stageTime <= -1)
+                if (stageTime <= -1)  
                 {
                     stageTimeText.text = "  ";
                 }
@@ -326,12 +334,34 @@ public class Level_1 : MonoBehaviour
                     stageTimeText.text = srtMinute + " : " + srtSecond;
                 }
             }
-
+            if (DelayTime >= 0)  //延遲倒數
+            {
+                DelayTime += Time.deltaTime;
+                if (DelayTime >= 2)
+                {
+                    DelayTime = -1;
+                    switch (LevelA_)
+                    {
+                        case 7:  //出現水晶Boss
+                            UiOpen = true;  //開啟任務UI與音效
+                            stageTime = 5;  //怪物繼續倒數開始
+                            PlayerView.missionChange(2, 3);
+                            DialogueEditor.StartConversation(2, 3, 1, false, 0);
+                            break;
+                        case 9:  //前往研究室
+                            UiOpen = true;
+                            PlayerView.missionChange(2, 4);
+                            DialogueEditor.StartConversation(2, 4, 0, false, 0);
+                            break;
+                    }
+                }
+            }
             if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)  //當前波數結束
             {
                 switch (LevelA_)
                 {
-                    case 4:
+                    case 4:  //第一波結束
+                        MissionUI[0].SetActive(true);
                         LevelA_ = 5;
                         StopAttack = true;
                         UiOpen = true;
@@ -339,23 +369,18 @@ public class Level_1 : MonoBehaviour
                         DialogueEditor.StartConversation(2, 1, 0, false, 0);  //開放左輪使用
                         Objects[2].GetComponent<BoxCollider>().enabled = true;
                         break;
-                    case 6:
+                    case 6:  //第二波結束
                         print("6");
                         LevelA_ = 7;
                         StopAttack = true;
                         cameraMove.StartBoss1();
-                        //UiOpen = true;  //開啟任務UI與音效
-                        stageTime = 5;  //怪物繼續倒數開始
-                        PlayerView.missionChange(2, 3);
-                        DialogueEditor.StartConversation(2, 3, 1, false, 0);
+                        DelayTime = 0;  //延遲倒數
                         break;
-                    case 8:
+                    case 8: //擊敗水晶Boss並打光怪物
                         print("8");
                         LevelA_ = 9;
                         StopAttack = true;
-                        UiOpen = true;
-                        PlayerView.missionChange(2, 4);
-                        DialogueEditor.StartConversation(2, 4, 0, false, 0);
+                        DelayTime = 0;  //延遲倒數
                         break;
                 }
             }

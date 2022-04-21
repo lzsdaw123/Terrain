@@ -13,7 +13,7 @@ public class Boss_Life : MonoBehaviour
     private Rigidbody rigid;
     private Collider cld;
     public AnimEvents AnimEvents;
-
+    public bool isBoss;
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public float[] hpFull; // 血量上限
@@ -160,7 +160,7 @@ public class Boss_Life : MonoBehaviour
                 Dead = true;
                 //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
                 CrystalAni.SetTrigger("Dead");
-                Level_1.LevelA_ = 8;
+                Level_1.LevelA_ = 8;  //關卡8
             }           
             hp = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸
@@ -185,19 +185,19 @@ public class Boss_Life : MonoBehaviour
     }
     void DifficultyUp()  //難度設定
     {
-        HpLv = Level_1.MonsterLevel;
-        Level = Settings.Level;
-        Level = Level +1;
-        if (HpLv > 0)
-        {
-            hpFull[MonsterType] = 7 + (HpLv * Level);
-            if (hpFull[MonsterType] >= 7 + (5 * Level))
-            {
-                hpFull[MonsterType] = 7 + (5 * Level);
-            }
-        }
+        //HpLv = Level_1.MonsterLevel;
+        //Level = Settings.Level;
+        //Level = Level +1;
+        //if (HpLv > 0)
+        //{
+        //    hpFull[MonsterType] = 7 + (HpLv * Level);
+        //    if (hpFull[MonsterType] >= 7 + (5 * Level))
+        //    {
+        //        hpFull[MonsterType] = 7 + (5 * Level);
+        //    }
+        //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 220, 20 };
+        hpFull = new float[] { 300, 20 };
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()

@@ -75,6 +75,8 @@ public class Boss01_AI : MonoBehaviour
     int MaxMuGrid;  //最大槍口格子數
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
+    public GameObject[] Rain;
+    public float[] RainV;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -110,10 +112,20 @@ public class Boss01_AI : MonoBehaviour
         Fire = false;
         AttackStatus = false;
         coolDown = 0;
-        BulletNub = 3;  //子彈數
+        BulletNub = 4;  //子彈數
         MaxMuGrid = muzzle.Length;
         muzzleGrid = new int[MaxMuGrid];
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
+        for (int i=0; i< Rain.Length; i++)  //降低下雨量
+        {
+            ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
+            var emission = ps.emission;
+            float hSliderValue = emission.rateOverTime.constant;
+            RainV[i] = hSliderValue;
+            hSliderValue /= 4;
+            emission.rateOverTime = hSliderValue;
+        }
+
 
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
@@ -366,7 +378,7 @@ public class Boss01_AI : MonoBehaviour
         SF_muzzleGrid = muzzleGrid;
         PS_muzzle = muzzle;
         if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
-        if (coolDown >= 1.5f && BulletNub>0)  //攻擊冷卻時間
+        if (coolDown >= 1f && BulletNub>0)  //攻擊冷卻時間
         {
             Fire = true;
             attacking = false;
@@ -475,11 +487,16 @@ public class Boss01_AI : MonoBehaviour
             {
                 switch (ButtleType)
                 {
-                    case 0:
-                        ButtleType = Random.Range(1, 2);  //子彈類型
-                        break;
                     case 1:
-                        ButtleType = 2;
+                        int R = Random.Range(0, 1);  //子彈類型
+                        if (R == 0)
+                        {
+                            ButtleType = 0;
+                        }
+                        else
+                        {
+                            ButtleType = 2;
+                        }
                         break;
                 }
             }
@@ -547,5 +564,13 @@ public class Boss01_AI : MonoBehaviour
     void OnDisable()  //禁用時
     {
         attacking = false;
+        for (int i = 0; i < Rain.Length; i++)  //降低下雨量
+        {
+            ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
+            var emission = ps.emission;
+            float hSliderValue = emission.rateOverTime.constant;
+            hSliderValue = RainV[i] /2;
+            emission.rateOverTime = hSliderValue;
+        }
     }
 }

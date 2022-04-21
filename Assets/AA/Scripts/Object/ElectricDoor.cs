@@ -20,7 +20,8 @@ public class ElectricDoor : MonoBehaviour
     [SerializeField] bool PlayAudio;
     public AudioSource AudioS;
     public bool AutoDoor;
-    public bool 任務=false; 
+    public bool 任務=false;
+    public bool 無法打開;
 
     void Start()
     {
@@ -111,31 +112,35 @@ public class ElectricDoor : MonoBehaviour
 
     void HitByRaycast() //被射線打到時會進入此方法
     {
-        if (OpenDoor)  //門開的
+        if (!無法打開)
         {
-            TextG.GetComponent<Text>().text = "按「E」關門\n";
-        }
-        else
-        {
-            TextG.GetComponent<Text>().text = "按「E」開門\n";
-        }
-
-        if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
-        {
-            if (!Botton)
+            if (OpenDoor)  //門開的
             {
-                Botton = true;
-                time = 0;
-                PlayAudio = true;
-                if (OpenDoor) //門開的
+                TextG.GetComponent<Text>().text = "按「E」關門\n";
+            }
+            else
+            {
+                TextG.GetComponent<Text>().text = "按「E」開門\n";
+            }
+
+            if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
+            {
+                if (!Botton)
                 {
-                    OpenDoor =false;
-                }
-                else
-                {
-                    OpenDoor = true;
+                    Botton = true;
+                    time = 0;
+                    PlayAudio = true;
+                    if (OpenDoor) //門開的
+                    {
+                        OpenDoor = false;
+                    }
+                    else
+                    {
+                        OpenDoor = true;
+                    }
                 }
             }
         }
+      
     }
 }

@@ -40,7 +40,7 @@ public class SpawnRay : MonoBehaviour {
 	public bool StartBorn;  //開始生成
 	public int EnemyWave;  //敵人波數
 	public EnemyWaveNum[] EnemyNum;   //敵人每波數量
-	bool[] StartBool=new bool[2];
+	public bool[] StartBool=new bool[2];
 	public float BornTime;
 
 	void OnDrawGizmos(){
@@ -92,7 +92,8 @@ public class SpawnRay : MonoBehaviour {
 				BornTime = -1;
 				StartBorn = false;
 				StartBool[0] = false;
-                switch (Level_1.LevelA_)
+				StartBool[1] = false;
+				switch (Level_1.LevelA_)
                 {
 					//case 4:
 					//	Level_1.stageTime = 25;  //開始進階冷卻
@@ -100,10 +101,10 @@ public class SpawnRay : MonoBehaviour {
 					case 5:
 						Level_1.LevelA_ = 6;
 						break;
-					//case 7:
-					//	Level_1.LevelA_ = 8;
-					//	break;
-				}
+                    case 7:
+						StartBorn = true;
+						break;
+                }
 			}
 			else if (BornTime >= 0)
 			{

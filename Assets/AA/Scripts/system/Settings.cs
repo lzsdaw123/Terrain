@@ -30,7 +30,7 @@ public class Settings : MonoBehaviour
     public RawImage StartUI;  //遊戲開場UI
     public Texture2D[] Start_image;
     public bool START_bool;
-    int SceneNub;  //當前場景編號
+    [SerializeField] int SceneNub;  //當前場景編號
     int SceneCount;  //當前場景編號
     public bool EnterStart;  //起始場景切換開關
     public int 關卡選擇;
@@ -44,7 +44,7 @@ public class Settings : MonoBehaviour
     public GameObject ExitUI;  //勝利UI
     public static bool 離開遊戲;
 
-    void Awake()
+    void Awake()  //0=設定 1=開頭 2=第一關 3=第二關 4=載入畫面
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
         SceneCount = SceneManager.sceneCount;
@@ -85,8 +85,6 @@ public class Settings : MonoBehaviour
 
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
-        START_bool = false;
-
         PictureSetUI.SetActive(false);
         
         instance = this;
@@ -104,6 +102,17 @@ public class Settings : MonoBehaviour
     }
     void Update()
     {
+        SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+
+        if (SceneNub == 0 || SceneNub == 1 || SceneNub == 4)
+        {
+            START_bool = false;
+        }
+        else if (SceneNub == 2 || SceneNub == 3)
+        {
+            START_bool = true;
+        }
+
         if (START_bool)
         {
             if (Input.GetKeyDown(KeyCode.Escape))  //按下Esc

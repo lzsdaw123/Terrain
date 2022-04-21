@@ -32,6 +32,7 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
         coolDown = 2.5f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
         Beside = new bool[2];
+        dialogueText.text = "";
         //if (DialogueOptionsUI == null)
         //{
         //    DialogueOptionsUI = GameObject.Find("DialogueOptionsUI").gameObject;

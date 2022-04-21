@@ -371,6 +371,7 @@ MonoBehaviour:
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  cameraMove: {fileID: 0}
   h: 0
   v: 0
   AudioManager: {fileID: 0}
@@ -777,7 +778,7 @@ MonoBehaviour:
   OriFireRotateX: 0
   coolDown: 1
   coolDownTimer: 0
-  playerMove: {fileID: 0}
+  playerMove: {fileID: 622874816369969760}
   heroLife: {fileID: 622874816369969756}
   AniTime: 0
   STtime: 0
@@ -863,6 +864,9 @@ MonoBehaviour:
   InfectionValue: 0
   InfectionValueUp: 00000000000000000000000000000000
   DeadTime: 0
+  LiftTime: 0
+  InfectionUI: {fileID: 0}
+  Infection_Image: {fileID: 0}
 --- !u!1 &622874816555596344
 GameObject:
   m_ObjectHideFlags: 0
@@ -5178,6 +5182,7 @@ MonoBehaviour:
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  cameraMove: {fileID: 0}
   h: 0
   v: 0
   AudioManager: {fileID: 0}
@@ -6998,6 +7003,7 @@ MonoBehaviour:
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  cameraMove: {fileID: 0}
   h: 0
   v: 0
   AudioManager: {fileID: 0}
@@ -9540,6 +9546,7 @@ MonoBehaviour:
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  cameraMove: {fileID: 0}
   h: 0
   v: 0
   AudioManager: {fileID: 0}
@@ -10149,6 +10156,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Reloda 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5223479539750956806, guid: b81223d8847d0d8499131a3345a31b97,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5223479539750956806, guid: b81223d8847d0d8499131a3345a31b97,
         type: 3}

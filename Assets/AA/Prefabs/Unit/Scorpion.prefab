@@ -948,12 +948,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  SF_ammunition: 0
+  SF_Total_ammunition: 0
+  WeaponAmm: 1e0000000600000005000000
+  R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 1165788677594114577}
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
+  b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
+  heroLife: {fileID: 0}
+  cameraMove: {fileID: 0}
   h: 0
   v: 0
   AudioManager: {fileID: 0}
@@ -984,8 +991,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 60
+  MinDistance: 1
+  MaxDistance: 40
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -1951,6 +1958,8 @@ MonoBehaviour:
   RigTarget: {fileID: 2024635115013550187}
   locking: 0
   coolDown: 0
+  OriSpeed: 0
+  angry: 0
 --- !u!114 &1165788677594114576
 MonoBehaviour:
   m_ObjectHideFlags: 0

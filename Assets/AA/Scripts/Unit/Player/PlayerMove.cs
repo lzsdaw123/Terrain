@@ -190,7 +190,7 @@ public class PlayerMove : MonoBehaviour
                     }
                     Speed -= 0.6f;
                 }
-                float moveSpeed = Speed - heroLife.Level * 1.3f;  //水晶感染影響速度
+                float moveSpeed = Speed - heroLife.Level * 1.4f;  //水晶感染影響速度
                 if (moveSpeed <= 0) moveSpeed = 0;
                 Weapon.SetFloat("Speed", moveSpeed);
                 controller.Move(move * moveSpeed * Time.deltaTime);  //移動

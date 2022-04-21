@@ -24,7 +24,7 @@ public class MissionTarget_Life : MonoBehaviour
     }
     void Start()
     {
-        hp = fullHp= hp_R = 40; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 50; //遊戲一開始時先填滿血
         Dead = false;
         warnUI.SetActive(false);
         SeriousWarnUI.SetActive(false);
@@ -36,6 +36,8 @@ public class MissionTarget_Life : MonoBehaviour
     {
         hp -= Power; // 扣血
         warnUI.SetActive(true);
+        warnUI.gameObject.transform.GetChild(0).GetComponent<Animator>().SetInteger("Type", 0);
+        warnUI.gameObject.transform.GetChild(0).GetComponent<Animator>().speed = 3f;
         //AudioManager.Warn(0);
         if (hp <= 0)
         {
@@ -63,12 +65,17 @@ public class MissionTarget_Life : MonoBehaviour
             hp_R = hp;
             time = 0;
         }
+        if (Level_1.LevelA_ == 9)  //第一關勝利
+        {
+            SeriousWarnUI.SetActive(false);
+        }
         if (!Dead)
         {
             if (hp <= fullHp * 0.12f)  //血量低於安全值
             {
                 HP_O.SetActive(true);
                 SeriousWarnUI.SetActive(true);
+                SeriousWarnUI.gameObject.transform.GetChild(0).GetComponent<Animator>().SetInteger("Type", 1);
                 if (WarnT)
                 {
                     WarnT = false;
@@ -78,7 +85,7 @@ public class MissionTarget_Life : MonoBehaviour
             if (warnUI.activeSelf)
             {
                 UItime += Time.deltaTime;
-                if (UItime >= 1)
+                if (UItime >= 2)
                 {
                     warnUI.SetActive(false);
                     UItime = 0;
@@ -87,11 +94,11 @@ public class MissionTarget_Life : MonoBehaviour
         }
         if (!SeriousWarnUI.activeSelf)
         {
-            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 368, 0);
+            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 8, 0);
         }
         else
         {
-            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, 300, 0);
+            warnUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, -78, 0);
         }
         if (Exp.activeSelf)
         {

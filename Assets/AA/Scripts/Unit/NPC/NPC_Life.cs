@@ -28,7 +28,7 @@ public class NPC_Life : MonoBehaviour
     }
     void Start()
     {
-        hp = fullHp= hp_R = 20; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 18; //遊戲一開始時先填滿血
         Dead = Explode = false;
         UItime = 0;
         if (Exp != null) Exp.SetActive(false);
@@ -58,10 +58,10 @@ public class NPC_Life : MonoBehaviour
     {
         //hpImage.fillAmount = hp / fullHp; //顯示血球
         //HP_R.fillAmount = hp_R / fullHp; //顯示血球
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            Damage(20);
-        }
+        //if (Input.GetKeyDown(KeyCode.I))  //自爆測試
+        //{
+        //    Damage(20);
+        //}
         //if (hp != hp_R)
         //{
         //    time += 4 * Time.deltaTime;
@@ -84,12 +84,16 @@ public class NPC_Life : MonoBehaviour
         }
         if (Deadtime >= 1)  //關閉整個NPC
         {
-            GetComponent<Rigidbody>().isKinematic = true;
             GetComponent<CapsuleCollider>().enabled = false;
+            //GetComponent<Rigidbody>().isKinematic = false;
             if (Exp != null) Exp.SetActive(false);
+        }
+        if (Deadtime >= 6f)
+        {
             Deadtime = -1;
-            //gameObject.SetActive(false);
-        }else if (Deadtime >= 0)
+            gameObject.SetActive(false);
+        }
+        if (Deadtime >= 0)
         {
             Deadtime += Time.deltaTime;
         }
@@ -110,7 +114,7 @@ public class NPC_Life : MonoBehaviour
     {
         if (!Explode)
         {
-            GetComponent<Rigidbody>().isKinematic = false;
+            //GetComponent<Rigidbody>().isKinematic = false;
             GetComponent<NavMeshAgent>().enabled = false;
             Explode = true;
             if (Exp != null) Exp.SetActive(true);

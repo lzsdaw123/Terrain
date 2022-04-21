@@ -506,9 +506,9 @@ public class NPC_AI : MonoBehaviour
             muzzlePOS = Muzzle_vfx.transform.position;
             //pool.ReUse(muzzlePOS, transform.rotation);
             Vector3 targetPos = tagObject.transform.position;
-            Vector3 direct = targetPos - muzzlePOS;
-            float RangeX = Random.Range(-0.5f, 0.5f);
-            float RangeY = Random.Range(-0.5f, 0.5f);
+            Vector3 direct = targetPos - muzzlePOS;  //準度調整
+            float RangeX = Random.Range(-0.8f, 0.8f);
+            float RangeY = Random.Range(-0.8f, 0.8f);
             direct.x = direct.x + RangeX;
             direct.y = direct.y + RangeY;
             Ray ray = new Ray(muzzlePOS, direct);

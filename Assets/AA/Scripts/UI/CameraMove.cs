@@ -36,6 +36,7 @@ public class CameraMove : MonoBehaviour
     public bool StartBossT;
     public Level_1 level_1;
     GameObject DeBugT;
+    public int Type;
 
     private void Awake()
     {
@@ -95,8 +96,9 @@ public class CameraMove : MonoBehaviour
             //Vector3 targetDir = BossObject.transform.position - GunCamTransform.position;
             //Quaternion rotate = Quaternion.LookRotation(targetDir);
             //GunCamTransform.localRotation = Quaternion.Slerp(GunCamTransform.localRotation, rotate, 1f * Time.deltaTime);
-            UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[1].rotation, 0.5f * Time.deltaTime);
-
+            //UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[1].rotation, 0.5f * Time.deltaTime);
+            UpCamTransform.position = Vector3.SmoothDamp(UpCamTransform.position, targetTransform[1].position, ref currentVelocity, smoothTime, maxSpeed);
+            UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[1].rotation, 0.5f * Time.smoothDeltaTime);
         }
         if (Input.GetKey(KeyCode.O))
         {
@@ -125,7 +127,7 @@ public class CameraMove : MonoBehaviour
                     time += Time.deltaTime;
                 }
                 UpCamTransform.position = Vector3.SmoothDamp(UpCamTransform.position, targetTransform[0].position, ref currentVelocity, smoothTime, maxSpeed);
-                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[0].rotation, 8f * Time.deltaTime);
+                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[0].rotation, 6f * Time.smoothDeltaTime);
             }
             else  //拉遠 解除鏡頭
             {
@@ -154,7 +156,7 @@ public class CameraMove : MonoBehaviour
                     time += Time.deltaTime;
                 }
                 UpCamTransform.localPosition = Vector3.SmoothDamp(UpCamTransform.localPosition, tagTranPos, ref currentVelocity, smoothTime, maxSpeed);
-                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, tagTranQu, 5f * Time.deltaTime);
+                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, tagTranQu, 16f * Time.smoothDeltaTime);
             }
             if (FieldOfView <= 55)
             {

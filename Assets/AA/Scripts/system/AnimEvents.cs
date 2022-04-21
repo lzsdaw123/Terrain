@@ -7,7 +7,9 @@ public class AnimEvents : MonoBehaviour
     public int UnitType;  //0=玩家 / 1=NPC
     public static bool DontShooting;
     public static int ammunition, Total_ammunition;  //彈藥量
-    int[] WeaponAmm = new int[] { 30, 6, 5 }; //武器可裝填彈藥量
+    [SerializeField] int SF_ammunition, SF_Total_ammunition;  //彈藥量
+    [SerializeField] int[] WeaponAmm = new int[] { 30, 6, 5 }; //武器可裝填彈藥量
+    public int R_ammunition;
     [SerializeField] int WeaponType; //武器類型
 
     public MonsterAI02 MonsterAI02;
@@ -35,6 +37,8 @@ public class AnimEvents : MonoBehaviour
     }
     void Update()
     {
+        SF_ammunition = Shooting.Weapons[WeaponType].WeapAm;
+        SF_Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
         //Move = animator.SetBool("Move", bool );
         if (UnitType == 0)
         {
@@ -85,18 +89,26 @@ public class AnimEvents : MonoBehaviour
             ammunition = Shooting.Weapons[WeaponType].WeapAm;
             Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
 
-            int R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前數量    
-            if (Total_ammunition < WeaponAmm[WeaponType])  //總數量<武器可裝填量 {當前數量+總數量}
+            R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前數量    
+            if (Total_ammunition < R_ammunition)  //總數量<武器可裝填量 {當前數量+總數量}
             {
-                ammunition += Total_ammunition;
+                if (Total_ammunition <= 0)
+                {
+                    Total_ammunition = 0;  // 總數量=0
+                }
+                else
+                {
+                    ammunition +=  Total_ammunition;  //彈藥 + 總數量
+                    Total_ammunition = 0;  //總數量=0
+                }
             }
             else  //總數量>=武器可裝填量 {當前數量+裝填量}
             {
-                ammunition += R_ammunition;
+                ammunition += R_ammunition;  //彈藥 + 裝填量
+                Total_ammunition -= R_ammunition;  //總數量 - 裝填量
             }
             //當前數量 >= 武器可裝填量 {當前數量 = 武器可裝填量}
-            if (ammunition >= WeaponAmm[WeaponType]) ammunition = WeaponAmm[WeaponType];
-            Total_ammunition -= R_ammunition;  //總數量-裝填量
+            //if (ammunition >= WeaponAmm[WeaponType]) ammunition = WeaponAmm[WeaponType];
         }     
     }
     void ReLoadEnd()
@@ -104,7 +116,7 @@ public class AnimEvents : MonoBehaviour
         switch (UnitType)
         {
             case 0:
-                Shooting.ReLoad_E();
+                Shooting.ReLoad_E(ammunition, Total_ammunition);
                 break;
             case 1:
                 NPC_AI.ReLoad_E();
