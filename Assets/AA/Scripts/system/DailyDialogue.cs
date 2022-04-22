@@ -154,7 +154,7 @@ public class DailyDialogue : MonoBehaviour  //NPC日常對話控制器
                 Dialogue = new string[3];
                 Dialogue[0] = "到底還有多少Bug要修阿!!!";
                 Dialogue[1] = "兄弟，水晶真漂亮對吧。";
-                Dialogue[2] = "一個挖掘、兩個挖掘、三個挖掘...";
+                Dialogue[2] = "一隻蟲子、兩隻蟲子、三隻蟲子...";
                 break;
         }
     }
