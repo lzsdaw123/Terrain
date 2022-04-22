@@ -115,8 +115,9 @@ public class PlayerMove : MonoBehaviour
                 GetComponent<CharacterController>().height = 1.6f;
                 Gun.transform.localPosition = new Vector3(0,2.29f,0.089f);  //Gun的本地座標修正
             }
-            else
+            if (Input.GetButtonUp("Squat"))
             {
+                isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);
                 if (isSquat)  //判斷頭頂是否有障礙物
                 {
                     Squat = true;
@@ -142,10 +143,6 @@ public class PlayerMove : MonoBehaviour
                         GetComponent<CharacterController>().height = 3.1f;
                     }
                 }
-            }
-            if (Input.GetButtonUp("Squat"))
-            {
-                isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);
             }
            
 

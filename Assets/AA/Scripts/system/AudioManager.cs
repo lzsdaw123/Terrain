@@ -77,7 +77,7 @@ public class AudioManager : MonoBehaviour
         AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         OriSceneNub = SceneNub;
-        StartLevelAudio();
+        StartLevelAudio(SceneNub);
         for (int i = 0; i < SaveVolume.Length; i++)
         {
             SaveVolume[i] = 0;
@@ -89,8 +89,16 @@ public class AudioManager : MonoBehaviour
         if (SceneNub != OriSceneNub)
         {
             OriSceneNub = SceneNub;
-            StartLevelAudio();
+            StartLevelAudio(SceneNub);
         }
+        if (SceneNub == 2)
+        {
+            if (!AmbientSource.isPlaying || AmbientSource.clip==null)
+            {
+                StartLevelAudio(2);
+            }
+        }
+
         SF_SceneNub = SceneNub;
         if (Re)
         {
@@ -188,15 +196,15 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public static void StartLevelAudio()  //背景音效
+    public static void StartLevelAudio(int Type)  //背景音效
     {
-        if (SceneNub == 1)
+        if (Type == 1)
         {
             current.AmbientSource.clip = current.BgsCilp[0];
             current.AmbientSource.volume = 0.8f;
             current.AmbientSource.pitch = 1;
         }
-        else if(SceneNub == 2)
+        if(Type == 2)
         {
             current.AmbientSource.clip = current.BgsCilp[1];
             current.AmbientSource.pitch = InteriorSpace.Pitch;

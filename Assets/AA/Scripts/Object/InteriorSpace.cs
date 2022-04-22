@@ -88,7 +88,7 @@ public class InteriorSpace : MonoBehaviour
         }
         if (OirPitch != Pitch)
         {
-            AudioManager.StartLevelAudio();
+            AudioManager.StartLevelAudio(2);
             OirPitch = Pitch;
         }
     }
