@@ -8,14 +8,15 @@ public class NPC_Life : MonoBehaviour
 {
     public float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
     //public Image hpImage, HP_R; //血球的UI物件
-    [SerializeField] bool Dead;  //是否死亡
-    [SerializeField] bool Explode;  //是否死亡
+    [SerializeField] private bool Dead;  //是否死亡
+    [SerializeField] private bool Explode;  //是否死亡
     float time;
-    [SerializeField] float Deadtime;
+    [SerializeField] private float Deadtime;
     public float UItime;
     public NPC_AI NPC_AI;
     public Animator ani; //動畫控制器
     public GameObject Exp, BigExp;  //爆炸,大爆炸
+    public bool 無敵;
 
     void OnDisable()
     {
@@ -43,6 +44,7 @@ public class NPC_Life : MonoBehaviour
     {
         hp -= Power; // 扣血
         //AudioManager.Warn(0);
+        if (無敵) hp = fullHp;
         if (hp <= 0)
         {
             if (!Dead)

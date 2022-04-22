@@ -363,6 +363,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  SF_ammunition: 0
+  SF_Total_ammunition: 0
+  WeaponAmm: 1e0000000600000005000000
+  R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
@@ -726,10 +730,11 @@ MonoBehaviour:
     m_Bits: 512
   Ceiling:
     serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 16897
   m_CollisionFlags: 0
   m_Jump: 0
   isAir: 0
+  isVehicle: 0
   inside: 0
   insideTimer: -1
   move: {x: 0, y: 0, z: 0}
@@ -782,6 +787,7 @@ MonoBehaviour:
   heroLife: {fileID: 622874816369969756}
   AniTime: 0
   STtime: 0
+  SF_WeaponType: 0
   NextWeaponType: 0
   Weapon: {fileID: 7191619068650776897}
   SF_FirstWeapon: 
@@ -829,6 +835,7 @@ MonoBehaviour:
     Recoil: []
     Price: []
   "\u90E8\u4EF6ID": 0
+  hitDamage: 0
 --- !u!114 &622874816369969756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2183,10 +2190,10 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806825259251099272}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1829241095837438607
 GameObject:
@@ -5174,6 +5181,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  SF_ammunition: 0
+  SF_Total_ammunition: 0
+  WeaponAmm: 1e0000000600000005000000
+  R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
@@ -6995,6 +7006,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  SF_ammunition: 0
+  SF_Total_ammunition: 0
+  WeaponAmm: 1e0000000600000005000000
+  R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
@@ -9538,6 +9553,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  SF_ammunition: 0
+  SF_Total_ammunition: 0
+  WeaponAmm: 1e0000000600000005000000
+  R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}

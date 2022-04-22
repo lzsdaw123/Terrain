@@ -197,7 +197,7 @@ public class Boss_Life : MonoBehaviour
         //    }
         //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 300, 20 };
+        hpFull = new float[] { 310, 20 };
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()

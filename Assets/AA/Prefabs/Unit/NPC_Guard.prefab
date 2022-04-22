@@ -4126,7 +4126,7 @@ MonoBehaviour:
   BFire: 0
   Muzzle_vfx: {fileID: 6931131035877816112}
   MuSmoke: {fileID: 2880782111247177663}
-  MuFire: {fileID: 0}
+  MuFire: {fileID: 3933291021126374365}
   layerMask:
     serializedVersion: 2
     m_Bits: 3584
@@ -4196,6 +4196,7 @@ MonoBehaviour:
   ani: {fileID: 2880782110791113554}
   Exp: {fileID: 2880357145792847019}
   BigExp: {fileID: 0}
+  "\u7121\u6575": 0
 --- !u!114 &5305572787452545906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4209,6 +4210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NpcName: 0
+  Who: 0
   Name: []
   AutoDialogue: 0
   RaDialogue: 1
@@ -17864,6 +17866,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 5173170208810769720, guid: d5e3e0555c2fed5419e161933f186802,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5173170208810769721, guid: d5e3e0555c2fed5419e161933f186802,
         type: 3}
       propertyPath: m_RootOrder
@@ -18021,6 +18028,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5e3e0555c2fed5419e161933f186802, type: 3}
+--- !u!198 &3933291021126374365 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1256296801998911957, guid: d5e3e0555c2fed5419e161933f186802,
+    type: 3}
+  m_PrefabInstance: {fileID: 2880782111107852808}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6931131035877816112 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5173170208810769720, guid: d5e3e0555c2fed5419e161933f186802,

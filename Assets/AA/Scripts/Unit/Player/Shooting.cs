@@ -394,7 +394,7 @@ public class Shooting : MonoBehaviour
             //若按下滑鼠左鍵開火
             if (Input.GetButton("Fire1") && DontShooting == false && LayDown == false && !Reload && !WeapSwitch)
             {
-                if(Weapons[WeaponType].WeapAm != 0)
+                if (Weapons[WeaponType].WeapAm != 0)
                 {
                     if (!shooting)
                     {

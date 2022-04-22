@@ -30,6 +30,7 @@ public class PlayerMove : MonoBehaviour
     public bool m_Jump;  //是否跳躍
     [SerializeField] bool isAir;  //是否跳躍
     public static bool m_Jumping;  //跳躍中
+    public bool isVehicle;  //在載具中
     float rotationX;
     public static int Metal;
 
@@ -50,7 +51,7 @@ public class PlayerMove : MonoBehaviour
         insideTimer = -1;
         jumpHeigh = 2.5f;
         _rigidbody = GetComponent<Rigidbody>();
-
+        isVehicle = false;
         m_Jumping = false;
     }
     void Update()  //Input用
@@ -114,30 +115,40 @@ public class PlayerMove : MonoBehaviour
                 GetComponent<CharacterController>().height = 1.6f;
                 Gun.transform.localPosition = new Vector3(0,2.29f,0.089f);  //Gun的本地座標修正
             }
-            else if(isSquat)  //判斷頭頂是否有障礙物
+            else
             {
-                if (_Shooting.LayDown)
+                if (isSquat)  //判斷頭頂是否有障礙物
                 {
-                    Speed = 4f;
+                    Squat = true;
+                    //if (_Shooting.LayDown)
+                    //{
+                    //    Speed = 4f;
+                    //}
+                    //else
+                    //{
+                    //    Speed = 3f;
+                    //}
+                    //Squat = true;
+                    //GetComponent<CharacterController>().height = 1.6f;
+                    //Gun.transform.localPosition = new Vector3(0, 2.29f, 0.089f);
                 }
                 else
                 {
-                    Speed = 3f;
+                    Squat = false;
+                    Gun.transform.localPosition = new Vector3(0, 2.865f, 0.089f);
+                    GetComponent<CharacterController>().height += 0.4f;
+                    if (GetComponent<CharacterController>().height >= 3.1f)
+                    {
+                        GetComponent<CharacterController>().height = 3.1f;
+                    }
                 }
-                Squat = true;
-                GetComponent<CharacterController>().height = 1.6f;
-                Gun.transform.localPosition = new Vector3(0, 2.29f, 0.089f);
             }
-            else
+            if (Input.GetButtonUp("Squat"))
             {
-                Squat = false;
-                Gun.transform.localPosition = new Vector3(0, 2.865f, 0.089f);
-                GetComponent<CharacterController>().height += 0.2f;
-                if (GetComponent<CharacterController>().height >= 3.1f)
-                {
-                    GetComponent<CharacterController>().height = 3.1f;
-                }
+                isSquat = Physics.CheckSphere(SquatCheck.position, SquatDistance, Ceiling);
             }
+           
+
 
             if (_Shooting.LayDown)
             {
@@ -160,13 +171,18 @@ public class PlayerMove : MonoBehaviour
                 {
                     Speed = 6.5f;
                 }
-            }          
-
+            }
+            if (Speed <= 3) Speed = 3;
             if ((Player_v != 0) || (Player_h != 0))  //人物移動
             {
                 Weapon.SetBool("Move", true);             
                 if (Input.GetButton("Run")&& Shooting.Reload!=true)    //人物跑動
-                {                   
+                {
+                    if (Input.GetButton("Fire1"))
+                    {
+                        Weapon.SetBool("Move", false);          
+                        Speed -= 0.6f;
+                    }
                     if (Input.GetButton("Fire2"))
                     {
                         Weapon.SetBool("AimMove", true);
@@ -256,7 +272,10 @@ public class PlayerMove : MonoBehaviour
         }
         m_CollisionFlags = controller.Move(move * Time.fixedDeltaTime);
 
-        velocity.y += gravity*1.1f * Time.deltaTime;  //重力物理
+        if (!isVehicle)
+        {
+            velocity.y += gravity * 1.1f * Time.deltaTime;  //重力物理
+        }
         float Vy = velocity.y;
         int Dhp;  //墜落傷害
         if (isGrounded && velocity.y < 0)

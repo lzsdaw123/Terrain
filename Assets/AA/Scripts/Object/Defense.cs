@@ -9,17 +9,22 @@ public class Defense : MonoBehaviour
     public static int ST_A_defense;
     public int A_defense;
     public GameObject[] defenseOb;
+    public BoxCollider[] boxCollider;
     public static GameObject[] st_defenseOb;
     public static int s_Level, s_Stage;
 
     void Awake()
     {
         defenseOb = new GameObject[3];
+        boxCollider = new BoxCollider[3];
         defenseOb[0] = GameObject.Find("defense_1").gameObject;
         defenseOb[1] = GameObject.Find("defense_2").gameObject;
         //defenseOb[2] = GameObject.Find("defense_3").gameObject;
         defenseOb[2] = GameObject.Find("defense_3 (1)").gameObject;
         st_defenseOb = defenseOb;
+        boxCollider[0] = GameObject.Find("defense_1").gameObject.GetComponent<BoxCollider>();
+        boxCollider[1] = GameObject.Find("defense_2").gameObject.GetComponent<BoxCollider>();
+        boxCollider[2] = GameObject.Find("defense_3 (1)").gameObject.GetComponent<BoxCollider>();
     }
     void Start()
     {
@@ -27,6 +32,7 @@ public class Defense : MonoBehaviour
         defenseOb[1].SetActive(false);
         defenseOb[2].SetActive(false);
         A_defense = 0;
+        boxCollider[0].enabled = true;
     }
     void Update()
     {
@@ -42,7 +48,9 @@ public class Defense : MonoBehaviour
             {
                 case 0:
                     A_defense = 1;
-                    defenseOb[0].SetActive(false);
+                    //defenseOb[0].SetActive(false);
+                    boxCollider[0].enabled = false;
+                    defenseOb[0].transform.position = defenseOb[1].transform.position;
                     defenseOb[1].SetActive(true);
                     s_Level = 3;
                     s_Stage = 0;
@@ -51,6 +59,7 @@ public class Defense : MonoBehaviour
                     break;
                 case 1:
                     A_defense = 2;
+                    defenseOb[0].transform.position = defenseOb[2].transform.position;
                     defenseOb[1].SetActive(false);
                     defenseOb[2].SetActive(true);
                     s_Level = 3;

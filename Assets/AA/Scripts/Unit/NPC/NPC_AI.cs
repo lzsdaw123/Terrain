@@ -116,6 +116,7 @@ public class NPC_AI : MonoBehaviour
     }
     void Start()
     {
+        Muzzle_vfx.SetActive(false);
         agent = GetComponent<NavMeshAgent>();
         coolDown = 1f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
@@ -459,7 +460,7 @@ public class NPC_AI : MonoBehaviour
         SF_WeapAm = WeapAm;
         if (coolDownTimer > coolDown) //若冷卻時間已到 可以發射子彈
         {
-            Muzzle_vfx.SetActive(false); //關閉火光
+            //Muzzle_vfx.SetActive(false); //關閉火光
             ani.SetBool("Fire", false);
             //若按下滑鼠左鍵開火
             if (Fire)
@@ -472,6 +473,8 @@ public class NPC_AI : MonoBehaviour
                     {
                         ani.SetBool("Fire", true);
                         FireButtle = 0;
+                        Muzzle_vfx.SetActive(true);
+                        MuFire.Play();
                     }
                     BFire = true;  //生成子彈
                     //Weapon.SetBool("Aim", false);                    
@@ -608,7 +611,6 @@ public class NPC_AI : MonoBehaviour
             }
             //Muzzle_vfx.transform.position = muzzlePOS;
             //Muzzle_vfx.transform.rotation = transform.rotation;
-            Muzzle_vfx.SetActive(true);
             AnimEvents.NPC_Audio(2);  //開火音效
             MuSmoke.Play();
             BFire = false;

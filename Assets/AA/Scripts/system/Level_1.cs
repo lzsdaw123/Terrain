@@ -57,7 +57,7 @@ public class Level_1 : MonoBehaviour
     [SerializeField] bool SF_StopAttack; //暫停怪物進攻
     public GameObject[] Objects;  //開放使用物件
     public float DelayTime;  //延遲倒數
-    public GameObject[] Rain;
+    public GameObject[] Rain;  //下雨
     public float[] RainV;
 
     void Awake()
@@ -334,7 +334,7 @@ public class Level_1 : MonoBehaviour
                     if (LevelA_>=5)
                     {
                         MissionUI[1].SetActive(true);
-                        MissionUI[0].GetComponent<Animator>().SetBool("Stop", true);
+                        MissionUI[0].GetComponent<Animator>().SetBool("Stop", true);  //倒數UI暫停
                         MissionUI[0].GetComponent<Animator>().speed = 0;
                         PlayAu = true;
                         PlayAudio();
@@ -342,7 +342,8 @@ public class Level_1 : MonoBehaviour
                 }
                 else if(stageTime >0)  //開始倒數
                 {
-                    MissionUI[0].GetComponent<Animator>().SetBool("Stop", false);
+                    MissionUI[0].GetComponent<Animator>().SetBool("Stop", false);  //倒數UI開始
+                    MissionUI[0].GetComponent<Animator>().SetTrigger("Start");  //倒數UI啟動
                     MissionUI[0].GetComponent<Animator>().speed = 1;
                     stageTime -= Time.deltaTime;
                 }

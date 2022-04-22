@@ -78,7 +78,7 @@ public class LightingSettings : MonoBehaviour
             {
                 if (Low)
                 {
-                    HDAdditionalLightData.SetShadowResolution(256);
+                    HDAdditionalLightData.SetShadowResolution(128);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ public class LightingSettings : MonoBehaviour
         {
             if (distance <= minDistance[Type])   //¦b½d³ò¤º
             {
-                HDAdditionalLightData.SetShadowResolution(256);
+                HDAdditionalLightData.SetShadowResolution(128);
                 //Light.enabled = true;
                 On(LightB, ShadowsB);
             }

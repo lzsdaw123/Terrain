@@ -110,7 +110,7 @@ public class MissionTarget_Life : MonoBehaviour
             DialogueEditor.StartConversation(3, 2, 0, false, 0, true);
             BigExp.SetActive(false);
         }
-        if (DeadTime >= 6)
+        if (DeadTime >= 16)
         {
             Scoreboard.Settlement();
             FailUI.SetActive(true);
