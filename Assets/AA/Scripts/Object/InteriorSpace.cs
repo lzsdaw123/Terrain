@@ -23,19 +23,17 @@ public class InteriorSpace : MonoBehaviour
     public AudioSource AmbientSource;
     public AudioSource AS;
 
-    private void Awake()
+    void Awake()
     {
         Player = GameObject.Find("POPP").gameObject;
+
     }
     void Start()
     {
-        AmbientSource = GameObject.Find("下雨聲").GetComponent<AudioSource>();
-        AmbientSource.enabled = true;
-        AS = GameObject.Find("風聲").GetComponent<AudioSource>();
-        AS.enabled = false;
         Interior = false;
         Pitch = 1;
         OirPitch = 0;
+
     }
 
     void Update()
@@ -45,6 +43,8 @@ public class InteriorSpace : MonoBehaviour
         深處 = Deep;
         SF_Pitch = Pitch;
         CloseDoor = _ElectricDoor.close;
+        AmbientSource = Elevator.PS_雨聲;
+        AS = Elevator.PS_風聲;
         AmbientSource.pitch = Pitch;
 
         if (Interior)  //在室內

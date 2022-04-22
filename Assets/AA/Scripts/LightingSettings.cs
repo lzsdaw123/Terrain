@@ -7,7 +7,6 @@ public class LightingSettings : MonoBehaviour
 {
     public int Type;
     float curtTime = 0f;
-    float lastTime = 0f;
     public Transform camTransform;
     public Camera Gun_Camera;
     public float distance;
@@ -24,13 +23,14 @@ public class LightingSettings : MonoBehaviour
 
     void Awake()
     {
+        Light = GetComponent<Light>(); ;
+        HDAdditionalLightData = GetComponent<HDAdditionalLightData>();
         camTransform = GameObject.Find("Gun_Camera").GetComponent<Transform>();
         Gun_Camera = GameObject.Find("Gun_Camera").GetComponent<Camera>();
-        Light = GetComponent<Light>(); ;
-        HDAdditionalLightData = GetComponent<HDAdditionalLightData>(); ;
     }
     void Start()
     {
+
         minDistance = new float[] { 7, 105, 40 };
         MaxDistance = new float[] { 7.7f, 110f, 60 };
     }
