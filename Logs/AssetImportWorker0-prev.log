@@ -1,23 +1,23 @@
 Using pre-set license
 Built from '2021.2/staging' branch; Version is '2021.2.8f1 (d0e5f0a7b06a) revision 13690352'; Using compiler version '192829333'; Build Type 'Release'
-OS: 'Windows 10  (10.0.19044) 64bit Professional' Language: 'zh' Physical Memory: 16300 MB
+OS: 'Windows 10  (10.0.19044) 64bit Core' Language: 'zh' Physical Memory: 8103 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
 COMMAND LINE ARGUMENTS:
-D:\Unity\2021.2.8f1\Editor\Unity.exe
+C:\Program Files\Unity\Hub\Editor\2021.2.8f1\Editor\Unity.exe
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-C:/Users/GOD/Desktop/Terrain
+J:/QWQ
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-49188
-Successfully changed project path to: C:/Users/GOD/Desktop/Terrain
-C:/Users/GOD/Desktop/Terrain
+65330
+Successfully changed project path to: J:/QWQ
+J:/QWQ
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -47,177 +47,58 @@ C:/Users/GOD/Desktop/Terrain
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 112.65 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 244.43 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.2.8f1 (d0e5f0a7b06a)
-[Subsystems] Discovering subsystems at path D:/Unity/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path C:/Users/GOD/Desktop/Terrain/Assets
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path J:/QWQ/Assets
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: NVIDIA GeForce RTX 2060 SUPER (ID=0x1f06)
-    Vendor:   NVIDIA
-    VRAM:     8031 MB
-    Driver:   30.0.15.1215
+    Renderer: AMD Radeon (TM) R9 380 Series (ID=0x6939)
+    Vendor:   ATI
+    VRAM:     2022 MB
+    Driver:   27.20.20903.8001
 Initialize mono
-Mono path[0] = 'D:/Unity/2021.2.8f1/Editor/Data/Managed'
-Mono path[1] = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
-Mono config path = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56484
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56632
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
-Register platform support module: D:/Unity/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002925 seconds.
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.017992 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 108.89 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 134.86 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.739 seconds
+- Completed reload, in  1.346 seconds
 Domain Reload Profiling:
-	ReloadAssembly (740ms)
-		BeginReloadAssembly (95ms)
+	ReloadAssembly (1348ms)
+		BeginReloadAssembly (296ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (561ms)
-			LoadAssemblies (95ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (131ms)
+			CreateAndSetChildDomain (3ms)
+		EndReloadAssembly (890ms)
+			LoadAssemblies (290ms)
+			RebuildTransferFunctionScriptingTraits (2ms)
+			SetupTypeCache (218ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (37ms)
-			SetupLoadedEditorAssemblies (323ms)
+			RebuildScriptCaches (35ms)
+			SetupLoadedEditorAssemblies (530ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (15ms)
+				InitializePlatformSupportModulesInManaged (31ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (109ms)
-				BeforeProcessingInitializeOnLoad (1ms)
-				ProcessInitializeOnLoadAttributes (144ms)
-				ProcessInitializeOnLoadMethodAttributes (53ms)
+				RefreshPlugins (135ms)
+				BeforeProcessingInitializeOnLoad (3ms)
+				ProcessInitializeOnLoadAttributes (250ms)
+				ProcessInitializeOnLoadMethodAttributes (111ms)
 				AfterProcessingInitializeOnLoad (0ms)
-				EditorAssembliesLoaded (0ms)
+				EditorAssembliesLoaded (1ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.009188 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 117.89 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  1.941 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1942ms)
-		BeginReloadAssembly (141ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (6ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (20ms)
-		EndReloadAssembly (1696ms)
-			LoadAssemblies (109ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (312ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (90ms)
-			SetupLoadedEditorAssemblies (1155ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (11ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (118ms)
-				BeforeProcessingInitializeOnLoad (103ms)
-				ProcessInitializeOnLoadAttributes (876ms)
-				ProcessInitializeOnLoadMethodAttributes (43ms)
-				AfterProcessingInitializeOnLoad (3ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (9ms)
-Platform modules already initialized, skipping
-========================================================================
-Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 1.16 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4906 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 80 unused Assets / (6.1 MB). Loaded Objects now: 5379.
-Memory consumption went from 353.5 MB to 347.4 MB.
-Total: 4.784600 ms (FindLiveObjects: 0.491100 ms CreateObjectMapping: 0.490300 ms MarkObjects: 2.774200 ms  DeleteObjects: 1.027500 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Import Request.
-  Time since last request: 473847.688576 seconds.
-  path: Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/Lab_Computer_Set_TT_checker_2048x2048_UV_GRID_BaseMap_2.png
-  artifactKey: Guid(951bbca65b9b48048835852c53f9c8ae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/Lab_Computer_Set_TT_checker_2048x2048_UV_GRID_BaseMap_2.png using Guid(951bbca65b9b48048835852c53f9c8ae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '026d61f0735cfbe5ff392bb4e28a0e12') in 0.131517 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set
-  artifactKey: Guid(fdff40d2c7fb8564ebee0a6fd2045b09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set using Guid(fdff40d2c7fb8564ebee0a6fd2045b09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0599558b06b7cbbef0f5b901b2789484') in 0.011276 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 2.840468 seconds.
-  path: Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/Lab_Computer_Set_TT_checker_1024x1024_UV_GRID_BaseMap 1.png
-  artifactKey: Guid(82748f2b0e695134bb29d15913517548) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/Lab_Computer_Set_TT_checker_1024x1024_UV_GRID_BaseMap 1.png using Guid(82748f2b0e695134bb29d15913517548) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd84b0c9b8f2157b1faeb2a57d07ba2b2') in 0.018881 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 10.184690 seconds.
-  path: Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/V1.mat
-  artifactKey: Guid(125d5647f7cccf245907a35a3cb37da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/V1.mat using Guid(125d5647f7cccf245907a35a3cb37da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4cf3db340642570efa06194978c9226') in 1.001511 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 5.913113 seconds.
-  path: Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/V2.mat
-  artifactKey: Guid(38aa0f7561c69b8468b914801e767f45) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/V2.mat using Guid(38aa0f7561c69b8468b914801e767f45) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aaced25613785f09a57e04cab97118bd') in 0.023363 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 7.385462 seconds.
-  path: Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/V3.mat
-  artifactKey: Guid(3793729bea19b194da95e83739e36c1d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/Lab/Lab_Computer_Set/V3.mat using Guid(3793729bea19b194da95e83739e36c1d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '54e491ea3ad0a78ecc58723f25f64716') in 0.018632 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 131.621248 seconds.
-  path: Assets/FBX AND TEXTURE/WeaponRoom/BACK/New Material.mat
-  artifactKey: Guid(491414c6b6851524884d6befa0ffdf92) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WeaponRoom/BACK/New Material.mat using Guid(491414c6b6851524884d6befa0ffdf92) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '41efb41fd5d29f2cdc2bb92c487ae563') in 0.043663 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 23.018830 seconds.
-  path: Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS
-  artifactKey: Guid(553fd6c58a692a747a00641409b2bf0c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS using Guid(553fd6c58a692a747a00641409b2bf0c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '07d9b7e1cb39545db2dd1e3e02b19570') in 0.005193 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 3.814864 seconds.
-  path: Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS/PowerStation_Power_Back_BaseMap.png
-  artifactKey: Guid(ead32e0ec103b5b4480ecf1bf1a8b189) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS/PowerStation_Power_Back_BaseMap.png using Guid(ead32e0ec103b5b4480ecf1bf1a8b189) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fa09df7c5a0dadf44155f04003232220') in 0.018348 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000041 seconds.
-  path: Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS/PowerStation_Power_Back_MaskMap.png
-  artifactKey: Guid(893b7abcf44d58b47b3db7187add1bd0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS/PowerStation_Power_Back_MaskMap.png using Guid(893b7abcf44d58b47b3db7187add1bd0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d07ad58f991f675f7d4dbcd3287e5d2') in 0.015452 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 8.153771 seconds.
-  path: Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS/New Material.mat
-  artifactKey: Guid(43330c038ecaf134fa69d9fabfd299c7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WeaponRoom/BACK/GLASS/New Material.mat using Guid(43330c038ecaf134fa69d9fabfd299c7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8aaec19168b85f31a24f8ec56154ab3f') in 0.019278 seconds 
+Registered in 0.006628 seconds.
