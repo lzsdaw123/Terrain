@@ -20,6 +20,7 @@ public class NPC_AI : MonoBehaviour
     private bool moving = false;  //是否要移動角色
     private float speed = 0; //animator裡面用的speed數值
     public bool Move;  //是否移動
+    public NPC_Life _NPC_Life;
 
     // run 的%不用指定,因為除了 idle 和 walk,剩下就是 run
     public float idlePercent = 10;
@@ -350,6 +351,7 @@ public class NPC_AI : MonoBehaviour
 
     void Update()
     {
+        if (_NPC_Life.P_Dead) return;
         if (MonTime >= 5f)
         {
             有怪 = false;
@@ -471,10 +473,13 @@ public class NPC_AI : MonoBehaviour
                     WeapAm--;
                     if (FireButtle == 1)
                     {
-                        ani.SetBool("Fire", true);
-                        FireButtle = 0;
-                        Muzzle_vfx.SetActive(true);
-                        MuFire.Play();
+                        if (!_NPC_Life.P_Dead)
+                        {
+                            ani.SetBool("Fire", true);
+                            FireButtle = 0;
+                            Muzzle_vfx.SetActive(true);
+                            MuFire.Play();
+                        }
                     }
                     BFire = true;  //生成子彈
                     //Weapon.SetBool("Aim", false);                    

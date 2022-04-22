@@ -352,7 +352,8 @@ public class MonsterAI02 : MonoBehaviour
 
     void Update()
     {
-        SF_bulletAttack = bulletAttack;
+        if (目前攻擊目標 == null) attacking = false;
+         SF_bulletAttack = bulletAttack;
         if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         A_defense = Defense.ST_A_defense;
         if (oriTarget[A_defense] != null) 目前進攻目標 = oriTarget[A_defense].gameObject;

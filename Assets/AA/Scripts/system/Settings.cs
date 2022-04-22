@@ -30,7 +30,8 @@ public class Settings : MonoBehaviour
     public RawImage StartUI;  //遊戲開場UI
     public Texture2D[] Start_image;
     public bool START_bool;
-    [SerializeField] int SceneNub;  //當前場景編號
+    int SceneNub;  //當前場景編號
+    [SerializeField] int SF_SceneNub;  //當前場景編號
     int SceneCount;  //當前場景編號
     public bool EnterStart;  //起始場景切換開關
     public int 關卡選擇;
@@ -83,9 +84,10 @@ public class Settings : MonoBehaviour
         //        print(SceneNub + "+SceneCount");
         //    }
         //}
-
         SettingsUI.SetActive(false);  //設定介面
         deSetUI.SetActive(false);  //詳細設定介面
+        //START_bool = false;
+
         PictureSetUI.SetActive(false);
         
         instance = this;
@@ -104,6 +106,7 @@ public class Settings : MonoBehaviour
     void Update()
     {
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        SF_SceneNub = SceneNub;
 
         if (SceneNub == 0 || SceneNub == 1 || SceneNub == 4)
         {

@@ -9,6 +9,7 @@ public class NPC_Life : MonoBehaviour
     public float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
     //public Image hpImage, HP_R; //血球的UI物件
     [SerializeField] private bool Dead;  //是否死亡
+    public bool P_Dead;  //是否死亡
     [SerializeField] private bool Explode;  //是否死亡
     float time;
     [SerializeField] private float Deadtime;
@@ -38,6 +39,7 @@ public class NPC_Life : MonoBehaviour
         GetComponent<NavMeshAgent>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = true;
         gameObject.layer = LayerMask.NameToLayer("Actor");
+        gameObject.tag = "NPC";
     }
 
     public void Damage(float Power) // 接受傷害
@@ -50,7 +52,10 @@ public class NPC_Life : MonoBehaviour
             if (!Dead)
             {
                 ani.SetTrigger("Dead");
+                ani.SetBool("Fire", false);
+                ani.SetBool("Aim", false);
                 gameObject.layer = LayerMask.NameToLayer("Default");
+                gameObject.tag = "Untagged";
                 Dead = true;
             }
             hp = 0; // 不要扣到負值
@@ -58,6 +63,7 @@ public class NPC_Life : MonoBehaviour
     }
     void Update()
     {
+        P_Dead = Dead;
         //hpImage.fillAmount = hp / fullHp; //顯示血球
         //HP_R.fillAmount = hp_R / fullHp; //顯示血球
         //if (Input.GetKeyDown(KeyCode.I))  //自爆測試
@@ -81,7 +87,10 @@ public class NPC_Life : MonoBehaviour
         if (hp <= 0 && !Dead)
         {
             ani.SetTrigger("Dead");
+            ani.SetBool("Fire", false);
+            ani.SetBool("Aim", false);
             gameObject.layer = LayerMask.NameToLayer("Default");
+            gameObject.tag = "Untagged";
             Dead = true;
         }
         if (Deadtime >= 1)  //關閉整個NPC
@@ -98,6 +107,8 @@ public class NPC_Life : MonoBehaviour
         if (Deadtime >= 0)
         {
             Deadtime += Time.deltaTime;
+            ani.SetBool("Fire", false);
+            ani.SetBool("Aim", false);
         }
     }
     public void DeadExp(int N)

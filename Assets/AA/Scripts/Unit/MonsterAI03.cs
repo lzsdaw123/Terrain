@@ -343,15 +343,17 @@ public class MonsterAI03 : MonoBehaviour
 
     void Update()
     {
+        if (目前攻擊目標 == null) attacking = false;
+
         if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         if (locking)  //如果鎖定中
         {
             coolDown += Time.deltaTime;
-            if (coolDown >= 1f)
+            if (coolDown >= 1f || TrackDistance >= attackDistance * 2)
             {
                 coolDown = 0;
                 TrackDistance = Vector3.Distance(transform.position, tagObject.transform.position);
-                if (TrackDistance >= attackDistance * 2)  //目標太遠 解鎖定
+                if (TrackDistance >= attackDistance / 2f)  //目標太遠 解鎖定
                 {
                     locking = false;
                 }
@@ -412,6 +414,8 @@ public class MonsterAI03 : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
+        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
+
     }
     void FixedUpdate()
     {
