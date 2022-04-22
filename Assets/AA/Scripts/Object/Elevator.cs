@@ -44,7 +44,7 @@ public class Elevator : MonoBehaviour
         running = false;
         end = false;
         遊戲開始 = true;
-        雨聲 = GameObject.Find("下雨聲").GetComponent<AudioSource>();
+        雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
         雨聲.enabled = true;
         風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
         風聲.enabled = false;

@@ -57,6 +57,8 @@ public class Boss_Life : MonoBehaviour
         //ani = GetComponent<Animator>();
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
+        gameObject.layer = LayerMask.NameToLayer("Monster");
+        gameObject.tag = "Enemy";
     }
 
     void Update()
@@ -160,6 +162,8 @@ public class Boss_Life : MonoBehaviour
                 Dead = true;
                 //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
                 CrystalAni.SetTrigger("Dead");
+                gameObject.layer = LayerMask.NameToLayer("Default");
+                gameObject.tag = "Untagged";
                 Level_1.LevelA_ = 8;  //關卡8
             }           
             hp = 0; // 不要扣到負值
