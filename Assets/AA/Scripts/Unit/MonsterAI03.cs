@@ -343,7 +343,7 @@ public class MonsterAI03 : MonoBehaviour
 
     void Update()
     {
-        if (目前攻擊目標 == null) attacking = false;
+        //if (目前攻擊目標 == null) attacking = false;
 
         if (attacking) return; // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
         if (locking)  //如果鎖定中
@@ -414,7 +414,7 @@ public class MonsterAI03 : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
+        ////if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
 
     }
     void FixedUpdate()
