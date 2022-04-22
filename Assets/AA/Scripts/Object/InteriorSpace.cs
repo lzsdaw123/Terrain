@@ -20,6 +20,8 @@ public class InteriorSpace : MonoBehaviour
     public static float Pitch;
     [SerializeField] float SF_Pitch;
     [SerializeField] float OirPitch;
+    public AudioSource AmbientSource;
+    public AudioSource AS;
 
     private void Awake()
     {
@@ -27,6 +29,10 @@ public class InteriorSpace : MonoBehaviour
     }
     void Start()
     {
+        AmbientSource = GameObject.Find("下雨聲").GetComponent<AudioSource>();
+        AmbientSource.enabled = true;
+        AS = GameObject.Find("風聲").GetComponent<AudioSource>();
+        AS.enabled = false;
         Interior = false;
         Pitch = 1;
         OirPitch = 0;
@@ -39,6 +45,7 @@ public class InteriorSpace : MonoBehaviour
         深處 = Deep;
         SF_Pitch = Pitch;
         CloseDoor = _ElectricDoor.close;
+        AmbientSource.pitch = Pitch;
 
         if (Interior)  //在室內
         {

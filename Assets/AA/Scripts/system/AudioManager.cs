@@ -33,7 +33,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip[] ActionCilp;  //動作音效
     public AudioClip[] WarnCilp;  //提示音效
 
-
+    public AudioSource[] AS;
     AudioSource AmbientSource;  //環境音源
     AudioSource PlayerSource;  //玩家音源
     AudioSource GunSource;  //槍枝音源
@@ -103,6 +103,8 @@ public class AudioManager : MonoBehaviour
         if (Re)
         {
             Re = false;
+            AS[0].volume = Slider[1].value;
+            AS[1].volume = Slider[1].value;
             AmbientSource.volume = Slider[1].value;
             PlayerSource.volume = SaveVolume[1] * Slider[2].value;
             GunSource.volume = SaveVolume[2] * Slider[2].value;
@@ -127,6 +129,8 @@ public class AudioManager : MonoBehaviour
         if (SettingsCanvas.transform.GetChild(0).gameObject.activeSelf)  //遊戲是否暫停
         {
             SourcePause = true;
+            AS[0].Pause();
+            AS[1].Pause();
             AmbientSource.Pause();
             PlayerSource.Pause();
             ActionSource.Pause();
@@ -138,6 +142,8 @@ public class AudioManager : MonoBehaviour
         else
         {
             SourcePause = false;
+            AS[0].UnPause();
+            AS[1].UnPause();
             AmbientSource.UnPause();
             PlayerSource.UnPause();
             ActionSource.UnPause();
@@ -183,8 +189,10 @@ public class AudioManager : MonoBehaviour
         }
         cb.colorMultiplier = 1;
         
-        MuteButton[N].colors = cb;      
+        MuteButton[N].colors = cb;
 
+        AS[0].mute = muteState[1];
+        AS[1].mute = muteState[1];
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
         ActionSource.mute = muteState[2];

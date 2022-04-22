@@ -138,7 +138,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     Squat = false;
                     Gun.transform.localPosition = new Vector3(0, 2.865f, 0.089f);
-                    GetComponent<CharacterController>().height += 0.4f;
+                    GetComponent<CharacterController>().height += 2f;
                     if (GetComponent<CharacterController>().height >= 3.1f)
                     {
                         GetComponent<CharacterController>().height = 3.1f;

@@ -63,7 +63,7 @@ public class Settings : MonoBehaviour
                     switch (關卡選擇)
                     {
                         case 1:
-                            SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));
+                            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));
                             SceneManager.LoadSceneAsync(2);
                             break;
                         case 2:

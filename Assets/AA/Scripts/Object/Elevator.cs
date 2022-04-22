@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Elevator : MonoBehaviour
 {
@@ -45,8 +46,10 @@ public class Elevator : MonoBehaviour
     {
         if (遊戲開始)
         {
-            遊戲開始 = false;
+            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));
             AudioManager.StartLevelAudio(2);
+            //print("遊戲開始 " + SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene")));
+            遊戲開始 = false;
         }
         SourcePause = AudioManager.SourcePause;
         if (SourcePause)  //暫停
