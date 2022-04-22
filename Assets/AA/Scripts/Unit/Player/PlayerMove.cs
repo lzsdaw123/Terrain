@@ -53,6 +53,7 @@ public class PlayerMove : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         isVehicle = false;
         m_Jumping = false;
+        GetComponent<CharacterController>().height = 3.1f;
     }
     void Update()  //Input用
     {
