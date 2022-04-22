@@ -26,6 +26,8 @@ public class Elevator : MonoBehaviour
     public GameObject Rp;
     [SerializeField] bool end;
 
+    public bool 遊戲開始;
+
     void Awake()
     {
     }
@@ -36,10 +38,16 @@ public class Elevator : MonoBehaviour
         boxCollider.enabled = true;
         running = false;
         end = false;
+        遊戲開始 = true;
     }
 
     void Update()
     {
+        if (遊戲開始)
+        {
+            遊戲開始 = false;
+            AudioManager.StartLevelAudio(2);
+        }
         SourcePause = AudioManager.SourcePause;
         if (SourcePause)  //暫停
         {

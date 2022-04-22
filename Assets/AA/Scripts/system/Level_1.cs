@@ -246,7 +246,7 @@ public class Level_1 : MonoBehaviour
                         if (Taget_distance <= 2f)  //觸發距離
                         {
                             LevelA_ = 12;
-                            ExitGame();
+                            //ExitGame();
                         }
                     }
                     else MissionTime += Time.deltaTime;

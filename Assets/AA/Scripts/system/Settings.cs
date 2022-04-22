@@ -63,6 +63,7 @@ public class Settings : MonoBehaviour
                     switch (關卡選擇)
                     {
                         case 1:
+                            SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));
                             SceneManager.LoadSceneAsync(2);
                             break;
                         case 2:
@@ -258,6 +259,7 @@ public class Settings : MonoBehaviour
         START_bool = true;
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
         LoadNewScene("SampleScene");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));
         //SceneManager.LoadSceneAsync(2);
         SceneManager.UnloadSceneAsync(1);
         //Settings.LoadScene("SampleScene");
