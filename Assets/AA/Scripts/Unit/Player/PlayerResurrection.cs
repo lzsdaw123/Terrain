@@ -17,6 +17,10 @@ public class PlayerResurrection : MonoBehaviour
     public bool StartGame;
     public static bool Mission_L1;
     [SerializeField] private bool SF_Mission_L1;
+    public bool RespawnPoint;
+    public int RePointNub;
+    public Transform[] RePoint;
+
     public Settings Settings;
     bool Dead;
     bool RePlay;
@@ -46,6 +50,11 @@ public class PlayerResurrection : MonoBehaviour
         Black.SetActive(false);
         Dead = true;
         RePlay = false;
+        if (RespawnPoint)
+        {
+            Player.SetActive(false);
+            Player.transform.position = RePoint[RePointNub].position;
+        }
     }
 
     void Start()
@@ -58,6 +67,7 @@ public class PlayerResurrection : MonoBehaviour
         Player.transform.rotation = R_transform[0].rotation;
         mouseLook.enabled = false;
         StartTime = 0;
+
     }
 
     void Update()
