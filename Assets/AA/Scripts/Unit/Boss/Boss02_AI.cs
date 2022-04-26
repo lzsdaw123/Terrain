@@ -68,13 +68,18 @@ public class Boss02_AI : MonoBehaviour
     public static int BulletNub;  //子彈數量
     [SerializeField] int SF_BulletNub;  //子彈數量
     [SerializeField]private GameObject[] muzzle;  //槍口
+    public GameObject Muzzle_vfx;  //槍口火光  
+    public ParticleSystem MuFire;  //槍口火光特效
+    public Material MuzzleMaterial;
     public static GameObject[] PS_muzzle;  //槍口
     public static int[] muzzleGrid;  //槍口格子
     [SerializeField] int[] SF_muzzleGrid;  //槍口格子
     public static int cuMuGrid;  //當前槍口格子
     int MaxMuGrid;  //最大槍口格子數
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
+    public GameObject RigTarget;  //槍口瞄準目標
     public float targetHP;
+    public static bool StartAttack;  //進入攻擊狀態
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -106,13 +111,17 @@ public class Boss02_AI : MonoBehaviour
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
         attacking = false;
-        bulletAttack = 0;
+        bulletAttack = 1;
         Fire = false;
         AttackStatus = false;
-        coolDown = 0;
-        BulletNub = 4;  //子彈數
+        coolDown = 1;
+        BulletNub = 20;  //子彈數
         MaxMuGrid = muzzle.Length;
-        muzzleGrid = new int[MaxMuGrid];
+        //muzzleGrid = new int[MaxMuGrid];
+        StartAttack = false;
+        Muzzle_vfx.SetActive(false);
+        MuzzleMaterial.SetFloat("_EmissiveExposureWeight", 1);
+
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
 
@@ -357,21 +366,22 @@ public class Boss02_AI : MonoBehaviour
         SF_bulletAttack = bulletAttack;
         SF_muzzleGrid = muzzleGrid;
         PS_muzzle = muzzle;
-        if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
-        if (coolDown >= 1f && BulletNub>0)  //攻擊冷卻時間
+        if (attackTarget != null)
         {
-            Fire = true;
-            attacking = false;
-            coolDown = -1;
-            bulletAttack = 1;
+            目前攻擊目標 = attackTarget.gameObject;
         }
-        if (coolDown >= 0 && AttackStatus)
-        {
-            coolDown += Time.deltaTime;
-        }
-        A_defense = Defense.ST_A_defense;
-        if (oriTarget[A_defense] != null) 目前進攻目標 = oriTarget[A_defense].gameObject;
 
+        //if (coolDown >= 0.7f && BulletNub>0)  //攻擊冷卻時間
+        //{
+        //    Fire = true;
+        //    attacking = false;
+        //    coolDown = 0;
+        //    bulletAttack = 1;
+        //}
+        //if (coolDown >= 0)
+        //{
+        //    coolDown += Time.deltaTime;
+        //}
         if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         {
             //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
@@ -387,6 +397,7 @@ public class Boss02_AI : MonoBehaviour
                 }
                 if (AttackAngleT)
                 {
+                    Fire = true;
                     AttackPlay = true;
                     attacking = true;
                     Attack();
@@ -438,12 +449,17 @@ public class Boss02_AI : MonoBehaviour
         {
             transform.rotation = GetNavRotation(true, agent);
         }
-      
     }
     void FixedUpdate()
     {
+        if (attackTarget != null)
+        {
+            RigTarget.transform.position = attackTarget.position;
+        }
         if (bulletAttack >= 1)
         {
+            attacking = false;
+            bulletAttack = 0;
             //int muzzleRange = Random.Range(0, MaxMuGrid);
             //if (muzzleGrid[muzzleRange] <= 0)
             //{
@@ -453,10 +469,7 @@ public class Boss02_AI : MonoBehaviour
             //{
             //    return;
             //}
-            Fire = false;
-            attacking = false;
-            bulletAttack = 0;
-            //BulletNub --;  //消耗子彈數
+
             //if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             //Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
             //Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
@@ -486,7 +499,7 @@ public class Boss02_AI : MonoBehaviour
             //{
             //    muzzle[cuMuGrid].gameObject.transform.GetChild(i).gameObject.SetActive(false);
             //}
-            coolDown = 0;
+            //coolDown = 0;
             //print("bulletAttack" + coolDown);
         }
     }
@@ -508,6 +521,8 @@ public class Boss02_AI : MonoBehaviour
     }
     private void Attack()
     {
+        if (!StartAttack) return;  //進入攻擊狀態
+
         if (AttackPlay)
         {
             Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
@@ -523,7 +538,17 @@ public class Boss02_AI : MonoBehaviour
             //ani.SetBool("Move", false);
             AttackAngleT = false;
             agent.speed = 0;
-            //ani.SetBool("Attack", true);
+            ani.SetBool("Attack1", true);
+            //Muzzle_vfx.SetActive(true);
+            //MuFire.Play();
+            BulletNub--;  //消耗子彈數
+            if(BulletNub<= 10)
+            {
+                float overheat = 0.97f + BulletNub * (0.03f / 10);  //最小EEW + 當前子彈數 * (最小與最大EEW差值 / 子彈上限) 
+                if (overheat <= 0.97f) overheat = 0.97f;
+                MuzzleMaterial.SetFloat("_EmissiveExposureWeight", overheat);
+            }
+
             //Vector3 targetDir = AAT - transform.position;
             //Quaternion rotate = Quaternion.LookRotation(targetDir);
             //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);

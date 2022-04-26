@@ -100,6 +100,8 @@ public class PlayerView : MonoBehaviour
     void Start()
     {
         missionStage = 0;
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
+        //DontDestroyOnLoad(targetUI.gameObject);  //切換場景時保留
     }
     void Update()
     {

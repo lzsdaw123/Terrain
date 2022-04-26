@@ -64,7 +64,7 @@ public class MonsterAI02 : MonoBehaviour
     [SerializeField] private GameObject muzzle;
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
     public float targetHP;
-    public GameObject RigTarget;
+    public GameObject RigTarget;  //槍口瞄準目標
     [SerializeField] private bool locking;
 
     private AttackUtility attackUtility = new AttackUtility();

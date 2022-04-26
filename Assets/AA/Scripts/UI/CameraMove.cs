@@ -5,13 +5,10 @@ using UnityEngine.UI;
 
 public class CameraMove : MonoBehaviour
 {
-    public GameObject MianCamera;
-    public Vector3 CameraPos;
-    public Transform MC_1, MC_2;
-
-    public GameObject UI;  //升級UI
+    public GameObject CanvasUI;  //全部UI
     public GameObject[] targetUI;
-    public GameObject play;
+    public GameObject play; //玩家
+    public GameObject Hit_Play;  //擊中玩家彈孔
     public Camera GunCamera;  //玩家相機
     public Camera UpgradeCamera;  //升級相機
     public Transform GunCamTransform;  //玩家相機位置
@@ -29,14 +26,17 @@ public class CameraMove : MonoBehaviour
     [SerializeField] GameObject Aim;
     public GameObject Take;
     public GameObject AllObject;  //全物件
-    public GameObject BossObject;  //全物件
+    public GameObject BossObject;  //Boss物件
     public bool locking;
     public Animator ani;
-    public float StartBossTime;
-    public bool StartBossT;
+    public float CM_EndTime;
+    public bool Enable_Camera;
     public Level_1 level_1;
     GameObject DeBugT;
-    public int Type;
+    public int CM_Type;  //哪台相機運鏡
+    public float MoveSpeed;  //運鏡速度
+    public float DelayTime;  //延遲運行時間
+    public bool Duble;  //延遲運行時間
 
     private void Awake()
     {
@@ -44,19 +44,21 @@ public class CameraMove : MonoBehaviour
         Aim = GameObject.Find("Aim").gameObject;
         DeBugT = GameObject.Find("DeBugT").gameObject;  //開發模式文字
     }
-    public void StartBoos1()
+    public void CameraMoveEnd(float Time)  //運鏡結束時間
     {
-        StartBossTime = 0;
+        CM_EndTime = Time;
     }
     void Start()
     {
         if (BossObject != null) BossObject.SetActive(false);
-        StartBossTime = -1;
-        UI.SetActive(true);
+        CM_EndTime = -1;
+        CanvasUI.SetActive(true);
         UpCamTransform = GunCamera.gameObject.transform;
         FieldOfView = UpgradeCamera.GetComponent<Camera>().fieldOfView;
         GunCamTransform = GunCamera.gameObject.transform;
-        StartBossT = true;
+        Enable_Camera = true;
+        DelayTime = -1;
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
     }
     private void lockingMove(int Lock)
     {
@@ -70,24 +72,41 @@ public class CameraMove : MonoBehaviour
                 break;
         }
     }
-    public void StartBoss1()
+    public void CameraMovement(int Type,float moveSpeed, float delayTime, bool duble)  //呼叫相機 (哪一台, 延遲運行時間, 二次位移)
     {
-        if (StartBossT)
-        {
-            StartBossT = false;
-            Enter();
-        }
+        CM_Type = Type;
+        MoveSpeed = moveSpeed;
+        DelayTime = delayTime;
+        Duble = duble;
     }
 
     void Update()
     {
-        if (StartBossTime >= 0)
+        if (DelayTime >= 0)
         {
-            StartBossTime += Time.deltaTime;
-            if (StartBossTime >= 2)
+            DelayTime -= Time.deltaTime;
+            if(DelayTime<=0 && DelayTime > -1)
             {
-                StartBossTime = -1;
-                Level_1.StopAttack = false;
+                if (Enable_Camera)
+                {
+                    DelayTime = -1;
+                    Enable_Camera = false;
+                    Enter();
+                }
+            }
+        }
+        if (CM_EndTime > 0)
+        {
+            CM_EndTime -= Time.deltaTime;
+            if (CM_EndTime <= 0)
+            {
+                CM_EndTime = -1;
+                switch (CM_Type)
+                {
+                    case 0:
+                        Level_1.StopAttack = false;
+                        break;
+                }
                 Exit();
             }
         }
@@ -112,22 +131,32 @@ public class CameraMove : MonoBehaviour
         {
             if (Move)  //拉近 綁定鏡頭
             {
-                if (time >= 0.9f || UpCamTransform.position == targetTransform[0].position)
+                if (time >= 0.9f || UpCamTransform.position == targetTransform[CM_Type].position)
                 {
                     if(AllObject!=null) AllObject.SetActive(true);
-                    if (BossObject != null) BossObject.SetActive(true);
+                    switch (CM_Type)
+                    {
+                        case 0:
+                            if (BossObject != null) BossObject.SetActive(true);  //啟動水晶boss
+                            break;
+                    }
                     CamMove = false;
                     FieldOfView = 60;
                     //Cursor.lockState = CursorLockMode.None; //游標無狀態模式
-                    ani.SetBool("locking", true);
+                    switch (Duble)
+                    {
+                        case true:
+                            ani.SetBool("locking", true);
+                            break;
+                    }
                 }
                 else if (time >= 0)
                 {
                     FieldOfView += 12 * Time.deltaTime;
                     time += Time.deltaTime;
                 }
-                UpCamTransform.position = Vector3.SmoothDamp(UpCamTransform.position, targetTransform[0].position, ref currentVelocity, smoothTime, maxSpeed);
-                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[0].rotation, 6f * Time.smoothDeltaTime);
+                UpCamTransform.position = Vector3.SmoothDamp(UpCamTransform.position, targetTransform[CM_Type].position, ref currentVelocity, smoothTime, maxSpeed);
+                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, targetTransform[CM_Type].rotation, MoveSpeed * Time.smoothDeltaTime);
             }
             else  //拉遠 解除鏡頭
             {
@@ -141,12 +170,13 @@ public class CameraMove : MonoBehaviour
                         play.GetComponent<Shooting>().Weapon.SetBool("LayDown", false);
                     }
                     play.GetComponent<Shooting>().enabled = true;
+                    Hit_Play.SetActive(true);
                     GunCamera.gameObject.GetComponent<QH_interactive>().enabled = true;
                     GunCamera.gameObject.GetComponent<QH_interactive>().ObjectText.SetActive(true);
                     Aim.SetActive(true);
                     Take.SetActive(true);
                     GunCamera.gameObject.GetComponent<MouseLook>().enabled = true;
-                    UI.SetActive(true);
+                    CanvasUI.SetActive(true);
                     targetUI[0].GetComponent<Image>().enabled = true;
                     targetUI[1].GetComponent<Text>().enabled = true;
                 }
@@ -156,7 +186,7 @@ public class CameraMove : MonoBehaviour
                     time += Time.deltaTime;
                 }
                 UpCamTransform.localPosition = Vector3.SmoothDamp(UpCamTransform.localPosition, tagTranPos, ref currentVelocity, smoothTime, maxSpeed);
-                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, tagTranQu, 16f * Time.smoothDeltaTime);
+                UpCamTransform.rotation = Quaternion.Slerp(UpCamTransform.rotation, tagTranQu, MoveSpeed *3 * Time.smoothDeltaTime);
             }
             if (FieldOfView <= 55)
             {
@@ -176,11 +206,12 @@ public class CameraMove : MonoBehaviour
         locking = false;
         CamMove = true;
         Move = false;
+        Enable_Camera = true;
         //Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
     }
     public void Enter()
     {
-        UI.SetActive(false);
+        CanvasUI.SetActive(false);
         targetUI[0].GetComponent<Image>().enabled = false;
         targetUI[1].GetComponent<Text>().enabled = false;
         tagTranPos = GunCamTransform.localPosition;
@@ -196,6 +227,7 @@ public class CameraMove : MonoBehaviour
         PlayerMove.Player_h = 0;
         PlayerMove.Player_v = 0;
         play.GetComponent<PlayerMove>().enabled = false;
+        Hit_Play.SetActive(false);
         GunCamera.gameObject.GetComponent<QH_interactive>().enabled = false;
         GunCamera.gameObject.GetComponent<QH_interactive>().ObjectText.SetActive(false);
         Aim.SetActive(false);

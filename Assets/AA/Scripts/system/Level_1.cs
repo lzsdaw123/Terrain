@@ -18,7 +18,7 @@ public class Level_1 : MonoBehaviour
     [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
     [SerializeField] bool Lv1;
-    int TotalStage;  //關卡階段
+    public int TotalStage;  //關卡階段
     public int EnemyWave;  //敵人波數
     public static float stageTime = -1;  //下次來襲時間
     [SerializeField] float SF_stageTime;
@@ -59,6 +59,7 @@ public class Level_1 : MonoBehaviour
     public float DelayTime;  //延遲倒數
     public GameObject[] Rain;  //下雨
     public float[] RainV;
+    public GameObject[] M_Trigger;
 
     void Awake()
     {
@@ -94,6 +95,8 @@ public class Level_1 : MonoBehaviour
         StartDialogue = true;
         StopAttack = false;
         Objects[3].GetComponent<Animator>().enabled = false;
+        M_Trigger[0].SetActive(false);
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
     }
     void Update()
     {
@@ -152,6 +155,7 @@ public class Level_1 : MonoBehaviour
                     {
                         LevelA_ = 1;
                         Level_A_Start = true;
+                        M_Trigger[0].SetActive(true);
                     }
                     break;
                 case 1:
@@ -160,6 +164,7 @@ public class Level_1 : MonoBehaviour
                     {
                         LevelA_ = 1;
                         Level_A_Start = true;
+                        M_Trigger[0].SetActive(true);
                         Objects[0].GetComponent<BoxCollider>().enabled = true;
                         Objects[1].GetComponent<BoxCollider>().enabled = true;
                     }                   
@@ -287,7 +292,7 @@ public class Level_1 : MonoBehaviour
                 }
             }
         }
-        if (Lv1)
+        if (Lv1)  //開始第一關
         {
             TotalStage = 1;
             time += Time.deltaTime;
@@ -319,112 +324,116 @@ public class Level_1 : MonoBehaviour
             //    //print("難度等級"+ Settings.Level + " / 怪物等級"+MonsterLevel+" / 難度升級時間:"+ Level);
             //}
         }
-        if (TotalStage==1)  //第一大關
-        {                
-            if(EnemyWave <2)  //進攻波數
-            {
-                if (StopAttack) return;  //處於暫停進攻狀態
-                if (stageTime<= 0 && stageTime>-1)  //下次來襲時間  開始進攻
+        switch (TotalStage)
+        {
+            case 1:  // 第一關
+                if (EnemyWave < 2)  //進攻波數
                 {
-                    _SpawnRay.StartBorn = true;  //怪物開始生成
-                    _SpawnRay.BornTime = 0;  //怪物開始生成
-                    EnemyWave++;
-                    _SpawnRay.EnemyWaveNum(EnemyWave);
-                    stageTime = -1;
-                    if (LevelA_>=5)
+                    if (StopAttack) return;  //處於暫停進攻狀態
+                    if (stageTime <= 0 && stageTime > -1)  //下次來襲時間  開始進攻
                     {
-                        MissionUI[1].SetActive(true);
-                        MissionUI[0].GetComponent<Animator>().SetBool("Stop", true);  //倒數UI暫停
-                        MissionUI[0].GetComponent<Animator>().speed = 0;
-                        PlayAu = true;
-                        PlayAudio();
+                        _SpawnRay.StartBorn = true;  //怪物開始生成
+                        _SpawnRay.BornTime = 0;  //怪物開始生成
+                        EnemyWave++;
+                        _SpawnRay.EnemyWaveNum(EnemyWave);
+                        stageTime = -1;
+                        if (LevelA_ >= 5)
+                        {
+                            MissionUI[1].SetActive(true);
+                            MissionUI[0].GetComponent<Animator>().SetBool("Stop", true);  //倒數UI暫停
+                            MissionUI[0].GetComponent<Animator>().speed = 0;
+                            PlayAu = true;
+                            PlayAudio();
+                        }
+                    }
+                    else if (stageTime > 0)  //開始倒數
+                    {
+                        MissionUI[0].GetComponent<Animator>().SetBool("Stop", false);  //倒數UI開始
+                        MissionUI[0].GetComponent<Animator>().SetTrigger("Start");  //倒數UI啟動
+                        MissionUI[0].GetComponent<Animator>().speed = 1;
+                        stageTime -= Time.deltaTime;
+                    }
+                    int Minute = 0;
+                    int Second = 0;
+                    string srtMinute = "";
+                    string srtSecond = "";
+                    if (stageTime <= -1)
+                    {
+                        stageTimeText.text = "  ";
+                    }
+                    else
+                    {
+                        Minute = (int)stageTime / 60;
+                        Second = (int)stageTime - (Minute * 60);
+                        srtMinute = "" + Minute;
+                        srtSecond = "" + Second;
+                        if (Minute < 10) srtMinute = "0" + Minute;
+                        if (Second < 10) srtSecond = "0" + Second;
+                        stageTimeText.text = srtMinute + " : " + srtSecond;
                     }
                 }
-                else if(stageTime >0)  //開始倒數
+                if (DelayTime >= 0)  //延遲倒數
                 {
-                    MissionUI[0].GetComponent<Animator>().SetBool("Stop", false);  //倒數UI開始
-                    MissionUI[0].GetComponent<Animator>().SetTrigger("Start");  //倒數UI啟動
-                    MissionUI[0].GetComponent<Animator>().speed = 1;
-                    stageTime -= Time.deltaTime;
+                    DelayTime += Time.deltaTime;
+                    if (DelayTime >= 2)
+                    {
+                        DelayTime = -1;
+                        switch (LevelA_)
+                        {
+                            case 7:  //出現水晶Boss
+                                UiOpen = true;  //開啟任務UI與音效
+                                stageTime = 5;  //怪物繼續倒數開始
+                                PlayerView.missionChange(2, 2);
+                                DialogueEditor.StartConversation(2, 3, 1, false, 0, true);
+                                break;
+                            case 9:  //前往研究室
+                                for (int i = 0; i < Rain.Length; i++)  //調回下雨量
+                                {
+                                    ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
+                                    var emission = ps.emission;
+                                    float hSliderValue = emission.rateOverTime.constant;
+                                    hSliderValue = RainV[i] / 3;
+                                    emission.rateOverTime = hSliderValue;
+                                }
+                                UiOpen = true;
+                                PlayerView.missionChange(2, 3);
+                                DialogueEditor.StartConversation(2, 4, 0, false, 0, true);
+                                Objects[4].GetComponent<BoxCollider>().enabled = true; //開放研究室
+                                break;
+                        }
+                    }
                 }
-                int Minute = 0;
-                int Second = 0;
-                string srtMinute = "";
-                string srtSecond="";
-                if (stageTime <= -1)  
+                if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)  //當前波數結束
                 {
-                    stageTimeText.text = "  ";
-                }
-                else
-                {
-                    Minute = (int)stageTime / 60;
-                    Second = (int)stageTime - (Minute * 60);
-                    srtMinute = "" + Minute;
-                    srtSecond = "" + Second;
-                    if(Minute < 10) srtMinute = "0" + Minute;
-                    if(Second <10) srtSecond = "0" + Second;
-                    stageTimeText.text = srtMinute + " : " + srtSecond;
-                }
-            }
-            if (DelayTime >= 0)  //延遲倒數
-            {
-                DelayTime += Time.deltaTime;
-                if (DelayTime >= 2)
-                {
-                    DelayTime = -1;
                     switch (LevelA_)
                     {
-                        case 7:  //出現水晶Boss
-                            UiOpen = true;  //開啟任務UI與音效
-                            stageTime = 5;  //怪物繼續倒數開始
-                            PlayerView.missionChange(2, 2);
-                            DialogueEditor.StartConversation(2, 3, 1, false, 0, true);
-                            break;
-                        case 9:  //前往研究室
-                            for (int i = 0; i < Rain.Length; i++)  //調回下雨量
-                            {
-                                ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
-                                var emission = ps.emission;
-                                float hSliderValue = emission.rateOverTime.constant;
-                                hSliderValue = RainV[i] / 3;
-                                emission.rateOverTime = hSliderValue;
-                            }
+                        case 4:  //第一波結束
+                            MissionUI[0].SetActive(true);
+                            LevelA_ = 5;
+                            StopAttack = true;
                             UiOpen = true;
-                            PlayerView.missionChange(2, 3);
-                            DialogueEditor.StartConversation(2, 4, 0, false, 0, true);
-                            Objects[4].GetComponent<BoxCollider>().enabled = true; //開放研究室
+                            PlayerView.missionChange(2, 1);  //改變關卡
+                            DialogueEditor.StartConversation(2, 1, 0, false, 0, true);  //開放左輪使用
+                            Objects[2].GetComponent<BoxCollider>().enabled = true;
+                            break;
+                        case 6:  //第二波結束
+                            print("6");
+                            LevelA_ = 7;
+                            StopAttack = true;
+                            cameraMove.CameraMovement(0, 6, 3, true);  //(哪台, 速度, 延遲, 二次)
+                            DelayTime = 0;  //延遲倒數
+                            break;
+                        case 8: //擊敗水晶Boss並打光怪物
+                            print("8");
+                            LevelA_ = 9;
+                            StopAttack = true;
+                            DelayTime = 0;  //延遲倒數
                             break;
                     }
                 }
-            }
-            if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)  //當前波數結束
-            {
-                switch (LevelA_)
-                {
-                    case 4:  //第一波結束
-                        MissionUI[0].SetActive(true);
-                        LevelA_ = 5;
-                        StopAttack = true;
-                        UiOpen = true;
-                        PlayerView.missionChange(2, 1);  //改變關卡
-                        DialogueEditor.StartConversation(2, 1, 0, false, 0, true);  //開放左輪使用
-                        Objects[2].GetComponent<BoxCollider>().enabled = true;
-                        break;
-                    case 6:  //第二波結束
-                        print("6");
-                        LevelA_ = 7;
-                        StopAttack = true;
-                        cameraMove.StartBoss1();
-                        DelayTime = 0;  //延遲倒數
-                        break;
-                    case 8: //擊敗水晶Boss並打光怪物
-                        print("8");
-                        LevelA_ = 9;
-                        StopAttack = true;
-                        DelayTime = 0;  //延遲倒數
-                        break;
-                }
-            }
+                break;
+            case 2:  //第二關  TotalStage
+                break;
         }
         switch (Settings.Level)  //難度圖示
         {
@@ -450,21 +459,39 @@ public class Level_1 : MonoBehaviour
             AudioManager.Warn(1);
         }
     }
+    public void MissionTrigger(int Level, GameObject _Objects)  //任務觸碰觸發
+    {
+        switch (Level)
+        {
+            case 0:
+                Level_A_Start = false;
+                Objects[3].GetComponent<Animator>().enabled = true;  //開起警報
+                LevelA_ = 2;
+                MissionTime = 0;
+                break;
+            case 1:
+                _Objects.transform.GetChild(0).GetComponent<Animator>().SetBool("Start", true);
+                cameraMove.CameraMovement(2,2, 0, false); //(哪台, 速度, 延遲, 二次)
+                TotalStage = 2;
+                break;
+        }
+      
+    }
     public void OnTriggerEnter(Collider other)  //開始第一關
     {
-        if (Level_A_Start)
-        {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Actor"))
-            {
-                if (other.tag == "Player")
-                {
-                    Level_A_Start = false;
-                    Objects[3].GetComponent<Animator>().enabled = true;  //開起警報
-                    LevelA_ = 2;
-                    MissionTime = 0;
-                }
-            }
-        }
+        //if (Level_A_Start)
+        //{
+        //    if (other.gameObject.layer == LayerMask.NameToLayer("Actor"))
+        //    {
+        //        if (other.tag == "Player")
+        //        {
+        //            Level_A_Start = false;
+        //            Objects[3].GetComponent<Animator>().enabled = true;  //開起警報
+        //            LevelA_ = 2;
+        //            MissionTime = 0;
+        //        }
+        //    }
+        //}
     }
     public void ExitGame()
     {

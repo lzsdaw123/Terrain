@@ -142,12 +142,12 @@ public class AnimEvents : MonoBehaviour
     {
         MonsterAI03.AttackAning(true, 1);
     }
-    void Boss1_Exp()
+    void Boss1_Exp()  //水晶Boss出場
     {
         boss01_AI.ani.SetBool("Start", true);
         boss01_AI.Scenes_ani.SetBool("Start", true);
         boss01_AI.AttackStatus = true;
-        cameraMove.StartBoos1();
+        cameraMove.CameraMoveEnd(2);
     }
     void B1_gEnd()
     {
@@ -156,6 +156,11 @@ public class AnimEvents : MonoBehaviour
     void B1_BH_gEnd(int Type)  //彈孔生成後
     {
         b1_BulletHole.Generate(Type);
+    }
+    void Boss2_Start() //機械Boss甦醒
+    {
+        GameObject.Find("CameraMove").GetComponent<CameraMove>().CameraMoveEnd(1);
+        Boss02_AI.StartAttack = true;
     }
     void Boss2_AttackEnd()
     {

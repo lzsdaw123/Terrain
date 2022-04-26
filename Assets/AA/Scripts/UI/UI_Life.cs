@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UI_Life : MonoBehaviour
 {
+    public int Type; 
     public float UI_Time;
     public float UI_LiftTime=3;
     void Start()
@@ -13,11 +14,19 @@ public class UI_Life : MonoBehaviour
 
     void Update()
     {
-        UI_Time += Time.deltaTime;
-        if (UI_Time >= UI_LiftTime)
+        switch (Type)
         {
-            UI_Time = 0;
-            gameObject.SetActive(false);
-        }
+            case 0:
+                UI_Time += Time.deltaTime;
+                if (UI_Time >= UI_LiftTime)
+                {
+                    UI_Time = 0;
+                    gameObject.SetActive(false);
+                }
+                break;
+            case 1:
+                DontDestroyOnLoad(gameObject);  //¤Á´«³õ´º®É«O¯d
+                break;
+        }     
     }
 }

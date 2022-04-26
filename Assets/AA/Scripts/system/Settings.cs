@@ -30,7 +30,7 @@ public class Settings : MonoBehaviour
     public RawImage StartUI;  //遊戲開場UI
     public Texture2D[] Start_image;
     public bool START_bool;
-    int SceneNub;  //當前場景編號
+    public int SceneNub;  //當前場景編號
     [SerializeField] int SF_SceneNub;  //當前場景編號
     int SceneCount;  //當前場景編號
     public bool EnterStart;  //起始場景切換開關
@@ -48,7 +48,7 @@ public class Settings : MonoBehaviour
     void Awake()  //0=設定 1=開頭 2=第一關 3=第二關 4=載入畫面
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
-        SceneCount = SceneManager.sceneCount;
+        SceneCount = SceneManager.sceneCount;  //場景數量
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
 
         if (SceneCount <= 1)  //場景數為1

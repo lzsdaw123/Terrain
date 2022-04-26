@@ -12,13 +12,13 @@ public class MissionTarget_Life : MonoBehaviour
     float time;
     public float UItime;
     public GameObject Exp,BigExp;  //爆炸,大爆炸
-    public GameObject FailUI;  //任務失敗UI
+    //public GameObject FailUI;  //任務失敗UI
     float DeadTime;
     bool WarnT=true;
 
     void Awake()
     {
-        FailUI.SetActive(false);
+        //FailUI.SetActive(false);
         time = 0;
         DeadTime = 0;
     }
@@ -113,7 +113,8 @@ public class MissionTarget_Life : MonoBehaviour
         if (DeadTime >= 16)
         {
             Scoreboard.Settlement();
-            FailUI.SetActive(true);
+            PlayerResurrection.GameOverUI();
+            //FailUI.SetActive(true);
             DeadTime = 10;
             Cursor.lockState = CursorLockMode.None; //游標無狀態模式
             Time.timeScale = 0f;

@@ -42,7 +42,8 @@ public class DialogueEditor : MonoBehaviour
         {
             DialogueOptionsUI = GameObject.Find("DialogueOptionsUI").gameObject;
         }
-        Add_Dialogue();     
+        Add_Dialogue();
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
     }
     void Update()
     {

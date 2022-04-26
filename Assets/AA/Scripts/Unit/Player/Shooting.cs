@@ -149,13 +149,13 @@ public class Shooting : MonoBehaviour
 
         Muzzle_vfx[WeaponType].SetActive(false);
         MuSmoke[WeaponType].Stop();
-        Weapon.SetBool("LayDown", true);
         for (int i = 0; i < GunFlashlight.Length; i++)  //預設關手電筒
         {
             GunFlashlight[i].SetActive(true);
             MuFire_Light[i].SetActive(false);
         }
         Aim =  GameObject.Find("Aim").gameObject.GetComponent<Image>();
+        Weapon.SetBool("LayDown", true);
     }
     void Update()
     {
