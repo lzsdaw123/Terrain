@@ -7,6 +7,7 @@ public class Trigger : MonoBehaviour
     public int Level;
     public int Type;
     public GameObject[] Objects;
+    public Boss02_AI boss02_AI;
     //public Level_1 level_1;
 
     void Start()
@@ -23,6 +24,7 @@ public class Trigger : MonoBehaviour
         {
             if (other.tag == "Player")
             {
+                boss02_AI.Player = other.gameObject;
                 GameObject.Find("Level_1").GetComponent<Level_1>().MissionTrigger(Level, Objects[Type]);
                 gameObject.SetActive(false);
             }

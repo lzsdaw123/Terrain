@@ -13,6 +13,8 @@ public class Boss02_AI : MonoBehaviour
     public GameObject[] MissionTarget;  //任務目標點
     [SerializeField] GameObject 目前進攻目標;
     [SerializeField] GameObject 目前攻擊目標;
+    public GameObject Player;  //玩家
+    public GameObject Eye;  //眼睛
     public GameObject[] defenseOb;
     //public Defense Defense;
     public int A_defense;
@@ -45,6 +47,7 @@ public class Boss02_AI : MonoBehaviour
     [Range(0, 180)] public float AttackAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
     [Range(0, 180)] public float ArangeAngle = 80; // 可見的夾角,左右各 80 度,所以可視範圍為 160 度
     public LayerMask actorLayer = 0; // 角色所在的圖層
+    public LayerMask layerMask;  //圖層
     [TagSelector] public string[] playerTags = { "Player" };
     public static Transform attackTarget; // 搜尋到最近的攻擊目標
     public static Transform[] oriTarget = new Transform[3]; // 任務的攻擊目標
@@ -77,9 +80,11 @@ public class Boss02_AI : MonoBehaviour
     public static int cuMuGrid;  //當前槍口格子
     int MaxMuGrid;  //最大槍口格子數
     [SerializeField]private Vector3 muzzlePOS;  //槍口座標
-    public GameObject RigTarget;  //槍口瞄準目標
+    public GameObject[] RigTarget;  //槍口瞄準目標
     public float targetHP;
     public static bool StartAttack;  //進入攻擊狀態
+    public float LockTime;  //鎖定時間
+    public bool Reload;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -121,6 +126,7 @@ public class Boss02_AI : MonoBehaviour
         StartAttack = false;
         Muzzle_vfx.SetActive(false);
         MuzzleMaterial.SetFloat("_EmissiveExposureWeight", 1);
+        Reload = false;
 
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
@@ -275,15 +281,6 @@ public class Boss02_AI : MonoBehaviour
                             player = actors[i].transform;
                         }
                         tagObject = player.gameObject;
-                        //if (player.gameObject == tagObject)
-                        //{
-                        //    //print(tagObject + "__鎖定了");
-                        //}
-                        //else
-                        //{
-                        //    //print(player + "__非");
-                        //    tagObject = player.gameObject;
-                        //}
                         //判斷在攻擊範圍內
                         if (nd < ArangeDistance || GetXZAngle(transform.forward, transform.position,
                                 tagObject.transform.position, false) < ArangeAngle)
@@ -382,80 +379,148 @@ public class Boss02_AI : MonoBehaviour
         //{
         //    coolDown += Time.deltaTime;
         //}
-        if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
+        if (StartAttack)
         {
-            //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
-            // 與攻擊目標的距離
-            float d = Vector3.Distance(transform.position, attackTarget.position);
-            if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+            Vector3 origin = Eye.transform.position;
+            Vector3 targetPos = Player.transform.position +new Vector3(0, 2, 0);
+            Vector3 direct = targetPos - origin;
+            Ray ray = new Ray(origin, direct);
+            RaycastHit hit = new RaycastHit(); //射線擊中資訊
+            //float distance = Vector3.Distance(origin, targetPos);
+
+            if (Physics.Raycast(ray, out hit,  layerMask)) 
             {
-                if (attacking)  // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
+                Debug.DrawLine(ray.origin, hit.point, Color.black, 0.5f, false);
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))  //彈孔噴黑煙
                 {
-                    Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
-                    AAT = atP;
-                    return;
+                    if (hit.collider.tag == "Player")  //金屬
+                    {
+                        //print("Player");
+                        Debug.DrawLine(ray.origin, hit.point, Color.green, 1f, false);
+                        if (BulletNub <= 0)
+                        {
+                            BulletNub = 0;
+                            //進入攻擊2
+                            bulletAttack = 0;
+                            ReLoad();
+                        }
+                        else
+                        {
+                            LockTime = 0;
+                            Fire = true;
+                            attacking = true;
+                            Attack();
+                            //print("攻擊");
+                        }
+                    }
                 }
-                if (AttackAngleT)
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))  //彈孔噴黑煙
                 {
-                    Fire = true;
-                    AttackPlay = true;
-                    attacking = true;
-                    Attack();
-                    //print("小於攻擊距離 攻擊+" + attackTarget);
+                    if (hit.collider.tag == "Crystal")  //金屬
+                    {
+                        Debug.DrawLine(ray.origin, hit.point, Color.yellow, 1f, false);
+                        LockTime += Time.deltaTime;
+                        if (LockTime >= 2)
+                        {
+                            LockTime = 2;
+                            //進入攻擊2
+                            //武器1 冷卻
+                            bulletAttack = 0;
+                            ReLoad();
+                            //print("ReLoad");
+                        }
+                    }
                 }
-                else
-                {
-                    AttackPlay = false;
-                }
-            }
-            else // 玩家距離大於攻擊距離,進行追踪
-            {
-                //TrPlayer = true;
-                //Fire = false;
-                //TrackingPlayer();
-                return;
+                //print(hit.transform.name);
+
             }
         }
-        else 
-        {
-            //float d = Vector3.Distance(transform.position, attackTarget.position);
-            //if (d < arriveDistance)  //若距離小於停止距離
-            //{
-            //    //print("警戒");
-            //}
+        //if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
+        //{
+        //    //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
+        //    // 與攻擊目標的距離
+        //    float d = Vector3.Distance(transform.position, attackTarget.position);
+        //    if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+        //    {
+        //        if (attacking)  // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
+        //        {
+        //            Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
+        //            AAT = atP;
+        //            return;
+        //        }
+        //        if (AttackAngleT)
+        //        {
+        //            Fire = true;
+        //            AttackPlay = true;
+        //            attacking = true;
+        //            Attack();
+        //            //print("小於攻擊距離 攻擊+" + attackTarget);
+        //        }
+        //        else
+        //        {
+        //            AttackPlay = false;
+        //        }
+        //    }
+        //    else // 玩家距離大於攻擊距離,進行追踪
+        //    {
+        //        //TrPlayer = true;
+        //        //Fire = false;
+        //        //TrackingPlayer();
+        //        return;
+        //    }
+        //}
+        //else 
+        //{
+        //    //float d = Vector3.Distance(transform.position, attackTarget.position);
+        //    //if (d < arriveDistance)  //若距離小於停止距離
+        //    //{
+        //    //    //print("警戒");
+        //    //}
 
 
-            //取得角色與目標的距離
-            //print(oriTarget[defense]);
-            //float dn = Vector3.Distance(transform.position, oriTarget[A_defense].position);
-            //moving = true;
-            //if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
-            //{
-            //    //AttackPlay = false;
-            //    //Fire = true;
-            //    //Attack();
-            //    TrPlayer = false;
-            //    TrackingPlayer();
-            //    Fire = false;
-            //}
-            //else // 玩家距離大於攻擊距離,進行追踪
-            //{
-            //    TrPlayer = false;
-            //    TrackingPlayer();
-            //    Fire = false;
-            //}
-        }
+        //    //取得角色與目標的距離
+        //    //print(oriTarget[defense]);
+        //    //float dn = Vector3.Distance(transform.position, oriTarget[A_defense].position);
+        //    //moving = true;
+        //    //if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
+        //    //{
+        //    //    //AttackPlay = false;
+        //    //    //Fire = true;
+        //    //    //Attack();
+        //    //    TrPlayer = false;
+        //    //    TrackingPlayer();
+        //    //    Fire = false;
+        //    //}
+        //    //else // 玩家距離大於攻擊距離,進行追踪
+        //    //{
+        //    //    TrPlayer = false;
+        //    //    TrackingPlayer();
+        //    //    Fire = false;
+        //    //}
+        //}
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
         }
     }
+    void ReLoad()
+    {
+        if (Reload == false)
+        {
+            Reload = true;
+            ani.SetTrigger("Reload");
+        }
+    }
     void FixedUpdate()
     {
-        if (attackTarget != null)
+        if (StartAttack)
         {
-            RigTarget.transform.position = attackTarget.position;
+            RigTarget[0].transform.position = Player.transform.position;  //頭部鎖定玩家
+            RigTarget[1].transform.position = Player.transform.position;  //槍口鎖定玩家
         }
+
         if (bulletAttack >= 1)
         {
             attacking = false;
