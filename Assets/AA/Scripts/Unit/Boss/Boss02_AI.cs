@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 
 public class Boss02_AI : MonoBehaviour
@@ -70,7 +71,7 @@ public class Boss02_AI : MonoBehaviour
     public GameObject bullet;
     public static int BulletNub;  //子彈數量
     [SerializeField] int SF_BulletNub;  //子彈數量
-    [SerializeField]private GameObject[] muzzle;  //槍口
+    [SerializeField] private GameObject[] muzzle;  //槍口
     public GameObject Muzzle_vfx;  //槍口火光  
     public ParticleSystem MuFire;  //槍口火光特效
     public Material MuzzleMaterial;
@@ -79,12 +80,18 @@ public class Boss02_AI : MonoBehaviour
     [SerializeField] int[] SF_muzzleGrid;  //槍口格子
     public static int cuMuGrid;  //當前槍口格子
     int MaxMuGrid;  //最大槍口格子數
-    [SerializeField]private Vector3 muzzlePOS;  //槍口座標
+    [SerializeField] private Vector3 muzzlePOS;  //槍口座標
     public GameObject[] RigTarget;  //槍口瞄準目標
-    public float targetHP;
     public static bool StartAttack;  //進入攻擊狀態
+    public float StartTime; ///進入攻擊前的等待時間
     public float LockTime;  //鎖定時間
-    public bool Reload;
+    public float overheatTime;  //過熱冷卻時間
+    public bool overheatLock;  //過熱鎖定
+    public bool Reload;  
+    public int AttackMode;  //攻擊模式
+    public int AttackRange;  //攻擊範圍
+    public GameObject[] MA_Rig;
+    public float MA_weight;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -120,13 +127,14 @@ public class Boss02_AI : MonoBehaviour
         Fire = false;
         AttackStatus = false;
         coolDown = 1;
-        BulletNub = 20;  //子彈數
+        BulletNub = 30;  //子彈數
         MaxMuGrid = muzzle.Length;
         //muzzleGrid = new int[MaxMuGrid];
         StartAttack = false;
         Muzzle_vfx.SetActive(false);
         MuzzleMaterial.SetFloat("_EmissiveExposureWeight", 1);
         Reload = false;
+        StartTime = -1;
 
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
@@ -379,6 +387,15 @@ public class Boss02_AI : MonoBehaviour
         //{
         //    coolDown += Time.deltaTime;
         //}
+        if (StartTime >= 0)
+        {
+            StartTime += Time.deltaTime;
+            if (StartTime >= 2f)
+            {
+                StartTime = -1;
+                StartAttack = true;
+            }
+        }
         if (StartAttack)
         {
             Vector3 origin = Eye.transform.position;
@@ -388,24 +405,25 @@ public class Boss02_AI : MonoBehaviour
             RaycastHit hit = new RaycastHit(); //射線擊中資訊
             //float distance = Vector3.Distance(origin, targetPos);
 
-            if (Physics.Raycast(ray, out hit,  layerMask)) 
+            if (Physics.Raycast(ray, out hit, 70f, layerMask)) 
             {
                 Debug.DrawLine(ray.origin, hit.point, Color.black, 0.5f, false);
 
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))  //彈孔噴黑煙
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))  //取得玩家
                 {
-                    if (hit.collider.tag == "Player")  //金屬
+                    if (hit.collider.tag == "Player")  //玩家
                     {
-                        //print("Player");
                         Debug.DrawLine(ray.origin, hit.point, Color.green, 1f, false);
-                        if (BulletNub <= 0)
+                        if (BulletNub <= 0)   //武器1 過熱
                         {
+                            Reload = true; //冷卻狀態
+                            overheatLock = true;   // 過熱鎖定
                             BulletNub = 0;
-                            //進入攻擊2
                             bulletAttack = 0;
                             ReLoad();
+                            //Attack();
                         }
-                        else
+                        else  //武器1 攻擊
                         {
                             LockTime = 0;
                             Fire = true;
@@ -416,27 +434,70 @@ public class Boss02_AI : MonoBehaviour
                     }
                 }
 
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))  //彈孔噴黑煙
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))  //玩家躲在掩體
                 {
-                    if (hit.collider.tag == "Crystal")  //金屬
+                    if (hit.collider.tag == "Crystal")  //水晶
                     {
                         Debug.DrawLine(ray.origin, hit.point, Color.yellow, 1f, false);
                         LockTime += Time.deltaTime;
                         if (LockTime >= 2)
                         {
+                            //AttackMode = 2;   //攻擊模式2
                             LockTime = 2;
-                            //進入攻擊2
                             //武器1 冷卻
-                            bulletAttack = 0;
+                            //bulletAttack = 0;
+                            Reload = true;
+                            overheatLock = false; 
                             ReLoad();
-                            //print("ReLoad");
+                            Attack();
+                            //print("被擋住了");
                         }
                     }
                 }
-                //print(hit.transform.name);
-
             }
+            switch (AttackRange)
+            {
+                case 1:  //攻擊1 範圍
+                    if (Reload && overheatLock)  //處於冷卻狀態 並過熱鎖定
+                    {
+                        AttackMode = 2;
+                        //print("過熱中");
+                    }
+                    if(Reload && !overheatLock)  //處於冷卻狀態 並 非過熱鎖定
+                    {
+                        Reload = false;
+                        AttackMode = 1;  //攻擊模式1
+                        //print("過熱但開火");
+                    }
+                    else if(!Reload)  //處於非冷卻狀態
+                    {
+                        AttackMode = 1;  //攻擊模式1
+                        //print("開火");
+                    }
+                    MA_weight += 1.5f * Time.deltaTime;
+                    if (MA_weight >= 1) MA_weight = 1;
+                    break;
+                case 2:  //攻擊1 右邊死角範圍
+                    Reload = true;
+                    overheatLock = false;
+                    ReLoad();
+                    AttackMode = 2;  //攻擊模式2
+                    MA_weight -= 0.5f * Time.deltaTime;
+                    if (MA_weight <= 0.4) MA_weight = 0.4f;
+                    break;
+                case 3:  //攻擊1 左邊死角範圍
+                    Reload = true;
+                    overheatLock = false;
+                    ReLoad();
+                    AttackMode = 2;  //攻擊模式2
+                    MA_weight -= 0.5f * Time.deltaTime;
+                    if (MA_weight <= 0.5) MA_weight = 0.5f;
+                    break;
+            }
+            MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
+            ani.SetInteger("AttackMode", AttackMode);
         }
+
         //if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
         //{
         //    //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
@@ -505,12 +566,19 @@ public class Boss02_AI : MonoBehaviour
             transform.rotation = GetNavRotation(true, agent);
         }
     }
-    void ReLoad()
+    void ReLoad()  //武器冷卻
     {
-        if (Reload == false)
+        if (Reload)
         {
-            Reload = true;
-            ani.SetTrigger("Reload");
+            overheatTime = MuzzleMaterial.GetFloat("_EmissiveExposureWeight");
+            overheatTime += 0.018f * Time.deltaTime;
+            if (overheatTime >= 1)
+            {
+                overheatTime = 1;
+                Reload = false;
+                BulletNub = 30;
+            }
+            MuzzleMaterial.SetFloat("_EmissiveExposureWeight", overheatTime);
         }
     }
     void FixedUpdate()
@@ -586,7 +654,7 @@ public class Boss02_AI : MonoBehaviour
     }
     private void Attack()
     {
-        if (!StartAttack) return;  //進入攻擊狀態
+        if (!StartAttack) return;
 
         if (AttackPlay)
         {
@@ -598,28 +666,38 @@ public class Boss02_AI : MonoBehaviour
         {
             //AAT = oriTarget[A_defense].position;
         }
-        if (Fire)
+        switch (AttackMode)
         {
+            case 1:
+                if (BulletNub <= 18)
+                {
+                    float overheat = 0.91f + BulletNub * (0.09f / 18);  //最小EEW + 當前子彈數 * (最小與最大EEW差值 / 子彈上限) 
+                    if (overheat <= 0.91f) overheat = 0.91f;
+                    MuzzleMaterial.SetFloat("_EmissiveExposureWeight", overheat);
+                }
+                //print("子彈 " + BulletNub);
+                break;
+            case 2:
+                //ani.SetBool("Attack1", false);
+                //print("攻擊2");
+                break;
+        }
+        ani.SetBool("Attack1", true);  //第一階攻擊模式
+        ani.SetInteger("AttackMode", AttackMode);
+
+        if (Fire)
+        {        
             //ani.SetBool("Move", false);
             AttackAngleT = false;
             agent.speed = 0;
-            ani.SetBool("Attack1", true);
             //Muzzle_vfx.SetActive(true);
             //MuFire.Play();
-            BulletNub--;  //消耗子彈數
-            if(BulletNub<= 10)
-            {
-                float overheat = 0.97f + BulletNub * (0.03f / 10);  //最小EEW + 當前子彈數 * (最小與最大EEW差值 / 子彈上限) 
-                if (overheat <= 0.97f) overheat = 0.97f;
-                MuzzleMaterial.SetFloat("_EmissiveExposureWeight", overheat);
-            }
 
             //Vector3 targetDir = AAT - transform.position;
             //Quaternion rotate = Quaternion.LookRotation(targetDir);
             //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 40f * Time.smoothDeltaTime);
             //AttackAning(true, 1);
             //print("Fire" + coolDown);
-
         }
     }
     public void AttackAning(bool attackingB, int BulletAttackNub)

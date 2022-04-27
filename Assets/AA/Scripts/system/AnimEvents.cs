@@ -160,11 +160,13 @@ public class AnimEvents : MonoBehaviour
     void Boss2_Start() //機械Boss甦醒
     {
         GameObject.Find("CameraMove").GetComponent<CameraMove>().CameraMoveEnd(1);
-        Boss02_AI.StartAttack = true;
+        boss02_AI.StartTime = 0;
     }
     void Boss2_AttackEnd()
     {
         boss02_AI.AttackAning(true, 1);
+        Boss02_AI.BulletNub--;
+        if (Boss02_AI.BulletNub <= 0) Boss02_AI.BulletNub = 0;
     }
 
     //音效用
