@@ -211,12 +211,6 @@ public class CameraMove : MonoBehaviour
     }
     public void Enter()
     {
-        CanvasUI.SetActive(false);
-        targetUI[0].GetComponent<Image>().enabled = false;
-        targetUI[1].GetComponent<Text>().enabled = false;
-        tagTranPos = GunCamTransform.localPosition;
-        tagTranQu = Quaternion.Euler(GunCamTransform.eulerAngles);
-        FieldOfView = 55;
         play = GameObject.Find("POPP").gameObject;
         if (Shooting.FirstWeapon[0] == true)
         {
@@ -227,6 +221,12 @@ public class CameraMove : MonoBehaviour
         PlayerMove.Player_h = 0;
         PlayerMove.Player_v = 0;
         play.GetComponent<PlayerMove>().enabled = false;
+        CanvasUI.SetActive(false);
+        targetUI[0].GetComponent<Image>().enabled = false;
+        targetUI[1].GetComponent<Text>().enabled = false;
+        tagTranPos = GunCamTransform.localPosition;
+        tagTranQu = Quaternion.Euler(GunCamTransform.eulerAngles);
+        FieldOfView = 55;
         Hit_Play.SetActive(false);
         GunCamera.gameObject.GetComponent<QH_interactive>().enabled = false;
         GunCamera.gameObject.GetComponent<QH_interactive>().ObjectText.SetActive(false);

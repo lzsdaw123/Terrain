@@ -20,6 +20,7 @@ public class AnimEvents : MonoBehaviour
     public B1_BulletHole b1_BulletHole;
     public NPC_Life NPC_Life;
     public HeroLife heroLife;
+    public MG_Turret_AI mg_Turret_AI;
     public CameraMove cameraMove;
     public float h, v;
 
@@ -133,7 +134,7 @@ public class AnimEvents : MonoBehaviour
         heroLife.Crystal_Infection = false;
     }
 
-    //怪物用
+    //敵人用
     void M1_Attack()
     {
         MonsterAI02.AttackAning(true, 1);
@@ -162,11 +163,28 @@ public class AnimEvents : MonoBehaviour
         GameObject.Find("CameraMove").GetComponent<CameraMove>().CameraMoveEnd(1);
         boss02_AI.StartTime = 0;
     }
-    void Boss2_AttackEnd()
+    void Boss2_AttackEnd()  //機械Boss攻擊
     {
         boss02_AI.AttackAning(true, 1);
         Boss02_AI.BulletNub--;
         if (Boss02_AI.BulletNub <= 0) Boss02_AI.BulletNub = 0;
+    }
+    void MG_Turret_Attack(int Type)  //機槍塔攻擊
+    {
+        switch (Type)
+        {
+            case 0: //攻擊結束
+                mg_Turret_AI.AttackAning(true, 1);
+                break;
+            case 1:  //射出第一發子彈
+                mg_Turret_AI.FlyStart[0] = true;
+                mg_Turret_AI.HitTarget[0] = false;
+                break;
+            case 2:  //射出第二發子彈
+                mg_Turret_AI.FlyStart[1] = true;
+                mg_Turret_AI.HitTarget[1] = false;
+                break;
+        }
     }
 
     //音效用

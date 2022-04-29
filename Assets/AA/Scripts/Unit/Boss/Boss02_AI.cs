@@ -16,6 +16,7 @@ public class Boss02_AI : MonoBehaviour
     [SerializeField] GameObject 目前攻擊目標;
     public GameObject Player;  //玩家
     public GameObject Eye;  //眼睛
+    public GameObject[] MG_Turret;  //機槍塔
     public GameObject[] defenseOb;
     //public Defense Defense;
     public int A_defense;
@@ -74,7 +75,7 @@ public class Boss02_AI : MonoBehaviour
     [SerializeField] private GameObject[] muzzle;  //槍口
     public GameObject Muzzle_vfx;  //槍口火光  
     public ParticleSystem MuFire;  //槍口火光特效
-    public Material MuzzleMaterial;
+    public Material[] MuzzleMaterial;  //槍口材質球
     public static GameObject[] PS_muzzle;  //槍口
     public static int[] muzzleGrid;  //槍口格子
     [SerializeField] int[] SF_muzzleGrid;  //槍口格子
@@ -90,8 +91,8 @@ public class Boss02_AI : MonoBehaviour
     public bool Reload;  
     public int AttackMode;  //攻擊模式
     public int AttackRange;  //攻擊範圍
-    public GameObject[] MA_Rig;
-    public float MA_weight;
+    public GameObject[] MA_Rig;  //Rig連結
+    public float MA_weight;  //Rig連結權重
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -132,7 +133,7 @@ public class Boss02_AI : MonoBehaviour
         //muzzleGrid = new int[MaxMuGrid];
         StartAttack = false;
         Muzzle_vfx.SetActive(false);
-        MuzzleMaterial.SetFloat("_EmissiveExposureWeight", 1);
+        MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", 1);
         Reload = false;
         StartTime = -1;
 
@@ -394,6 +395,9 @@ public class Boss02_AI : MonoBehaviour
             {
                 StartTime = -1;
                 StartAttack = true;
+                MG_Turret[0].GetComponent<MG_Turret_AI>().Player = Player;
+                //MG_Turret[1].GetComponent<MG_Turret_AI>().Player = Player;
+                //MG_Turret[2].GetComponent<MG_Turret_AI>().Player = Player;
             }
         }
         if (StartAttack)
@@ -407,13 +411,13 @@ public class Boss02_AI : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 70f, layerMask)) 
             {
-                Debug.DrawLine(ray.origin, hit.point, Color.black, 0.5f, false);
+                //Debug.DrawLine(ray.origin, hit.point, Color.black, 0.5f, false);  //黑線
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))  //取得玩家
                 {
                     if (hit.collider.tag == "Player")  //玩家
                     {
-                        Debug.DrawLine(ray.origin, hit.point, Color.green, 1f, false);
+                        //Debug.DrawLine(ray.origin, hit.point, Color.green, 1f, false);  //綠線
                         if (BulletNub <= 0)   //武器1 過熱
                         {
                             Reload = true; //冷卻狀態
@@ -438,7 +442,7 @@ public class Boss02_AI : MonoBehaviour
                 {
                     if (hit.collider.tag == "Crystal")  //水晶
                     {
-                        Debug.DrawLine(ray.origin, hit.point, Color.yellow, 1f, false);
+                        //Debug.DrawLine(ray.origin, hit.point, Color.yellow, 1f, false);  //黃線
                         LockTime += Time.deltaTime;
                         if (LockTime >= 2)
                         {
@@ -467,11 +471,13 @@ public class Boss02_AI : MonoBehaviour
                     {
                         Reload = false;
                         AttackMode = 1;  //攻擊模式1
+                        MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                         //print("過熱但開火");
                     }
                     else if(!Reload)  //處於非冷卻狀態
                     {
                         AttackMode = 1;  //攻擊模式1
+                        MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                         //print("開火");
                     }
                     MA_weight += 1.5f * Time.deltaTime;
@@ -492,6 +498,7 @@ public class Boss02_AI : MonoBehaviour
                     AttackMode = 2;  //攻擊模式2
                     MA_weight -= 0.5f * Time.deltaTime;
                     if (MA_weight <= 0.5) MA_weight = 0.5f;
+                    MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
                     break;
             }
             MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
@@ -570,7 +577,7 @@ public class Boss02_AI : MonoBehaviour
     {
         if (Reload)
         {
-            overheatTime = MuzzleMaterial.GetFloat("_EmissiveExposureWeight");
+            overheatTime = MuzzleMaterial[0].GetFloat("_EmissiveExposureWeight");
             overheatTime += 0.018f * Time.deltaTime;
             if (overheatTime >= 1)
             {
@@ -578,7 +585,7 @@ public class Boss02_AI : MonoBehaviour
                 Reload = false;
                 BulletNub = 30;
             }
-            MuzzleMaterial.SetFloat("_EmissiveExposureWeight", overheatTime);
+            MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", overheatTime);
         }
     }
     void FixedUpdate()
@@ -673,7 +680,7 @@ public class Boss02_AI : MonoBehaviour
                 {
                     float overheat = 0.91f + BulletNub * (0.09f / 18);  //最小EEW + 當前子彈數 * (最小與最大EEW差值 / 子彈上限) 
                     if (overheat <= 0.91f) overheat = 0.91f;
-                    MuzzleMaterial.SetFloat("_EmissiveExposureWeight", overheat);
+                    MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", overheat);
                 }
                 //print("子彈 " + BulletNub);
                 break;

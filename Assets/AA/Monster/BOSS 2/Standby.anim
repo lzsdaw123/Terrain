@@ -774,25 +774,6 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_Weight
-    path: L_Hand_Rig/L_Hand
-    classID: 114
-    script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
         value: 0.7490196
         inSlope: 0
         outSlope: 0
@@ -863,6 +844,25 @@ AnimationClip:
     attribute: material._EmissiveColor.a
     path: Boss_L
     classID: 137
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EmissiveExposureWeight
+    path: 'Armature/Bone.003/Bone.007/Bone.008/Gun/ZBrush_defualt_group/muzzle_Inside '
+    classID: 23
     script: {fileID: 0}
   m_PPtrCurves: []
   m_SampleRate: 24
@@ -1202,13 +1202,6 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2912027493
-      attribute: 1257374345
-      script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
-      typeID: 114
-      customType: 0
-      isPPtrCurve: 0
-    - serializedVersion: 2
       path: 2235858691
       attribute: 1075998812
       script: {fileID: 0}
@@ -1234,6 +1227,13 @@ AnimationClip:
       attribute: 1881305180
       script: {fileID: 0}
       typeID: 137
+      customType: 22
+      isPPtrCurve: 0
+    - serializedVersion: 2
+      path: 228160926
+      attribute: 2305669842
+      script: {fileID: 0}
+      typeID: 23
       customType: 22
       isPPtrCurve: 0
     pptrCurveMapping: []
@@ -2797,25 +2797,6 @@ AnimationClip:
     path: Armature/Bone.003/Bone.007/Bone.008
     classID: 4
     script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_Weight
-    path: L_Hand_Rig/L_Hand
-    classID: 114
-    script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -4411,6 +4392,25 @@ AnimationClip:
     attribute: m_LocalRotation.w
     path: Armature/LARM
     classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: material._EmissiveExposureWeight
+    path: 'Armature/Bone.003/Bone.007/Bone.008/Gun/ZBrush_defualt_group/muzzle_Inside '
+    classID: 23
     script: {fileID: 0}
   m_EulerEditorCurves:
   - curve:
