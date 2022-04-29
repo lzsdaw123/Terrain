@@ -21,11 +21,11 @@ public class HitUI : MonoBehaviour
         UIcolor = GetComponent<Image>().color;
         transform.localScale += new Vector3(1f, 1f, 0f) * speed * Time.deltaTime;
 
-        if (UIcolor == Color.white)
+        if (UIcolor == Color.white)  //命中
         {
-            if (transform.localScale.x >= 0.8)
+            if (transform.localScale.x >= 0.85)
             {
-                transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+                transform.localScale = new Vector3(0.85f, 0.85f, 1f);
             }
             if (HitUITime >= 0.2f)
             {
@@ -34,11 +34,11 @@ public class HitUI : MonoBehaviour
                 HitUITime = 0;
             }
         }
-        if (UIcolor == Color.red)
+        if (UIcolor == Color.red)  //擊殺
         {
-            if (transform.localScale.x >= 1.3)
+            if (transform.localScale.x >= 1.5)
             {
-                transform.localScale = new Vector3(1.3f, 1.3f, 1f);
+                transform.localScale = new Vector3(1.5f, 1.5f, 1f);
             }
             if (HitUITime >= 0.3f)
             {

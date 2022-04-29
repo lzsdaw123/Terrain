@@ -65,11 +65,12 @@ public class Boss02_AI : MonoBehaviour
     public static bool AttackPlay;
     bool TrPlayer;
     [SerializeField] private bool Fire;
-    public static int ButtleType;  //子彈類型
+    public static int BulletType;  //子彈類型
     public bool AttackStatus;  //攻擊狀態
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
     public int SaveBT;
     public GameObject bullet;
+    public int Level;  //攻擊等級
     public static int BulletNub;  //子彈數量
     [SerializeField] int SF_BulletNub;  //子彈數量
     [SerializeField] private GameObject[] muzzle;  //槍口
@@ -124,7 +125,7 @@ public class Boss02_AI : MonoBehaviour
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
         attacking = false;
-        bulletAttack = 1;
+        bulletAttack = 0;
         Fire = false;
         AttackStatus = false;
         coolDown = 1;
@@ -136,6 +137,7 @@ public class Boss02_AI : MonoBehaviour
         MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", 1);
         Reload = false;
         StartTime = -1;
+        Level = 1;
 
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
@@ -396,8 +398,8 @@ public class Boss02_AI : MonoBehaviour
                 StartTime = -1;
                 StartAttack = true;
                 MG_Turret[0].GetComponent<MG_Turret_AI>().Player = Player;
-                //MG_Turret[1].GetComponent<MG_Turret_AI>().Player = Player;
-                //MG_Turret[2].GetComponent<MG_Turret_AI>().Player = Player;
+                MG_Turret[1].GetComponent<MG_Turret_AI>().Player = Player;
+                MG_Turret[2].GetComponent<MG_Turret_AI>().Player = Player;
             }
         }
         if (StartAttack)
@@ -472,12 +474,16 @@ public class Boss02_AI : MonoBehaviour
                         Reload = false;
                         AttackMode = 1;  //攻擊模式1
                         MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
+                        MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
+                        MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
                         //print("過熱但開火");
                     }
                     else if(!Reload)  //處於非冷卻狀態
                     {
                         AttackMode = 1;  //攻擊模式1
                         MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
+                        MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
+                        MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
                         //print("開火");
                     }
                     MA_weight += 1.5f * Time.deltaTime;
@@ -490,6 +496,8 @@ public class Boss02_AI : MonoBehaviour
                     AttackMode = 2;  //攻擊模式2
                     MA_weight -= 0.5f * Time.deltaTime;
                     if (MA_weight <= 0.4) MA_weight = 0.4f;
+                    MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
                     break;
                 case 3:  //攻擊1 左邊死角範圍
                     Reload = true;
@@ -499,6 +507,8 @@ public class Boss02_AI : MonoBehaviour
                     MA_weight -= 0.5f * Time.deltaTime;
                     if (MA_weight <= 0.5) MA_weight = 0.5f;
                     MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
                     break;
             }
             MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
@@ -609,31 +619,49 @@ public class Boss02_AI : MonoBehaviour
             //{
             //    return;
             //}
+            Vector3 origin = muzzle[0].transform.position;
+            Vector3 targetPos = Player.transform.position + new Vector3(0, 2, 0);
+            Vector3 direct = targetPos - origin;
+            Ray ray = new Ray(origin, direct);
+            RaycastHit hit = new RaycastHit(); //射線擊中資訊
+            if (Physics.Raycast(ray, out hit, 70f, layerMask))
+            {
+                //Debug.DrawLine(ray.origin, hit.point, Color.black, 0.5f, false);  //黑線
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))  //取得玩家
+                {
+                    if (hit.collider.tag == "Player")  //玩家
+                    {
+                        Debug.DrawLine(ray.origin, hit.point, Color.green, 0.1f, false);  //綠線
+                        AAT = hit.transform.position;
+                    }
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))  //玩家躲在掩體
+                {
+                    if (hit.collider.tag == "Crystal")  //水晶
+                    {
+                        Debug.DrawLine(ray.origin, hit.point, Color.yellow, 0.1f, false);  //黃線
+                        AAT = hit.transform.position;
+                    }
+                }
+            }
 
             //if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
-            //Vector3 AttacktargetDir = AAT - transform.position;  //子彈轉向目標
-            //Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
-            //muzzlePOS = muzzle[muzzleRange].transform.position;
-            //cuMuGrid = muzzleRange;
+            muzzlePOS = muzzle[0].transform.position;
+            Vector3 AttacktargetDir = targetPos - muzzlePOS;  //子彈轉向目標
+            Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
+            cuMuGrid = 0;
             //ButtleType = Random.Range(0, 2);  //子彈類型
-            //if (ButtleType== SaveBT)
-            //{
-            //    switch (ButtleType)
-            //    {
-            //        case 1:
-            //            int R = Random.Range(0, 1);  //子彈類型
-            //            if (R == 0)
-            //            {
-            //                ButtleType = 0;
-            //            }
-            //            else
-            //            {
-            //                ButtleType = 2;
-            //            }
-            //            break;
-            //    }
-            //}
-            //pool.ReUseBoss1Bullet(muzzlePOS, rotate, ButtleType, cuMuGrid);  //生成子彈
+            switch (Level)
+            {
+                case 1:
+                    BulletType = 1;
+                    break;
+                case 2:
+                    BulletType = 2;
+                    break;
+            }
+            pool.ReUseBoss2Bullet(muzzlePOS, rotate, BulletType, cuMuGrid);  //生成子彈
             //SaveBT = ButtleType;
             //for (int i=0; i< 2; i++)
             //{
@@ -663,16 +691,16 @@ public class Boss02_AI : MonoBehaviour
     {
         if (!StartAttack) return;
 
-        if (AttackPlay)
-        {
-            Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
-            AAT = atP;
-            //AAT = attackTarget.position;
-        }
-        else
-        {
-            //AAT = oriTarget[A_defense].position;
-        }
+        //if (AttackPlay)
+        //{
+        //    Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
+        //    AAT = atP;
+        //    //AAT = attackTarget.position;
+        //}
+        //else
+        //{
+        //    //AAT = oriTarget[A_defense].position;
+        //}
         switch (AttackMode)
         {
             case 1:

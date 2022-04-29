@@ -8,7 +8,7 @@ public class B1_BulletHole : MonoBehaviour
     public float[] InputTime;  //輸入生命時間
     public ObjectPool pool_Hit;
     public Animator ani;
-    public int ButtleType; //武器類型
+    public int BulletType; //武器類型
     public GameObject[] Hit;
     [SerializeField] private GameObject Light;
     float LightRange;
@@ -26,11 +26,11 @@ public class B1_BulletHole : MonoBehaviour
     }
     void Start()
     {
-        BulletHoleTime = InputTime[ButtleType];
+        BulletHoleTime = InputTime[BulletType];
         if (!AutoDead) BulletHoleTime = -1;
         if(Light.gameObject != null)
         {
-            if (ButtleType == 1)
+            if (BulletType == 1)
             {
                 Light.GetComponent<Light>().range = 10;
                 Light.SetActive(true);
@@ -43,7 +43,7 @@ public class B1_BulletHole : MonoBehaviour
         //father = transform.parent.gameObject;
         Dead = false;
         //print("ani  "+ButtleType);
-        ani.SetInteger("Type", ButtleType);
+        ani.SetInteger("Type", BulletType);
     }
 
     void Update()
@@ -51,7 +51,7 @@ public class B1_BulletHole : MonoBehaviour
         if (!PlayAni)
         {
             PlayAni = true;
-            ani.SetInteger("Type", ButtleType);
+            ani.SetInteger("Type", BulletType);
         }
         //transform.parent = gameObject.transform;
         if (clusterBombExp)  //子水晶爆炸
@@ -91,13 +91,13 @@ public class B1_BulletHole : MonoBehaviour
         {
             case 0:
                 clusterBombExp = true;
-                BulletHoleTime = InputTime[ButtleType];
+                BulletHoleTime = InputTime[BulletType];
                 break;
             case 1:
-                BulletHoleTime = InputTime[ButtleType];
+                BulletHoleTime = InputTime[BulletType];
                 break;
             case 2:
-                BulletHoleTime = InputTime[ButtleType];
+                BulletHoleTime = InputTime[BulletType];
                 break;
         }
     } 
@@ -109,7 +109,7 @@ public class B1_BulletHole : MonoBehaviour
         PlayAni = false;
         if (Light.gameObject != null)
         {
-            if (ButtleType == 1)
+            if (BulletType == 1)
             {
                 Light.GetComponent<Light>().range = 10;
                 Light.SetActive(true);
@@ -119,7 +119,7 @@ public class B1_BulletHole : MonoBehaviour
                 Light.SetActive(false);
             }
         }
-        BulletHoleTime = InputTime[ButtleType];
+        BulletHoleTime = InputTime[BulletType];
         if (!AutoDead) BulletHoleTime = -1;
         Dead = false;
         ani.enabled = true;

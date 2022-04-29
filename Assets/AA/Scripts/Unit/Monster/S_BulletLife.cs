@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class S_BulletLife : MonoBehaviour
 {
+    public int BulletType;  //子彈類型
+    public GameObject[] Bullet;
     public GameObject Muzzle_vfx;
     public GameObject[] Hit_vfx;  //彈孔類型
     public ParticleSystem[] Pro;
@@ -14,8 +16,8 @@ public class S_BulletLife : MonoBehaviour
     public Vector3 Atarget;
     public float AtargetY;
     public float speed ;//飛行速度
-    public float liftTime = 5f; //生命時間
-    bool Ay = true;  //子彈飛行軌跡
+    public float liftTime; //生命時間
+    bool B_FlyTrack = true;  //子彈飛行軌跡
     public Vector3 ABPath;
     Vector3 AAT;
     float FlyDistance; //慣性飛行時間
@@ -28,11 +30,9 @@ public class S_BulletLife : MonoBehaviour
     [TagSelector] public string[] damageTags; //要傷害的Tag
     [TagSelector] public string[] ignoreTags; //要忽略的Tag
 
-    public float rayLength = 0.5f;  //1大約x:105-人物到槍口???射線長度??
-    public float rayLength2 = 1f;
     public LayerMask[] Ground;  //射線偵測圖層
     public LayerMask layerMask;
-    bool forwardFly = false;
+    bool forwardFly = false;  //依慣性向前飛
     bool AttackPlay;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
@@ -42,8 +42,24 @@ public class S_BulletLife : MonoBehaviour
     }
     void Start()
     {
-        speed = 60f; //飛行速度
-        power = 1;
+        switch (BulletType)
+        {
+            case 0:  //蠍子毒液
+                speed = 60f; //飛行速度
+                power = 1;
+                liftTime = 5f;
+                break;
+            case 1:  //Boss2 攻擊1 火炮
+                speed = 35f; //飛行速度
+                power = 2;
+                liftTime = 5f;
+                break;
+            case 2:  //Boss2 攻擊1 黑火球
+                speed = 20f; //飛行速度
+                power = 7;
+                liftTime = 10f;
+                break;
+        }
         AttackLv = 0;
         for (int i=0; i< Pro.Length; i++)
         {
@@ -76,7 +92,7 @@ public class S_BulletLife : MonoBehaviour
         }
         //在到物體上產生彈孔
         //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-        Vector3 pos = hit.point;
+        //Vector3 pos = hit.point;
     }
     void DifficultyUp()  //難度設定
     {
@@ -109,7 +125,7 @@ public class S_BulletLife : MonoBehaviour
     {
         DifficultyUp();
         liftTime = 5;
-        Ay = true;
+        B_FlyTrack = true;
         Atarget = Vector3.zero;
         forwardFly = false;
     }
@@ -119,17 +135,50 @@ public class S_BulletLife : MonoBehaviour
         FlyDistance += Time.deltaTime;
         if (liftTime <= 0)
         {
-            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryM01Bullet(gameObject);
+            switch (BulletType)
+            {
+                case 0:  //蠍子毒液
+                    GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryM01Bullet(gameObject);
+                    break;
+                case 1:  //Boss2 攻擊1 火炮
+                    GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryBoss2Bullet(gameObject);
+                    Bullet[0].SetActive(false);
+                    Bullet[1].SetActive(false);
+                    forwardFly = true;
+                    break;
+                case 2:  //Boss2 攻擊1 黑火球
+                    GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryBoss2Bullet(gameObject);
+                    Bullet[0].SetActive(false);
+                    Bullet[1].SetActive(false);
+                    forwardFly = true;
+                    break;
+            }
         }
     }
     void FixedUpdate()
     {
         //target = MonsterAI02.attackTarget;
 
-        if (Ay)
+        if (B_FlyTrack)
         {
-            AAT = MonsterAI02.AAT;
-            AttackPlay = MonsterAI02.AttackPlay;
+            switch (BulletType)
+            {
+                case 0:  //蠍子毒液
+                    AAT = MonsterAI02.AAT;
+                    AttackPlay = MonsterAI02.AttackPlay;
+                    break;
+                case 1:  //Boss2 攻擊1 火炮
+                    AAT = Boss02_AI.AAT+ new Vector3(0, 2, 0);
+                    AttackPlay = false;
+                    Bullet[0].SetActive(true);
+                    break;
+                case 2:  //Boss2 攻擊1 黑火球
+                    AAT = Boss02_AI.AAT + new Vector3(0, 2, 0);
+                    AttackPlay = false;
+                    Bullet[1].SetActive(true);
+                    break;
+            }
+
 
             if (AttackPlay)
             {
@@ -140,10 +189,10 @@ public class S_BulletLife : MonoBehaviour
             {
                 Atarget = AAT;
             }
-           
+
             //ABPath = Atarget - transform.position;
             //ABPath = ABPath / 10;
-            Ay = false;
+            B_FlyTrack = false;
         }
 
         if (Atarget != Vector3.zero)

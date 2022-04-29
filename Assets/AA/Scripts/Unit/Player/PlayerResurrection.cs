@@ -7,8 +7,9 @@ using UnityEngine.SceneManagement;
 public class PlayerResurrection : MonoBehaviour
 {
     public int SceneNub;
-    public Transform R1, R2;
-    public Transform[] R_transform;
+    public int InputSceneNub;  //測試用重生
+    public Transform R1;  //遊戲起始點
+    public Transform[] RebirthPonit;  //玩家重生點
     public GameObject Player;  //取得玩家
     public GameObject Gun;  //玩家武器
     public GameObject DeadUI;  //死亡UI
@@ -60,7 +61,7 @@ public class PlayerResurrection : MonoBehaviour
             if (Mission_L1)
             {
                 Player.SetActive(false);
-                Player.transform.position = R2.position;
+                Player.transform.position = RebirthPonit[0].position;
                 Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
                 Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
@@ -80,7 +81,7 @@ public class PlayerResurrection : MonoBehaviour
         Gun.transform.GetChild(0).GetChild(0).GetComponent<Animator>().SetBool("LayDown", true);        
         mouseLook = GameObject.Find("Gun_Camera").GetComponent<MouseLook>();
         //Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-        Player.transform.rotation = R_transform[0].rotation;
+        Player.transform.rotation = RebirthPonit[0].rotation;
         mouseLook.enabled = false;
         StartTime = 0;
         GameOver = false;
@@ -142,8 +143,26 @@ public class PlayerResurrection : MonoBehaviour
         RePlay = true;
         HeroLife.PlayerRe();  //血量回復
         Shooting.PlayerRe();  //彈藥回復
-        Player.transform.position = R2.position;
-        Player.transform.rotation = R2.localRotation;
+        if (StartGame)  //如果遊戲開始
+        {
+            SceneNub = Settings.SceneNub; //取得當前場景編號
+            switch (SceneNub)
+            {
+                case 2:  //第一關
+                    Player.transform.position = RebirthPonit[0].position;
+                    Player.transform.rotation = RebirthPonit[0].localRotation;
+                    break;
+                case 3:  //第二關
+                    Player.transform.position = RebirthPonit[1].position;
+                    Player.transform.rotation = RebirthPonit[1].localRotation;
+                    break;
+            }
+        }
+        else  //測試用重生
+        {
+            Player.transform.position = RebirthPonit[InputSceneNub].position;
+            Player.transform.rotation = RebirthPonit[InputSceneNub].localRotation;           
+        }
         con();
     }
     public static void GameOverUI()  //遊戲失敗

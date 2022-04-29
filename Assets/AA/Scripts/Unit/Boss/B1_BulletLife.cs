@@ -8,7 +8,7 @@ public class B1_BulletLife : MonoBehaviour
     public Animator ani;
     public GameObject[] Hit_vfx;  //彈孔類型
     public ParticleSystem[] Pro;
-    public int ButtleType;  //子彈類型
+    public int BulletType;  //子彈類型
     public Transform target;
     public Transform OriTarger;
     public int aTN;
@@ -70,8 +70,8 @@ public class B1_BulletLife : MonoBehaviour
         Pro[0].gameObject.SetActive(false);
         Pro[1].gameObject.SetActive(false);
         Pro[2].gameObject.SetActive(false);
-        OriSize = Pro[ButtleType + 3].transform.localScale * Random.Range(0.5f,1f);
-        switch (ButtleType)
+        OriSize = Pro[BulletType + 3].transform.localScale * Random.Range(0.5f,1f);
+        switch (BulletType)
         {
             case 0:  //尖形 結晶
                 Pro[0].gameObject.SetActive(true);
@@ -170,9 +170,9 @@ public class B1_BulletLife : MonoBehaviour
         }
         else
         {
-            bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime[ButtleType] * Time.deltaTime;  //生成尺寸
+            bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime[BulletType] * Time.deltaTime;  //生成尺寸
         }
-        Pro[ButtleType + 3].transform.localScale = bornSize;
+        Pro[BulletType + 3].transform.localScale = bornSize;
         if (StartAttack)
         {
             AttackCTime += Time.deltaTime;
@@ -182,8 +182,8 @@ public class B1_BulletLife : MonoBehaviour
                 Attacking = true;
                 Boss01_AI.ReMuzzleGrid(cuMuGrid);
                 Muzzle = Boss01_AI.PS_muzzle[cuMuGrid];
-                Muzzle.gameObject.transform.GetChild(ButtleType).gameObject.SetActive(true);
-                Muzzle.gameObject.transform.GetChild(ButtleType).GetComponent<ParticleSystem>().Play();
+                Muzzle.gameObject.transform.GetChild(BulletType).gameObject.SetActive(true);
+                Muzzle.gameObject.transform.GetChild(BulletType).GetComponent<ParticleSystem>().Play();
                 Muzzle.transform.localRotation = transform.localRotation;
             }
         }
@@ -224,14 +224,14 @@ public class B1_BulletLife : MonoBehaviour
                 oriDistance = firstDistance;  //舊距離
                 if (forwardFly)
                 {
-                    transform.Translate(Vector3.forward * speed[ButtleType] * Time.deltaTime); //往前移動
+                    transform.Translate(Vector3.forward * speed[BulletType] * Time.deltaTime); //往前移動
                 }
                 else
                 {
                     if (firstDistance != 0)
                     {
 
-                        transform.position = Vector3.MoveTowards(transform.position, Atarget, speed[ButtleType] * Time.deltaTime);
+                        transform.position = Vector3.MoveTowards(transform.position, Atarget, speed[BulletType] * Time.deltaTime);
                         firstDistance = Vector3.Distance(transform.position, Atarget);
                     }
                     else
@@ -293,7 +293,7 @@ public class B1_BulletLife : MonoBehaviour
             {
                 if (collision.gameObject.tag == damageTags[i])
                 {
-                    collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
+                    collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
                     break; //結束迴圈
                 }
             }
@@ -342,10 +342,10 @@ public class B1_BulletLife : MonoBehaviour
                 {
                     if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
                     {
-                        collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
+                        collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
-                            collision.gameObject.SendMessage("DamageEffects", ButtleType); //傷害
+                            collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
                         }
                         break; //結束迴圈
                     }
@@ -358,7 +358,7 @@ public class B1_BulletLife : MonoBehaviour
             //在到物體上產生彈孔
             Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
             Vector3 pos = hit.point;
-            pool_Hit.ReUseBoss1Hit(pos, rot, ButtleType);  //從彈孔池取出彈孔
+            pool_Hit.ReUseBoss1Hit(pos, rot, BulletType);  //從彈孔池取出彈孔
         }
     }
 }
