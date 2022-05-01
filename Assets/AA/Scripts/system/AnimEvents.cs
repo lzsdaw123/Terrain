@@ -163,7 +163,7 @@ public class AnimEvents : MonoBehaviour
         GameObject.Find("CameraMove").GetComponent<CameraMove>().CameraMoveEnd(1);
         boss02_AI.StartTime = 0;
     }
-    void Boss2_AttackEnd()  //機械Boss攻擊
+    void Boss2_AttackEnd()  //機械Boss攻擊結束
     {
         boss02_AI.AttackAning(true, 1);
         Boss02_AI.BulletNub--;

@@ -7,6 +7,11 @@ public class HeroLife : MonoBehaviour
 {
     public static float fullHp,hp, hp_R;  //滿血時數值, 實際, 紅血
     public Image HP_W, HP_R; //血球的UI物件
+    public GameObject[] BloodpackUI=new GameObject[3];  //補包UI
+    public static int BloodpackNub; //補包數量
+    public int SaveBpN;  //保存補包數量
+    public static bool GetBP;  //使用補包
+    public float BpTime;  //補包使用冷卻
     public static bool Dead;
     public float UiTime=0;
     bool Invincible=false;
@@ -32,6 +37,11 @@ public class HeroLife : MonoBehaviour
     void Awake()
     {
         DeBugT = GameObject.Find("DeBugT").gameObject;  //開發模式文字
+        for (int Bp = 0; Bp < BloodpackUI.Length; Bp++)
+        {
+            BloodpackUI[Bp].SetActive(false);
+        }
+        BloodpackNub = 0;
     }
 
     void Start()
@@ -42,6 +52,8 @@ public class HeroLife : MonoBehaviour
         InfectionValueUp = new int[] { 1, 2, 3, 3 };
         Crystal_Infection = false;
         hp = hp_R = fullHp = 20; //遊戲一開始時先填滿血
+        GetBP = false;
+        BpTime = -1;
         Dead = false;
 
         for (int i=0; i< Hit_Player.Length; i++)
@@ -91,6 +103,12 @@ public class HeroLife : MonoBehaviour
     {
         if (PlayerRebirth)  //玩家重生
         {
+            BloodpackNub = SaveBpN;  //回復補包數量
+            for (int Bp = 0; Bp < SaveBpN; Bp++)
+            {
+                BloodpackUI[Bp].SetActive(true);
+                SaveBpN = 0;
+            }
             PlayerAni[0].SetTrigger("InfectionLift");
             PlayerAni[1].SetTrigger("InfectionLift");
             BossHit_Ani.SetTrigger("Lift");
@@ -151,12 +169,14 @@ public class HeroLife : MonoBehaviour
                 hp -= 1;
             }
         }
-        if (hp <= 0)
+        if (hp <= 0)  //玩家死亡
         {
+            hp = 0; // 不要扣到負值
             Hit_Player[HitType].Stop();
             Hit_Player[HitType].gameObject.SetActive(false);
             DeadTime=0;
-            hp = 0; // 不要扣到負值
+            SaveBpN = BloodpackNub;         
+            HP_W.color = new Color(0, 0.57f, 0.85f, 1);
             Dead = true;
         }
         if (Hit_Player[HitType] != null)
@@ -167,9 +187,6 @@ public class HeroLife : MonoBehaviour
                 Hit_Player[HitType].gameObject.SetActive(false);
             }
         }
-
-
-
         HP_W.fillAmount = hp / fullHp; //顯示血球
         HP_R.fillAmount = hp_R / fullHp; //顯示血球
         if (hp != hp_R)
@@ -186,7 +203,33 @@ public class HeroLife : MonoBehaviour
             hp_R = hp;
             UiTime = 0;
         }
-
+        if (GetBP)  //取得補包
+        {
+            GetBP = false;
+            BloodpackNub++;
+            BloodpackUI[BloodpackNub-1].SetActive(true);
+        }
+        if (Input.GetKeyDown(KeyCode.B)) //使用補包
+        {
+            if(hp< fullHp && BpTime==-1)
+            {
+                HP_W.color = new Color(0, 0.85f, 0.70f, 1);
+                BpTime = 0;
+                hp += 10;
+                BloodpackUI[BloodpackNub - 1].SetActive(false);
+                BloodpackNub--;
+                AudioManager.PickUp(1);
+            }
+        }
+        if (BpTime >= 0)
+        {
+            BpTime += Time.deltaTime;
+            if (BpTime >= 2.866f)
+            {
+                BpTime = -1;
+                HP_W.color = new Color(0, 0.57f, 0.85f, 1);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.L)) //開發者模式
         {
             Damage(5);
@@ -225,5 +268,9 @@ public class HeroLife : MonoBehaviour
     {
         fullHp = 20 + Shop.HpLv * 5;
         hp= hp_R = fullHp;
+    }
+    public static void GetBloodpack()  //取得補包
+    {
+        GetBP = true;
     }
 }

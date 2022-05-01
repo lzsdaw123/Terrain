@@ -89,7 +89,8 @@ public class Boss02_AI : MonoBehaviour
     public float LockTime;  //鎖定時間
     public float overheatTime;  //過熱冷卻時間
     public bool overheatLock;  //過熱鎖定
-    public bool Reload;  
+    public bool Reload;
+    public GameObject[] AttackModePS;  //攻擊模式特效
     public int AttackMode;  //攻擊模式
     public int AttackRange;  //攻擊範圍
     public GameObject[] MA_Rig;  //Rig連結
@@ -476,6 +477,9 @@ public class Boss02_AI : MonoBehaviour
                         MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                         MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
                         MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
+                        AttackModePS[0].SetActive(false);
+                        AttackModePS[1].SetActive(false);
+                        AttackModePS[2].SetActive(false);
                         //print("過熱但開火");
                     }
                     else if(!Reload)  //處於非冷卻狀態
@@ -484,6 +488,9 @@ public class Boss02_AI : MonoBehaviour
                         MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                         MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
                         MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
+                        AttackModePS[0].SetActive(false);
+                        AttackModePS[1].SetActive(false);
+                        AttackModePS[2].SetActive(false);
                         //print("開火");
                     }
                     MA_weight += 1.5f * Time.deltaTime;
@@ -498,6 +505,9 @@ public class Boss02_AI : MonoBehaviour
                     if (MA_weight <= 0.4) MA_weight = 0.4f;
                     MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
                     MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    AttackModePS[0].SetActive(false);
+                    AttackModePS[1].SetActive(true);
+                    AttackModePS[2].SetActive(true);
                     break;
                 case 3:  //攻擊1 左邊死角範圍
                     Reload = true;
@@ -509,6 +519,9 @@ public class Boss02_AI : MonoBehaviour
                     MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
                     MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
                     MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    AttackModePS[0].SetActive(true);
+                    AttackModePS[1].SetActive(true);
+                    AttackModePS[2].SetActive(true);
                     break;
             }
             MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
@@ -649,6 +662,11 @@ public class Boss02_AI : MonoBehaviour
             //if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             muzzlePOS = muzzle[0].transform.position;
             Vector3 AttacktargetDir = targetPos - muzzlePOS;  //子彈轉向目標
+            if (AttackMode == 2)
+            {
+                AttacktargetDir = muzzlePOS - muzzlePOS;
+            }
+
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             cuMuGrid = 0;
             //ButtleType = Random.Range(0, 2);  //子彈類型

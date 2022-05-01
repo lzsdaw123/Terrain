@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PickUpWeapons : MonoBehaviour
 {
     public GameObject TextG;
-    [SerializeField] GameObject Take;
+    [SerializeField] GameObject Take;  //互動圖示UI
     GameObject play;
     public int WeaponsType;  // 0=步槍,1=電磁手槍, 2=霰彈槍
     string[] WeaponsText = new string[] { "自動步槍", "電磁手槍", "霰彈槍" };

@@ -7,13 +7,15 @@ public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
     //物件池集中位置
-    public GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B, B1_BulletPool, B1_HitPool, B2_BulletPool; 
+    public GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B,
+        B1_BulletPool, B1_HitPool, B2_BulletPool, B2_HitPool; 
     public GameObject[] Monster;    // 可生的怪種類
     public MonsterAttributes[] MonsterAttributes = new MonsterAttributes[3];
     public GameObject MBullet ;	// 怪物子彈
     public GameObject B1_Bullet ;	// 水晶BOSS子彈
     public GameObject B2_Bullet ;	// 機械BOSS子彈
-    public GameObject B1_Hit;	// 水晶BOSS彈孔
+    public GameObject B1_Hit; 	//水晶BOSS彈孔
+    public GameObject B2_Hit; 	//機械BOSS彈孔
     public SpawnRay _SpawnRay;
 
     public int inttailSize;  //預置物件數量
@@ -32,11 +34,11 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> B1_Bullet_pool = new Queue<GameObject>();
     private Queue<GameObject> B2_Bullet_pool = new Queue<GameObject>();
     private Queue<GameObject> B1_Hit_pool = new Queue<GameObject>();
+    private Queue<GameObject> B2_Hit_pool = new Queue<GameObject>();
 
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);  //切換場景時保留
         inttailSize = 8;  //物件池大小
         inttailSizeMS[0] = 16;  //物件池大小
         inttailSizeMS[1] = 12;  //物件池大小
@@ -52,6 +54,7 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;   //Boss1子彈於怪物子彈池
             GameObject Boss1BHit = Instantiate(B1_Hit, B1_HitPool.transform) as GameObject;   //Boss1彈孔於怪物子彈池
             GameObject Boss2B = Instantiate(B2_Bullet, B2_BulletPool.transform) as GameObject;   //Boss2子彈於怪物子彈池
+            GameObject Boss2BHit = Instantiate(B2_Hit, B2_HitPool.transform) as GameObject;   //Boss2彈孔於怪物子彈池
 
             _pool.Enqueue(go);  //Queue.Enqueue() 將物件放入結構中
             _pool_Hit.Enqueue(go2);  //Queue.Enqueue() 將物件放入結構中
@@ -60,12 +63,14 @@ public class ObjectPool : MonoBehaviour
             B1_Bullet_pool.Enqueue(Boss1B);  //Queue.Enqueue() 將Boss1子彈放入結構中
             B2_Bullet_pool.Enqueue(Boss2B);  //Queue.Enqueue() 將Boss2子彈放入結構中
             B1_Hit_pool.Enqueue(Boss1BHit);  //Queue.Enqueue() 將Boss1彈孔放入結構中
+            B2_Hit_pool.Enqueue(Boss2BHit);  //Queue.Enqueue() 將Boss2彈孔放入結構中
             go.SetActive(false);
             go2.SetActive(false);
             Mo1B.SetActive(false);
             Boss1B.SetActive(false);
             Boss1BHit.SetActive(false);
             Boss2B.SetActive(false);
+            Boss2BHit.SetActive(false);
         }
         for (int cut = 0; cut < inttailSizeMS[0]; cut++)
         {
@@ -96,6 +101,10 @@ public class ObjectPool : MonoBehaviour
             Mo2.SetActive(false);
         }
 
+    }
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
     }
     //子彈
     public void ReUse (Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
@@ -329,6 +338,43 @@ public class ObjectPool : MonoBehaviour
     public void RecoveryBoss2Bullet(GameObject recovery)  //用來回收物件
     {
         B2_Bullet_pool.Enqueue(recovery);
+        recovery.SetActive(false);
+    }
+    //Boss2 彈孔
+    public void ReUseBoss2Hit(Vector3 positon, Quaternion rotation, int HitType)  //取出存放在物件池中的物件
+    {
+        if (B2_Hit_pool.Count > 0)
+        {
+            GameObject reuse = B2_Hit_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
+            reuse.transform.position = positon;
+            reuse.transform.rotation = rotation;
+            reuse.GetComponent<B2_BulletHole>().BulletType = HitType;
+            GameObject reHit = reuse.transform.GetChild(HitType).gameObject;
+            reHit.SetActive(true);
+            //reuse.GetComponent<B2_BulletHole>().ani.SetInteger("Type", HitType);
+            //print(HitType+"  HitType   " + reuse.GetComponent<B1_BulletHole>().ButtleType);
+            reuse.SetActive(true);
+        }
+        else
+        {
+            GameObject Boss2BHit = Instantiate(B2_Hit, B2_HitPool.transform) as GameObject;  //Boss2彈孔於怪物子彈池
+            Boss2BHit.transform.position = positon;
+            Boss2BHit.transform.rotation = rotation;
+            Boss2BHit.GetComponent<B2_BulletHole>().BulletType = HitType;
+            GameObject reHit = Boss2BHit.transform.GetChild(HitType).gameObject;
+            reHit.SetActive(true);
+            //Boss2BHit.GetComponent<B2_BulletHole>().ani.SetInteger("Type", HitType);
+        }
+    }
+    public void RecoveryBoss2Hit(GameObject recovery)  //用來回收物件
+    {
+        B2_Hit_pool.Enqueue(recovery);
+        GameObject reHit;
+        for (int i = 0; i < recovery.transform.childCount; i++)
+        {
+            reHit = recovery.transform.GetChild(i).gameObject;
+            reHit.SetActive(false);
+        }
         recovery.SetActive(false);
     }
 }

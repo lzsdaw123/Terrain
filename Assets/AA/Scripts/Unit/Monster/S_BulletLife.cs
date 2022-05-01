@@ -34,11 +34,17 @@ public class S_BulletLife : MonoBehaviour
     public LayerMask layerMask;
     bool forwardFly = false;  //依慣性向前飛
     bool AttackPlay;
+    public ObjectPool pool_Hit;  //物件池
+
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
         facingRight = FacingRight;
         //Destroy(gameObject, liftTime); //設置生命時間到自動刪除
+    }
+    private void Awake()
+    {
+        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
     }
     void Start()
     {
@@ -298,6 +304,21 @@ public class S_BulletLife : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit; //射線擊中資訊
+        if (Physics.Raycast(ray, out hit, 10f,layerMask)) //擊中牆壁
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Monster"))  //無視怪物
+            {
+                return;
+            }
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Actor"))
+            {
+                if (hit.collider.tag == "MissionTarget")  //目標
+                {
+                }
+            }
+        }
         //若碰撞體在作用圖層內才進行運算
         if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
@@ -329,6 +350,14 @@ public class S_BulletLife : MonoBehaviour
         else if (InLayerMask(collision.gameObject.layer, Ground[1]))
         {
             liftTime = 0;
+            //在到物體上產生彈孔
+            if (BulletType >= 1)
+            {
+                Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                Vector3 pos = hit.point;
+                int HitType = BulletType - 1;
+                pool_Hit.ReUseBoss2Hit(pos, rot, HitType);  //從彈孔池取出彈孔
+            }
         }
     }
 }

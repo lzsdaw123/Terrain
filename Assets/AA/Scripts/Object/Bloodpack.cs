@@ -7,8 +7,7 @@ public class Bloodpack : MonoBehaviour
 {
     public GameObject T;
     bool StartB;
-    float time;
-    [SerializeField] GameObject Take;
+    [SerializeField] GameObject Take;  //互動圖示UI
 
     void Awake()
     {
@@ -20,36 +19,46 @@ public class Bloodpack : MonoBehaviour
         StartB = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Take.activeSelf && StartB)
-        {
-            HeroLife.AddHp();
-        }
-        if (!Take.activeSelf)
-        {
-            AudioManager.PickUp(-1);
-        }
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            StartB = false;
-            AudioManager.PickUp(-1);
-        }
+        //if (Take.activeSelf && StartB)
+        //{
+        //    HeroLife.AddHp();
+        //}
+        //if (!Take.activeSelf)
+        //{
+        //    AudioManager.PickUp(-1);
+        //}
+        //if (Input.GetKeyUp(KeyCode.E))
+        //{
+        //    StartB = false;
+        //    AudioManager.PickUp(-1);
+        //}
 
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
-        T.GetComponent<Text>().text = "按住「E」修理\n";
-        QH_interactive.thing();  //呼叫QH_拾取圖案
-
-        if (Take.activeSelf)
+        if (HeroLife.BloodpackNub >= 3)
         {
-            if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
+            T.GetComponent<Text>().text = "修理包已達上限";
+            QH_interactive.thing();  //呼叫QH_拾取圖案
+        }
+        else
+        {
+            T.GetComponent<Text>().text = "按「E」取得修理包";
+            QH_interactive.thing();  //呼叫QH_拾取圖案
+
+            if (Take.activeSelf)
             {
-                AudioManager.PickUp(1);
-                StartB = true;
+                if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
+                {
+                    AudioManager.PickUp(0);
+                    HeroLife.GetBloodpack();
+                    gameObject.SetActive(false);
+                    StartB = true;
+                }
             }
         }
+
     }
 }

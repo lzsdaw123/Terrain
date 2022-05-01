@@ -118,15 +118,18 @@ public class PlayerResurrection : MonoBehaviour
         }
         if (time >= 1)   //復活時間
         {
-            time =0;
-            RePlay = false;
-            RebirthUI.SetActive(false);
             Player.SetActive(true);
             Player.GetComponent<PlayerMove>().enabled = true;
             Player.GetComponent<Shooting>().enabled = true;
             Player.GetComponent<HeroLife>().enabled = true;
             //DeadUI.SetActive(false);
             Dead = true;         
+        }
+        if (time >= 1.3f)  //復活結束
+        {
+            RePlay = false;
+            time = 0;
+            RebirthUI.SetActive(false);
         }
         if (GameOver)  //顯示遊戲失敗UI
         {
