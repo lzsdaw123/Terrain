@@ -10,7 +10,7 @@ public class HeroLife : MonoBehaviour
     public GameObject[] BloodpackUI=new GameObject[3];  //補包UI
     public static int BloodpackNub; //補包數量
     public int SaveBpN;  //保存補包數量
-    public static bool GetBP;  //使用補包
+    public static bool GetBP;  //取得補包
     public float BpTime;  //補包使用冷卻
     public static bool Dead;
     public float UiTime=0;

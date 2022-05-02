@@ -74,7 +74,6 @@ public class Shooting : MonoBehaviour
     bool Fire1st = false;  
     public bool TargetWall;
     public GameObject[] GunFlashlight; //槍枝手電筒
-    public BoxCollider GunCollider;
     public static bool SkipTeach;
     Image Aim;
     static UpgradeValue[] 武器欄位;
@@ -83,6 +82,14 @@ public class Shooting : MonoBehaviour
     public static bool 換部件;
     static bool Bomb=true;
     public bool hitDamage;
+    public static int GrenadeNub; //手榴彈數量
+    [SerializeField] int SF_GrenadeNub; //手榴彈數量
+    public int SaveGN;  //保存手榴彈數量
+    public static bool GetGrenade;  //取得手榴彈
+    public GameObject GrenadeUI;
+    public GameObject[] Grenade;  //手榴彈物件
+    public static GameObject GetGrenadeObj;  //
+    public static bool UseGrenade;
 
     public static void StartAll()
     {
@@ -127,11 +134,13 @@ public class Shooting : MonoBehaviour
         PickUpWeapon = 0;
         SwitchWeapon = false;
         FirstWeapon = new bool[] { false, false, false };
+        Grenade = new GameObject[2];
     }
     void Start()
     {
         coolDown = 1f;  //冷卻結束時間
         coolDownTimer = coolDown + 1;
+        GetGrenade = UseGrenade = false;
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         ReloadWarn = GameObject.Find("ReloadWarn").gameObject;
         Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;
@@ -160,6 +169,7 @@ public class Shooting : MonoBehaviour
     void Update()
     {
         SF_WeaponType = WeaponType;
+        SF_GrenadeNub = GrenadeNub;
         if (換部件)
         {
             換部件 = false;
@@ -520,14 +530,43 @@ public class Shooting : MonoBehaviour
             coolDownTimer += Time.deltaTime;
             //Weapon.SetBool("Fire", false);
         }
-        if (!Bomb)
+
+        if (GetGrenade)  //取得手榴彈
         {
-            Weapon.SetBool("Bomb", false);
+            for (int g = 0; g < Grenade.Length; g++)
+            {
+                if (Grenade[g] == null)
+                {
+                    Grenade[g] = GetGrenadeObj;
+                    break;
+                }
+            }
+            GetGrenade = false;
+            GrenadeNub++;
+            GrenadeUI.GetComponent<Text>().text = ""+ GrenadeNub;
         }
-        if (Input.GetKeyDown(KeyCode.G) && Bomb)  //投擲手榴彈
+        if (UseGrenade)  //使用手榴彈
         {
+            UseGrenade = false;
+            Grenade[GrenadeNub].transform.position = Muzzle_vfx[3].transform.position;
+            Grenade[GrenadeNub].transform.rotation = Muzzle_vfx[3].transform.rotation;
+            Grenade[GrenadeNub].transform.parent = null;
+            Grenade[GrenadeNub].SetActive(true);
+            Grenade[GrenadeNub].GetComponent<ExplosionLift>().enabled = true;
+            //Grenade[GrenadeNub].GetComponent<Grenade>().enabled = false;
+            Grenade[GrenadeNub].layer = LayerMask.NameToLayer("Default");
+            Grenade[GrenadeNub].GetComponent<Rigidbody>().isKinematic = false;
+            //Grenade[GrenadeNub].GetComponent<CapsuleCollider>().isTrigger = false;
+            Grenade[GrenadeNub].transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(false);
+            Grenade[GrenadeNub].transform.GetChild(0).transform.GetChild(2).gameObject.SetActive(false);
+            Grenade[GrenadeNub] = null;
+        }
+        if (Input.GetKeyDown(KeyCode.G) && Bomb && GrenadeNub !=0)  //投擲手榴彈
+        {
+            GrenadeNub--;            
+            GrenadeUI.GetComponent<Text>().text = "" + GrenadeNub;
             Bomb = false;
-            Weapon.SetBool("Bomb", true);
+            Weapon.SetTrigger("Bomb");
         }
         if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
         {
@@ -967,24 +1006,21 @@ public class Shooting : MonoBehaviour
                 break;
         }
     }
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other == GunCollider)
-        {
-            //print("碰到槍了");
-
-            if (other.gameObject.layer != LayerMask.NameToLayer("Weapon"))
-            {
-
-            }
-        }
-    }
     public static void UseWork(UpgradeValue[] _武器欄位)
     {
         武器欄位 = _武器欄位;
     }
-    public static void BumbEnd()
+    public static void Bumb()  //投彈
+    {
+        UseGrenade = true;
+    }
+    public static void BumbEnd()  //投彈結束
     {
         Bomb = true;
+    }
+    public static void Get_Grenade(GameObject grenade)  //取得手榴彈
+    {
+        GetGrenadeObj = grenade;     
+        GetGrenade = true;
     }
 }

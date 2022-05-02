@@ -80,7 +80,11 @@ public class AnimEvents : MonoBehaviour
                 break;
         }   
     }
-    void BumbEnd()
+    void Bumb()  //投彈
+    {
+        Shooting.Bumb();
+    }
+    void BumbEnd()  //投彈結束
     {
         Shooting.BumbEnd();
     }

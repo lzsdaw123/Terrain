@@ -8,7 +8,7 @@ public class ExplosionLift : MonoBehaviour
     public Animator ani;
     public GameObject[] Hit_vfx;  //彈孔類型
     public ParticleSystem[] Pro;
-    public int ButtleType;  //子彈類型
+    public int BulletType;  //子彈類型
     public Transform target;
     public Transform OriTarger;
     public int aTN;
@@ -38,6 +38,8 @@ public class ExplosionLift : MonoBehaviour
     public LayerMask[] Ground;  //射線偵測圖層
     public LayerMask layerMask;
     [SerializeField] bool forwardFly;  //是否向前飛
+    [SerializeField] bool ReflectionT;  //是否向前飛
+    [SerializeField] bool forwardTurn;  //是否向前轉
     public float firstDistance;  //初始距離
     public float oriDistance;  //舊距離
     bool AttackPlay;  //攻擊目標是否為玩家
@@ -45,6 +47,12 @@ public class ExplosionLift : MonoBehaviour
     public bool StartAttack;  //開始攻擊
     public float AttackCTime;  //攻擊倒數
     public ObjectPool pool_Hit;  //物件池
+    public GameObject[] Object;
+    float Rz;
+    public int collisionNub;  //碰撞次數
+    public float ReflectTime;
+    public int ReflectNub;
+    public  Vector3 Reflection;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -57,20 +65,24 @@ public class ExplosionLift : MonoBehaviour
     }
     void Start()
     {
-        speed = new float[] {160,80,40 }; //飛行速度
-        power =new float[] {1,3,10 };
+        speed = new float[] {15,80,40 }; //飛行速度
+        power =new float[] {20,3,10 };
         AttackLv = 0;
         bornTime = new float[] {2,1, 150f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;
-        forwardFly = false;
         Attacking = false;
         Damage = true;
         //Pro[0].gameObject.SetActive(false);
         //Pro[1].gameObject.SetActive(false);
         //Pro[2].gameObject.SetActive(false);
-        switch (ButtleType)
+        switch (BulletType)
         {
-            case 0:  //尖形 結晶
+            case 0:  //手榴彈
+                forwardFly = true;
+                Attacking = true;
+                liftTime = 4;
+                collisionNub = 0;
+                ReflectTime = -1;
                 //Pro[0].gameObject.SetActive(true);
                 //bornSize = Vector3.zero;
                 break;
@@ -79,6 +91,7 @@ public class ExplosionLift : MonoBehaviour
                 //bornSize = new Vector3(0, 0, 0.4f);
                 break;
             case 2:  //多邊 爆炸
+                forwardFly = false;
                 AttackCTime = 2;
                 StartAttack = true;
                 liftTime = 1;
@@ -151,64 +164,142 @@ public class ExplosionLift : MonoBehaviour
         if (liftTime <= 0)
         {
             liftTime = 0;
+            print("時間到爆炸");
             Damage = false;
             bornSize = Vector3.zero;
             //gameObject.SetActive(false);
             //GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryBoss1Bullet(gameObject);  //回收子彈
             //Boss01_AI.BulletNub++;
+            gameObject.SetActive(false);
         }
-
-        if (bornSize.z >= OriSize.z)
+        switch (BulletType)
         {
-            bornSize = OriSize;
-            liftTime = 0;
-        }
-        else
-        {
-            if(Damage) bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime[ButtleType] * Time.deltaTime;  //生成尺寸
-        }
-        transform.localScale = bornSize;
-        if (StartAttack)
-        {
-            AttackCTime += Time.deltaTime;
-            if (AttackCTime >= 2)  //發射前等待
-            {
-                StartAttack = false;
-                Attacking = true;
-                //Boss01_AI.ReMuzzleGrid(cuMuGrid);
-                //Muzzle = Boss01_AI.PS_muzzle[cuMuGrid];
-                //Muzzle.gameObject.transform.GetChild(ButtleType).gameObject.SetActive(true);
-                //Muzzle.gameObject.transform.GetChild(ButtleType).GetComponent<ParticleSystem>().Play();
-                //Muzzle.transform.localRotation = transform.localRotation;
-            }
-        }
-
+            case 0:  //尖形 結晶
+                if (liftTime <= 4)
+                {
+                    //forwardFly = false;
+                }
+                break;
+            case 1:  //長方 傳送
+                break;
+            case 2:  //多邊 爆炸
+                if (bornSize.z >= OriSize.z)
+                {
+                    bornSize = OriSize;
+                    liftTime = 0;
+                }
+                else
+                {
+                    if (Damage) bornSize += new Vector3(0.1f, 0.1f, 0.1f) * bornTime[BulletType] * Time.deltaTime;  //生成尺寸
+                }
+                transform.localScale = bornSize;
+                if (StartAttack)
+                {
+                    AttackCTime += Time.deltaTime;
+                    if (AttackCTime >= 2)  //發射前等待
+                    {
+                        StartAttack = false;
+                        Attacking = true;
+                        //Boss01_AI.ReMuzzleGrid(cuMuGrid);
+                        //Muzzle = Boss01_AI.PS_muzzle[cuMuGrid];
+                        //Muzzle.gameObject.transform.GetChild(ButtleType).gameObject.SetActive(true);
+                        //Muzzle.gameObject.transform.GetChild(ButtleType).GetComponent<ParticleSystem>().Play();
+                        //Muzzle.transform.localRotation = transform.localRotation;
+                    }
+                }
+                break;
+        }               
     }
     void FixedUpdate()
     {
         //target = MonsterAI02.attackTarget;
-
-        if (Get_ATarget)
+        switch (BulletType)
         {
-            AAT = Boss01_AI.AAT;
-            AttackPlay = Boss01_AI.AttackPlay;
+            case 0:
+                if (forwardFly)
+                {
+                    transform.Translate(Vector3.forward * speed[BulletType] * Time.deltaTime); //往前移動
+                    Rz -= 1080* Time.deltaTime;
+                    Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz) ;  //旋轉
+                     //transform.localRotation = Quaternion.Euler(-28.635f, -20f, Rz/2) ;  //旋轉
+                }
+                if (ReflectTime >= 0)
+                {
+                    ReflectTime += Time.deltaTime;
+                    //transform.Translate(Reflection * 0.025f / ReflectNub * Time.deltaTime); //往前反射
+                    switch (ReflectNub)
+                    {
+                        case 1:
+                            transform.Translate(Reflection * 35 * Time.deltaTime); //往前反射
+                            break;
+                        case 2:
+                            transform.Translate(Reflection * 25 * Time.deltaTime); //往前反射
+                            break;
+                        case 3:
+                            transform.Translate(Reflection * 15 * Time.deltaTime); //往前反射
+                            break;
+                        case 4:
+                            transform.Translate(Reflection * 7 * Time.deltaTime); //往前反射
+                            break;
+                    }
+                    //transform.position -= Reflection;
+                    Rz -= 360 * Time.deltaTime;
+                    Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz);  //旋轉
+                }
+                if (ReflectNub >= 4)
+                {
+                    ReflectTime = -1;
+                    ReflectionT = true;
+                }
+                else
+                {
+                    if (ReflectTime >= 0.05f)
+                    {
+                        ReflectionT = false;
+                    }
+                }
 
-            if (AttackPlay)
-            {
-                AtargetY = AAT.y + 1.2f;
-                Atarget = new Vector3(AAT.x, AtargetY, AAT.z);
-            }
-            else
-            {
-                Atarget = AAT;
-            }
-            if (StartAttack)  //開始攻擊
-            {
-                Vector3 targetDir = Atarget - transform.position;
-                Quaternion rotate = Quaternion.LookRotation(targetDir);
-                transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 20 * Time.deltaTime);
-            }
+
+                //if (forwardTurn)
+                //{
+                //    if (speed[BulletType] > 0)
+                //    {
+                //        speed[BulletType] -= 15 * Time.deltaTime;
+                //        Rz += 720 * Time.deltaTime;
+                //    }
+                //    else
+                //    {
+                //        speed[BulletType] = 0;
+                //    }
+                //    transform.Translate(Vector3.forward * speed[BulletType] * Time.deltaTime); //往前移動                    
+                //    Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz);  //旋轉
+                //}
+                break;
+            case 2:
+                if (Get_ATarget)
+                {
+                    AAT = Boss01_AI.AAT;
+                    AttackPlay = Boss01_AI.AttackPlay;
+
+                    if (AttackPlay)
+                    {
+                        AtargetY = AAT.y + 1.2f;
+                        Atarget = new Vector3(AAT.x, AtargetY, AAT.z);
+                    }
+                    else
+                    {
+                        Atarget = AAT;
+                    }
+                    if (StartAttack)  //開始攻擊
+                    {
+                        Vector3 targetDir = Atarget - transform.position;
+                        Quaternion rotate = Quaternion.LookRotation(targetDir);
+                        transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 20 * Time.deltaTime);
+                    }
+                }
+                break;
         }
+        
 
         //if (Attacking)
         //{
@@ -268,14 +359,40 @@ public class ExplosionLift : MonoBehaviour
             {
                 if (collision.gameObject.tag == damageTags[i])
                 {
-                    collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
+                    collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
                     break; //結束迴圈
                 }
             }
         }
         else if (InLayerMask(collision.gameObject.layer, Ground[1]))
         {
-            liftTime = 0;
+            if (BulletType == 0)
+            {
+                forwardFly = false;
+                collisionNub++;
+                //print("collisionNub" + collisionNub);
+                if (!ReflectionT)
+                {
+                    //ReflectionT = true;
+                    ReflectTime = 0;
+                    ReflectNub++;
+                    //Reflection = Vector3.Reflect(transform.position, transform.right) *0.0005f;
+                    Reflection = Vector3.Reflect(transform.position, Vector3.right) *0.0005f;
+                    print("碰撞---------反射");
+                }
+                else
+                {
+                    //if (collisionNub >= 3)
+                    //{
+                    //    forwardTurn = false;
+                    //    print("爆炸" + collisionNub);
+                    //}
+                    //if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    //{
+                    //    forwardTurn = true;
+                    //}
+                }
+            }
         }
     }
 
@@ -319,10 +436,10 @@ public class ExplosionLift : MonoBehaviour
                     {
                         if (Damage)
                         {
-                            collision.gameObject.SendMessage("Damage", power[ButtleType]); //傷害
+                            collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
                             if (collision.GetComponent<HeroLife>())
                             {
-                                collision.gameObject.SendMessage("DamageEffects", ButtleType); //傷害
+                                collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
                             }
                         }
                         break; //結束迴圈
@@ -332,6 +449,33 @@ public class ExplosionLift : MonoBehaviour
         } 
         else if (InLayerMask(collision.gameObject.layer, Ground[1]))
         {
+            if (BulletType == 0)
+            {
+                forwardFly = false;
+                collisionNub++;
+                //print("collisionNub" + collisionNub);
+                if (!ReflectionT)
+                {
+                    //ReflectionT = true;
+                    ReflectTime = 0;
+                    ReflectNub++;
+                    //Reflection = Vector3.Reflect(transform.position, Vector3.right);
+                    Reflection = Vector3.Reflect(transform.position, Vector3.right) * 0.0008f;
+                    print("觸發反射");
+                }
+                else
+                {
+                    //if (collisionNub >= 3)
+                    //{
+                    //    forwardTurn = false;
+                    //    print("爆炸" + collisionNub);
+                    //}
+                    //if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    //{
+                    //    forwardTurn = true;
+                    //}
+                }               
+            }
             //liftTime = 0;
             ////在到物體上產生彈孔
             //Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);

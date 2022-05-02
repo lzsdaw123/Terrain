@@ -39,6 +39,12 @@ public class ObjectPool : MonoBehaviour
 
     void Awake()
     {
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+            UnityEditor.SceneVisibilityManager.instance.Show(gameObject, false);
+#endif
+        DontDestroyOnLoad(gameObject);  //切換場景時保留
+
         inttailSize = 8;  //物件池大小
         inttailSizeMS[0] = 16;  //物件池大小
         inttailSizeMS[1] = 12;  //物件池大小
@@ -100,11 +106,9 @@ public class ObjectPool : MonoBehaviour
 
             Mo2.SetActive(false);
         }
-
     }
     void Start()
     {
-        DontDestroyOnLoad(gameObject);  //切換場景時保留
     }
     //子彈
     public void ReUse (Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
@@ -255,14 +259,14 @@ public class ObjectPool : MonoBehaviour
     }
 
     //Boss1 子彈
-    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation,int ButtleType, int Muzzle)  //取出存放在物件池中的物件
+    public void ReUseBoss1Bullet(Vector3 positon, Quaternion rotation,int BulletType, int Muzzle)  //取出存放在物件池中的物件
     {
         if (B1_Bullet_pool.Count > 0)
         {
             GameObject reuse = B1_Bullet_pool.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
-            reuse.GetComponent<B1_BulletLife>().BulletType = ButtleType;
+            reuse.GetComponent<B1_BulletLife>().BulletType = BulletType;
             reuse.GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
             reuse.SetActive(true);
         }
@@ -271,7 +275,7 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss1B = Instantiate(B1_Bullet, B1_BulletPool.transform) as GameObject;  //Boss1子彈於怪物子彈池
             Boss1B.transform.position = positon;
             Boss1B.transform.rotation = rotation;
-            Boss1B.GetComponent<B1_BulletLife>().BulletType = ButtleType;
+            Boss1B.GetComponent<B1_BulletLife>().BulletType = BulletType;
             Boss1B.GetComponent<B1_BulletLife>().cuMuGrid = Muzzle;
         }
     }
