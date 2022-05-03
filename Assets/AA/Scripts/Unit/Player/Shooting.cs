@@ -283,6 +283,10 @@ public class Shooting : MonoBehaviour
         }
         if (AniTime <= 0)
         {
+            if (heroLife.Level > 0)
+            {
+                heroLife.InfectionSW = true;
+            }
             WeapSwitch = false;
             _Animator[WeaponType].SetActive(false);
             switch (NextWeaponType)  //切換武器模型
@@ -548,15 +552,15 @@ public class Shooting : MonoBehaviour
         if (UseGrenade)  //使用手榴彈
         {
             UseGrenade = false;
-            Grenade[GrenadeNub].transform.position = Muzzle_vfx[3].transform.position;
-            Grenade[GrenadeNub].transform.rotation = Muzzle_vfx[3].transform.rotation;
+            Grenade[GrenadeNub].transform.position = Muzzle_vfx[WeaponType +3].transform.position;
+            Grenade[GrenadeNub].transform.rotation = Muzzle_vfx[WeaponType +3].transform.rotation;
             Grenade[GrenadeNub].transform.parent = null;
             Grenade[GrenadeNub].SetActive(true);
             Grenade[GrenadeNub].GetComponent<ExplosionLift>().enabled = true;
             //Grenade[GrenadeNub].GetComponent<Grenade>().enabled = false;
             Grenade[GrenadeNub].layer = LayerMask.NameToLayer("Default");
             Grenade[GrenadeNub].GetComponent<Rigidbody>().isKinematic = false;
-            //Grenade[GrenadeNub].GetComponent<CapsuleCollider>().isTrigger = false;
+            Grenade[GrenadeNub].GetComponent<CapsuleCollider>().isTrigger = false;
             Grenade[GrenadeNub].transform.GetChild(0).transform.GetChild(1).gameObject.SetActive(false);
             Grenade[GrenadeNub].transform.GetChild(0).transform.GetChild(2).gameObject.SetActive(false);
             Grenade[GrenadeNub] = null;

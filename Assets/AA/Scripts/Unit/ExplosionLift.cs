@@ -48,11 +48,12 @@ public class ExplosionLift : MonoBehaviour
     public float AttackCTime;  //攻擊倒數
     public ObjectPool pool_Hit;  //物件池
     public GameObject[] Object;
-    float Rz;
+    float Rz;  //旋轉
     public int collisionNub;  //碰撞次數
     public float ReflectTime;
-    public int ReflectNub;
     public  Vector3 Reflection;
+    public PhysicMaterial physicMaterial;
+    public GameObject[] actors=new GameObject[6];
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -65,24 +66,26 @@ public class ExplosionLift : MonoBehaviour
     }
     void Start()
     {
-        speed = new float[] {15,80,40 }; //飛行速度
-        power =new float[] {20,3,10 };
+        speed = new float[] {16,80,40 }; //飛行速度
+        power =new float[] {30,3,10 };
         AttackLv = 0;
-        bornTime = new float[] {2,1, 150f};  //生成速度{快, 慢, 中}
+        bornTime = new float[] {150,1, 150f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;
         Attacking = false;
-        Damage = true;
         //Pro[0].gameObject.SetActive(false);
         //Pro[1].gameObject.SetActive(false);
         //Pro[2].gameObject.SetActive(false);
         switch (BulletType)
         {
             case 0:  //手榴彈
+                Damage = false;
                 forwardFly = true;
-                Attacking = true;
-                liftTime = 4;
+                StartAttack = true;
+                liftTime = 1;
                 collisionNub = 0;
                 ReflectTime = -1;
+                physicMaterial.bounciness = 1;
+                Object[1].SetActive(false);
                 //Pro[0].gameObject.SetActive(true);
                 //bornSize = Vector3.zero;
                 break;
@@ -91,6 +94,7 @@ public class ExplosionLift : MonoBehaviour
                 //bornSize = new Vector3(0, 0, 0.4f);
                 break;
             case 2:  //多邊 爆炸
+                Damage = true;
                 forwardFly = false;
                 AttackCTime = 2;
                 StartAttack = true;
@@ -164,7 +168,6 @@ public class ExplosionLift : MonoBehaviour
         if (liftTime <= 0)
         {
             liftTime = 0;
-            print("時間到爆炸");
             Damage = false;
             bornSize = Vector3.zero;
             //gameObject.SetActive(false);
@@ -175,9 +178,29 @@ public class ExplosionLift : MonoBehaviour
         switch (BulletType)
         {
             case 0:  //尖形 結晶
-                if (liftTime <= 4)
+                if (StartAttack)
                 {
-                    //forwardFly = false;
+                    Object[2].SetActive(true);
+                    AttackCTime += Time.deltaTime;
+                    if (AttackCTime >= 4)  //發射前等待
+                    {
+                        StartAttack = false;
+                        Attacking = true;
+                    }
+                    if (Attacking)
+                    {
+                        Damage = true;
+                        GetComponent<Rigidbody>().isKinematic = true;
+                        Object[0].SetActive(false);
+                        Object[1].SetActive(true);
+                        Object[2].SetActive(false);
+                        GetComponent<CapsuleCollider>().isTrigger = true;
+                        GetComponent<CapsuleCollider>().radius += bornTime[0] * Time.deltaTime;
+                        if(GetComponent<CapsuleCollider>().radius >= 4.5f)
+                        {
+                            GetComponent<CapsuleCollider>().radius = 4.5f;
+                        }
+                    }
                 }
                 break;
             case 1:  //長方 傳送
@@ -223,56 +246,40 @@ public class ExplosionLift : MonoBehaviour
                     Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz) ;  //旋轉
                      //transform.localRotation = Quaternion.Euler(-28.635f, -20f, Rz/2) ;  //旋轉
                 }
-                if (ReflectTime >= 0)
-                {
-                    ReflectTime += Time.deltaTime;
-                    //transform.Translate(Reflection * 0.025f / ReflectNub * Time.deltaTime); //往前反射
-                    switch (ReflectNub)
-                    {
-                        case 1:
-                            transform.Translate(Reflection * 35 * Time.deltaTime); //往前反射
-                            break;
-                        case 2:
-                            transform.Translate(Reflection * 25 * Time.deltaTime); //往前反射
-                            break;
-                        case 3:
-                            transform.Translate(Reflection * 15 * Time.deltaTime); //往前反射
-                            break;
-                        case 4:
-                            transform.Translate(Reflection * 7 * Time.deltaTime); //往前反射
-                            break;
-                    }
-                    //transform.position -= Reflection;
-                    Rz -= 360 * Time.deltaTime;
-                    Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz);  //旋轉
-                }
-                if (ReflectNub >= 4)
-                {
-                    ReflectTime = -1;
-                    ReflectionT = true;
-                }
-                else
-                {
-                    if (ReflectTime >= 0.05f)
-                    {
-                        ReflectionT = false;
-                    }
-                }
-
-
-                //if (forwardTurn)
+                //if (ReflectTime >= 0)
                 //{
-                //    if (speed[BulletType] > 0)
+                //    ReflectTime += Time.deltaTime;
+                //    //transform.Translate(Reflection * 0.025f / ReflectNub * Time.deltaTime); //往前反射
+                //    switch (ReflectNub)
                 //    {
-                //        speed[BulletType] -= 15 * Time.deltaTime;
-                //        Rz += 720 * Time.deltaTime;
+                //        case 1:
+                //            transform.Translate(Reflection * 35 * Time.deltaTime); //往前反射
+                //            break;
+                //        case 2:
+                //            transform.Translate(Reflection * 25 * Time.deltaTime); //往前反射
+                //            break;
+                //        case 3:
+                //            transform.Translate(Reflection * 15 * Time.deltaTime); //往前反射
+                //            break;
+                //        case 4:
+                //            transform.Translate(Reflection * 7 * Time.deltaTime); //往前反射
+                //            break;
                 //    }
-                //    else
-                //    {
-                //        speed[BulletType] = 0;
-                //    }
-                //    transform.Translate(Vector3.forward * speed[BulletType] * Time.deltaTime); //往前移動                    
+                //    //transform.position -= Reflection;
+                //    Rz -= 360 * Time.deltaTime;
                 //    Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz);  //旋轉
+                //}
+                //if (ReflectNub >= 4)
+                //{
+                //    ReflectTime = -1;
+                //    ReflectionT = true;
+                //}
+                //else
+                //{
+                //    if (ReflectTime >= 0.05f)
+                //    {
+                //        ReflectionT = false;
+                //    }
                 //}
                 break;
             case 2:
@@ -346,7 +353,7 @@ public class ExplosionLift : MonoBehaviour
         //若碰撞體在作用圖層內才進行運算
         if (InLayerMask(collision.gameObject.layer, Ground[0]))
         {
-            liftTime = 0;
+            //liftTime = 0;
             for (int i = 0; i < ignoreTags.Length; i++)
             {
                 if (collision.gameObject.tag == ignoreTags[i])
@@ -359,7 +366,33 @@ public class ExplosionLift : MonoBehaviour
             {
                 if (collision.gameObject.tag == damageTags[i])
                 {
-                    collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
+                    if (BulletType==0)
+                    {
+                        if (Damage)
+                        {
+                            FindUpParent(collision.transform);  //找有HP的父物件
+                            Transform FindUpParent(Transform zi)  //找最大父物件
+                            {
+                                if (zi.GetComponent<MonsterLife>())
+                                {
+                                    zi.gameObject.SendMessage("Damage", power[BulletType]); //傷害
+                                    print("0 " + zi.gameObject.name);
+                                    return zi;
+                                }
+                                if (zi.GetComponent<Boss_Life>())
+                                {
+                                    zi.gameObject.SendMessage("Damage", power[BulletType]); //傷害
+                                    print("0 " + zi.gameObject.name); 
+                                    return zi;
+                                }
+                                else
+                                {
+                                    if (zi.parent == null) return zi;
+                                    else return FindUpParent(zi.parent);
+                                }
+                            }
+                        }
+                    }
                     break; //結束迴圈
                 }
             }
@@ -369,16 +402,17 @@ public class ExplosionLift : MonoBehaviour
             if (BulletType == 0)
             {
                 forwardFly = false;
-                collisionNub++;
+                physicMaterial.bounciness = 0.5f;
+                //collisionNub++;
                 //print("collisionNub" + collisionNub);
                 if (!ReflectionT)
                 {
-                    //ReflectionT = true;
-                    ReflectTime = 0;
-                    ReflectNub++;
+                    ReflectionT = true;
+                    //ReflectTime = 0;
+                    //ReflectNub++;
                     //Reflection = Vector3.Reflect(transform.position, transform.right) *0.0005f;
-                    Reflection = Vector3.Reflect(transform.position, Vector3.right) *0.0005f;
-                    print("碰撞---------反射");
+                    //Reflection = Vector3.Reflect(transform.position, Vector3.right) *0.0005f;
+                    //print("碰撞---------反射");
                 }
                 else
                 {
@@ -396,7 +430,7 @@ public class ExplosionLift : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collision)  //使用中
+    private void OnTriggerEnter(Collider collision)  //觸發
     {
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit; //射線擊中資訊
@@ -432,18 +466,50 @@ public class ExplosionLift : MonoBehaviour
             {
                 if (collision.gameObject.tag == damageTags[i])
                 {
-                    if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
+                    switch (BulletType)
                     {
-                        if (Damage)
-                        {
-                            collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
-                            if (collision.GetComponent<HeroLife>())
+                        case 0:
+                            if (Damage)
                             {
-                                collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
+                                FindUpParent(collision.transform);  //找有HP的父物件
+                                Transform FindUpParent(Transform zi)  //找最大父物件
+                                {
+                                    if (zi.GetComponent<MonsterLife>() || zi.GetComponent<Boss_Life>())
+                                    {
+                                        for (int i = 0; i < actors.Length; i++)
+                                        {
+                                            if (actors[i] != zi.gameObject)
+                                            {
+                                                zi.gameObject.SendMessage("Damage", power[BulletType]); //傷害
+                                                print("傷害 " + zi.gameObject.name);
+                                                actors[i] = zi.gameObject;
+                                            }
+                                        }
+                                        return zi;
+                                    }
+                                    else
+                                    {
+                                        if (zi.parent == null) return zi;
+                                        else return FindUpParent(zi.parent);
+                                    }                                   
+                                }
                             }
-                        }
-                        break; //結束迴圈
-                    }
+                            break;
+                        case 2:
+                            if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
+                            {
+                                if (Damage)
+                                {
+                                    collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
+                                    if (collision.GetComponent<HeroLife>())
+                                    {
+                                        collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
+                                    }
+                                }
+                                break; //結束迴圈
+                            }
+                            break;
+                    }                  
                 }
             }
         } 
@@ -452,16 +518,18 @@ public class ExplosionLift : MonoBehaviour
             if (BulletType == 0)
             {
                 forwardFly = false;
-                collisionNub++;
+                physicMaterial.bounciness = 0.5f;
+                ////collisionNub++;
                 //print("collisionNub" + collisionNub);
                 if (!ReflectionT)
                 {
-                    //ReflectionT = true;
-                    ReflectTime = 0;
-                    ReflectNub++;
+                    ReflectionT = true;
+                    
+                    //ReflectTime = 0;
+                    //ReflectNub++;
                     //Reflection = Vector3.Reflect(transform.position, Vector3.right);
-                    Reflection = Vector3.Reflect(transform.position, Vector3.right) * 0.0008f;
-                    print("觸發反射");
+                    //Reflection = Vector3.Reflect(transform.position, Vector3.right) * 0.0008f;
+                    //print("觸發反射");
                 }
                 else
                 {

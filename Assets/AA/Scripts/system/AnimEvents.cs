@@ -137,6 +137,10 @@ public class AnimEvents : MonoBehaviour
     {
         heroLife.Crystal_Infection = false;
     }
+    void InfectionSW()  //感染生成切換
+    {
+        heroLife.InfectionSW = false;
+    }
 
     //敵人用
     void M1_Attack()

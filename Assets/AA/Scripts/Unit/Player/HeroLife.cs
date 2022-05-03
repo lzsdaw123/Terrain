@@ -33,6 +33,7 @@ public class HeroLife : MonoBehaviour
     public float LiftTime; //解除倒數
     public GameObject InfectionUI;
     public Image Infection_Image;
+    public bool InfectionSW;
 
     void Awake()
     {
@@ -50,7 +51,7 @@ public class HeroLife : MonoBehaviour
         DeadTime = 0;
         LiftTime = 0;
         InfectionValueUp = new int[] { 1, 2, 3, 3 };
-        Crystal_Infection = false;
+        Crystal_Infection = InfectionSW = false;
         hp = hp_R = fullHp = 20; //遊戲一開始時先填滿血
         GetBP = false;
         BpTime = -1;
@@ -140,6 +141,7 @@ public class HeroLife : MonoBehaviour
             {
                 LiftTime = 0;
                 Level = 0;
+                InfectionValue = 0;
                 Hit_Player[HitType].gameObject.SetActive(true);
                 Hit_Player[0].Play();
                 PlayerAni[0].SetInteger("InfectionLevel", 0);
@@ -156,6 +158,13 @@ public class HeroLife : MonoBehaviour
             PlayerAni[0].SetInteger("InfectionLevel", Level);
             PlayerAni[1].SetInteger("InfectionLevel", Level);
             BossHit_Ani.SetInteger("Level", Level);
+        }
+        if (InfectionSW)
+        {
+            PlayerAni[0].SetTrigger("InfectionSw");
+            PlayerAni[1].SetTrigger("InfectionSw");
+            PlayerAni[0].SetInteger("InfectionLevel", Level);
+            PlayerAni[1].SetInteger("InfectionLevel", Level);
         }
 
         WeaponType = Shooting.WeaponType;
@@ -215,6 +224,7 @@ public class HeroLife : MonoBehaviour
             {
                 HP_W.color = new Color(0, 0.85f, 0.70f, 1);
                 BpTime = 0;
+                LiftTime = 12;
                 hp += 10;
                 BloodpackUI[BloodpackNub - 1].SetActive(false);
                 BloodpackNub--;
