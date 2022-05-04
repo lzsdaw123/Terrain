@@ -385,6 +385,7 @@ public class clusterBomb_Lift : MonoBehaviour
                         if (collision.GetComponent<HeroLife>())
                         {
                             collision.gameObject.SendMessage("DamageEffects", ButtleType); //傷害
+                            collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
                         }
                         break; //結束迴圈
                     }

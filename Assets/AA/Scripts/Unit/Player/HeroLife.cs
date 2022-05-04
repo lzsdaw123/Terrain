@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class HeroLife : MonoBehaviour
 {
+    public Camera Camera;
+    public int HpLv =1;
     public static float fullHp,hp, hp_R;  //滿血時數值, 實際, 紅血
     public Image HP_W, HP_R; //血球的UI物件
+    public GameObject[] Hit_Direction_UI;
     public GameObject[] BloodpackUI=new GameObject[3];  //補包UI
     public static int BloodpackNub; //補包數量
     public int SaveBpN;  //保存補包數量
@@ -34,6 +37,9 @@ public class HeroLife : MonoBehaviour
     public GameObject InfectionUI;
     public Image Infection_Image;
     public bool InfectionSW;
+    public float dot;
+    public float Fdot;
+    public float Rdot;
 
     void Awake()
     {
@@ -52,7 +58,7 @@ public class HeroLife : MonoBehaviour
         LiftTime = 0;
         InfectionValueUp = new int[] { 1, 2, 3, 3 };
         Crystal_Infection = InfectionSW = false;
-        hp = hp_R = fullHp = 20; //遊戲一開始時先填滿血
+        hp = hp_R = fullHp = 20 * HpLv; //遊戲一開始時先填滿血
         GetBP = false;
         BpTime = -1;
         Dead = false;
@@ -72,7 +78,7 @@ public class HeroLife : MonoBehaviour
     {
         hp -= Power; // 扣血
     }
-    public void DamageEffects(int hitType)
+    public void DamageEffects(int hitType)  //受傷特效
     {
         HitType = hitType;
         switch (HitType)
@@ -94,6 +100,48 @@ public class HeroLife : MonoBehaviour
         Hit_Player[HitType].gameObject.SetActive(true);
         Hit_Player[HitType].Play();
         playing = true;
+    }
+    public void hit_Direction(Transform Hit_transform)  //命中方向
+    {
+        Vector3 dirForward = (Hit_transform.transform.position - transform.position).normalized;
+        dot = Vector3.Dot(transform.forward, dirForward);     //判斷物體是否在相機前面
+        Vector3 Bdir = Hit_transform.transform.position - Camera.transform.position; //位置差，方向  
+        Rdot = Vector3.Dot(Camera.transform.right, Bdir.normalized);//點乘判斷左右： Rdot >0在右，<0在左
+        Fdot = Vector3.Dot(Camera.transform.forward, Bdir.normalized);//點乘判斷前後：Fdot >0在前，<0在後
+        if (dot > 0)
+        {
+            if (Fdot > 0.86)  //擊中正面
+            {
+                Hit_Direction_UI[0].SetActive(true);
+            }
+            else if (Fdot < -0.35) //後面
+            {
+                Hit_Direction_UI[1].SetActive(true);
+            }
+            if (Rdot > 0.5)  //R 右邊
+            {
+                Hit_Direction_UI[2].SetActive(true);
+
+            }
+            else if (Rdot < -0.5)  //L 左邊
+            {
+                Hit_Direction_UI[3].SetActive(true);
+            }
+        }
+        else if(dot<0)  //擊中背面
+        {
+            Hit_Direction_UI[1].SetActive(true);
+
+            if (Rdot > 0.1)  //R 右邊
+            {
+                Hit_Direction_UI[2].SetActive(true);
+
+            }
+            else if (Rdot < -0.1)  //L 左邊
+            {
+                Hit_Direction_UI[3].SetActive(true);
+            }
+        }
     }
     public static void DownDamage(int Dps)  //摔落傷害
     {

@@ -71,7 +71,7 @@ public class UpgradeWorkbench : MonoBehaviour
                     AllObject.SetActive(true);
                     CamMove = false;
                     UpgradeMenu.SetActive(true);
-                    print("0");
+                    ////print("0");
                     FieldOfView = 60;
                     Cursor.lockState = CursorLockMode.None; //´å¼ÐµLª¬ºA¼Ò¦¡
                 }

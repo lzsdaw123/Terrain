@@ -849,6 +849,10 @@ public class Shooting : MonoBehaviour
                     }
                     if (hit[n].collider.tag == "Crystal")  //水晶
                     {
+                        if(hit[n].collider.GetComponent<Crystal_Life>())  //如果水晶可破壞
+                        {
+                            hit[n].collider.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
+                        }
                         AudioManager.Hit(5);  //擊中水晶音效
                         HitType = 8;
                     }

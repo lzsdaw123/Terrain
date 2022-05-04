@@ -108,7 +108,8 @@ public class B2_BulletHole : MonoBehaviour
             if (other.tag == "Player")
             {
                 other.gameObject.SendMessage("Damage", 0.1f); //傷害
-                other.gameObject.SendMessage("DamageEffects", 3); //傷害特效
+                other.gameObject.SendMessage("DamageEffects", 4); //傷害特效
+                other.gameObject.SendMessage("hit_Direction", transform); //命中方位
             }
         }
     }

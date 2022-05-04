@@ -14,8 +14,8 @@ public class Boss_Life : MonoBehaviour
     private Collider cld;
     public AnimEvents AnimEvents;
     public bool isBoss;
-    public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
-    public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
+    public int MonsterType;  //Boss類型 0=水晶 / 1= 機械
+    public static int PS_MonsterType;  //Boss類型 0=水晶 / 1= 機械
     public float[] hpFull; // 血量上限
     public float hp; // 血量
     public bool 無敵=false;
@@ -130,7 +130,7 @@ public class Boss_Life : MonoBehaviour
     {
         //print(Power);
         hp -= Power; // 扣血
-        transform.position += new Vector3(0, 0, 0.5f);
+        //transform.position += new Vector3(0, 0, 0.5f);
         if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
         {        
@@ -162,11 +162,18 @@ public class Boss_Life : MonoBehaviour
                     //AudioManager.Hit(4);  //玩家擊殺音效
                 }
                 Dead = true;
-                //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
-                if(CrystalAni !=null) CrystalAni.SetTrigger("Dead");
-                gameObject.layer = LayerMask.NameToLayer("Default");
-                gameObject.tag = "Untagged";
-                Level_1.LevelA_ = 8;  //關卡8
+                switch (MonsterType)
+                {
+                    case 0:
+                        //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
+                        if (CrystalAni != null) CrystalAni.SetTrigger("Dead");
+                        gameObject.layer = LayerMask.NameToLayer("Default");
+                        gameObject.tag = "Untagged";
+                        Level_1.LevelA_ = 8;  //關卡8
+                        break;
+                    case 1:
+                        break;
+                }
             }           
             hp = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸

@@ -371,10 +371,12 @@ MonoBehaviour:
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
+  boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  mg_Turret_AI: {fileID: 0}
   cameraMove: {fileID: 0}
   h: 0
   v: 0
@@ -761,6 +763,9 @@ MonoBehaviour:
   - {fileID: 4557433543618534346}
   - {fileID: 6080148185883515141}
   - {fileID: 3015234007402359266}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 3015234007402359266}
   MuSmoke:
   - {fileID: 3250799378802924937}
   - {fileID: 7794056175795303112}
@@ -820,7 +825,6 @@ MonoBehaviour:
   - {fileID: 1212255426452540709}
   - {fileID: 6073767899578719153}
   - {fileID: 7704470666355553832}
-  GunCollider: {fileID: 0}
   "\u90E8\u4F4D":
     "\u985E\u578B": 
     PartObject: []
@@ -836,6 +840,10 @@ MonoBehaviour:
     Price: []
   "\u90E8\u4EF6ID": 0
   hitDamage: 0
+  SF_GrenadeNub: 0
+  SaveGN: 0
+  GrenadeUI: {fileID: 0}
+  Grenade: []
 --- !u!114 &622874816369969756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -848,8 +856,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: defbe51ed013e6a4a98a5e3817ee8de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 7529279469598822717}
+  HpLv: 0
   HP_W: {fileID: 0}
   HP_R: {fileID: 0}
+  BloodpackUI:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  SaveBpN: 0
+  BpTime: 0
   UiTime: 0
   WeaponType: 0
   HitType: 0
@@ -863,7 +879,7 @@ MonoBehaviour:
   - {fileID: 6448242124078165655}
   - {fileID: 949891445215024522}
   - {fileID: 7581782527234306868}
-  - {fileID: 0}
+  - {fileID: 2014468965168724955}
   HP_R_speed: 2
   Crystal_Infection: 0
   Level: 0
@@ -874,6 +890,7 @@ MonoBehaviour:
   LiftTime: 0
   InfectionUI: {fileID: 0}
   Infection_Image: {fileID: 0}
+  InfectionSW: 0
 --- !u!1 &622874816555596344
 GameObject:
   m_ObjectHideFlags: 0
@@ -5189,10 +5206,12 @@ MonoBehaviour:
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
+  boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  mg_Turret_AI: {fileID: 0}
   cameraMove: {fileID: 0}
   h: 0
   v: 0
@@ -7014,10 +7033,12 @@ MonoBehaviour:
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
+  boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  mg_Turret_AI: {fileID: 0}
   cameraMove: {fileID: 0}
   h: 0
   v: 0
@@ -9534,6 +9555,12 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 237851073221309336}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &2014468965168724955 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1781684460587255875, guid: 0d8824e81756ff745b56274270de6a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 237851073221309336}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2676771530710060822 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2767683849299639438, guid: 0d8824e81756ff745b56274270de6a7e,
@@ -9561,10 +9588,12 @@ MonoBehaviour:
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
+  boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 622874816369969756}
+  mg_Turret_AI: {fileID: 0}
   cameraMove: {fileID: 0}
   h: 0
   v: 0

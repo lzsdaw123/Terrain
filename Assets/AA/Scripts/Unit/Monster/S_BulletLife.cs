@@ -340,7 +340,8 @@ public class S_BulletLife : MonoBehaviour
                         collision.gameObject.SendMessage("Damage", power); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
-                            collision.gameObject.SendMessage("DamageEffects", 3); //傷害特效
+                            collision.gameObject.SendMessage("DamageEffects", 4); //傷害特效
+                            collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
                         }
                         break; //結束迴圈
                     }
@@ -350,6 +351,20 @@ public class S_BulletLife : MonoBehaviour
         else if (InLayerMask(collision.gameObject.layer, Ground[1]))
         {
             liftTime = 0;
+            if (BulletType == 2)
+            {
+                if (collision.gameObject.tag == damageTags[3])
+                {
+                    if (collision.GetComponent<Crystal_Life>())  //如果水晶可破壞
+                    {
+                        collision.gameObject.SendMessage("Damage", power); //傷害
+                        if (collision.GetComponent<Crystal_Life>().hp <= 0)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }       
             //在到物體上產生彈孔
             if (BulletType >= 1)
             {

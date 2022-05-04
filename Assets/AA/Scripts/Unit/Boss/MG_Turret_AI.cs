@@ -214,6 +214,7 @@ public class MG_Turret_AI : MonoBehaviour
                             if (O_hit.collider.tag == "Player")  //玩家
                             {
                                 O_hit.transform.SendMessage("Damage", power);  //造成傷害
+                                O_hit.collider.gameObject.SendMessage("hit_Direction", transform); //命中方位
                             }
                         }
                         FlyStart[0] = false;
@@ -266,6 +267,7 @@ public class MG_Turret_AI : MonoBehaviour
                             if (O_hit.collider.tag == "Player")  //玩家
                             {
                                 O_hit.transform.SendMessage("Damage", power);  //造成傷害
+                                O_hit.collider.gameObject.SendMessage("hit_Direction", transform); //命中方位
                             }
                         }
                         FlyStart[1] = false;

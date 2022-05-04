@@ -54,6 +54,7 @@ public class ExplosionLift : MonoBehaviour
     public  Vector3 Reflection;
     public PhysicMaterial physicMaterial;
     public GameObject[] actors=new GameObject[6];
+    public Material[] Material;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -86,6 +87,7 @@ public class ExplosionLift : MonoBehaviour
                 ReflectTime = -1;
                 physicMaterial.bounciness = 1;
                 Object[1].SetActive(false);
+                Object[0].GetComponent<MeshRenderer>().material = Material[1];
                 //Pro[0].gameObject.SetActive(true);
                 //bornSize = Vector3.zero;
                 break;
@@ -160,7 +162,7 @@ public class ExplosionLift : MonoBehaviour
     {
         //DifficultyUp();
         Start();
-
+        Object[0].GetComponent<MeshRenderer>().material = Material[0];
     }
     void Update()
     {
@@ -180,6 +182,10 @@ public class ExplosionLift : MonoBehaviour
             case 0:  //尖形 結晶
                 if (StartAttack)
                 {
+                    //改發光
+                    //Color color = Color.red;
+                    //Material[0].SetFloat("_EmissiveExposureWeight", 0);
+                    //Material[0].SetColor("_EmissiveColor", color* 512);
                     Object[2].SetActive(true);
                     AttackCTime += Time.deltaTime;
                     if (AttackCTime >= 4)  //發射前等待
@@ -504,6 +510,7 @@ public class ExplosionLift : MonoBehaviour
                                     if (collision.GetComponent<HeroLife>())
                                     {
                                         collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
+                                        collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
                                     }
                                 }
                                 break; //結束迴圈
