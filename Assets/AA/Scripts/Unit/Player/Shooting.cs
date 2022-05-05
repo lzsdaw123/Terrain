@@ -795,6 +795,16 @@ public class Shooting : MonoBehaviour
                                 if (zi.GetComponent<Boss_Life>())
                                 {
                                     isBoss = zi.gameObject.GetComponent<Boss_Life>().isBoss;
+                                    MonsterType = zi.gameObject.GetComponent<Boss_Life>().MonsterType;
+                                    if (MonsterType == 1)
+                                    {
+                                        zi.gameObject.GetComponent<Boss_Life>().Weakness(hit[n].collider.gameObject);
+                                    }
+                                    return zi;
+                                }
+                                if (zi.GetComponent<Crystal_Life>())
+                                {
+                                    MonsterType = 2;
                                     return zi;
                                 }
                                 else

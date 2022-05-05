@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using UnityEngine.Rendering.HighDefinition;
 
 public class Crystal_Life : MonoBehaviour
 {
@@ -14,8 +15,9 @@ public class Crystal_Life : MonoBehaviour
     private Collider cld;
     public AnimEvents AnimEvents;
     public bool isBoss;
-    public int MonsterType;  //水晶類型 0=場景水晶 / 1= 目標水晶
-    public static int PS_MonsterType;  //水晶類型 0=場景水晶 / 1= 目標水晶
+    public int MonsterType;  //水晶類型 0=場景水晶, 1= 目標水晶, 2=機槍塔
+    public static int PS_MonsterType;  //水晶類型 0=場景水晶, 1= 目標水晶, 2=機槍塔
+    public int BossLevel;  //Boss2等級
     public float[] hpFull; // 血量上限
     public float hp; // 血量
     public bool 無敵=false;
@@ -26,12 +28,14 @@ public class Crystal_Life : MonoBehaviour
     private NavMeshAgent agent;
     public Boss01_AI boss01_AI;
     public Boss02_AI boss02_AI;
+    public MG_Turret_AI mg_Turret_AI;
     public Level_1 level_1;
     //public Level_2 level_2;
 
     public GameObject PS_Dead;  //死亡特效
     public GameObject Model;  //模型
     public MeshRenderer MR;  //模型
+    public DecalProjector Decal;  //貼花
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
@@ -65,12 +69,19 @@ public class Crystal_Life : MonoBehaviour
         {
             case 0:
                 gameObject.layer = LayerMask.NameToLayer("Wall");
+                gameObject.tag = "Crystal";
                 break;
             case 1:
                 gameObject.layer = LayerMask.NameToLayer("Monster");
+                gameObject.tag = "Crystal";
+                Decal.fadeFactor = 0.5f;
+                Decal.gameObject.transform.GetChild(0).GetComponent<SphereCollider>().enabled = false;
+                break;
+            case 2:
+                gameObject.layer = LayerMask.NameToLayer("Monster");
+                gameObject.tag = "Enemy";
                 break;
         }
-        gameObject.tag = "Crystal";
     }
 
     void Update()
@@ -88,18 +99,6 @@ public class Crystal_Life : MonoBehaviour
                 DeadTime += 1.4f * Time.deltaTime;
                 if (DeadTime >= 1)
                 {
-                    //agent.enabled = false; // 立即關閉尋徑功能
-
-                    //switch (MonsterType)
-                    //{
-                    //    case 0:
-                    //        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
-                    //        break;
-                    //    case 1:
-                    //        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster02(gameObject);
-                    //        break;
-
-                    //}
                 }
             }
         }
@@ -160,7 +159,7 @@ public class Crystal_Life : MonoBehaviour
                     break;
             }            
         }
-        if (hp <= 0)
+        if (hp <= 0)  //死亡
         {
             if (!Dead)
             {
@@ -175,6 +174,11 @@ public class Crystal_Life : MonoBehaviour
                 gameObject.layer = LayerMask.NameToLayer("Default");
                 gameObject.tag = "Untagged";
             }           
+            if(Decal !=null)
+            {
+                Decal.fadeFactor = 1;
+                Decal.gameObject.transform.GetChild(0).GetComponent<SphereCollider>().enabled = true;
+            }
             hp = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸
             if (Model !=null) Model.SetActive(false);
@@ -185,6 +189,10 @@ public class Crystal_Life : MonoBehaviour
                 case 0:
                     break;
                 case 1:
+                    break;
+                case 2:
+                    ani.SetTrigger("Dead");
+                    mg_Turret_AI.enabled = false;
                     break;
             }           
             //ani.SetTrigger("Die");           
@@ -211,7 +219,7 @@ public class Crystal_Life : MonoBehaviour
         //    }
         //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 50, 100,  };
+        hpFull = new float[] { 50, 50, 50};
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
@@ -226,6 +234,9 @@ public class Crystal_Life : MonoBehaviour
             case 0:
                 break;
             case 1:
+                break;
+            case 2:
+                mg_Turret_AI.enabled = true;
                 break;
         }
         //agent.enabled = true; // 開啟尋徑功能

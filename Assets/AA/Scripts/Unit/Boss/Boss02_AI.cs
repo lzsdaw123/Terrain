@@ -95,6 +95,7 @@ public class Boss02_AI : MonoBehaviour
     public int AttackRange;  //攻擊範圍
     public GameObject[] MA_Rig;  //Rig連結
     public float MA_weight;  //Rig連結權重
+    public GameObject[] Crystal_Weakness;  //水晶弱點
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -670,13 +671,18 @@ public class Boss02_AI : MonoBehaviour
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             cuMuGrid = 0;
             //ButtleType = Random.Range(0, 2);  //子彈類型
-            switch (Level)
+            switch (Level)  //Boss2等級
             {
                 case 1:
                     BulletType = 1;
+                    Crystal_Weakness[0].GetComponent<Crystal_Life>().無敵 = false;
                     break;
                 case 2:
                     BulletType = 2;
+                    Crystal_Weakness[1].GetComponent<Crystal_Life>().無敵 = false;
+                    Crystal_Weakness[2].GetComponent<Crystal_Life>().無敵 = false;
+                    break;
+                case 3:
                     break;
             }
             pool.ReUseBoss2Bullet(muzzlePOS, rotate, BulletType, cuMuGrid);  //生成子彈

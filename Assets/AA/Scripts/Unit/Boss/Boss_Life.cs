@@ -38,6 +38,9 @@ public class Boss_Life : MonoBehaviour
     bool Player;
     Color UIcolor;
     bool Dead;
+    public GameObject HitObject;
+    public GameObject[] WeaknessObject;
+    public float[] Weakness_Hp;  //弱點血量
 
     void Awake()
     {
@@ -61,6 +64,7 @@ public class Boss_Life : MonoBehaviour
         //RagdollActive(false); // 先關閉物理娃娃
         gameObject.layer = LayerMask.NameToLayer("Monster");
         gameObject.tag = "Enemy";
+        Weakness_Hp = new float[] { 50, 50, 50 };
     }
 
     void Update()
@@ -126,39 +130,64 @@ public class Boss_Life : MonoBehaviour
     {
         Player = player;
     }
-    public void Damage(float Power)
+    public void Weakness(GameObject gameObject)  //哪個弱點
+    {
+        HitObject = gameObject;
+    }
+    public void Damage(float Power)  //-----受到傷害----//
     {
         //print(Power);
-        hp -= Power; // 扣血
-        //transform.position += new Vector3(0, 0, 0.5f);
+        switch (MonsterType)
+        {
+            case 0:
+                hp -= Power; // 扣血
+                if (hp <= hpFull[MonsterType] / 2)  //怪物血量低於一半
+                {
+
+                }
+                break;
+            case 1:
+                for (int i = 0; i < WeaknessObject.Length; i++)
+                {
+                    if (WeaknessObject[i] == HitObject)
+                    {
+                        Weakness_Hp[i] -= Power;
+                    }
+                    if (Weakness_Hp[i] <= 0)
+                    {
+                        WeaknessObject[i].GetComponent<SphereCollider>().enabled = false;
+                    }
+                }
+                if (Weakness_Hp[0] <= 0)
+                {
+                    Weakness_Hp[0] = 60;
+                    boss02_AI.Level = 2;
+                    boss02_AI.ani.SetInteger("Level", 2);
+                    boss02_AI.ani.SetTrigger("LevelUp");
+                }
+                if (Weakness_Hp[1] <= 0 && Weakness_Hp[1] <= 1)
+                {
+                    boss02_AI.Level = 3;
+                }
+                break;
+        }
         if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
         {        
             if (Player)
             {
-                HitUI.SetActive(true);
-                HitUI.GetComponent<Image>().color = Color.white;
+                //HitUI.SetActive(true);
+                //HitUI.GetComponent<Image>().color = Color.white;
             }
         }
-        if (hp <= hpFull[MonsterType] /2)  //怪物血量低於一半
-        {
-            switch (MonsterType)
-            {
-                case 0:
-                    break;
-                case 1:
-                    //monster03.ani.SetInteger("Level", 1);
-                    break;
-            }            
-        }
-        if (hp <= 0)
+        if (hp <= 0)  //死亡
         {
             if (!Dead)
             {
                 if (Player)
                 {
-                    HitUI.SetActive(true);
-                    HitUI.GetComponent<Image>().color = Color.red;
+                    //HitUI.SetActive(true);
+                    //HitUI.GetComponent<Image>().color = Color.red;
                     //AudioManager.Hit(4);  //玩家擊殺音效
                 }
                 Dead = true;
