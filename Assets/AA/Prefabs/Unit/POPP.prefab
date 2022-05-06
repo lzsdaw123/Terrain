@@ -860,6 +860,7 @@ MonoBehaviour:
   HpLv: 0
   HP_W: {fileID: 0}
   HP_R: {fileID: 0}
+  Hit_Direction_UI: []
   BloodpackUI:
   - {fileID: 0}
   - {fileID: 0}
@@ -880,6 +881,7 @@ MonoBehaviour:
   - {fileID: 949891445215024522}
   - {fileID: 7581782527234306868}
   - {fileID: 2014468965168724955}
+  - {fileID: 3392518580874491522}
   HP_R_speed: 2
   Crystal_Infection: 0
   Level: 0
@@ -891,6 +893,9 @@ MonoBehaviour:
   InfectionUI: {fileID: 0}
   Infection_Image: {fileID: 0}
   InfectionSW: 0
+  dot: 0
+  Fdot: 0
+  Rdot: 0
 --- !u!1 &622874816555596344
 GameObject:
   m_ObjectHideFlags: 0
@@ -9337,6 +9342,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2092718608908944920, guid: 0d8824e81756ff745b56274270de6a7e,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 2767683849299639438, guid: 0d8824e81756ff745b56274270de6a7e,
         type: 3}
       propertyPath: m_Name
@@ -9605,6 +9615,12 @@ MonoBehaviour:
 --- !u!4 &2676771530710060823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2767683849299639439, guid: 0d8824e81756ff745b56274270de6a7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 237851073221309336}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3392518580874491522 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3195763422799234330, guid: 0d8824e81756ff745b56274270de6a7e,
     type: 3}
   m_PrefabInstance: {fileID: 237851073221309336}
   m_PrefabAsset: {fileID: 0}

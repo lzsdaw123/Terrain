@@ -318,7 +318,7 @@ public class ObjectPool : MonoBehaviour
         recovery.SetActive(false);
     }
     //Boss2 子彈
-    public void ReUseBoss2Bullet(Vector3 positon, Quaternion rotation, int ButtleType, int Muzzle)  //取出存放在物件池中的物件
+    public void ReUseBoss2Bullet(Vector3 positon, Quaternion rotation, int BulletType, int Muzzle)  //取出存放在物件池中的物件
     {
         if (B2_Bullet_pool.Count > 0)
         {
@@ -326,7 +326,8 @@ public class ObjectPool : MonoBehaviour
             reuse.transform.position = Vector3.zero;
             reuse.transform.position = positon;
             reuse.transform.rotation = rotation;
-            reuse.GetComponent<S_BulletLife>().BulletType = ButtleType;
+            reuse.GetComponent<S_BulletLife>().BulletType = BulletType;
+            reuse.GetComponent<S_BulletLife>().Start();
             //reuse.GetComponent<S_BulletLife>().cuMuGrid = Muzzle;
             reuse.SetActive(true);
         }
@@ -335,7 +336,8 @@ public class ObjectPool : MonoBehaviour
             GameObject Boss2B = Instantiate(B2_Bullet, B2_BulletPool.transform) as GameObject;  //Boss1子彈於怪物子彈池
             Boss2B.transform.position = positon;
             Boss2B.transform.rotation = rotation;
-            Boss2B.GetComponent<S_BulletLife>().BulletType = ButtleType;
+            Boss2B.GetComponent<S_BulletLife>().BulletType = BulletType;
+            Boss2B.GetComponent<S_BulletLife>().Start();
             //Boss1B.GetComponent<S_BulletLife>().cuMuGrid = Muzzle;
         }
     }

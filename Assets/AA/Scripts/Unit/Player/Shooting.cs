@@ -534,7 +534,18 @@ public class Shooting : MonoBehaviour
             coolDownTimer += Time.deltaTime;
             //Weapon.SetBool("Fire", false);
         }
-
+        if (Input.GetKeyDown(KeyCode.U))  //測試用  武器傷害升級---------------///////////------------
+        {
+            Weapons[0].power = Weapons[0].power +10;
+            Weapons[1].power = Weapons[1].power + 10;
+            Weapons[2].power = Weapons[2].power + 10;
+        }
+        if (Input.GetKeyDown(KeyCode.I))  //測試用  武器傷害升級---------------///////////------------
+        {
+            Weapons[0].power = 2;
+            Weapons[1].power = 1;
+            Weapons[2].power = 1;
+        }
         if (GetGrenade)  //取得手榴彈
         {
             for (int g = 0; g < Grenade.Length; g++)

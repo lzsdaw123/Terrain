@@ -65,6 +65,7 @@ public class Boss_Life : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Monster");
         gameObject.tag = "Enemy";
         Weakness_Hp = new float[] { 50, 50, 50 };
+        boss02_AI.RangeObject[0].SetActive(true);
     }
 
     void Update()
@@ -158,16 +159,22 @@ public class Boss_Life : MonoBehaviour
                         WeaknessObject[i].GetComponent<SphereCollider>().enabled = false;
                     }
                 }
-                if (Weakness_Hp[0] <= 0)
+                if (Weakness_Hp[0] <= 0)  //左手弱點擊破
                 {
                     Weakness_Hp[0] = 60;
                     boss02_AI.Level = 2;
                     boss02_AI.ani.SetInteger("Level", 2);
                     boss02_AI.ani.SetTrigger("LevelUp");
                 }
-                if (Weakness_Hp[1] <= 0 && Weakness_Hp[1] <= 1)
+                if (Weakness_Hp[1] <= 0 && Weakness_Hp[2] <= 0)
                 {
+                    Weakness_Hp[1] = 60;
+                    Weakness_Hp[2] = 60;
                     boss02_AI.Level = 3;
+                    boss02_AI.ani.SetInteger("Level", 3);
+                    boss02_AI.ani.SetTrigger("LevelUp");
+                    boss02_AI.RangeObject[0].SetActive(false);
+                    boss02_AI.RangeObject[1].SetActive(true);
                 }
                 break;
         }

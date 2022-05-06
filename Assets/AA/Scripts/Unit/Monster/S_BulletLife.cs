@@ -35,6 +35,7 @@ public class S_BulletLife : MonoBehaviour
     bool forwardFly = false;  //依慣性向前飛
     bool AttackPlay;
     public ObjectPool pool_Hit;  //物件池
+    public bool ReSave;
 
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
@@ -46,7 +47,7 @@ public class S_BulletLife : MonoBehaviour
     {
         pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
     }
-    void Start()
+    public void Start()
     {
         switch (BulletType)
         {
@@ -61,11 +62,12 @@ public class S_BulletLife : MonoBehaviour
                 liftTime = 5f;
                 break;
             case 2:  //Boss2 攻擊1 黑火球
-                speed = 20f; //飛行速度
-                power = 7;
-                liftTime = 10f;
+                speed = 2f; //飛行速度
+                power = 10;
+                liftTime = 20f;
                 break;
         }
+        ReSave = false;
         AttackLv = 0;
         for (int i=0; i< Pro.Length; i++)
         {
@@ -137,6 +139,11 @@ public class S_BulletLife : MonoBehaviour
     }
     void Update()
     {
+        if (ReSave)
+        {
+            ReSave = false;
+            Start();
+        }
         liftTime -= Time.deltaTime;
         FlyDistance += Time.deltaTime;
         if (liftTime <= 0)
@@ -340,7 +347,18 @@ public class S_BulletLife : MonoBehaviour
                         collision.gameObject.SendMessage("Damage", power); //傷害
                         if (collision.GetComponent<HeroLife>())
                         {
-                            collision.gameObject.SendMessage("DamageEffects", 4); //傷害特效
+                            switch (BulletType)
+                            {
+                                case 0:
+                                    collision.gameObject.SendMessage("DamageEffects", 3); //傷害特效
+                                    break;
+                                case 1:
+                                    collision.gameObject.SendMessage("DamageEffects", 4); //傷害特效
+                                    break;
+                                case 2:
+                                    collision.gameObject.SendMessage("DamageEffects", 5); //傷害特效
+                                    break;
+                            }
                             collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
                         }
                         break; //結束迴圈

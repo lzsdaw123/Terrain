@@ -9,6 +9,7 @@ public class Trigger : MonoBehaviour
     public int Features;  //е\пр
     public GameObject[] Objects;
     public Boss02_AI boss02_AI;
+    public Level_1 level_1;
     public MG_Turret_AI mg_Turret_AI;
     //public Level_1 level_1;
 

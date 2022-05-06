@@ -66,13 +66,14 @@ public class Boss02_AI : MonoBehaviour
     bool TrPlayer;
     [SerializeField] private bool Fire;
     public static int BulletType;  //子彈類型
+    [SerializeField] int SF_BulletType;  //子彈類型
     public bool AttackStatus;  //攻擊狀態
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
     public int SaveBT;
     public GameObject bullet;
     public int Level;  //攻擊等級
-    public static int BulletNub;  //子彈數量
-    [SerializeField] int SF_BulletNub;  //子彈數量
+    public static int[] BulletNub;  //子彈數量
+    [SerializeField] int[] SF_BulletNub;  //子彈數量
     [SerializeField] private GameObject[] muzzle;  //槍口
     public GameObject Muzzle_vfx;  //槍口火光  
     public ParticleSystem MuFire;  //槍口火光特效
@@ -87,12 +88,13 @@ public class Boss02_AI : MonoBehaviour
     public static bool StartAttack;  //進入攻擊狀態
     public float StartTime; ///進入攻擊前的等待時間
     public float LockTime;  //鎖定時間
-    public float overheatTime;  //過熱冷卻時間
+    public float[] overheatTime;  //過熱冷卻時間
     public bool overheatLock;  //過熱鎖定
-    public bool Reload;
+    public bool[] Reload;
     public GameObject[] AttackModePS;  //攻擊模式特效
     public int AttackMode;  //攻擊模式
     public int AttackRange;  //攻擊範圍
+    public GameObject[] RangeObject;  //攻擊範圍
     public GameObject[] MA_Rig;  //Rig連結
     public float MA_weight;  //Rig連結權重
     public GameObject[] Crystal_Weakness;  //水晶弱點
@@ -131,15 +133,16 @@ public class Boss02_AI : MonoBehaviour
         Fire = false;
         AttackStatus = false;
         coolDown = 1;
-        BulletNub = 30;  //子彈數
+        BulletNub =new int[2]{ 30, 1};  //子彈數
         MaxMuGrid = muzzle.Length;
         //muzzleGrid = new int[MaxMuGrid];
         StartAttack = false;
         Muzzle_vfx.SetActive(false);
         MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", 1);
-        Reload = false;
+        Reload =new bool[2] {false, false};
         StartTime = -1;
         Level = 1;
+        overheatTime = new float[2] { 0, 0 };
 
         //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
 
@@ -376,6 +379,7 @@ public class Boss02_AI : MonoBehaviour
         SF_bulletAttack = bulletAttack;
         SF_muzzleGrid = muzzleGrid;
         PS_muzzle = muzzle;
+        SF_BulletType = BulletType;
         if (attackTarget != null)
         {
             目前攻擊目標 = attackTarget.gameObject;
@@ -412,7 +416,6 @@ public class Boss02_AI : MonoBehaviour
             Ray ray = new Ray(origin, direct);
             RaycastHit hit = new RaycastHit(); //射線擊中資訊
             //float distance = Vector3.Distance(origin, targetPos);
-
             if (Physics.Raycast(ray, out hit, 70f, layerMask)) 
             {
                 //Debug.DrawLine(ray.origin, hit.point, Color.black, 0.5f, false);  //黑線
@@ -422,14 +425,20 @@ public class Boss02_AI : MonoBehaviour
                     if (hit.collider.tag == "Player")  //玩家
                     {
                         //Debug.DrawLine(ray.origin, hit.point, Color.green, 1f, false);  //綠線
-                        if (BulletNub <= 0)   //武器1 過熱
+                        if (BulletNub[0] <= 0)   //武器1 過熱
                         {
-                            Reload = true; //冷卻狀態
+                            Reload[0] = true; //冷卻狀態
                             overheatLock = true;   // 過熱鎖定
-                            BulletNub = 0;
+                            BulletNub[0] = 0;
                             bulletAttack = 0;
-                            ReLoad();
+                            ReLoad(0);
                             //Attack();
+                        }
+                        if (BulletNub[1] <= 0 && BulletType==2)
+                        {
+                            BulletType = 1;
+                            Reload[1] = true; //冷卻狀態
+                            ReLoad(0);
                         }
                         else  //武器1 攻擊
                         {
@@ -454,9 +463,9 @@ public class Boss02_AI : MonoBehaviour
                             LockTime = 2;
                             //武器1 冷卻
                             //bulletAttack = 0;
-                            Reload = true;
+                            Reload[0] = true;
                             overheatLock = false; 
-                            ReLoad();
+                            ReLoad(0);
                             Attack();
                             //print("被擋住了");
                         }
@@ -466,14 +475,14 @@ public class Boss02_AI : MonoBehaviour
             switch (AttackRange)
             {
                 case 1:  //攻擊1 範圍
-                    if (Reload && overheatLock)  //處於冷卻狀態 並過熱鎖定
+                    if (Reload[0] && overheatLock)  //處於冷卻狀態 並過熱鎖定
                     {
                         AttackMode = 2;
                         //print("過熱中");
                     }
-                    if(Reload && !overheatLock)  //處於冷卻狀態 並 非過熱鎖定
+                    if(Reload[0] && !overheatLock)  //處於冷卻狀態 並 非過熱鎖定
                     {
-                        Reload = false;
+                        Reload[0] = false;
                         AttackMode = 1;  //攻擊模式1
                         MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                         MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
@@ -483,7 +492,7 @@ public class Boss02_AI : MonoBehaviour
                         AttackModePS[2].SetActive(false);
                         //print("過熱但開火");
                     }
-                    else if(!Reload)  //處於非冷卻狀態
+                    else if(!Reload[0])  //處於非冷卻狀態
                     {
                         AttackMode = 1;  //攻擊模式1
                         MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
@@ -498,34 +507,40 @@ public class Boss02_AI : MonoBehaviour
                     if (MA_weight >= 1) MA_weight = 1;
                     break;
                 case 2:  //攻擊1 右邊死角範圍
-                    Reload = true;
+                    Reload[0] = true;
                     overheatLock = false;
-                    ReLoad();
+                    ReLoad(0);
                     AttackMode = 2;  //攻擊模式2
                     MA_weight -= 0.5f * Time.deltaTime;
                     if (MA_weight <= 0.4) MA_weight = 0.4f;
                     MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
                     MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
                     AttackModePS[0].SetActive(false);
-                    AttackModePS[1].SetActive(true);
-                    AttackModePS[2].SetActive(true);
+                    if (MG_Turret[1].GetComponent<MG_Turret_AI>().enabled)  AttackModePS[1].SetActive(true);
+                    if (MG_Turret[2].GetComponent<MG_Turret_AI>().enabled)  AttackModePS[2].SetActive(true);
                     break;
                 case 3:  //攻擊1 左邊死角範圍
-                    Reload = true;
+                    Reload[0] = true;
                     overheatLock = false;
-                    ReLoad();
+                    ReLoad(0);
                     AttackMode = 2;  //攻擊模式2
                     MA_weight -= 0.5f * Time.deltaTime;
                     if (MA_weight <= 0.5) MA_weight = 0.5f;
                     MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
                     MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
                     MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    AttackModePS[0].SetActive(true);
-                    AttackModePS[1].SetActive(true);
-                    AttackModePS[2].SetActive(true);
+                    if (MG_Turret[0].GetComponent<MG_Turret_AI>().enabled) AttackModePS[0].SetActive(true);
+                    if (MG_Turret[1].GetComponent<MG_Turret_AI>().enabled) AttackModePS[1].SetActive(true);
+                    if (MG_Turret[2].GetComponent<MG_Turret_AI>().enabled) AttackModePS[2].SetActive(true);
                     break;
             }
-            MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
+            if (!MG_Turret[0].GetComponent<MG_Turret_AI>().enabled &&!MG_Turret[1].GetComponent<MG_Turret_AI>().enabled 
+                && !MG_Turret[2].GetComponent<MG_Turret_AI>().enabled && AttackRange!=1)
+            {
+                AttackMode = 0;  //攻擊模式1
+            }
+                MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
+            //MA_Rig[0].GetComponent<MultiAimConstraint>().
             ani.SetInteger("AttackMode", AttackMode);
         }
 
@@ -570,8 +585,6 @@ public class Boss02_AI : MonoBehaviour
         //    //{
         //    //    //print("警戒");
         //    //}
-
-
         //    //取得角色與目標的距離
         //    //print(oriTarget[defense]);
         //    //float dn = Vector3.Distance(transform.position, oriTarget[A_defense].position);
@@ -597,20 +610,38 @@ public class Boss02_AI : MonoBehaviour
             transform.rotation = GetNavRotation(true, agent);
         }
     }
-    void ReLoad()  //武器冷卻
+    void ReLoad(int Type)  //武器冷卻
     {
-        if (Reload)
+        switch (Type)
         {
-            overheatTime = MuzzleMaterial[0].GetFloat("_EmissiveExposureWeight");
-            overheatTime += 0.018f * Time.deltaTime;
-            if (overheatTime >= 1)
-            {
-                overheatTime = 1;
-                Reload = false;
-                BulletNub = 30;
-            }
-            MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", overheatTime);
-        }
+            case 0:
+                if (Reload[0])
+                {
+                    overheatTime[0] = MuzzleMaterial[0].GetFloat("_EmissiveExposureWeight");
+                    overheatTime[0] += 0.018f * Time.deltaTime;
+                    if (overheatTime[0] >= 1)
+                    {
+                        overheatTime[0] = 1;
+                        Reload[0] = false;
+                        BulletNub[0] = 30;
+                    }
+                    MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", overheatTime[0]);
+                }
+                break;
+            case 1:
+                if (Reload[1])
+                {
+                    overheatTime[1] += Time.deltaTime;
+                    if (overheatTime[1] >= 10)
+                    {
+                        overheatTime[1] = 0;
+                        BulletType = 2;
+                        BulletNub[1] = 1;
+                        Reload[1] = false;
+                    }
+                }              
+                break;
+        }    
     }
     void FixedUpdate()
     {
@@ -659,7 +690,6 @@ public class Boss02_AI : MonoBehaviour
                     }
                 }
             }
-
             //if (attackTarget != null) 目前攻擊目標 = attackTarget.gameObject;
             muzzlePOS = muzzle[0].transform.position;
             Vector3 AttacktargetDir = targetPos - muzzlePOS;  //子彈轉向目標
@@ -667,25 +697,40 @@ public class Boss02_AI : MonoBehaviour
             {
                 AttacktargetDir = muzzlePOS - muzzlePOS;
             }
-
             Quaternion rotate = Quaternion.LookRotation(AttacktargetDir);
             cuMuGrid = 0;
-            //ButtleType = Random.Range(0, 2);  //子彈類型
-            switch (Level)  //Boss2等級
+            switch (Level)  //Boss2戰鬥階段
             {
-                case 1:
+                case 1:  //限制火炮+機槍塔1護盾 打左手弱點
                     BulletType = 1;
                     Crystal_Weakness[0].GetComponent<Crystal_Life>().無敵 = false;
                     break;
-                case 2:
-                    BulletType = 2;
+                case 2:  //限制火炮+機槍塔2.3護盾  打腹部兩個弱點
+                    BulletType = 1;
                     Crystal_Weakness[1].GetComponent<Crystal_Life>().無敵 = false;
                     Crystal_Weakness[2].GetComponent<Crystal_Life>().無敵 = false;
                     break;
-                case 3:
+                case 3:  //射黑火+不限制火炮 打左胸弱點
+                    if (BulletNub[1] >= 1)
+                    {
+                        BulletType = 2;
+                    }                   
+                    break;
+                case 4:  //散發出黑火形成巨大黑火球 全身水晶炸掉露出最後弱點 爆炸前打死Boss2
                     break;
             }
             pool.ReUseBoss2Bullet(muzzlePOS, rotate, BulletType, cuMuGrid);  //生成子彈
+            switch (BulletType)
+            {
+                case 1:
+                    BulletNub[0]--;
+                    if (BulletNub[0] <= 0) BulletNub[0] = 0;
+                    break;
+                case 2:
+                    BulletNub[1]--;
+                    if (BulletNub[1] <= 0) BulletNub[1] = 0;
+                    break;
+            }
             //SaveBT = ButtleType;
             //for (int i=0; i< 2; i++)
             //{
@@ -728,12 +773,18 @@ public class Boss02_AI : MonoBehaviour
         switch (AttackMode)
         {
             case 1:
-                if (BulletNub <= 18)
+                switch (BulletType)
                 {
-                    float overheat = 0.91f + BulletNub * (0.09f / 18);  //最小EEW + 當前子彈數 * (最小與最大EEW差值 / 子彈上限) 
-                    if (overheat <= 0.91f) overheat = 0.91f;
-                    MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", overheat);
+                    case 1:
+                        if (BulletNub[0] <= 18)
+                        {
+                            float overheat = 0.91f + BulletNub[0] * (0.09f / 18);  //最小EEW + 當前子彈數 * (最小與最大EEW差值 / 子彈上限) 
+                            if (overheat <= 0.91f) overheat = 0.91f;
+                            MuzzleMaterial[0].SetFloat("_EmissiveExposureWeight", overheat);
+                        }
+                        break;
                 }
+
                 //print("子彈 " + BulletNub);
                 break;
             case 2:
@@ -741,7 +792,22 @@ public class Boss02_AI : MonoBehaviour
                 //print("攻擊2");
                 break;
         }
-        ani.SetBool("Attack1", true);  //第一階攻擊模式
+        if(Level != 3)
+        {
+            ani.SetBool("Attack1", true);  //第一階攻擊模式
+        }
+        else
+        {
+            switch (BulletType)
+            {
+                case 1:
+                    ani.SetBool("Attack1", true);  //第一階攻擊模式
+                    break;
+                case 2:
+                    ani.SetBool("Attack2", true);  //第二階攻擊模式
+                    break;
+            }
+        }
         ani.SetInteger("AttackMode", AttackMode);
 
         if (Fire)
@@ -763,6 +829,8 @@ public class Boss02_AI : MonoBehaviour
     {
         attacking = attackingB;
         bulletAttack = BulletAttackNub;
+        ani.SetBool("Attack1", false);  //第一階攻擊模式
+        ani.SetBool("Attack2", false);  //第二階攻擊模式
     }
     public static void ReMuzzleGrid(int Grid)  //釋放槍口格子
     {
