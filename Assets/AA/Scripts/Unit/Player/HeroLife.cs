@@ -23,7 +23,7 @@ public class HeroLife : MonoBehaviour
     public int HitType;
     public Animator[] PlayerAni;
     public Animator BossHit_Ani;
-    public ParticleSystem[] Hit_Player;
+    public ParticleSystem[] Hit_Player;  //玩家受傷特效
     public float HP_R_speed =0.8f;
     bool playing ;
     public bool Crystal_Infection;

@@ -133,7 +133,7 @@ public class Boss02_AI : MonoBehaviour
         Fire = false;
         AttackStatus = false;
         coolDown = 1;
-        BulletNub =new int[2]{ 30, 1};  //子彈數
+        BulletNub =new int[2]{ 30, 20};  //子彈數
         MaxMuGrid = muzzle.Length;
         //muzzleGrid = new int[MaxMuGrid];
         StartAttack = false;
@@ -143,9 +143,7 @@ public class Boss02_AI : MonoBehaviour
         StartTime = -1;
         Level = 1;
         overheatTime = new float[2] { 0, 0 };
-
-        //GameObject Mo1B = Instantiate(MBullet, MBulletPool.transform) as GameObject;   //無法生成
-
+        BulletType = 1;
 
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
@@ -212,27 +210,6 @@ public class Boss02_AI : MonoBehaviour
         }
     }
 
-    Vector3 GetNavDirection(bool forward, NavMeshAgent nav)
-    {
-        if (nav.hasPath) // 若有路徑
-        {
-            Vector3 v1 = new Vector3(nav.path.corners[0].x, 0,
-            nav.path.corners[0].z);//當前的點
-            Vector3 v2 = new Vector3(nav.path.corners[1].x, 0,
-            nav.path.corners[1].z);//下一個點
-
-
-            // 計算移動向量的旋轉方向
-            if (forward)
-                return (v2 - v1);
-            else
-                return (v1 - v2);
-        }
-        else
-        {
-            return Vector3.zero;
-        }
-    }
     float GetXZAngle(Vector3 forward, Vector3 selfPosition, Vector3
     targetPosition, bool signedNumber)
     {
@@ -302,32 +279,7 @@ public class Boss02_AI : MonoBehaviour
                                 tagObject.transform.position, false) < ArangeAngle)
                         {
                             agent.speed = 0;
-                            AttackAngleT = true;
-                            //if (coolDown >= 1)
-                            //{
-                            //    //判斷在攻擊角度內
-                            //    if (GetXZAngle(transform.forward, transform.position,
-                            //        tagObject.transform.position, false) < AttackAngle)
-                            //    {
-                            //        agent.speed = 0;
-                            //        AttackAngleT = true;
-                            //        //print("攻擊角度內" + tagObject);
-                            //    }
-                            //    else
-                            //    {
-                            //        //若不在攻擊角度內轉向目標
-                            //        //Vector3 targetDir = tagObject.transform.position - transform.position;
-                            //        //Quaternion rotate = Quaternion.LookRotation(targetDir);
-                            //        //transform.localRotation = Quaternion.Slerp(transform.localRotation, rotate, 50f * Time.deltaTime);
-                            //        //print("轉向" + tagObject);
-                            //    }
-                            //    coolDown = 1f;
-                            //}
-                            //else
-                            //{
-                            //    //coolDown += Time.deltaTime;
-                            //}
-                            
+                            AttackAngleT = true;                        
                         }
                         fined = true;                     
                     }
@@ -384,18 +336,6 @@ public class Boss02_AI : MonoBehaviour
         {
             目前攻擊目標 = attackTarget.gameObject;
         }
-
-        //if (coolDown >= 0.7f && BulletNub>0)  //攻擊冷卻時間
-        //{
-        //    Fire = true;
-        //    attacking = false;
-        //    coolDown = 0;
-        //    bulletAttack = 1;
-        //}
-        //if (coolDown >= 0)
-        //{
-        //    coolDown += Time.deltaTime;
-        //}
         if (StartTime >= 0)
         {
             StartTime += Time.deltaTime;
@@ -434,11 +374,12 @@ public class Boss02_AI : MonoBehaviour
                             ReLoad(0);
                             //Attack();
                         }
-                        if (BulletNub[1] <= 0 && BulletType==2)
+                        if (BulletNub[1] <= 0)
                         {
-                            BulletType = 1;
                             Reload[1] = true; //冷卻狀態
-                            ReLoad(0);
+                            ReLoad(1);
+                            ani.SetBool("Attack2", false);  //第二階攻擊模式
+                            ani.SetBool("Attack1", true);  //第一階攻擊模式
                         }
                         else  //武器1 攻擊
                         {
@@ -544,67 +485,6 @@ public class Boss02_AI : MonoBehaviour
             ani.SetInteger("AttackMode", AttackMode);
         }
 
-        //if (FindNearestPlayer(playerTags, out attackTarget, out targetDistance))// 若有掃描到玩家
-        //{
-        //    //actionTimer = nextActionTime; // 把計時器設為時間已到,當玩家離開視線時能強制更換行為
-        //    // 與攻擊目標的距離
-        //    float d = Vector3.Distance(transform.position, attackTarget.position);
-        //    if (d < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
-        //    {
-        //        if (attacking)  // 若在攻擊狀態中,一定要等攻擊完才做下一次的動作
-        //        {
-        //            Vector3 atP = new Vector3(attackTarget.position.x, attackTarget.position.y, attackTarget.position.z);
-        //            AAT = atP;
-        //            return;
-        //        }
-        //        if (AttackAngleT)
-        //        {
-        //            Fire = true;
-        //            AttackPlay = true;
-        //            attacking = true;
-        //            Attack();
-        //            //print("小於攻擊距離 攻擊+" + attackTarget);
-        //        }
-        //        else
-        //        {
-        //            AttackPlay = false;
-        //        }
-        //    }
-        //    else // 玩家距離大於攻擊距離,進行追踪
-        //    {
-        //        //TrPlayer = true;
-        //        //Fire = false;
-        //        //TrackingPlayer();
-        //        return;
-        //    }
-        //}
-        //else 
-        //{
-        //    //float d = Vector3.Distance(transform.position, attackTarget.position);
-        //    //if (d < arriveDistance)  //若距離小於停止距離
-        //    //{
-        //    //    //print("警戒");
-        //    //}
-        //    //取得角色與目標的距離
-        //    //print(oriTarget[defense]);
-        //    //float dn = Vector3.Distance(transform.position, oriTarget[A_defense].position);
-        //    //moving = true;
-        //    //if (dn < attackDistance) // 玩家距離小於攻擊距離,攻擊玩家
-        //    //{
-        //    //    //AttackPlay = false;
-        //    //    //Fire = true;
-        //    //    //Attack();
-        //    //    TrPlayer = false;
-        //    //    TrackingPlayer();
-        //    //    Fire = false;
-        //    //}
-        //    //else // 玩家距離大於攻擊距離,進行追踪
-        //    //{
-        //    //    TrPlayer = false;
-        //    //    TrackingPlayer();
-        //    //    Fire = false;
-        //    //}
-        //}
         if (moving)   //若要移動，進行方向修正
         {
             transform.rotation = GetNavRotation(true, agent);
@@ -636,7 +516,7 @@ public class Boss02_AI : MonoBehaviour
                     {
                         overheatTime[1] = 0;
                         BulletType = 2;
-                        BulletNub[1] = 1;
+                        BulletNub[1] = 20;
                         Reload[1] = false;
                     }
                 }              
@@ -711,10 +591,7 @@ public class Boss02_AI : MonoBehaviour
                     Crystal_Weakness[2].GetComponent<Crystal_Life>().無敵 = false;
                     break;
                 case 3:  //射黑火+不限制火炮 打左胸弱點
-                    if (BulletNub[1] >= 1)
-                    {
-                        BulletType = 2;
-                    }                   
+                    Crystal_Weakness[3].GetComponent<Crystal_Life>().無敵 = false;
                     break;
                 case 4:  //散發出黑火形成巨大黑火球 全身水晶炸掉露出最後弱點 爆炸前打死Boss2
                     break;
@@ -825,12 +702,15 @@ public class Boss02_AI : MonoBehaviour
             //print("Fire" + coolDown);
         }
     }
+    public void AttackBullet(int Type)
+    {
+        BulletType = Type;
+    }
     public void AttackAning(bool attackingB, int BulletAttackNub)
     {
         attacking = attackingB;
         bulletAttack = BulletAttackNub;
         ani.SetBool("Attack1", false);  //第一階攻擊模式
-        ani.SetBool("Attack2", false);  //第二階攻擊模式
     }
     public static void ReMuzzleGrid(int Grid)  //釋放槍口格子
     {

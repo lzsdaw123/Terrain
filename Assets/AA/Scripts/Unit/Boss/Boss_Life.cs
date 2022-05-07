@@ -64,7 +64,7 @@ public class Boss_Life : MonoBehaviour
         //RagdollActive(false); // 先關閉物理娃娃
         gameObject.layer = LayerMask.NameToLayer("Monster");
         gameObject.tag = "Enemy";
-        Weakness_Hp = new float[] { 50, 50, 50 };
+        Weakness_Hp = new float[] { 50, 50, 50, 50,300 };
         boss02_AI.RangeObject[0].SetActive(true);
     }
 
@@ -153,20 +153,21 @@ public class Boss_Life : MonoBehaviour
                     if (WeaknessObject[i] == HitObject)
                     {
                         Weakness_Hp[i] -= Power;
+                        if (boss02_AI.Level == 4) hp = Weakness_Hp[4]; // 扣血
                     }
                     if (Weakness_Hp[i] <= 0)
                     {
                         WeaknessObject[i].GetComponent<SphereCollider>().enabled = false;
                     }
                 }
-                if (Weakness_Hp[0] <= 0)  //左手弱點擊破
+                if (Weakness_Hp[0] <= 0)  //左手臂弱點
                 {
                     Weakness_Hp[0] = 60;
                     boss02_AI.Level = 2;
                     boss02_AI.ani.SetInteger("Level", 2);
                     boss02_AI.ani.SetTrigger("LevelUp");
                 }
-                if (Weakness_Hp[1] <= 0 && Weakness_Hp[2] <= 0)
+                if (Weakness_Hp[1] <= 0 && Weakness_Hp[2] <= 0)  //腹部兩個弱點
                 {
                     Weakness_Hp[1] = 60;
                     Weakness_Hp[2] = 60;
@@ -175,6 +176,17 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.ani.SetTrigger("LevelUp");
                     boss02_AI.RangeObject[0].SetActive(false);
                     boss02_AI.RangeObject[1].SetActive(true);
+                    Boss02_AI.BulletType = 2;
+                }
+                if (Weakness_Hp[3] <= 0)  //左胸弱點擊破
+                {
+                    Weakness_Hp[3] = 60;
+                    Weakness_Hp[4] = 300;
+                    boss02_AI.Level = 4;
+                    boss02_AI.ani.SetInteger("Level", 4);
+                    boss02_AI.ani.SetTrigger("LevelUp");
+                    boss02_AI.ani.SetBool("Attack1", false);  //第一階攻擊模式
+                    boss02_AI.ani.SetBool("Attack2", false);  //第二階攻擊模式
                 }
                 break;
         }
@@ -208,6 +220,7 @@ public class Boss_Life : MonoBehaviour
                         Level_1.LevelA_ = 8;  //關卡8
                         break;
                     case 1:
+                        boss02_AI.ani.SetTrigger("Dead");
                         break;
                 }
             }           

@@ -36,6 +36,8 @@ public class S_BulletLife : MonoBehaviour
     bool AttackPlay;
     public ObjectPool pool_Hit;  //物件池
     public bool ReSave;
+    public bool Move;
+    public float MoveTime;
 
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
@@ -49,22 +51,33 @@ public class S_BulletLife : MonoBehaviour
     }
     public void Start()
     {
+        Move = true;
+        MoveTime = -1;
         switch (BulletType)
         {
             case 0:  //蠍子毒液
                 speed = 60f; //飛行速度
                 power = 1;
                 liftTime = 5f;
+                GetComponent<CapsuleCollider>().center = new Vector3(0, 0, -0.45f);
+                GetComponent<CapsuleCollider>().radius = 0.82f;
+                GetComponent<CapsuleCollider>().height = 0.34f;
                 break;
             case 1:  //Boss2 攻擊1 火炮
                 speed = 35f; //飛行速度
                 power = 2;
                 liftTime = 5f;
+                GetComponent<CapsuleCollider>().center = new Vector3(0, 0, 0);
+                GetComponent<CapsuleCollider>().radius = 0.25f;
+                GetComponent<CapsuleCollider>().height = 1.26f;
                 break;
             case 2:  //Boss2 攻擊1 黑火球
-                speed = 2f; //飛行速度
-                power = 10;
+                speed = 40f; //飛行速度
+                power = 2;
                 liftTime = 20f;
+                GetComponent<CapsuleCollider>().center = new Vector3(0, 0, 0);
+                GetComponent<CapsuleCollider>().radius = 0.1f;
+                GetComponent<CapsuleCollider>().height = 2.8f;
                 break;
         }
         ReSave = false;
@@ -139,6 +152,15 @@ public class S_BulletLife : MonoBehaviour
     }
     void Update()
     {
+        if (MoveTime >= 0)
+        {
+            MoveTime += Time.deltaTime;
+            if (MoveTime >= 0.16f)
+            {
+                MoveTime = -1;
+                Move = false;
+            }
+        }
         if (ReSave)
         {
             ReSave = false;
@@ -166,12 +188,12 @@ public class S_BulletLife : MonoBehaviour
                     forwardFly = true;
                     break;
             }
+            Move = true;
         }
     }
     void FixedUpdate()
     {
         //target = MonsterAI02.attackTarget;
-
         if (B_FlyTrack)
         {
             switch (BulletType)
@@ -207,38 +229,41 @@ public class S_BulletLife : MonoBehaviour
             //ABPath = ABPath / 10;
             B_FlyTrack = false;
         }
-
-        if (Atarget != Vector3.zero)
+        if (Move)
         {
-            float firstSpeed = Vector3.Distance(transform.position, Atarget);
-            float orifirstSpeed = firstSpeed;
+            if (Atarget != Vector3.zero)
+            {
+                float firstSpeed = Vector3.Distance(transform.position, Atarget);
+                float orifirstSpeed = firstSpeed;
 
-            if (forwardFly)
-            {
-                transform.Translate(Vector3.forward * speed * Time.deltaTime); //往前移動
-            }
-            else
-            {
-                if (firstSpeed != 0)
+                if (forwardFly)
                 {
-
-                    transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
-                    firstSpeed = Vector3.Distance(transform.position, Atarget);
-                    if (firstSpeed == orifirstSpeed)
-                    {
-                        forwardFly = true;
-                    }
+                    transform.Translate(Vector3.forward * speed * Time.deltaTime); //往前移動
                 }
                 else
                 {
-                    liftTime = 0;
+                    if (firstSpeed != 0)
+                    {
+
+                        transform.position = Vector3.MoveTowards(transform.position, Atarget, speed * Time.deltaTime);
+                        firstSpeed = Vector3.Distance(transform.position, Atarget);
+                        if (firstSpeed == orifirstSpeed)
+                        {
+                            forwardFly = true;
+                        }
+                    }
+                    else
+                    {
+                        liftTime = 0;
+                    }
                 }
             }
+            else
+            {
+                liftTime = 0;
+            }
         }
-        else
-        {
-            liftTime = 0;
-        }
+       
        
         //    float step = speed * Time.deltaTime;
         //transform.localPosition += ABPath * speed * Time.deltaTime ;
@@ -368,29 +393,34 @@ public class S_BulletLife : MonoBehaviour
         } 
         else if (InLayerMask(collision.gameObject.layer, Ground[1]))
         {
-            liftTime = 0;
-            if (BulletType == 2)
+            switch (BulletType)
             {
-                if (collision.gameObject.tag == damageTags[3])
-                {
-                    if (collision.GetComponent<Crystal_Life>())  //如果水晶可破壞
+                case 0:
+                    liftTime = 0;
+                    break;
+                case 1:  //在到物體上產生彈孔
+                    liftTime = 0;
+                    Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                    Vector3 pos = hit.point;
+                    int HitType = BulletType - 1;
+                    pool_Hit.ReUseBoss2Hit(pos, rot, HitType);  //從彈孔池取出彈孔
+                    break;
+                case 2:
+                    liftTime = 5;
+                    MoveTime = 0;
+                    if (collision.gameObject.tag == damageTags[3])
                     {
-                        collision.gameObject.SendMessage("Damage", power); //傷害
-                        if (collision.GetComponent<Crystal_Life>().hp <= 0)
+                        if (collision.GetComponent<Crystal_Life>())  //如果水晶可破壞
                         {
-                            return;
+                            collision.gameObject.SendMessage("Damage", power); //傷害
+                            if (collision.GetComponent<Crystal_Life>().hp <= 0)
+                            {
+                                return;
+                            }
                         }
                     }
-                }
-            }       
-            //在到物體上產生彈孔
-            if (BulletType >= 1)
-            {
-                Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                Vector3 pos = hit.point;
-                int HitType = BulletType - 1;
-                pool_Hit.ReUseBoss2Hit(pos, rot, HitType);  //從彈孔池取出彈孔
-            }
+                    break;
+            }     
         }
     }
 }
