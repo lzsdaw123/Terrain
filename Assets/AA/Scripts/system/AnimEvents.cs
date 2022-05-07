@@ -88,13 +88,12 @@ public class AnimEvents : MonoBehaviour
     {
         Shooting.BumbEnd();
     }
-    void ReLoad()
+    void ReLoad()  //換彈
     {
         if (UnitType == 0)
         {
             ammunition = Shooting.Weapons[WeaponType].WeapAm;
             Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
-
             R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前數量    
             if (Total_ammunition < R_ammunition)  //總數量<武器可裝填量 {當前數量+總數量}
             {
@@ -104,17 +103,40 @@ public class AnimEvents : MonoBehaviour
                 }
                 else
                 {
-                    ammunition +=  Total_ammunition;  //彈藥 + 總數量
-                    Total_ammunition = 0;  //總數量=0
+                    switch (Shooting.WeaponType)
+                    {
+                        case 0:
+                        case 1:
+                            ammunition += Total_ammunition;  //彈藥 + 總數量
+                            Total_ammunition = 0;  //總數量=0
+                            break;
+                        case 2:  //霰彈槍
+                            ammunition += 1;
+                            Total_ammunition -= 1;
+                            break;
+                    }
                 }
             }
             else  //總數量>=武器可裝填量 {當前數量+裝填量}
             {
-                ammunition += R_ammunition;  //彈藥 + 裝填量
-                Total_ammunition -= R_ammunition;  //總數量 - 裝填量
+                switch (Shooting.WeaponType)
+                {
+                    case 0:
+                    case 1:
+                        ammunition += R_ammunition;  //彈藥 + 裝填量
+                        Total_ammunition -= R_ammunition;  //總數量 - 裝填量
+                        break;
+                    case 2:
+                        if (R_ammunition != 0)
+                        {
+                            ammunition += 1;
+                            Total_ammunition -= 1;
+                        }
+                        break;
+                }
             }
             //當前數量 >= 武器可裝填量 {當前數量 = 武器可裝填量}
-            //if (ammunition >= WeaponAmm[WeaponType]) ammunition = WeaponAmm[WeaponType];
+            //if (ammunition >= WeaponAmm[WeaponType]) ammunition = WeaponAmm[WeaponType];         
         }     
     }
     void ReLoadEnd()
@@ -122,6 +144,24 @@ public class AnimEvents : MonoBehaviour
         switch (UnitType)
         {
             case 0:
+                switch (Shooting.WeaponType)
+                {
+                    case 0:
+                    case 1:
+                        Shooting.ReReLoad(false);
+                        break;
+                    case 2:
+                        if (ammunition < 5 && Total_ammunition >0)
+                        {
+                            Shooting.ReReLoad(true);
+                        }
+                        else
+                        {
+                            Shooting.ReReLoad(false);
+                        }
+                        break;
+                }
+                if (Total_ammunition <= 0) Total_ammunition = 0;
                 Shooting.ReLoad_E(ammunition, Total_ammunition);
                 break;
             case 1:

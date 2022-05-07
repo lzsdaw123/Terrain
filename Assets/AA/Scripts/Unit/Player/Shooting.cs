@@ -54,6 +54,7 @@ public class Shooting : MonoBehaviour
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
     public static bool Reload;  //換彈藥bool
+    public static bool ReReload;  //換彈藥bool
     bool AimIng;  //瞄準中bool
     float FieldOfView;  //玩家相機視野
     float gFieldOfView;  //武器相機視野
@@ -88,8 +89,10 @@ public class Shooting : MonoBehaviour
     public static bool GetGrenade;  //取得手榴彈
     public GameObject GrenadeUI;
     public GameObject[] Grenade;  //手榴彈物件
-    public static GameObject GetGrenadeObj;  //
+    public static GameObject GetGrenadeObj;  //取得的手榴彈物件
     public static bool UseGrenade;
+    public Material[] material;
+    public Texture2D[] texture2Ds;
 
     public static void StartAll()
     {
@@ -126,7 +129,7 @@ public class Shooting : MonoBehaviour
 
         Equipment = new int[] { 0, 0, 0};  //身上持有的武器
         Weapon_of_Pos = new int[] { -1, -1};  //武器放置位置
-        Reload = false;
+        Reload = ReReload = false;
         DontShooting = false;
         LayDown = true;
         WeapSwitch = false;
@@ -454,6 +457,7 @@ public class Shooting : MonoBehaviour
                     if (FireButtle==1)
                     {
                         Weapon.SetBool("Fire", true);
+                        Weapon.SetTrigger("Fire 0");
                         FireButtle = 0;
                     }
                     MouseLook.Shaking();
@@ -687,28 +691,52 @@ public class Shooting : MonoBehaviour
         TargetWall = ShootingRange.TargetWall;
         if (MuFire_Light[WeaponType].activeSelf && WeaponType !=0)
         {
-            //print(MuFire_Light[WeaponType].name);
-            MuFire_Light[WeaponType].GetComponent<Light>().range -= 80 * Time.deltaTime;
-            float Range = MuFire_Light[WeaponType].GetComponent<Light>().range;
-            if (Range <= 0)
-            {
-                MuFire_Light[WeaponType].SetActive(false);
-                MuFire_Light[WeaponType].GetComponent<Light>().range = 30;
-            }
+            ////print(MuFire_Light[WeaponType].name);
+            //MuFire_Light[WeaponType].GetComponent<Light>().range -= 80 * Time.deltaTime;
+            //float Range = MuFire_Light[WeaponType].GetComponent<Light>().range;
+            //if (Range <= 0)
+            //{
+            //    MuFire_Light[WeaponType].SetActive(false);
+            //    MuFire_Light[WeaponType].GetComponent<Light>().range = 30;
+            //}
         }
-    } 
+        //修改武器材質
+        if (WeaponType == 2) material[0].SetTexture("_EmissiveColorMap", texture2Ds[Weapons[2].WeapAm]);
+    }
     void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.R) && !LayDown && Weapons[WeaponType].T_WeapAm != 0)    //換彈藥
         {
             if (Reload == false)
             {
+                if (WeaponType == 2)
+                {
+                    if (Weapons[2].WeapAm >= 5)
+                    {
+                        return;
+                    }
+                    Weapon.SetBool("Reloading", true);
+                }
                 FireButtle = 0;
                 Reload = true;
-                Weapon.SetTrigger("Reload");
+                ReReload = true;
+                Weapon.SetTrigger("Reload");               
                 ReloadWarn.SetActive(false);
             }
         }
+        if (ReReload)  //再次裝彈
+        {
+            FireButtle = 0;
+            Reload = true;
+            ReReload = true;
+            if (WeaponType == 2) Weapon.SetBool("Reloading", true);
+            ReloadWarn.SetActive(false);
+        }
+        else
+        {
+            if (WeaponType == 2) Weapon.SetBool("Reloading", false);
+        }
+
         if (BFire) //生成子彈
         {
             muzzlePOS = muzzle[WeaponType].GetComponent<Transform>().position;  //槍口位置
@@ -925,7 +953,7 @@ public class Shooting : MonoBehaviour
             Muzzle_vfx[WeaponType].transform.position = muzzlePOS;
             Muzzle_vfx[WeaponType].transform.rotation = GunCamera.transform.rotation;
             Muzzle_vfx[WeaponType].SetActive(true);
-            MuFire_Light[WeaponType].SetActive(true);
+            //MuFire_Light[WeaponType].SetActive(true);
             switch (WeaponType)
             {
                 case 0:
@@ -955,6 +983,10 @@ public class Shooting : MonoBehaviour
         Weapons[WeaponType].T_WeapAm = T_Ammo;
         Reload = false;
         FireButtle = 1;
+    }
+    public static void ReReLoad(bool Re)  //再次裝填
+    {
+        ReReload = Re;
     }
     void GunshotsAudio(int Type)  //開槍音效
     {

@@ -38,6 +38,7 @@ public class AudioManager : MonoBehaviour
     AudioSource AmbientSource;  //環境音源
     AudioSource PlayerSource;  //玩家音源
     AudioSource GunSource;  //槍枝音源
+    AudioSource Gun2_Source;  //槍枝音源
     AudioSource HitSource;  //擊中音源
     static AudioSource ElevatorSource;  //電梯音源
     AudioSource EffectsSource;  //特效音源
@@ -50,7 +51,7 @@ public class AudioManager : MonoBehaviour
     public Text[] Nub;  //BSE
     public bool[] muteState;
     static bool Re;
-    public static float[] SaveVolume =new float[8];  //保存預設音量
+    public static float[] SaveVolume =new float[9];  //保存預設音量
 
     public static int SceneNub;  //當前場景編號
     [SerializeField]int SF_SceneNub;  //當前場景編號
@@ -67,6 +68,7 @@ public class AudioManager : MonoBehaviour
         AmbientSource = gameObject.AddComponent<AudioSource>();
         PlayerSource = gameObject.AddComponent<AudioSource>();
         GunSource = gameObject.AddComponent<AudioSource>();
+        Gun2_Source = gameObject.AddComponent<AudioSource>();
         HitSource = gameObject.AddComponent<AudioSource>();
         EffectsSource = gameObject.AddComponent<AudioSource>();
         ButtonSource = gameObject.AddComponent<AudioSource>();
@@ -115,6 +117,7 @@ public class AudioManager : MonoBehaviour
             AmbientSource.volume = Slider[1].value;
             PlayerSource.volume = SaveVolume[1] * Slider[2].value;
             GunSource.volume = SaveVolume[2] * Slider[2].value;
+            Gun2_Source.volume = SaveVolume[3] * Slider[2].value;
             HitSource.volume = Slider[2].value;
             EffectsSource.volume = Slider[2].value;
             ButtonSource.volume = Slider[2].value;
@@ -142,6 +145,7 @@ public class AudioManager : MonoBehaviour
             PlayerSource.Pause();
             ActionSource.Pause();
             GunSource.Pause();
+            Gun2_Source.Pause();
             HitSource.Pause();
             EffectsSource.Pause();
             WarnSource.Pause();
@@ -155,6 +159,7 @@ public class AudioManager : MonoBehaviour
             PlayerSource.UnPause();
             ActionSource.UnPause();
             GunSource.UnPause();
+            Gun2_Source.UnPause();
             HitSource.UnPause();
             EffectsSource.UnPause();
             WarnSource.UnPause();
@@ -204,6 +209,7 @@ public class AudioManager : MonoBehaviour
         PlayerSource.mute = muteState[2];
         ActionSource.mute = muteState[2];
         GunSource.mute = muteState[2];
+        Gun2_Source.mute = muteState[2];
         HitSource.mute = muteState[2];
         EffectsSource.mute = muteState[2];
         ButtonSource.mute = muteState[2];
@@ -313,18 +319,18 @@ public class AudioManager : MonoBehaviour
         switch (Nub)
         {
             case 0:
-                current.GunSource.clip = current.GunshotsClip[2];
+                current.Gun2_Source.clip = current.GunshotsClip[2];
                 break;
             case 1:
-                current.GunSource.clip = current.GunshotsClip[3];
+                current.Gun2_Source.clip = current.GunshotsClip[3];
                 break;
             case 2:
-                current.GunSource.clip = current.GunshotsClip[5];
+                current.Gun2_Source.clip = current.GunshotsClip[5];
                 break;
         }
-        current.GunSource.volume = 1;
-        SaveVolume[2] = current.GunSource.volume;
-        current.GunSource.Play();
+        current.Gun2_Source.volume = 1;
+        SaveVolume[3] = current.Gun2_Source.volume;
+        current.Gun2_Source.Play();
         OnClick();
     }
     public static void explode()  //爆炸
