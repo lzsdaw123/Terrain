@@ -173,11 +173,11 @@ public class Crystal_Life : MonoBehaviour
                 //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
                 gameObject.layer = LayerMask.NameToLayer("Default");
                 gameObject.tag = "Untagged";
-            }           
+            }
             if(Decal !=null)
             {
                 Decal.fadeFactor = 1;
-                Decal.gameObject.transform.GetChild(0).GetComponent<SphereCollider>().enabled = true;
+                Decal.gameObject.transform.GetChild(0).GetComponent<SphereCollider>().enabled = true;  //弱點血量
             }
             hp = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸
@@ -188,7 +188,7 @@ public class Crystal_Life : MonoBehaviour
             {
                 case 0:
                     break;
-                case 1:
+                case 1:  //目標水晶
                     break;
                 case 2:
                     ani.SetTrigger("Dead");

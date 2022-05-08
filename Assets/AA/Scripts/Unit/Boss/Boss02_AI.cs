@@ -97,7 +97,6 @@ public class Boss02_AI : MonoBehaviour
     public GameObject[] RangeObject;  //攻擊範圍
     public GameObject[] MA_Rig;  //Rig連結
     public float MA_weight;  //Rig連結權重
-    public GameObject[] Crystal_Weakness;  //水晶弱點
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -144,7 +143,6 @@ public class Boss02_AI : MonoBehaviour
         Level = 1;
         overheatTime = new float[2] { 0, 0 };
         BulletType = 1;
-
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
 
@@ -583,15 +581,12 @@ public class Boss02_AI : MonoBehaviour
             {
                 case 1:  //限制火炮+機槍塔1護盾 打左手弱點
                     BulletType = 1;
-                    Crystal_Weakness[0].GetComponent<Crystal_Life>().無敵 = false;
                     break;
                 case 2:  //限制火炮+機槍塔2.3護盾  打腹部兩個弱點
                     BulletType = 1;
-                    Crystal_Weakness[1].GetComponent<Crystal_Life>().無敵 = false;
-                    Crystal_Weakness[2].GetComponent<Crystal_Life>().無敵 = false;
+                    print("SS");
                     break;
                 case 3:  //射黑火+不限制火炮 打左胸弱點
-                    Crystal_Weakness[3].GetComponent<Crystal_Life>().無敵 = false;
                     break;
                 case 4:  //散發出黑火形成巨大黑火球 全身水晶炸掉露出最後弱點 爆炸前打死Boss2
                     break;

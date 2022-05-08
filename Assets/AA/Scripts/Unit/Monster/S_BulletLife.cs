@@ -39,7 +39,6 @@ public class S_BulletLife : MonoBehaviour
     public bool Move;
     public float MoveTime;
 
-
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
         facingRight = FacingRight;
@@ -71,13 +70,19 @@ public class S_BulletLife : MonoBehaviour
                 GetComponent<CapsuleCollider>().radius = 0.25f;
                 GetComponent<CapsuleCollider>().height = 1.26f;
                 break;
-            case 2:  //Boss2 攻擊1 黑火球
+            case 2:  //Boss2 攻擊2 黑火尖刺
                 speed = 40f; //飛行速度
                 power = 2;
                 liftTime = 20f;
                 GetComponent<CapsuleCollider>().center = new Vector3(0, 0, 0);
                 GetComponent<CapsuleCollider>().radius = 0.1f;
                 GetComponent<CapsuleCollider>().height = 2.8f;
+                break;
+            case 3:  //Boss2 攻擊4 黑火球
+                speed = 0;
+                power = 0.1f;
+                liftTime = -1f;
+                Move = false;
                 break;
         }
         ReSave = false;
@@ -166,7 +171,8 @@ public class S_BulletLife : MonoBehaviour
             ReSave = false;
             Start();
         }
-        liftTime -= Time.deltaTime;
+        if(liftTime>0) liftTime -= Time.deltaTime;
+
         FlyDistance += Time.deltaTime;
         if (liftTime <= 0)
         {
@@ -186,6 +192,8 @@ public class S_BulletLife : MonoBehaviour
                     Bullet[0].SetActive(false);
                     Bullet[1].SetActive(false);
                     forwardFly = true;
+                    break;
+                case 3:
                     break;
             }
             Move = true;
@@ -383,6 +391,9 @@ public class S_BulletLife : MonoBehaviour
                                 case 2:
                                     collision.gameObject.SendMessage("DamageEffects", 5); //傷害特效
                                     break;
+                                case 3:
+                                    collision.gameObject.SendMessage("DamageEffects", 5); //傷害特效
+                                    break;
                             }
                             collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
                         }
@@ -420,7 +431,66 @@ public class S_BulletLife : MonoBehaviour
                         }
                     }
                     break;
+                case 3:
+                    liftTime = -1;
+                    break;
             }     
+        }
+    }
+    private void OnTriggerStay(Collider collision)  //不斷接觸
+    {
+        //若碰撞體在作用圖層內才進行運算
+        if (InLayerMask(collision.gameObject.layer, Ground[0]))
+        {
+            liftTime = 0;
+            for (int i = 0; i < ignoreTags.Length; i++)
+            {
+                if (collision.gameObject.tag == ignoreTags[i])
+                {
+                    return; //若對象在忽略Tag，則直接返回不做任何處理
+                }
+            }
+            for (int i = 0; i < damageTags.Length; i++)
+            {
+                if (collision.gameObject.tag == damageTags[i])
+                {
+                    if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
+                    {
+                        collision.gameObject.SendMessage("Damage", power); //傷害
+                        if (collision.GetComponent<HeroLife>())
+                        {
+                            switch (BulletType)
+                            {
+                                case 2:
+                                    if(!Move) collision.gameObject.SendMessage("DamageEffects", 5); //傷害特效
+                                    break;
+                                case 3:
+                                    collision.gameObject.SendMessage("DamageEffects", 5); //傷害特效
+                                    break;
+                            }
+                            collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
+                        }
+                        break; //結束迴圈
+                    }
+                }
+            }
+        }
+        else if (InLayerMask(collision.gameObject.layer, Ground[1]))
+        {
+            switch (BulletType)
+            {
+                case 3:
+                    liftTime = -1;
+                    if (collision.GetComponent<Crystal_Life>())  //如果水晶可破壞
+                    {
+                        collision.gameObject.SendMessage("Damage", power); //傷害
+                        if (collision.GetComponent<Crystal_Life>().hp <= 0)
+                        {
+                            return;
+                        }
+                    }
+                    break;
+            }
         }
     }
 }
