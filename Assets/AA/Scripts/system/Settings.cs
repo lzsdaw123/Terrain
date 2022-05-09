@@ -44,6 +44,7 @@ public class Settings : MonoBehaviour
     [SerializeField] GameObject Player;
     public GameObject ExitUI;  //勝利UI
     public static bool 離開遊戲;
+    public static bool EnterScene;
 
     void Awake()  //0=設定 1=開頭 2=第一關 3=第二關 4=載入畫面
     {
@@ -102,6 +103,7 @@ public class Settings : MonoBehaviour
         離開遊戲 = false;
         ReStart();
         ExitUI.SetActive(false);
+        EnterScene = false;
     }
     void Update()
     {
@@ -154,6 +156,13 @@ public class Settings : MonoBehaviour
                     ReStart();
                 }
             }
+        }
+        if (EnterScene)
+        {
+            EnterScene = false;
+            Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
+            LoadNewScene("Scene_2");
+            SceneManager.UnloadSceneAsync("SampleScene");
         }
         if (離開遊戲)
         {
@@ -266,6 +275,10 @@ public class Settings : MonoBehaviour
         //SceneManager.LoadSceneAsync(2);
         SceneManager.UnloadSceneAsync(1);
         //Settings.LoadScene("SampleScene");
+    }
+    public static void Enter_Scene2()
+    {
+        EnterScene = true;
     }
     public void OptionB()
     {

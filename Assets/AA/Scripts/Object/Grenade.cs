@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Grenade : MonoBehaviour
 {
-    public GameObject T;
+    public GameObject ObjectText;
     bool StartB;
     [SerializeField] GameObject Take;  //互動圖示UI
     public GameObject GrenadeObj;
@@ -13,11 +13,11 @@ public class Grenade : MonoBehaviour
 
     void Awake()
     {
-        Take = GameObject.Find("Take");
     }
     void Start()
     {
-        T = GameObject.Find("ObjectText");
+        ObjectText = Save_Across_Scene.ObjectText;
+        Take = Save_Across_Scene.Take;
         StartB = false;
         GrenadeObj = gameObject;
     }
@@ -30,12 +30,12 @@ public class Grenade : MonoBehaviour
     {
         if (Shooting.GrenadeNub >= 2)
         {
-            T.GetComponent<Text>().text = "手榴彈已達上限";
+            ObjectText.GetComponent<Text>().text = "手榴彈已達上限";
             QH_interactive.thing();  //呼叫QH_拾取圖案
         }
         else
         {
-            T.GetComponent<Text>().text = "按「E」取得手榴彈";
+            ObjectText.GetComponent<Text>().text = "按「E」取得手榴彈";
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)
@@ -43,7 +43,7 @@ public class Grenade : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
                 {
                     AudioManager.PickUp(0);
-                    Play = GameObject.Find("POPP").gameObject;
+                    Play = Save_Across_Scene.Play;
                     gameObject.transform.parent = Play.gameObject.transform;
                     Shooting.Get_Grenade(GrenadeObj);
                     gameObject.SetActive(false);

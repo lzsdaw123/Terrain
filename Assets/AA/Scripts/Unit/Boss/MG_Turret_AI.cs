@@ -39,7 +39,7 @@ public class MG_Turret_AI : MonoBehaviour
 
     void Start()
     {
-        pool = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+        //pool = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
         attacking = false;
         bulletAttack = 1;
         //Fire = false;
@@ -85,7 +85,7 @@ public class MG_Turret_AI : MonoBehaviour
                             bulletAttack = 0;
                             ReLoad();
                             attacking = false;
-                            print("BulletNub =0");
+                            //print("BulletNub =0");
                         }
                         else  //ªZ¾¹1 §ðÀ»
                         {

@@ -6,7 +6,7 @@ using System;
 
 public class UpgradeWorkbench : MonoBehaviour
 {
-    public GameObject TextG;
+    public GameObject ObjectText;
     public int Type;
     public Shop Shop;
     public GameObject UpgradeMenu;  //升級UI
@@ -40,18 +40,19 @@ public class UpgradeWorkbench : MonoBehaviour
 
     private void Awake()
     {
-        Take = GameObject.Find("Take").gameObject;
     }
     void Start()
     {
-        TextG = GameObject.Find("ObjectText");
+        Take = Save_Across_Scene.Take;
+        ObjectText = Save_Across_Scene.ObjectText;
+        Aim = Save_Across_Scene.Aim;
+        GunCamera = Save_Across_Scene.Gun_Camera;
         Shop = GameObject.Find("Shop").GetComponent<Shop>();
-        UpgradeMenu = GameObject.Find("UpgradeMenu");
+        //UpgradeMenu = GameObject.Find("UpgradeMenu");
         UpgradeMenu.SetActive(false);
         UpCamTransform = GunCamera.gameObject.transform;
         FieldOfView = UpgradeCamera.GetComponent<Camera>().fieldOfView ;
         GunCamTransform = GunCamera.gameObject.transform;
-        Aim = GameObject.Find("Aim").gameObject;
         部件ID = 0;
         部件名稱 = "不使用";
         time = -1;
@@ -178,26 +179,26 @@ public class UpgradeWorkbench : MonoBehaviour
                     武器欄位[i].Object.SetActive(false);
                     for (int n = 0; n < 武器欄位[i].部位.Length; n++)
                     {
-                        武器欄位[i].部位[n].PartObject[1].SetActive(false);
+                        武器欄位[i].部位[n].PartObject[1].SetActive(false);  //關閉全部武器
                     }
                 }
                 if (!武器欄位[dropdown.value].Object.activeSelf)
                 {
                     武器欄位[dropdown.value].Object.SetActive(true);
-                    for(int n=0; n< 武器欄位[dropdown.value].部位.Length; n++)
+                    for(int n=0; n< 武器欄位[dropdown.value].部位.Length; n++) 
                     {
-                        武器欄位[dropdown.value].部位[n].PartObject[1].SetActive(true);
+                        武器欄位[dropdown.value].部位[n].PartObject[1].SetActive(true);   //打開當前武器
                     }
                 }
                 break;
             case 1:  //換部件
                 for (int i = 0; i < 武器欄位[FieldType].部位[PartType].Part.Length; i++)
                 {
-                    武器欄位[FieldType].部位[PartType].Part[i].SetActive(false);
+                    武器欄位[FieldType].部位[PartType].Part[i].SetActive(false);  //關閉全部零件
                 }
                 if (!武器欄位[FieldType].部位[PartType].Part[dropdown.value].activeSelf)
                 {
-                    武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);
+                    武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);   //打開當前零件
                     武器欄位[FieldType].Power = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //武器傷害
                     武器欄位[FieldType].Recoil = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  //武器後座力
                     部件ID = 武器欄位[FieldType].部位[PartType].ID[dropdown.value];
@@ -223,7 +224,7 @@ public class UpgradeWorkbench : MonoBehaviour
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
-        TextG.GetComponent<Text>().text = "按「E」使用工作臺";
+        ObjectText.GetComponent<Text>().text = "按「E」使用工作臺";
         QH_interactive.thing();  //呼叫QH_拾取圖案
 
         if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
@@ -232,7 +233,7 @@ public class UpgradeWorkbench : MonoBehaviour
             tagTranPos = GunCamTransform.localPosition;
             tagTranQu = Quaternion.Euler(GunCamTransform.eulerAngles);
             FieldOfView = 55;
-            play = GameObject.Find("POPP").gameObject;
+            play = Save_Across_Scene.Play;
             if (Shooting.FirstWeapon[0] == true)
             {
                 play.GetComponent<Shooting>().Weapon.SetTrigger("LayDownT");
@@ -255,7 +256,10 @@ public class UpgradeWorkbench : MonoBehaviour
             if (!FirstWork)
             {
                 FirstWork = true;
-                DialogueEditor.StartConversation(0, 4, 0, true, 0, true);  //開始對話
+                if (PlayerView.missionLevel == 0)
+                {
+                    DialogueEditor.StartConversation(0, 4, 0, true, 0, true);  //開始對話
+                }
             }
         }
     }

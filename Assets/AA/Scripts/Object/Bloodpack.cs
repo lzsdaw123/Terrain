@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 public class Bloodpack : MonoBehaviour
 {
-    public GameObject T;
+    public GameObject ObjectText;
     bool StartB;
     [SerializeField] GameObject Take;  //互動圖示UI
 
     void Awake()
     {
-        Take = GameObject.Find("Take");
     }
     void Start()
     {
-        T = GameObject.Find("ObjectText");
+        Take = Save_Across_Scene.Take;
+        ObjectText = Save_Across_Scene.ObjectText;
         StartB = false;
     }
 
@@ -40,12 +40,12 @@ public class Bloodpack : MonoBehaviour
     {
         if (HeroLife.BloodpackNub >= 3)
         {
-            T.GetComponent<Text>().text = "修理包已達上限";
+            ObjectText.GetComponent<Text>().text = "修理包已達上限";
             QH_interactive.thing();  //呼叫QH_拾取圖案
         }
         else
         {
-            T.GetComponent<Text>().text = "按「E」取得修理包";
+            ObjectText.GetComponent<Text>().text = "按「E」取得修理包";
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)

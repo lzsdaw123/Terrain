@@ -18,7 +18,7 @@ public class Level_1 : MonoBehaviour
     [SerializeField] ParticleSystem PSsmoke;
     float time = 0;
     [SerializeField] bool Lv1;
-    public int TotalStage;  //關卡階段
+    public int TotalStage;  //關卡階段 ------------00
     public int EnemyWave;  //敵人波數
     public static float stageTime = -1;  //下次來襲時間
     [SerializeField] float SF_stageTime;

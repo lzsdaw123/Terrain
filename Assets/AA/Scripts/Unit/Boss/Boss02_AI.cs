@@ -344,6 +344,8 @@ public class Boss02_AI : MonoBehaviour
                 MG_Turret[0].GetComponent<MG_Turret_AI>().Player = Player;
                 MG_Turret[1].GetComponent<MG_Turret_AI>().Player = Player;
                 MG_Turret[2].GetComponent<MG_Turret_AI>().Player = Player;
+                defenseOb[0].GetComponent<ElectricDoor>().Animator.SetBool("Open", true);
+                PlayerView.Stop = true;
             }
         }
         if (StartAttack)

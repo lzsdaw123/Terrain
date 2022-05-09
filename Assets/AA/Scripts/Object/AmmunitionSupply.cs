@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AmmunitionSupply : MonoBehaviour
 {
-    public GameObject TextG;
+    public GameObject ObjectText;
     public int Type;
     int[] T_WeapAmm = new int[2] ; //武器總彈藥量
     public int[] AmmSupply =new int[2];
@@ -24,8 +24,8 @@ public class AmmunitionSupply : MonoBehaviour
 
     void Awake()
     {
-        Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;
-        TextG = GameObject.Find("ObjectText");
+        Am_zero_Warn = Save_Across_Scene.Am_zero_Warn;
+        ObjectText = Save_Across_Scene.ObjectText;
     }
     void Start()
     {
@@ -165,17 +165,17 @@ public class AmmunitionSupply : MonoBehaviour
     {
         if (interactive || CoverOn)
         {
-            TextG.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply[Type];
+            ObjectText.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply[Type];
         }
         else
         {
             switch (Type)
             {
                 case 0:
-                    TextG.GetComponent<Text>().text = "按「E」打開步槍彈藥盒 ";
+                    ObjectText.GetComponent<Text>().text = "按「E」打開步槍彈藥盒 ";
                     break;
                 case 1:
-                    TextG.GetComponent<Text>().text = "按「E」打開左輪彈藥盒 ";
+                    ObjectText.GetComponent<Text>().text = "按「E」打開左輪彈藥盒 ";
                     break;
             }
         }

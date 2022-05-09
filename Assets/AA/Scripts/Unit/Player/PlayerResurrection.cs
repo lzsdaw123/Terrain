@@ -8,7 +8,9 @@ public class PlayerResurrection : MonoBehaviour
 {
     public int SceneNub;
     public int InputSceneNub;  //測試用重生
-    public Transform R1;  //遊戲起始點
+    public bool Sw_Scene;
+    public Transform R1;  //第一關起始點
+    public Transform R2;  //第二關起始點
     public Transform[] RebirthPonit;  //玩家重生點
     public GameObject Player;  //取得玩家
     public GameObject Gun;  //玩家武器
@@ -29,6 +31,7 @@ public class PlayerResurrection : MonoBehaviour
     public MouseLook mouseLook;
     public float StartTime;
     public static bool GameOver;
+    public static bool PlayerBirthT;
 
     void Awake()
     {
@@ -85,10 +88,26 @@ public class PlayerResurrection : MonoBehaviour
         mouseLook.enabled = false;
         StartTime = 0;
         GameOver = false;
+        Sw_Scene = true;
+        PlayerBirthT = false;
     }
 
     void Update()
     {
+        if (PlayerBirthT)
+        {
+            PlayerBirthT = false;
+            Birth();
+        }
+        //SceneNub = Settings.SceneNub; //取得當前場景編號)
+        //if (SceneNub == 3 && Sw_Scene)
+        //{
+        //    Player.SetActive(false);
+        //    Sw_Scene = false;
+        //    Player.transform.position = R2.position;
+        //    Player.transform.localRotation = R2.localRotation;
+        //    Player.SetActive(true);
+        //}
         if (StartTime >= 0)
         {
             StartTime += Time.deltaTime;
@@ -122,20 +141,53 @@ public class PlayerResurrection : MonoBehaviour
             Player.GetComponent<PlayerMove>().enabled = true;
             Player.GetComponent<Shooting>().enabled = true;
             Player.GetComponent<HeroLife>().enabled = true;
+            Player.GetComponent<HeroLife>().無敵 = true;
             //DeadUI.SetActive(false);
             Dead = true;         
         }
         if (time >= 1.3f)  //復活結束
         {
-            RePlay = false;
-            time = 0;
             RebirthUI.SetActive(false);
+        }
+        if (time >= 4.3f)  //無敵時間結束
+        {
+            time = 0;
+            RePlay = false;
+            Player.GetComponent<HeroLife>().無敵 = false;
         }
         if (GameOver)  //顯示遊戲失敗UI
         {
             GameOver = false;
             FailUI.SetActive(true);
         }
+    }
+    public static void PlayerBirth() //生成玩家
+    {
+        PlayerBirthT = true;
+    }
+    public void Birth()
+    {
+        AudioManager.Button();
+        Player.SetActive(false);
+        //HeroLife.PlayerRe();  //血量回復
+        //Shooting.PlayerRe();  //彈藥回復
+        SceneNub = Settings.SceneNub; //取得當前場景編號
+        switch (SceneNub)
+        {
+            case 2:  //第一關
+                Player.transform.position = RebirthPonit[0].position;
+                Player.transform.rotation = RebirthPonit[0].localRotation;
+                HeroLife.HpLv = 1;
+                break;
+            case 3:  //第二關
+                Player.transform.position = RebirthPonit[1].position;
+                Player.transform.rotation = RebirthPonit[1].localRotation;
+                HeroLife.HpLv = 2;
+                HeroLife.hp = HeroLife.fullHp = 20 * HeroLife.HpLv;
+                break;
+        }
+        Player.SetActive(true);
+        con();
     }
     public void Re()  //復活
     {
@@ -166,6 +218,7 @@ public class PlayerResurrection : MonoBehaviour
             Player.transform.position = RebirthPonit[InputSceneNub].position;
             Player.transform.rotation = RebirthPonit[InputSceneNub].localRotation;           
         }
+        Player.SetActive(true);
         con();
     }
     public static void GameOverUI()  //遊戲失敗
@@ -175,7 +228,18 @@ public class PlayerResurrection : MonoBehaviour
     public void SceneRe()  //重新關卡
     {
         FailUI.SetActive(false);
-        Settings.LoadNewScene("SampleScene");
+        SceneNub = Settings.SceneNub; //取得當前場景編號
+        switch (SceneNub)
+        {
+            case 2:  //第一關
+                SceneManager.UnloadSceneAsync("SampleScene");
+                Settings.LoadNewScene("SampleScene");
+                break;
+            case 3:  //第二關
+                SceneManager.UnloadSceneAsync("Scene_2");
+                Settings.LoadNewScene("Scene_2");
+                break;
+        }
         //Black.SetActive(true);
         //SceneManager.LoadScene("SampleScene");
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式 

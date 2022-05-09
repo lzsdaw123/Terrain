@@ -52,7 +52,8 @@ public class Crystal_Life : MonoBehaviour
     }
     void Start()
     {
-        if(PS_Dead!=null) PS_Dead.SetActive(false);
+        HitUI = Save_Across_Scene.HitUI;
+        if (PS_Dead!=null) PS_Dead.SetActive(false);
         if (MR != null) MR.enabled = true;
         if (cld != null) cld.enabled = true;
         DeadTime = 0;
@@ -64,7 +65,6 @@ public class Crystal_Life : MonoBehaviour
 
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
-        //HitUI = GameObject.Find("HitUI").gameObject;
         switch (MonsterType)
         {
             case 0:
@@ -141,11 +141,16 @@ public class Crystal_Life : MonoBehaviour
         hp -= Power; // 扣血
         if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
-        {        
-            if (Player)
+        {
+            if (MonsterType != 0)
             {
-                //HitUI.SetActive(true);
-                //HitUI.GetComponent<Image>().color = Color.white;
+                HitUI.SetActive(true);
+                HitUI.GetComponent<Image>().color = Color.white;
+                if (Player)
+                {
+                    HitUI.SetActive(true);
+                    HitUI.GetComponent<Image>().color = Color.white;
+                }
             }
         }
         if (hp <= hpFull[MonsterType] /2)  //怪物血量低於一半
@@ -163,12 +168,18 @@ public class Crystal_Life : MonoBehaviour
         {
             if (!Dead)
             {
-                if (Player)
+                if (MonsterType != 0)
                 {
-                    //HitUI.SetActive(true);
-                    //HitUI.GetComponent<Image>().color = Color.red;
-                    //AudioManager.Hit(4);  //玩家擊殺音效
+                    HitUI.SetActive(true);
+                    HitUI.GetComponent<Image>().color = Color.red;
+                    if (Player)
+                    {
+                        HitUI.SetActive(true);
+                        HitUI.GetComponent<Image>().color = Color.red;
+                        //AudioManager.Hit(4);  //玩家擊殺音效
+                    }
                 }
+
                 Dead = true;
                 //AnimEvents.MonsterAudio(2);  //怪物爆汁音效
                 gameObject.layer = LayerMask.NameToLayer("Default");
@@ -219,7 +230,7 @@ public class Crystal_Life : MonoBehaviour
         //    }
         //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 50, 50, 50};
+        hpFull = new float[] { 50, 25, 25};
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()

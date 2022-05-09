@@ -17,8 +17,8 @@ public class QH_interactive : MonoBehaviour
     public bool ret;
     void Start()
     {
-        ObjectText = GameObject.Find("ObjectText");
-        Take = GameObject.Find("Take");
+        ObjectText = Save_Across_Scene.ObjectText;
+        Take = Save_Across_Scene.Take;
         Take.SetActive(false);
     }
 

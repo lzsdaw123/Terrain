@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class HeroLife : MonoBehaviour
 {
     public Camera Camera;
-    public int HpLv =1;
-    public static float fullHp,hp, hp_R;  //滿血時數值, 實際, 紅血
+    public static int HpLv;
+    [SerializeField] int SF_HpLv;
+    public static float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
+    [SerializeField] float SF_fullHp, SF_hp;  //滿血時數值, 實際, 紅血
     public Image HP_W, HP_R; //血球的UI物件
     public GameObject[] Hit_Direction_UI;
     public GameObject[] BloodpackUI=new GameObject[3];  //補包UI
@@ -40,6 +42,7 @@ public class HeroLife : MonoBehaviour
     public float dot;
     public float Fdot;
     public float Rdot;
+    public bool 無敵;
 
     void Awake()
     {
@@ -53,11 +56,13 @@ public class HeroLife : MonoBehaviour
 
     void Start()
     {
+        無敵 = false;
         Level = InfectionValue = 0;
         DeadTime = 0;
         LiftTime = 0;
         InfectionValueUp = new int[] { 1, 2, 3, 3 };
         Crystal_Infection = InfectionSW = false;
+        HpLv = 1;
         hp = hp_R = fullHp = 20 * HpLv; //遊戲一開始時先填滿血
         GetBP = false;
         BpTime = -1;
@@ -76,7 +81,10 @@ public class HeroLife : MonoBehaviour
     }
     public void Damage(float Power) // 接受傷害
     {
-        hp -= Power; // 扣血
+        if (BpTime == -1)
+        {
+            hp -= Power; // 扣血
+        }
     }
     public void DamageEffects(int hitType)  //受傷特效
     {
@@ -150,6 +158,9 @@ public class HeroLife : MonoBehaviour
 
     void Update()
     {
+        SF_HpLv = HpLv;
+        SF_fullHp = fullHp;
+        SF_hp = hp;
         if (PlayerRebirth)  //玩家重生
         {
             BloodpackNub = SaveBpN;  //回復補包數量
@@ -217,14 +228,23 @@ public class HeroLife : MonoBehaviour
 
         WeaponType = Shooting.WeaponType;
 
-        if (Level >= 4)
+        if (Level >= 4)  //水晶感染Lv4 狂扣血
         {
             DeadTime += Time.deltaTime;
             if (DeadTime >= 2)
             {
                 DeadTime = 2;
-                hp -= 1;
+                hp -= 1 *HpLv;
             }
+        }
+        if (無敵)
+        {
+            hp = fullHp;  //補滿血量
+            HP_W.color = new Color(0, 0.85f, 0.70f, 1);
+        }
+        if(!無敵 && BpTime ==-1)
+        {
+            HP_W.color = new Color(0, 0.57f, 0.85f, 1);
         }
         if (hp <= 0)  //玩家死亡
         {
@@ -273,13 +293,13 @@ public class HeroLife : MonoBehaviour
                 HP_W.color = new Color(0, 0.85f, 0.70f, 1);
                 BpTime = 0;
                 LiftTime = 12;
-                hp += 10;
+                hp = fullHp;
                 BloodpackUI[BloodpackNub - 1].SetActive(false);
                 BloodpackNub--;
                 AudioManager.PickUp(1);
             }
         }
-        if (BpTime >= 0)
+        if (BpTime >= 0)  //補包冷卻時間
         {
             BpTime += Time.deltaTime;
             if (BpTime >= 2.866f)
@@ -314,7 +334,7 @@ public class HeroLife : MonoBehaviour
     }
     public static void PlayerRe()  //重生
     {
-        hp = hp_R = fullHp; //遊戲一開始時先填滿血        
+        hp = hp_R = fullHp = 20 * HpLv; //遊戲一開始時先填滿血
         Dead = false;
         PlayerRebirth = true;
     }

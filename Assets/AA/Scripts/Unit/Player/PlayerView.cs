@@ -18,6 +18,7 @@ public class PlayerView : MonoBehaviour
     public  GameObject[] MissionTaget_L1_2;  //L1任務目標物件
     public  GameObject[] MissionTaget_L2;  //L2任務目標物件
     public  GameObject[] MissionTaget_L2_2;  //L2任務目標物件
+    public  GameObject[] MissionTaget_L3;  //L2任務目標物件
     public  GameObject[] MissionTaget;  //任務目標物件
     public static int missionLevel;  //任務關卡
     public int missionNumb;  //任務數量
@@ -26,20 +27,27 @@ public class PlayerView : MonoBehaviour
     public float Rdot;
     public float Fdot;
     public Image targetUI;  //任務目標UI
+    public Image[] Boss2_targetUI;  //Boss2弱點UI
+    public GameObject[] Boss2_target;  //Boss2弱點
     public Text text;
     public float UI_x;
     public float UI_y;
     public Vector3 Camdir;
     public Vector2 SP;
     public float dot;
+    public float B2_dot;
     bool sp_Dot;
+    bool B2_sp_Dot;
     bool sp_Dot_D=true;
     [SerializeField] float distance;  //距離
     public static float pu_distance;
     [SerializeField] int d;  //換算距離
     Color UIcolor;
     Vector3 oldPos;
+    Vector3 B2_oldPos;
     public static bool MissionEnd;
+    public static int Crystal_Weakness;
+    public static bool Stop;
 
     void OnWillRenderObject()
     {
@@ -99,7 +107,13 @@ public class PlayerView : MonoBehaviour
     }
     void Start()
     {
+        Crystal_Weakness = -1;
+        for (int i = 0; i < Boss2_targetUI.Length; i++)
+        {
+            Boss2_targetUI[i].gameObject.SetActive(false);
+        }
         missionStage = 0;
+        Stop = false;
         DontDestroyOnLoad(gameObject);  //切換場景時保留
         //DontDestroyOnLoad(targetUI.gameObject);  //切換場景時保留
     }
@@ -119,6 +133,9 @@ public class PlayerView : MonoBehaviour
             case 3:
                 MissionTaget = MissionTaget_L2_2;
                 break;
+            case 4:  //第二關
+                MissionTaget = MissionTaget_L3;
+                break;
         }
         st_missionStage = missionStage;
         if (MissionEnd)  //任務目標結束
@@ -129,7 +146,10 @@ public class PlayerView : MonoBehaviour
         }
         //Vector2 vec2 = Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
         camTransform = Camera.transform;  //相機座標
-        distance = (camTransform.position - MissionTaget[missionStage].transform.position).magnitude / 3.5f;
+        if(MissionTaget[missionStage] != null)
+        {
+            distance = (camTransform.position - MissionTaget[missionStage].transform.position).magnitude / 3.5f;
+        }
 
         pu_distance = distance;
         d = (int)distance;
@@ -143,8 +163,38 @@ public class PlayerView : MonoBehaviour
         {
             UIcolor.a = 0.7058824f;
         }
+        if (Stop) UIcolor.a = 0;
         targetUI.color = UIcolor;
         text.color = new Color(1, 1, 1, UIcolor.a);
+        switch (Crystal_Weakness)  //弱點UI
+        {
+            case 0:  //左手臂弱點
+                Boss2_targetUI[0].gameObject.SetActive(true);
+                break;
+            case 1:  //腹部兩個弱點
+                Boss2_targetUI[0].gameObject.SetActive(false);
+                Boss2_targetUI[1].gameObject.SetActive(true);
+                Boss2_targetUI[2].gameObject.SetActive(true);
+                break;
+            case 2:  //腹部上弱點擊破
+                Boss2_targetUI[1].gameObject.SetActive(false);
+                break;
+            case 3:  //腹部下弱點擊破
+                Boss2_targetUI[2].gameObject.SetActive(false);
+                break;
+            case 4:  //左胸弱點
+                Boss2_targetUI[1].gameObject.SetActive(false);
+                Boss2_targetUI[2].gameObject.SetActive(false);
+                Boss2_targetUI[3].gameObject.SetActive(true);
+                break;
+            case 5:  //頭部弱點
+                Boss2_targetUI[3].gameObject.SetActive(false);
+                Boss2_targetUI[4].gameObject.SetActive(true);
+                break;
+            case 6:
+                Boss2_targetUI[4].gameObject.SetActive(false);
+                break;
+        }
 
         if (IsInView(MissionTaget[missionStage].transform.position))
         {
@@ -152,6 +202,19 @@ public class PlayerView : MonoBehaviour
             Vector2 viewPos = Camera.WorldToViewportPoint(MissionTaget[missionStage].transform.position);  //世界座標到視口座標
             Vector2 ScreenPos = Camera.ViewportToScreenPoint(viewPos);  //視口座標→螢幕座標
             Vector2 SP = new Vector2(ScreenPos.x - 960, ScreenPos.y - 540);
+            for (int i = 0; i < Boss2_targetUI.Length; i++)
+            {
+                Vector2 B2_viewPos = Camera.WorldToViewportPoint(Boss2_target[i].transform.position);  //世界座標到視口座標
+                Vector2 B2_ScreenPos = Camera.ViewportToScreenPoint(B2_viewPos);  //視口座標→螢幕座標
+                Vector2 B2_SP = new Vector2(B2_ScreenPos.x - 960, B2_ScreenPos.y - 540);
+                //畫面左右邊界
+                if (B2_SP.x <= -900) B2_SP.x = -900;
+                else if (B2_SP.x >= 900) B2_SP.x = 900;
+                //畫面上下邊界
+                if (B2_SP.y <= -350) B2_SP.y = -350;
+                else if (B2_SP.y >= 350) B2_SP.y = 350;
+                Boss2_targetUI[i].GetComponent<RectTransform>().anchoredPosition3D = B2_SP;
+            }
             //畫面左右邊界
             if (SP.x <= -900) SP.x = -900;
             else if (SP.x >= 900) SP.x = 900;
@@ -246,7 +309,36 @@ public class PlayerView : MonoBehaviour
                 //else if (UI_y >= 350) UI_y = 350;
                 sp_Dot = true;
                 targetUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-SP.x, UI_y, 0);
-                //targetUI.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-SP.x, SP.y, 0);
+            }
+            for (int i = 0; i < Boss2_targetUI.Length; i++)  // Boss2弱點
+            {
+                Vector2 B2_viewPos = Camera.WorldToViewportPoint(Boss2_target[i].transform.position);  //世界座標到視口座標
+                Vector2 B2_ScreenPos = Camera.ViewportToScreenPoint(B2_viewPos);  //視口座標→螢幕座標
+                Vector2 B2_SP = new Vector2(B2_ScreenPos.x - 960, B2_ScreenPos.y - 540);
+                //畫面左右邊界
+                if (B2_SP.x <= -900) B2_SP.x = -900;
+                else if (B2_SP.x >= 900) B2_SP.x = 900;
+                //畫面上下邊界
+                if (B2_SP.y <= -350) B2_SP.y = -350;
+                else if (B2_SP.y >= 350) B2_SP.y = 350;
+
+                camTransform = Camera.transform; //相機座標
+                Vector3 B2_dirForward = (Boss2_target[i].transform.position - camTransform.position).normalized;
+                B2_dot = Vector3.Dot(camTransform.forward, B2_dirForward);     //判斷物體是否在相機前面
+                if (B2_dot >= 0f)
+                {
+                    Boss2_targetUI[i].GetComponent<RectTransform>().anchoredPosition3D = new Vector3(B2_SP.x, B2_SP.y, 0);
+                    B2_sp_Dot = false;
+                    oldPos = new Vector2(SP.x, SP.y);
+                    B2_oldPos = new Vector2(B2_SP.x, B2_SP.y);
+
+                }
+                else if (B2_dot < 0f)
+                {
+                    UI_y = -350;
+                    B2_sp_Dot = true;
+                    Boss2_targetUI[i].GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-B2_SP.x, UI_y, 0);
+                }
             }
             //else if(dot <0.2f && dot > -0.2f)
             //{

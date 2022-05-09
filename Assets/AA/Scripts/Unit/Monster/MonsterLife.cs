@@ -45,10 +45,10 @@ public class MonsterLife : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         monster02 = GetComponent<MonsterAI02>();
         monster03 = GetComponent<MonsterAI03>();
-        HitUI = GameObject.Find("HitUI").gameObject;
     }
     void Start()
     {
+        HitUI = Save_Across_Scene.HitUI;
         PS_Dead.SetActive(false);
         DeadTime = 0;
         DifficultyUp();  //難度調整 設定血量

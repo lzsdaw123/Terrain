@@ -104,16 +104,17 @@ public class AudioManager : MonoBehaviour
             {
                 StartLevelAudio(2);
             }
+            雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
         }
-        雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
+        
         風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
 
         SF_SceneNub = SceneNub;
         if (Re)
         {
             Re = false;
-            雨聲.volume = Slider[1].value;
-            風聲.volume = Slider[1].value;
+            if(雨聲!=null) 雨聲.volume = Slider[1].value;
+            if (風聲 != null) 風聲.volume = Slider[1].value;
             AmbientSource.volume = Slider[1].value;
             PlayerSource.volume = SaveVolume[1] * Slider[2].value;
             GunSource.volume = SaveVolume[2] * Slider[2].value;
@@ -139,8 +140,8 @@ public class AudioManager : MonoBehaviour
         if (SettingsCanvas.transform.GetChild(0).gameObject.activeSelf)  //遊戲是否暫停
         {
             SourcePause = true;
-            雨聲.Pause();
-            風聲.Pause();
+            if (雨聲 != null) 雨聲.Pause();
+            if (風聲 != null) 風聲.Pause();
             AmbientSource.Pause();
             PlayerSource.Pause();
             ActionSource.Pause();
@@ -153,8 +154,8 @@ public class AudioManager : MonoBehaviour
         else
         {
             SourcePause = false;
-            雨聲.UnPause();
-            風聲.UnPause();
+            if (雨聲 != null) 雨聲.UnPause();
+            if (風聲 != null) 風聲.UnPause();
             AmbientSource.UnPause();
             PlayerSource.UnPause();
             ActionSource.UnPause();
@@ -203,8 +204,8 @@ public class AudioManager : MonoBehaviour
         
         MuteButton[N].colors = cb;
 
-        雨聲.mute = muteState[1];
-        風聲.mute = muteState[1];
+        if (雨聲 != null) 雨聲.mute = muteState[1];
+        if (風聲 != null) 風聲.mute = muteState[1];
         AmbientSource.mute = muteState[1];
         PlayerSource.mute = muteState[2];
         ActionSource.mute = muteState[2];

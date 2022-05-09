@@ -9,6 +9,7 @@ public class HpCanvasDiract : MonoBehaviour
 
     void Start()
     {
+        Camera = Save_Across_Scene.Gun_Camera;
         camTrans = Camera.transform;
     }
 

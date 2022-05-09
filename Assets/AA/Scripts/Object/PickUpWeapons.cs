@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PickUpWeapons : MonoBehaviour
 {
-    public GameObject TextG;
+    public GameObject ObjectText;
     [SerializeField] GameObject Take;  //互動圖示UI
     GameObject play;
     public int WeaponsType;  // 0=步槍,1=電磁手槍, 2=霰彈槍
@@ -20,11 +20,11 @@ public class PickUpWeapons : MonoBehaviour
 
     void Awake()
     {
-        Take = GameObject.Find("Take");
     }
     void Start()
     {
-        TextG = GameObject.Find("ObjectText");
+        Take = Save_Across_Scene.Take;
+        ObjectText = Save_Across_Scene.ObjectText;
         gameObject.SetActive(true);
         WaveText = null;
     }
@@ -51,7 +51,7 @@ public class PickUpWeapons : MonoBehaviour
         {
             WaveText = "    已擁有";
         }
-        TextG.GetComponent<Text>().text = "按「E」拾取\n"+ WeaponsText[WeaponsType]+ WaveText;
+        ObjectText.GetComponent<Text>().text = "按「E」拾取\n"+ WeaponsText[WeaponsType]+ WaveText;
 
         if (Take.activeSelf)
         {
