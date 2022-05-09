@@ -45,14 +45,14 @@ public class Bloodpack : MonoBehaviour
         }
         else
         {
-            ObjectText.GetComponent<Text>().text = "按「E」取得修理包";
+            ObjectText.GetComponent<Text>().text = "取得修理包";
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)
             {
                 if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
                 {
-                    AudioManager.PickUp(0);
+                    AudioManager.PickUp(3);
                     HeroLife.GetBloodpack();
                     gameObject.SetActive(false);
                     StartB = true;

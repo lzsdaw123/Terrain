@@ -45,6 +45,7 @@ public class PlayerMove : MonoBehaviour
     public Vector3 velocity;
     public bool isGrounded;  //在地面上
     public bool isSquat; //正在蹲下
+    public bool UpSquat;
 
     void Start()
     {
@@ -54,6 +55,7 @@ public class PlayerMove : MonoBehaviour
         isVehicle = false;
         m_Jumping = false;
         GetComponent<CharacterController>().height = 3.1f;
+        UpSquat = true;
     }
     void Update()  //Input用
     {
@@ -122,6 +124,7 @@ public class PlayerMove : MonoBehaviour
                 if (isSquat)  //判斷頭頂是否有障礙物
                 {
                     Squat = true;
+                    UpSquat = true;
                     //if (_Shooting.LayDown)
                     //{
                     //    Speed = 4f;
@@ -137,6 +140,7 @@ public class PlayerMove : MonoBehaviour
                 else
                 {
                     Squat = false;
+                    UpSquat=false;
                     Gun.transform.localPosition = new Vector3(0, 2.865f, 0.089f);
                     GetComponent<CharacterController>().height += 2f;
                     if (GetComponent<CharacterController>().height >= 3.1f)
@@ -145,9 +149,17 @@ public class PlayerMove : MonoBehaviour
                     }
                 }
             }
-           
-
-
+            if(!isSquat && UpSquat)
+            {
+                Squat = UpSquat = false;
+                Gun.transform.localPosition = new Vector3(0, 2.865f, 0.089f);
+                GetComponent<CharacterController>().height += 2f;
+                if (GetComponent<CharacterController>().height >= 3.1f)
+                {
+                    GetComponent<CharacterController>().height = 3.1f;
+                }
+            }
+       
             if (_Shooting.LayDown)
             {
                 if (Speed >= 12.5f)

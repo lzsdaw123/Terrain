@@ -116,11 +116,11 @@ public class ElectricDoor : MonoBehaviour
         {
             if (OpenDoor)  //門開的
             {
-                TextG.GetComponent<Text>().text = "按「E」關門\n";
+                TextG.GetComponent<Text>().text = "關門\n";
             }
             else
             {
-                TextG.GetComponent<Text>().text = "按「E」開門\n";
+                TextG.GetComponent<Text>().text = "開門\n";
             }
 
             if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時

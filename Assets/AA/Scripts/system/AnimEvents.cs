@@ -5,6 +5,8 @@ using UnityEngine;
 public class AnimEvents : MonoBehaviour
 {
     public int UnitType;  //0=玩家 / 1=NPC
+    public int MonsterType;  //0=玩家 / 1=NPC
+    public int BossType;  //0=玩家 / 1=NPC
     public static bool DontShooting;
     public static int ammunition, Total_ammunition;  //彈藥量
     [SerializeField] int SF_ammunition, SF_Total_ammunition;  //彈藥量
@@ -28,6 +30,7 @@ public class AnimEvents : MonoBehaviour
     public AudioManager AudioManager;
     public AudioClip[] NPC_Clip;  //NPC守衛音效
     public AudioClip[] MonsterClip;  //怪物音校
+    public float SaveVolume;
 
     public AudioSource NPC_Source;  //NPC守衛音源
     public AudioSource MonsterSource;  ///怪物攻擊音源
@@ -214,6 +217,21 @@ public class AnimEvents : MonoBehaviour
     void Boss2_Attack(int Type)  //機械Boss攻擊
     {
         boss02_AI.AttackBullet(Type);
+        switch (Type)
+        {
+            case 1:
+                MonsterSource.clip = MonsterClip[1];
+                MonsterSource.volume = 0.5f;
+                break;
+            case 2:
+                MonsterSource.clip = MonsterClip[2];
+                MonsterSource.volume = 0.9f;
+                break;
+        }
+        SaveVolume = MonsterSource.volume;
+        MonsterSource.volume = SaveVolume * AudioManager.Slider[2].value;
+        MonsterSource.mute = AudioManager.muteState[2];
+        MonsterSource.Play();
     }
     void Boss2_AttackEnd(int Type)  //機械Boss攻擊結束
     {
@@ -278,6 +296,27 @@ public class AnimEvents : MonoBehaviour
         MonsterSource.volume = AudioManager.Slider[2].value;
         MonsterSource.mute = AudioManager.muteState[2];
         MonsterSource.Play();   
+    }
+    public void BossAudio(int Nub)  //怪物音效
+    {
+        switch (BossType)
+        {
+            case 0:
+                break;
+            case 1:
+                switch (Nub)
+                {
+                    case 0:
+                        MonsterSource.clip = MonsterClip[0];
+                        MonsterSource.volume = 0.7f;
+                        break;
+                }
+                break;
+        }
+        SaveVolume = MonsterSource.volume;
+        MonsterSource.volume = SaveVolume * AudioManager.Slider[2].value;
+        MonsterSource.mute = AudioManager.muteState[2];
+        MonsterSource.Play();
     }
     void ReloadAudio(int Nub)  //換彈音效
     {

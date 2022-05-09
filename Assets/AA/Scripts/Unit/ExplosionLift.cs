@@ -6,6 +6,9 @@ public class ExplosionLift : MonoBehaviour
 {
     public GameObject Muzzle_vfx;
     public Animator ani;
+    public AudioSource AudioSource;
+    public AudioClip[] AudioClip;
+    public AudioManager AudioManager;
     public GameObject[] Hit_vfx;  //彈孔類型
     public ParticleSystem[] Pro;
     public int BulletType;  //子彈類型
@@ -55,6 +58,8 @@ public class ExplosionLift : MonoBehaviour
     public PhysicMaterial physicMaterial;
     public GameObject[] actors=new GameObject[6];
     public Material[] Material;
+    public bool accelerate;  //聲音加速
+    public ParticleSystem ParticleSystem;
 
     public void Init(bool FacingRight) //初始化子彈時順便給定子彈飛行方向
     {
@@ -85,9 +90,15 @@ public class ExplosionLift : MonoBehaviour
                 liftTime = 1;
                 collisionNub = 0;
                 ReflectTime = -1;
-                physicMaterial.bounciness = 1;
+                physicMaterial.bounciness = 0.9f;
                 Object[1].SetActive(false);
                 Object[0].GetComponent<MeshRenderer>().material = Material[1];
+                AudioManager =Save_Across_Scene.AudioManager;  //聲音控制器
+                ExpAudio(1);
+                accelerate = false;
+                var psmain = ParticleSystem.main;
+                psmain.duration = 0.5f;
+                psmain.startLifetime = 0.25f;
                 //Pro[0].gameObject.SetActive(true);
                 //bornSize = Vector3.zero;
                 break;
@@ -179,7 +190,7 @@ public class ExplosionLift : MonoBehaviour
         }
         switch (BulletType)
         {
-            case 0:  //尖形 結晶
+            case 0:  //手雷
                 if (StartAttack)
                 {
                     //改發光
@@ -188,10 +199,24 @@ public class ExplosionLift : MonoBehaviour
                     //Material[0].SetColor("_EmissiveColor", color* 512);
                     Object[2].SetActive(true);
                     AttackCTime += Time.deltaTime;
+                    if (AttackCTime >= 2 && !accelerate)
+                    {
+                        accelerate = true;
+                        ExpAudio(2);
+                        ParticleSystem.Stop();
+                        var psmain = ParticleSystem.main;
+                        psmain.duration = 0.25f;
+                        psmain.startLifetime = 0.125f;
+                        ParticleSystem.Play();
+                    }
                     if (AttackCTime >= 4)  //發射前等待
                     {
                         StartAttack = false;
                         Attacking = true;
+                        if (AudioSource !=null)
+                        {
+                            ExpAudio(0); 
+                        }
                     }
                     if (Attacking)
                     {
@@ -229,6 +254,7 @@ public class ExplosionLift : MonoBehaviour
                     {
                         StartAttack = false;
                         Attacking = true;
+                        if (AudioSource != null) ExpAudio(0);
                         //Boss01_AI.ReMuzzleGrid(cuMuGrid);
                         //Muzzle = Boss01_AI.PS_muzzle[cuMuGrid];
                         //Muzzle.gameObject.transform.GetChild(ButtleType).gameObject.SetActive(true);
@@ -557,5 +583,26 @@ public class ExplosionLift : MonoBehaviour
             //Vector3 pos = hit.point;
             //pool_Hit.ReUseBoss1Hit(pos, rot, ButtleType);  //從彈孔池取出彈孔
         }
+    }
+    public void ExpAudio(int Nub)  //怪物音效
+    {
+        switch (Nub)
+        {
+            case 0:  //爆炸
+                AudioSource.clip = AudioClip[Nub];
+                AudioSource.loop = false;
+                break;
+            case 1:  //倒數聲
+                AudioSource.clip = AudioClip[Nub];
+                AudioSource.loop = true;
+                break;
+            case 2:  //加速倒數聲
+                AudioSource.clip = AudioClip[Nub];
+                AudioSource.loop = true;
+                break;
+        }
+        AudioSource.volume = AudioManager.Slider[2].value;
+        AudioSource.mute = AudioManager.muteState[2];
+        AudioSource.Play();
     }
 }

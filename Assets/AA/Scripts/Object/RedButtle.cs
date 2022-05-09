@@ -22,7 +22,7 @@ public class RedButtle : MonoBehaviour
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
-        T.GetComponent<Text>().text = "按E按下";
+        T.GetComponent<Text>().text = "按下";
 
         if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
         {

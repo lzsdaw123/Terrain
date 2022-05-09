@@ -28,21 +28,21 @@ public class Grenade : MonoBehaviour
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
-        if (Shooting.GrenadeNub >= 2)
+        if (Shooting.GrenadeNub >= 3)
         {
             ObjectText.GetComponent<Text>().text = "手榴彈已達上限";
             QH_interactive.thing();  //呼叫QH_拾取圖案
         }
         else
         {
-            ObjectText.GetComponent<Text>().text = "按「E」取得手榴彈";
+            ObjectText.GetComponent<Text>().text = "取得手榴彈";
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)
             {
                 if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
                 {
-                    AudioManager.PickUp(0);
+                    AudioManager.PickUp(3);
                     Play = Save_Across_Scene.Play;
                     gameObject.transform.parent = Play.gameObject.transform;
                     Shooting.Get_Grenade(GrenadeObj);

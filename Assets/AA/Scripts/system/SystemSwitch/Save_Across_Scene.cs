@@ -11,7 +11,7 @@ public class Save_Across_Scene : MonoBehaviour
     public static Camera Gun_Camera;
     public static GameObject Aim;
     public static GameObject HitUI;
-
+    public static AudioManager AudioManager;
 
     void Awake()
     {
@@ -25,7 +25,8 @@ public class Save_Across_Scene : MonoBehaviour
     }
     void Start()
     {
-        
+        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();  //聲音控制器
+
     }
 
     void Update()

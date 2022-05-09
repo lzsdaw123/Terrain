@@ -357,13 +357,16 @@ public class AudioManager : MonoBehaviour
         current.ActionSource.clip = current.ActionCilp[Nub];
         switch (Nub)
         {
-            case 0:  //拾取道具
+            case 0:  //拾取彈藥
                 current.ActionSource.pitch = 2;
                 break;
             case 1:  //修理
                 current.ActionSource.pitch = 1;
                 break;
             case 2:  //拾取武器
+                current.ActionSource.pitch = 1;
+                break;
+            case 3:  //拾取道具
                 current.ActionSource.pitch = 1;
                 break;
         }

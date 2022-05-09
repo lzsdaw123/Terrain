@@ -51,7 +51,7 @@ public class PickUpWeapons : MonoBehaviour
         {
             WaveText = "    已擁有";
         }
-        ObjectText.GetComponent<Text>().text = "按「E」拾取\n"+ WeaponsText[WeaponsType]+ WaveText;
+        ObjectText.GetComponent<Text>().text = "拾取\n"+ WeaponsText[WeaponsType]+ WaveText;
 
         if (Take.activeSelf)
         {

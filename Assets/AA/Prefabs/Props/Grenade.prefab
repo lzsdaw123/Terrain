@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 2503947148104957993}
   - component: {fileID: 6761240754529929458}
   m_Layer: 0
-  m_Name: Light (1)
+  m_Name: Light (Trail)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5295,6 +5295,7 @@ GameObject:
   - component: {fileID: 3887132235166039100}
   - component: {fileID: 5641672579696134265}
   - component: {fileID: 7957872007253201444}
+  - component: {fileID: 7740162245470246708}
   m_Layer: 15
   m_Name: Grenade
   m_TagString: Metal
@@ -5331,7 +5332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6786c9fdb9f0bc458f4ecf174e3be2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  T: {fileID: 0}
+  ObjectText: {fileID: 0}
   Take: {fileID: 0}
   GrenadeObj: {fileID: 0}
   Play: {fileID: 0}
@@ -5349,6 +5350,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Muzzle_vfx: {fileID: 0}
   ani: {fileID: 0}
+  AudioSource: {fileID: 7740162245470246708}
+  AudioClip:
+  - {fileID: 8300000, guid: bbeb4ea5c93f24a488f7edf181c62de6, type: 3}
+  - {fileID: 8300000, guid: c2ec452878107124194bc14dce9d481a, type: 3}
+  - {fileID: 8300000, guid: 7dc2e9d8f0b918e4f9088cdb0dd9ea6d, type: 3}
+  AudioManager: {fileID: 0}
   Hit_vfx: []
   Pro: []
   BulletType: 0
@@ -5405,6 +5412,8 @@ MonoBehaviour:
   Material:
   - {fileID: 2100000, guid: bec39562d4f698e4ea32aac0f64a00c2, type: 2}
   - {fileID: 2100000, guid: 8893b8a653ab0164186b1abffb86f4db, type: 2}
+  accelerate: 0
+  ParticleSystem: {fileID: 2503947148104957993}
 --- !u!54 &5641672579696134265
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5435,6 +5444,102 @@ CapsuleCollider:
   m_Height: 0.7
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!82 &7740162245470246708
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6037709316646390784}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: bbeb4ea5c93f24a488f7edf181c62de6, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 2
+  MaxDistance: 40
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7166183465637667600
 GameObject:
   m_ObjectHideFlags: 0
@@ -5750,10 +5855,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: f8234e1244e19ba4babc2b8fa2271e2e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.0027
-  m_Height: 0.014
+  m_Radius: 0.0029
+  m_Height: 0.016
   m_Direction: 2
-  m_Center: {x: 0, y: -8.099804e-12, z: 0.00010728512}
+  m_Center: {x: 0, y: -8.099804e-12, z: 0.00012}
 --- !u!1001 &8240520433270237992
 PrefabInstance:
   m_ObjectHideFlags: 0

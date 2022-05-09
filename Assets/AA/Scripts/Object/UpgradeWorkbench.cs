@@ -224,7 +224,7 @@ public class UpgradeWorkbench : MonoBehaviour
     }
     void HitByRaycast() //被射線打到時會進入此方法
     {
-        ObjectText.GetComponent<Text>().text = "按「E」使用工作臺";
+        ObjectText.GetComponent<Text>().text = "使用工作臺";
         QH_interactive.thing();  //呼叫QH_拾取圖案
 
         if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時

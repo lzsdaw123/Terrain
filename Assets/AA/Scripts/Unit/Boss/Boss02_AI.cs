@@ -586,7 +586,6 @@ public class Boss02_AI : MonoBehaviour
                     break;
                 case 2:  //限制火炮+機槍塔2.3護盾  打腹部兩個弱點
                     BulletType = 1;
-                    print("SS");
                     break;
                 case 3:  //射黑火+不限制火炮 打左胸弱點
                     break;

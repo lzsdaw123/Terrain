@@ -13,12 +13,14 @@ public class QH_interactive : MonoBehaviour
     public LayerMask layerMask;
     public GameObject ObjectText;
     public static GameObject Take;
+    public static GameObject Aim;
     public static bool tt;
     public bool ret;
     void Start()
     {
         ObjectText = Save_Across_Scene.ObjectText;
         Take = Save_Across_Scene.Take;
+        Aim = Save_Across_Scene.Aim;
         Take.SetActive(false);
     }
 
@@ -45,6 +47,7 @@ public class QH_interactive : MonoBehaviour
                 else if (hit.collider != oldhit.collider)
                 {
                     Take.SetActive(false);
+                    Aim.GetComponent<Image>().enabled = true;
                 }
                 oldhit = hit;
             }
@@ -68,6 +71,7 @@ public class QH_interactive : MonoBehaviour
             else if (hit.collider != oldhit.collider)
             {
                 Take.SetActive(false);
+                Aim.GetComponent<Image>().enabled = true;
             }
             oldhit = hit;
 
@@ -82,10 +86,12 @@ public class QH_interactive : MonoBehaviour
         {
             ObjectText.GetComponent<Text>().text = "";
             Take.SetActive(false);
+            Aim.GetComponent<Image>().enabled = true;
         }
     }
     public static void thing()
     {
         Take.SetActive(true);
+        Aim.GetComponent<Image>().enabled = false;
     }
 }

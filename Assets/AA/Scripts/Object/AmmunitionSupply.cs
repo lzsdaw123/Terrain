@@ -165,17 +165,17 @@ public class AmmunitionSupply : MonoBehaviour
     {
         if (interactive || CoverOn)
         {
-            ObjectText.GetComponent<Text>().text = "按「E」拾取彈藥\n" + "彈藥量 " + AmmSupply[Type];
+            ObjectText.GetComponent<Text>().text = "拾取彈藥\n" + "彈藥量 " + AmmSupply[Type];
         }
         else
         {
             switch (Type)
             {
                 case 0:
-                    ObjectText.GetComponent<Text>().text = "按「E」打開步槍彈藥盒 ";
+                    ObjectText.GetComponent<Text>().text = "打開步槍彈藥盒 ";
                     break;
                 case 1:
-                    ObjectText.GetComponent<Text>().text = "按「E」打開左輪彈藥盒 ";
+                    ObjectText.GetComponent<Text>().text = "打開左輪彈藥盒 ";
                     break;
             }
         }

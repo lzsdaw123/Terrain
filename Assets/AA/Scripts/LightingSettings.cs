@@ -25,12 +25,11 @@ public class LightingSettings : MonoBehaviour
     {
         Light = GetComponent<Light>(); ;
         HDAdditionalLightData = GetComponent<HDAdditionalLightData>();
-        Gun_Camera = Save_Across_Scene.Gun_Camera;
-        camTransform = Gun_Camera.transform;
     }
     void Start()
     {
-
+        Gun_Camera = Save_Across_Scene.Gun_Camera;
+        camTransform = Gun_Camera.transform;
         minDistance = new float[] { 7, 105, 40 };
         MaxDistance = new float[] { 7.7f, 110f, 60 };
     }

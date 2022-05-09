@@ -107,23 +107,23 @@ public class TagetWall_Button : MonoBehaviour
             case 0:
                 if (Type == 0)
                 {
-                    TextG.GetComponent<Text>().text = "按「E」標靶復位";
+                    TextG.GetComponent<Text>().text = "標靶復位";
                 }else
                 {
-                    TextG.GetComponent<Text>().text = "按「E」查看標靶";
+                    TextG.GetComponent<Text>().text = "查看標靶";
                 }
                 break;
             case 1:
-                TextG.GetComponent<Text>().text = "按「E」切換距離\n" + Text[Type];
+                TextG.GetComponent<Text>().text = "切換距離\n" + Text[Type];
                 break;
             case 2:
                 if (Type == 0)
                 {
-                    TextG.GetComponent<Text>().text = "按「E」關閉標靶鏡頭";
+                    TextG.GetComponent<Text>().text = "關閉標靶鏡頭";
                 }
                 else
                 {
-                    TextG.GetComponent<Text>().text = "按「E」開啟標靶鏡頭";
+                    TextG.GetComponent<Text>().text = "開啟標靶鏡頭";
                 }
                 break;
         }
