@@ -1,23 +1,23 @@
 Using pre-set license
 Built from '2021.2/staging' branch; Version is '2021.2.8f1 (d0e5f0a7b06a) revision 13690352'; Using compiler version '192829333'; Build Type 'Release'
-OS: 'Windows 10  (10.0.19044) 64bit Core' Language: 'zh' Physical Memory: 8103 MB
+OS: 'Windows 10  (10.0.19044) 64bit Professional' Language: 'zh' Physical Memory: 16300 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
 COMMAND LINE ARGUMENTS:
-C:\Program Files\Unity\Hub\Editor\2021.2.8f1\Editor\Unity.exe
+D:\Unity\2021.2.8f1\Editor\Unity.exe
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-J:/QWQ
+C:/Users/GOD/Desktop/Terrain
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-56212
-Successfully changed project path to: J:/QWQ
-J:/QWQ
+61699
+Successfully changed project path to: C:/Users/GOD/Desktop/Terrain
+C:/Users/GOD/Desktop/Terrain
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -47,58 +47,147 @@ J:/QWQ
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 359.45 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 105.83 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.2.8f1 (d0e5f0a7b06a)
-[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path J:/QWQ/Assets
+[Subsystems] Discovering subsystems at path D:/Unity/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/GOD/Desktop/Terrain/Assets
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: AMD Radeon (TM) R9 380 Series (ID=0x6939)
-    Vendor:   ATI
-    VRAM:     2022 MB
-    Driver:   27.20.20903.8001
+    Renderer: NVIDIA GeForce RTX 2060 SUPER (ID=0x1f06)
+    Vendor:   NVIDIA
+    VRAM:     8031 MB
+    Driver:   30.0.15.1215
 Initialize mono
-Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Managed'
-Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
-Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56748
+Mono path[0] = 'D:/Unity/2021.2.8f1/Editor/Data/Managed'
+Mono path[1] = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56816
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
-Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.023168 seconds.
+Register platform support module: D:/Unity/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.004031 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 219.38 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 95.97 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.666 seconds
+- Completed reload, in  0.625 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1666ms)
-		BeginReloadAssembly (375ms)
+	ReloadAssembly (625ms)
+		BeginReloadAssembly (84ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (1088ms)
-			LoadAssemblies (373ms)
+		EndReloadAssembly (467ms)
+			LoadAssemblies (84ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (307ms)
+			SetupTypeCache (105ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (63ms)
-			SetupLoadedEditorAssemblies (603ms)
+			RebuildScriptCaches (25ms)
+			SetupLoadedEditorAssemblies (287ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (25ms)
+				InitializePlatformSupportModulesInManaged (14ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (219ms)
-				BeforeProcessingInitializeOnLoad (5ms)
-				ProcessInitializeOnLoadAttributes (267ms)
-				ProcessInitializeOnLoadMethodAttributes (86ms)
+				RefreshPlugins (96ms)
+				BeforeProcessingInitializeOnLoad (1ms)
+				ProcessInitializeOnLoadAttributes (121ms)
+				ProcessInitializeOnLoadMethodAttributes (55ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.195797 seconds.
+Registered in 0.010192 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 131.45 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.281 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2283ms)
+		BeginReloadAssembly (157ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (8ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (24ms)
+		EndReloadAssembly (2005ms)
+			LoadAssemblies (122ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (341ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (113ms)
+			SetupLoadedEditorAssemblies (1376ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (12ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (132ms)
+				BeforeProcessingInitializeOnLoad (112ms)
+				ProcessInitializeOnLoadAttributes (1063ms)
+				ProcessInitializeOnLoadMethodAttributes (54ms)
+				AfterProcessingInitializeOnLoad (3ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (8ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
+Refreshing native plugins compatible for Editor in 1.18 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4915 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 80 unused Assets / (6.1 MB). Loaded Objects now: 5388.
+Memory consumption went from 354.0 MB to 347.9 MB.
+Total: 6.569100 ms (FindLiveObjects: 0.607200 ms CreateObjectMapping: 0.628100 ms MarkObjects: 4.143800 ms  DeleteObjects: 1.188500 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 19582.503446 seconds.
+  path: Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_MaskMap.png
+  artifactKey: Guid(2677805628be3c049bf87586777c06ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_MaskMap.png using Guid(2677805628be3c049bf87586777c06ff) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e3f5a5aef133d97ff7554089d643746c') in 0.138427 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_Emissive.png
+  artifactKey: Guid(733c1f33fdbd2bc4995184fe442c824f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_Emissive.png using Guid(733c1f33fdbd2bc4995184fe442c824f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f84d0866e8bbc649ccd426fb119a0ad0') in 0.033187 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.047561 seconds.
+  path: Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_Normal.png
+  artifactKey: Guid(38e3ea0628f06c6408ef6e94dbcc5fa9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_Normal.png using Guid(38e3ea0628f06c6408ef6e94dbcc5fa9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '01a24cca4c263a7aa87ec36310f83434') in 0.036071 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_BaseMap.png
+  artifactKey: Guid(0bd5a1f86a09d3542acc243643e7e4c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_BaseMap.png using Guid(0bd5a1f86a09d3542acc243643e7e4c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd19530981e8f60cd0075df1b79e4484e') in 0.016049 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 7.990526 seconds.
+  path: Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_Normal.png
+  artifactKey: Guid(38e3ea0628f06c6408ef6e94dbcc5fa9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Level2/FBX AND TEXTURE/BossRoom/BossRoom_TT_checker_2048x2048_UV_GRID.001_Normal.png using Guid(38e3ea0628f06c6408ef6e94dbcc5fa9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6986173e3ba7ae77de7ef102874e57aa') in 0.043324 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 32.996670 seconds.
+  path: Assets/Level2/FBX AND TEXTURE/BossRoom/New Material.mat
+  artifactKey: Guid(bb1ac4d3446bbc049b07fdf69fb90d4a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Level2/FBX AND TEXTURE/BossRoom/New Material.mat using Guid(bb1ac4d3446bbc049b07fdf69fb90d4a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '76e0be15f7015f5950f1bb27af51d1b9') in 1.186579 seconds 
