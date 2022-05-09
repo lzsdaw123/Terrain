@@ -286,7 +286,7 @@ public class HeroLife : MonoBehaviour
             BloodpackNub++;
             BloodpackUI[BloodpackNub-1].SetActive(true);
         }
-        if (Input.GetKeyDown(KeyCode.B)) //使用補包
+        if (Input.GetKeyDown(KeyCode.Q)) //使用補包
         {
             if(hp< fullHp && BpTime==-1)
             {
