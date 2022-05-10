@@ -128,8 +128,7 @@ GameObject:
   - component: {fileID: 3433433023406465388}
   - component: {fileID: 1799881785927193344}
   - component: {fileID: 5071807237462701957}
-  - component: {fileID: 6718964196197088290}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Blood
   m_TagString: Metal
   m_Icon: {fileID: 0}
@@ -207,20 +206,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.014164706, y: 0.007979679, z: 0.023248326}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6718964196197088290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3129603922953139606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffb9faf7576f36c4180557070d473949, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  T: {fileID: 0}
-  Take: {fileID: 0}
 --- !u!1 &5552990577419580119
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +217,6 @@ GameObject:
   - component: {fileID: 3546353230792113260}
   - component: {fileID: 1570741406599087448}
   - component: {fileID: 4468320759671254782}
-  - component: {fileID: 2880542423200880457}
   m_Layer: 8
   m_Name: Billboard (2)Spot Light (7)
   m_TagString: Untagged
@@ -262,7 +246,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5552990577419580119}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
@@ -273,7 +257,7 @@ Light:
   m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -439,32 +423,6 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
---- !u!114 &2880542423200880457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5552990577419580119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c8b068eeb46b084d829a58e8746c45a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 2
-  camTransform: {fileID: 0}
-  Gun_Camera: {fileID: 0}
-  distance: 0
-  Low: 1
-  _IsInView: 0
-  LightB: 1
-  ShadowsB: 0
-  c_dot: 0
-  _viewPos: {x: 0, y: 0}
-  minDistance: []
-  MaxDistance: []
-  Light: {fileID: 1570741406599087448}
-  HDAdditionalLightData: {fileID: 4468320759671254782}
 --- !u!1 &5980243024691302609
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,8 +8,8 @@ public class AnimEvents : MonoBehaviour
     public int MonsterType;  //0=玩家 / 1=NPC
     public int BossType;  //0=玩家 / 1=NPC
     public static bool DontShooting;
-    public static int ammunition, Total_ammunition;  //彈藥量
-    [SerializeField] int SF_ammunition, SF_Total_ammunition;  //彈藥量
+    public static int ammunition, Total_ammunition, Magazine;  //彈藥量
+    [SerializeField] int SF_ammunition, SF_Total_ammunition, SF_Magazine;  //彈藥量
     [SerializeField] int[] WeaponAmm = new int[] { 30, 6, 5 }; //武器可裝填彈藥量
     public int R_ammunition;
     [SerializeField] int WeaponType; //武器類型
@@ -44,6 +44,7 @@ public class AnimEvents : MonoBehaviour
     {
         SF_ammunition = Shooting.Weapons[WeaponType].WeapAm;
         SF_Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
+        SF_Magazine = Shooting.Weapons[WeaponType].Magazine;
         //Move = animator.SetBool("Move", bool );
         if (UnitType == 0)
         {
@@ -97,8 +98,10 @@ public class AnimEvents : MonoBehaviour
         {
             ammunition = Shooting.Weapons[WeaponType].WeapAm;
             Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
-            R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前數量    
-            if (Total_ammunition < R_ammunition)  //總數量<武器可裝填量 {當前數量+總數量}
+            Magazine = Shooting.Weapons[WeaponType].Magazine;
+            WeaponAmm[WeaponType] = Magazine; //武器可裝填量 = 彈匣容量
+            R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前子彈數    
+            if (Total_ammunition < R_ammunition)  //總數量< 裝填量 {當前數量+總數量}
             {
                 if (Total_ammunition <= 0)
                 {

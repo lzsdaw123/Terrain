@@ -78,8 +78,8 @@ public class Shooting : MonoBehaviour
     public static bool SkipTeach;
     Image Aim;
     static UpgradeValue[] 武器欄位;
-    public 部位 部位;
-    [SerializeField] int 部件ID;
+    public 部位[] 部位;
+    [SerializeField] int 部位ID, 零件ID;
     public static bool 換部件;
     static bool Bomb=true;
     public bool hitDamage;
@@ -96,15 +96,15 @@ public class Shooting : MonoBehaviour
 
     public static void StartAll()
     {
-        if(!FirstAmm && !FirstWeapon[0]) Weapons[0] = new WeaponValue(0, 2, 400, 0, 0); //沒槍沒子彈
-        else if (!FirstAmm) Weapons[0] = new WeaponValue(0, 2, 400, 30, 0);  //只有槍
+        if(!FirstAmm && !FirstWeapon[0]) Weapons[0] = new WeaponValue(0, 2, 400, 0, 0, 30); //沒槍沒子彈
+        else if (!FirstAmm) Weapons[0] = new WeaponValue(0, 2, 400, 30, 0, 30);  //只有槍
         //else if (!FirstWeapon) Weapons[0] = new WeaponValue(0, 2, 400, 0, 300);  //只有子彈
         else
         {
-            Weapons[0] = new WeaponValue(0, 2, 400, 30, 300);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量)           
+            Weapons[0] = new WeaponValue(0, 2, 400, 30, 300, 30);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)           
         }
-        Weapons[1] = new WeaponValue(1, 1, 200, 6, 30);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量)
-        Weapons[2] = new WeaponValue(0, 1, 100, 5, 30);  //霰彈槍(武器位置,威力,射程,彈藥量,總彈藥量)
+        Weapons[1] = new WeaponValue(1, 1, 200, 6, 30, 6);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
+        Weapons[2] = new WeaponValue(0, 1, 100, 5, 30, 5);  //霰彈槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
     }
     public void OnBeforeSerialize()  //序列化
     {
@@ -176,40 +176,52 @@ public class Shooting : MonoBehaviour
         if (換部件)
         {
             換部件 = false;
-            部件ID = UpgradeWorkbench.部件ID;
-            for (int i = 0; i < 部位.Part.Length; i++)
+            部位ID = UpgradeWorkbench.部位ID;
+            零件ID = UpgradeWorkbench.零件ID;
+            for (int i = 0; i < 部位[部位ID].Part.Length; i++)
             {
-                部位.Part[i].SetActive(false);
+                部位[部位ID].Part[i].SetActive(false);  //關全部零件
             }
-            部位.Part[部件ID].SetActive(true);
+            部位[部位ID].Part[零件ID].SetActive(true);  //打開選擇零件
+            switch (部位ID)
+            {
+                case 0:
+                    switch (零件ID)
+                    {
+                        case 0:  //不使用
+                            MuFire_Light[0].GetComponent<Light>().intensity = 675000;  // =( intensity * At* At)
+                            MuFire_Light[0].GetComponent<Light>().range = 20;
+                            ParticleSystem ps0 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();  //粒子
+                            var sh0 = ps0.shape;
+                            sh0.angle = 12;
+                            Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(1.5f, 2.756f, 1.5f);
+                            break;
+                        case 1:  //消焰器
+                            MuFire_Light[0].GetComponent<Light>().intensity = 75000;
+                            MuFire_Light[0].GetComponent<Light>().range = 5;
+                            ParticleSystem ps1 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
+                            var sh1 = ps1.shape;
+                            sh1.angle = 3;
+                            Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(0.4f, 2.756f, 0.4f);
+                            break;
+                        case 2:  //補償器
+                            MuFire_Light[0].GetComponent<Light>().intensity = 300000;
+                            MuFire_Light[0].GetComponent<Light>().range = 15;
+                            ParticleSystem ps2 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
+                            var sh2 = ps2.shape;
+                            sh2.angle = 8;
+                            Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(1.1f, 2.756f, 1.1f);
+                            break;
+                    }
+                    break;
+                case 1:
+                    Weapons[0].WeapAm = 武器欄位[0].Ammo;
+                    Weapons[0].Magazine = 武器欄位[0].Ammo;
+                    break;
+            }
         }
-        switch (部件ID)
-        {
-            case 0:  //不使用
-                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().intensity = 1875000;  // =( intensity * At* At)
-                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().range = 20;
-                ParticleSystem ps0 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
-                var sh0 = ps0.shape;
-                sh0.angle = 12;
-                Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(1.5f, 2.756f, 1.5f);
-                break;
-            case 1:  //消焰器
-                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().intensity = 625000;
-                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().range = 5;
-                ParticleSystem ps1 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
-                var sh1 = ps1.shape;
-                sh1.angle = 3;
-                Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(0.4f, 2.756f, 0.4f);
-                break;
-            case 2:  //補償器
-                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().intensity = 1250000;
-                Muzzle_vfx[0].transform.GetChild(0).GetComponent<Light>().range = 15;
-                ParticleSystem ps2 = Muzzle_vfx[0].transform.GetChild(1).GetComponent<ParticleSystem>();
-                var sh2 = ps2.shape;
-                sh2.angle = 8;
-                Muzzle_vfx[0].transform.GetChild(2).GetComponent<Transform>().localScale = new Vector3(1.1f, 2.756f, 1.1f);
-                break;
-        }
+       
+      
 
         if (Time.timeScale == 0) {return;}
         FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;

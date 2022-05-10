@@ -40,12 +40,12 @@ public class Bloodpack : MonoBehaviour
     {
         if (HeroLife.BloodpackNub >= 3)
         {
-            ObjectText.GetComponent<Text>().text = "修理包已達上限";
+            ObjectText.GetComponent<Text>().text = "修理包已達上限\n" + "按「Q」 使用";
             QH_interactive.thing();  //呼叫QH_拾取圖案
         }
         else
         {
-            ObjectText.GetComponent<Text>().text = "取得修理包";
+            ObjectText.GetComponent<Text>().text = "取得修理包\n"+ "按「Q」 使用";
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)

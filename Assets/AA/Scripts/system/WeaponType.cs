@@ -16,6 +16,7 @@ public class WeaponValue
     public float distance;  //射程
     public int WeapAm;  //武器彈藥量
     public int T_WeapAm; //武器總彈藥量
+    public int Magazine; //彈匣容量
 
     /// <summary>
     /// 各武器數值
@@ -25,13 +26,15 @@ public class WeaponValue
     /// <param name="Distance">射程</param>
     /// <param name="_WeapAm">武器彈藥量</param>
     /// <param name="_T_WeapAm">武器總彈藥量</param>
+    /// <param name="Magazine">彈匣容量</param>
     /// <returns></returns>
-    public WeaponValue(int _WeaponPos, float Power, float Distance, int _WeapAm, int _T_WeapAm)
+    public WeaponValue(int _WeaponPos, float Power, float Distance, int _WeapAm, int _T_WeapAm, int magazine)
     {
         WeaponPos = _WeaponPos;
         power = Power;
         distance = Distance;
         WeapAm = _WeapAm;
         T_WeapAm = _T_WeapAm;
+        Magazine = magazine;
     }
 }

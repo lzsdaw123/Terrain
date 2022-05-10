@@ -33,10 +33,11 @@ public class UpgradeWorkbench : MonoBehaviour
     public int DropdownType;
     public int FieldType;
     public int PartType;
-    public static int 部件ID;
+    public static int 部位ID,零件ID;
     public string 部件名稱;
     public Text text;
     public static bool FirstWork;
+    public float[] AddPower=new float[2];
 
     private void Awake()
     {
@@ -53,7 +54,7 @@ public class UpgradeWorkbench : MonoBehaviour
         UpCamTransform = GunCamera.gameObject.transform;
         FieldOfView = UpgradeCamera.GetComponent<Camera>().fieldOfView ;
         GunCamTransform = GunCamera.gameObject.transform;
-        部件ID = 0;
+        部位ID =零件ID = 0;
         部件名稱 = "不使用";
         time = -1;
         FirstWork = false;
@@ -147,20 +148,39 @@ public class UpgradeWorkbench : MonoBehaviour
                 }
             }
         }
-        switch (部件ID)
+        switch (部位ID)  //步槍
         {
-            case 0:
-                text.text = "["+部件名稱+"]\n換取部件來獲得不同效果";
+            case 0:  //槍口
+                switch (零件ID)
+                {
+                    case 0:
+                        text.text = "[" + 部件名稱 + "]\n換取部件來獲得不同效果";
+                        break;
+                    case 1:
+                        text.text = "[" + 部件名稱 + "]\n能降低開火時的火光";
+                        break;
+                    case 2:
+                        text.text = "[" + 部件名稱 + "]\n能降低射擊後的後座力";
+                        break;
+                }
                 break;
-            case 1:
-                text.text = "[" + 部件名稱 + "]\n能降低開火時的火光";
-                break;
-            case 2:
-                text.text = "[" + 部件名稱 + "]\n能降低射擊後的後座力";
+            case 1:  //彈匣
+                switch (零件ID)
+                {
+                    case 0:
+                        text.text = "[" + 部件名稱 + "]\n步槍用制式彈匣，30發裝彈量\n一般的制式彈匣";
+                        break;
+                    case 1:
+                        text.text = "[" + 部件名稱 + "]\n步槍用擴充彈匣，70發裝彈量\n提高裝填量";
+                        break;
+                    case 2:
+                        text.text = "[" + 部件名稱 + "]\n步槍用穿甲彈匣，20發裝彈量\n有較強的穿透效果";
+                        break;
+                }
                 break;
         }
     }
-    public void UseType(int Type)
+    public void UseType(int Type)  //下拉式選單
     {
         DropdownType = Type;
     }
@@ -169,7 +189,7 @@ public class UpgradeWorkbench : MonoBehaviour
         PartType = (int)Type;  //部件類型
         FieldType = (int)(Type - PartType) * 10;  //武器欄位類型
     }
-    public void UseDropdown(Dropdown dropdown)
+    public void UseDropdown(Dropdown dropdown)  //下拉式選單
     {
         switch (DropdownType)
         {
@@ -198,10 +218,22 @@ public class UpgradeWorkbench : MonoBehaviour
                 }
                 if (!武器欄位[FieldType].部位[PartType].Part[dropdown.value].activeSelf)
                 {
-                    武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);   //打開當前零件
-                    武器欄位[FieldType].Power = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //武器傷害
-                    武器欄位[FieldType].Recoil = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  //武器後座力
-                    部件ID = 武器欄位[FieldType].部位[PartType].ID[dropdown.value];
+                    switch (PartType)
+                    {
+                        case 0:  //槍口
+                            武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);   //打開當前零件
+                            AddPower[0] = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //武器傷害
+                            武器欄位[FieldType].Recoil = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  //武器後座力
+                            break;
+                        case 1:  //彈匣
+                            武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);   //打開當前零件
+                            AddPower[1] = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //武器傷害
+                            武器欄位[FieldType].Ammo = 武器欄位[FieldType].部位[PartType].Ammo[dropdown.value];  //武器彈匣容量
+                            break;
+                    }
+                    武器欄位[FieldType].Power = AddPower[0] * AddPower[1];
+                    部位ID = PartType;
+                    零件ID = 武器欄位[FieldType].部位[PartType].ID[dropdown.value];
                     部件名稱 = 武器欄位[FieldType].部位[PartType].PartName[dropdown.value];
                     Shooting.換部件 = true;
                 }
@@ -271,8 +303,9 @@ public class UpgradeValue
     public GameObject Object;  //武器
     public 部位[] 部位;  //武器部件
     public int Lvevl;  //等級
-    public float Power;  //威力
+    public float Power =1;  //威力
     public float Recoil;  //後座力
+    public int Ammo;  //彈藥量
     public float Price; //價格
 
     /// <summary>
@@ -285,7 +318,7 @@ public class UpgradeValue
     /// <param name="Power">威力</param>
     /// <param name="Price">價格</param>
     /// <returns></returns>
-    public UpgradeValue(String _類型, GameObject gameObject, 部位[] _部位, int lvevl, float power, float recoil, float price)
+    public UpgradeValue(String _類型, GameObject gameObject, 部位[] _部位, int lvevl, float power, float recoil, int ammo, float price)
     {
         類型 = _類型;
         Object = gameObject;
@@ -293,6 +326,7 @@ public class UpgradeValue
         Lvevl = lvevl;
         Power = power;
         Recoil = recoil;
+        Ammo = ammo;
         Price = price;
     }
 }
@@ -307,6 +341,7 @@ public class 部位
     public int[] Lvevl;  //等級
     public float[] Power;  //威力
     public float[] Recoil;  //後座力
+    public int[] Ammo;  //彈藥量
     public float[] Price; //價格
 
     /// <summary>
@@ -321,7 +356,8 @@ public class 部位
     /// <param name="Power">威力</param>
     /// <param name="Price">價格</param>
     /// <returns></returns>
-    public 部位(String _類型, GameObject[] partObject, int[] id, String[] partName, GameObject[] part, int[] lvevl, float[] power, float[] recoil, float[] price)
+    public 部位(String _類型, GameObject[] partObject, int[] id, String[] partName, GameObject[] part, 
+        int[] lvevl, float[] power, float[] recoil, int[] ammo, float[] price)
     {
         類型 = _類型;
         ID = id;
@@ -331,6 +367,7 @@ public class 部位
         Lvevl = lvevl;
         Power = power;
         Recoil = recoil;
+        Ammo = ammo;
         Price = price;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Save_Across_Scene : MonoBehaviour
 {
     public static GameObject Play;
+    public static Shooting Shooting;
     public static GameObject Take;
     public static GameObject ObjectText;
     public static GameObject Am_zero_Warn;
@@ -16,6 +17,7 @@ public class Save_Across_Scene : MonoBehaviour
     void Awake()
     {
         Play = GameObject.Find("POPP").gameObject;
+        Shooting = Play.GetComponent<Shooting>();
         Take = GameObject.Find("Take");
         ObjectText = GameObject.Find("ObjectText");
         Am_zero_Warn = GameObject.Find("Am_zero_Warn").gameObject;

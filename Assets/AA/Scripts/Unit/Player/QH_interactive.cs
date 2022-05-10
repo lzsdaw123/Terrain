@@ -12,8 +12,9 @@ public class QH_interactive : MonoBehaviour
 
     public LayerMask layerMask;
     public GameObject ObjectText;
-    public static GameObject Take;
-    public static GameObject Aim;
+    public static GameObject Take;  //互動UI
+    public static GameObject Aim;  //白色準心
+    public Shooting Shooting;
     public static bool tt;
     public bool ret;
     void Start()
@@ -21,6 +22,7 @@ public class QH_interactive : MonoBehaviour
         ObjectText = Save_Across_Scene.ObjectText;
         Take = Save_Across_Scene.Take;
         Aim = Save_Across_Scene.Aim;
+        Shooting = Save_Across_Scene.Shooting;
         Take.SetActive(false);
     }
 
@@ -47,7 +49,7 @@ public class QH_interactive : MonoBehaviour
                 else if (hit.collider != oldhit.collider)
                 {
                     Take.SetActive(false);
-                    Aim.GetComponent<Image>().enabled = true;
+                    if (Shooting.LayDown)  Aim.GetComponent<Image>().enabled = true;
                 }
                 oldhit = hit;
             }
@@ -71,7 +73,7 @@ public class QH_interactive : MonoBehaviour
             else if (hit.collider != oldhit.collider)
             {
                 Take.SetActive(false);
-                Aim.GetComponent<Image>().enabled = true;
+                if (Shooting.LayDown)  Aim.GetComponent<Image>().enabled = true;
             }
             oldhit = hit;
 
@@ -86,7 +88,7 @@ public class QH_interactive : MonoBehaviour
         {
             ObjectText.GetComponent<Text>().text = "";
             Take.SetActive(false);
-            Aim.GetComponent<Image>().enabled = true;
+            if(Shooting.LayDown) Aim.GetComponent<Image>().enabled = true;
         }
     }
     public static void thing()

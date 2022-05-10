@@ -30,12 +30,12 @@ public class Grenade : MonoBehaviour
     {
         if (Shooting.GrenadeNub >= 3)
         {
-            ObjectText.GetComponent<Text>().text = "手榴彈已達上限";
+            ObjectText.GetComponent<Text>().text = "手榴彈已達上限\n" + "按「G」 使用";
             QH_interactive.thing();  //呼叫QH_拾取圖案
         }
         else
         {
-            ObjectText.GetComponent<Text>().text = "取得手榴彈";
+            ObjectText.GetComponent<Text>().text = "取得手榴彈\n"+"按「G」 投擲";
             QH_interactive.thing();  //呼叫QH_拾取圖案
 
             if (Take.activeSelf)

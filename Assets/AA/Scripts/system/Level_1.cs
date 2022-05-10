@@ -433,6 +433,9 @@ public class Level_1 : MonoBehaviour
                 }
                 break;
             case 2:  //第二關  TotalStage
+                MissionTarget.SetActive(false);
+                MissionUI[0].SetActive(false);
+                MissionUI[1].SetActive(false);
                 break;
         }
         switch (Settings.Level)  //難度圖示

@@ -78,25 +78,29 @@ public class MonsterLife : MonoBehaviour
         //    agent.enabled = false;  //立即關閉尋徑功能
         //    ani.SetTrigger("Die");
         //}
-        if (PS_Dead.activeSelf)
+        if (PS_Dead != null)
         {
-            DeadTime += 1.4f * Time.deltaTime;
-            if (DeadTime >= 1)
+            if (PS_Dead.activeSelf)
             {
-                agent.enabled = false; // 立即關閉尋徑功能
-
-                switch (MonsterType)
+                DeadTime += 1.4f * Time.deltaTime;
+                if (DeadTime >= 1)
                 {
-                    case 0:
-                        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
-                        break;
-                    case 1:
-                        GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster02(gameObject);
-                        break;
+                    agent.enabled = false; // 立即關閉尋徑功能
 
+                    switch (MonsterType)
+                    {
+                        case 0:
+                            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster01(gameObject);
+                            break;
+                        case 1:
+                            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster02(gameObject);
+                            break;
+
+                    }
                 }
             }
         }
+       
     }
     // 開啟或關閉物理娃娃系統
     void RagdollActive(bool active)

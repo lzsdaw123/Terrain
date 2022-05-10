@@ -24,11 +24,12 @@ public class AmmunitionSupply : MonoBehaviour
 
     void Awake()
     {
-        Am_zero_Warn = Save_Across_Scene.Am_zero_Warn;
-        ObjectText = Save_Across_Scene.ObjectText;
+
     }
     void Start()
     {
+        Am_zero_Warn = Save_Across_Scene.Am_zero_Warn;
+        ObjectText = Save_Across_Scene.ObjectText;
         AmmSupply = new int[] { 480, 6 };
         T_WeapAmm = new int[] { 300, 30 };
 

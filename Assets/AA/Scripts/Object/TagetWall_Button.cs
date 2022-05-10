@@ -127,7 +127,7 @@ public class TagetWall_Button : MonoBehaviour
                 }
                 break;
         }
-
+        QH_interactive.thing();  //呼叫QH_拾取圖案
         if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
         {
             if (!Botton)

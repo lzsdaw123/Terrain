@@ -117,10 +117,12 @@ public class ElectricDoor : MonoBehaviour
             if (OpenDoor)  //門開的
             {
                 TextG.GetComponent<Text>().text = "關門\n";
+                QH_interactive.thing();  //呼叫QH_互動圖案
             }
             else
             {
                 TextG.GetComponent<Text>().text = "開門\n";
+                QH_interactive.thing();  //呼叫QH_互動圖案
             }
 
             if (Input.GetKeyDown(KeyCode.E)) //當按下鍵盤 E 鍵時
