@@ -86,7 +86,6 @@ public class AsyncLoadScene : MonoBehaviour
 				AnyKey.SetActive(false);
 				//允許非同步載入完畢後自動切換場景
 				operation.allowSceneActivation = true;
-				PlayerResurrection.PlayerBirth();
 				//SceneManager.SetActiveScene(SceneManager.GetSceneByName(Globe.nextSceneName));
 			}			
 		}

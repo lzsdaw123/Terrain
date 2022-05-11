@@ -73,6 +73,8 @@ public class Level_1 : MonoBehaviour
     }
     void Start()
     {
+        Settings.BirthPoint.SetActive(true);
+        PlayerResurrection.PlayerBirth();
         Mission_L1 = PlayerResurrection.Mission_L1;
         StartTime = 0;
         if (Mission_L1) StartTime = 15;

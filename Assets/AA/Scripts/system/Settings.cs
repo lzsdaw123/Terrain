@@ -20,6 +20,7 @@ public class Settings : MonoBehaviour
     public Button QuitButton;
 
     public GameObject SettingsUI, deSetUI;
+    public static GameObject BirthPoint;
 
     public AudioManager AudioManager;
 
@@ -96,7 +97,7 @@ public class Settings : MonoBehaviour
         mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
         mouse_Slider.value = 16;  //滑鼠預設靈敏度
 
-
+        BirthPoint = GameObject.Find("BirthPoint").gameObject;
     }
     void Start()
     {

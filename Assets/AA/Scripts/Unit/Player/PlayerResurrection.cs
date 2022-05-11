@@ -36,20 +36,27 @@ public class PlayerResurrection : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);  //切換場景時保留
-
         DeadUI.SetActive(false);
         FailUI.SetActive(false);
         RebirthUI.SetActive(false);
         Mission_L1 = SF_Mission_L1;
         //Gun = GameObject.Find("Gun").gameObject;
-      
+        SceneNub = Settings.SceneNub; //取得當前場景編號
+        if(SceneNub == 2 || SceneNub == 3)
+        {
+            gameObject.SetActive(true);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     void Start()
     {
-        Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
 
-        SceneNub = Settings.SceneNub; //取得當前場景編號
+        Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
+        SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         if (SceneNub == 2 || SceneNub == 3)
         {
             Player = GameObject.Find("POPP").gameObject;
@@ -59,7 +66,7 @@ public class PlayerResurrection : MonoBehaviour
                 Player.SetActive(false);
                 Player.transform.position = R1.position;
                 Player.transform.localRotation = R1.localRotation;
-                //print("0");
+                //Gun.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
             }
             if (Mission_L1)
             {
@@ -78,10 +85,16 @@ public class PlayerResurrection : MonoBehaviour
             Dead = true;
             RePlay = false;
         }
-  
         //Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
+        if (Player == null)
+        {
+            Player = GameObject.Find("POPP").gameObject;
+            Gun = Player.transform.GetChild(2).gameObject;
+            Start();
+            return;
+        }
         Player.SetActive(true);
-        Gun.transform.GetChild(0).GetChild(0).GetComponent<Animator>().SetBool("LayDown", true);        
+        Gun.transform.GetChild(0).GetChild(0).GetComponent<Animator>().SetBool("LayDown", true);
         mouseLook = GameObject.Find("Gun_Camera").GetComponent<MouseLook>();
         //Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
         Player.transform.rotation = RebirthPonit[0].rotation;

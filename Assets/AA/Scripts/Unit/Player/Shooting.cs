@@ -54,6 +54,7 @@ public class Shooting : MonoBehaviour
     public RuntimeAnimatorController[] controllers;  //動畫控制陣列
 
     public static bool Reload;  //換彈藥bool
+    [SerializeField] bool SF_Reload;  //換彈藥bool
     public static bool ReReload;  //換彈藥bool
     bool AimIng;  //瞄準中bool
     float FieldOfView;  //玩家相機視野
@@ -173,6 +174,7 @@ public class Shooting : MonoBehaviour
     {
         SF_WeaponType = WeaponType;
         SF_GrenadeNub = GrenadeNub;
+        SF_Reload = Reload;
         if (換部件)
         {
             換部件 = false;
@@ -235,7 +237,7 @@ public class Shooting : MonoBehaviour
             ZoomOut();
         }
         DontShooting = AnimEvents.DontShooting;  //取得AnimEvents腳本變數
-        if (SwitchWeapon)  //拾取武器並切換
+        if (SwitchWeapon && !Reload)  //拾取武器並切換
         {
             SwitchWeapon = false;
             NextWeaponType = PickUpWeapon;  //下把武器
@@ -243,7 +245,7 @@ public class Shooting : MonoBehaviour
         }
         if ( AniTime >=2)  //切換武器
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0)  //主武器
+            if (Input.GetKeyDown(KeyCode.Alpha1) && WeaponType!=0 && !Reload)  //主武器
             {
                 if(Equipment[0] == 1)
                 {
@@ -256,7 +258,7 @@ public class Shooting : MonoBehaviour
                     WeapSwitching();
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1 && Equipment[1] == 1)  //副武器
+            if (Input.GetKeyDown(KeyCode.Alpha2) && WeaponType != 1 && Equipment[1] == 1 && !Reload)  //副武器
             {
                 NextWeaponType = 1;
                 WeapSwitching();
