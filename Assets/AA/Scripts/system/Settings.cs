@@ -240,6 +240,9 @@ public class Settings : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; //游標無狀態模式    
         int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         operation = SceneManager.LoadSceneAsync(1);
+        PlayerResurrection PlayerR = GameObject.Find("BirthPoint").gameObject.GetComponent<PlayerResurrection>();
+        PlayerR.Player = null;
+        GameObject.Find("BirthPoint").gameObject.SetActive(false);
         SceneManager.UnloadSceneAsync(SceneNub);
         //Settings.LoadScene("Start");
     }

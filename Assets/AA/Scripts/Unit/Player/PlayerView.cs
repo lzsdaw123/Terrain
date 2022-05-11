@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 /// <summary>
 /// 將指令碼掛在攝像機觀察的物體上  物體必須帶有Render
 /// </summary>
@@ -119,6 +121,11 @@ public class PlayerView : MonoBehaviour
     }
     void Update()
     {
+        int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub == 1)
+        {
+            Destroy(gameObject);
+        }
         switch (missionLevel)
         {
             case 0:
@@ -145,6 +152,7 @@ public class PlayerView : MonoBehaviour
             return;
         }
         //Vector2 vec2 = Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
+        if (Camera == null) return;
         camTransform = Camera.transform;  //相機座標
         if(MissionTaget[missionStage] != null)
         {

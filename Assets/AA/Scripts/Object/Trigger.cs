@@ -30,7 +30,14 @@ public class Trigger : MonoBehaviour
                 switch (Features)
                 {
                     case 0:
-                        boss02_AI.Player = other.gameObject;
+                        switch (Level)
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                boss02_AI.Player = other.gameObject;
+                                break;
+                        }
                         GameObject.Find("Level_1").GetComponent<Level_1>().MissionTrigger(Level, Objects[Type]);
                         gameObject.SetActive(false);
                         break;

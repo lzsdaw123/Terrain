@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DialogueEditor : MonoBehaviour
 {
@@ -49,6 +50,11 @@ public class DialogueEditor : MonoBehaviour
     {
         SF_Delay = Delay;
         SF_TextLine = TextLine;
+        int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub == 1)
+        {
+            Destroy(gameObject);
+        }
         if (StartDialogue)  //開始對話
         {
             if (coolDownTimer >= coolDown) //對話冷卻時間，coolDown 越小越快

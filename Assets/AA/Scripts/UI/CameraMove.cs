@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CameraMove : MonoBehaviour
 {
@@ -82,6 +83,11 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
+        int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub == 1)
+        {
+            Destroy(gameObject);
+        }
         if (DelayTime >= 0)
         {
             DelayTime -= Time.deltaTime;

@@ -54,7 +54,6 @@ public class PlayerResurrection : MonoBehaviour
 
     void Start()
     {
-
         Settings = GameObject.Find("SettingsCanvas").GetComponent<Settings>();
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         if (SceneNub == 2 || SceneNub == 3)
@@ -72,7 +71,7 @@ public class PlayerResurrection : MonoBehaviour
             {
                 Player.SetActive(false);
                 Player.transform.position = RebirthPonit[0].position;
-                Player.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+                Player.transform.localRotation = RebirthPonit[0].localRotation;
                 Gun.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
             if (RespawnPoint)
@@ -107,6 +106,7 @@ public class PlayerResurrection : MonoBehaviour
 
     void Update()
     {
+        print("4");
         if (PlayerBirthT)
         {
             PlayerBirthT = false;
@@ -189,7 +189,7 @@ public class PlayerResurrection : MonoBehaviour
         {
             case 2:  //第一關
                 Player.transform.position = RebirthPonit[0].position;
-                Player.transform.rotation = RebirthPonit[0].localRotation;
+                Player.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
                 HeroLife.HpLv = 1;
                 break;
             case 3:  //第二關
@@ -218,7 +218,7 @@ public class PlayerResurrection : MonoBehaviour
             {
                 case 2:  //第一關
                     Player.transform.position = RebirthPonit[0].position;
-                    Player.transform.rotation = RebirthPonit[0].localRotation;
+                    Player.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
                     break;
                 case 3:  //第二關
                     Player.transform.position = RebirthPonit[1].position;

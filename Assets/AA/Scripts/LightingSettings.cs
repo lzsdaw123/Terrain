@@ -62,6 +62,7 @@ public class LightingSettings : MonoBehaviour
     }
     void Update()
     {
+        if (Gun_Camera == null) return;
         Vector2 vec2 = Gun_Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
         if (camTransform == null || Gun_Camera == null)
         {

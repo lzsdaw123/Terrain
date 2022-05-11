@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UI_Life : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public class UI_Life : MonoBehaviour
                 break;
             case 1:
                 DontDestroyOnLoad(gameObject);  //切換場景時保留
+                int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+                if (SceneNub == 1)
+                {
+                    Destroy(gameObject);
+                }
                 break;
         }     
     }

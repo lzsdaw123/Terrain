@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class ObjectPool : MonoBehaviour
 {
@@ -109,6 +110,14 @@ public class ObjectPool : MonoBehaviour
     }
     void Start()
     {
+    }
+    void Update()
+    {
+        int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub == 1)
+        {
+            Destroy(gameObject);
+        }
     }
     //子彈
     public void ReUse (Vector3 positon, Quaternion rotation)  //取出存放在物件池中的物件
