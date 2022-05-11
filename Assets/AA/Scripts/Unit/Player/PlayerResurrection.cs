@@ -106,7 +106,6 @@ public class PlayerResurrection : MonoBehaviour
 
     void Update()
     {
-        print("4");
         if (PlayerBirthT)
         {
             PlayerBirthT = false;
