@@ -72,7 +72,7 @@ public class ExplosionLift : MonoBehaviour
     }
     void Start()
     {
-        speed = new float[] {16,80,40 }; //飛行速度
+        speed = new float[] {26,80,40 }; //飛行速度
         power =new float[] {30,3,10 };
         AttackLv = 0;
         bornTime = new float[] {150,1, 150f};  //生成速度{快, 慢, 中}
@@ -90,15 +90,17 @@ public class ExplosionLift : MonoBehaviour
                 liftTime = 1;
                 collisionNub = 0;
                 ReflectTime = -1;
-                physicMaterial.bounciness = 0.9f;
+                physicMaterial.bounciness = 0.8f;  //反彈強度
                 Object[1].SetActive(false);
                 Object[0].GetComponent<MeshRenderer>().material = Material[1];
                 AudioManager =Save_Across_Scene.AudioManager;  //聲音控制器
                 ExpAudio(1);
                 accelerate = false;
+                ParticleSystem.Stop();
                 var psmain = ParticleSystem.main;
                 psmain.duration = 0.5f;
                 psmain.startLifetime = 0.25f;
+                ParticleSystem.Play();
                 //Pro[0].gameObject.SetActive(true);
                 //bornSize = Vector3.zero;
                 break;
@@ -227,9 +229,9 @@ public class ExplosionLift : MonoBehaviour
                         Object[2].SetActive(false);
                         GetComponent<CapsuleCollider>().isTrigger = true;
                         GetComponent<CapsuleCollider>().radius += bornTime[0] * Time.deltaTime;
-                        if(GetComponent<CapsuleCollider>().radius >= 4.5f)
+                        if(GetComponent<CapsuleCollider>().radius >= 12f)
                         {
-                            GetComponent<CapsuleCollider>().radius = 4.5f;
+                            GetComponent<CapsuleCollider>().radius = 12f;
                         }
                     }
                 }
@@ -276,7 +278,7 @@ public class ExplosionLift : MonoBehaviour
                     transform.Translate(Vector3.forward * speed[BulletType] * Time.deltaTime); //往前移動
                     Rz -= 1080* Time.deltaTime;
                     Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz) ;  //旋轉
-                     //transform.localRotation = Quaternion.Euler(-28.635f, -20f, Rz/2) ;  //旋轉
+                    transform.Rotate(new Vector3(0, 0, -3f), Space.Self);  //自體旋轉
                 }
                 //if (ReflectTime >= 0)
                 //{
@@ -434,7 +436,17 @@ public class ExplosionLift : MonoBehaviour
             if (BulletType == 0)
             {
                 forwardFly = false;
-                physicMaterial.bounciness = 0.5f;
+                switch (collisionNub)
+                {
+                    case 0:
+                        physicMaterial.bounciness = 0.5f;
+                        collisionNub = 1;
+                        break;
+                    case 1:
+                        physicMaterial.bounciness = 0.3f;
+                        collisionNub = 2;
+                        break;
+                }
                 //collisionNub++;
                 //print("collisionNub" + collisionNub);
                 if (!ReflectionT)
@@ -501,6 +513,10 @@ public class ExplosionLift : MonoBehaviour
                     switch (BulletType)
                     {
                         case 0:
+                            if (AttackCTime < 3)
+                            {
+                                AttackCTime = 3;
+                            }
                             if (Damage)
                             {
                                 FindUpParent(collision.transform);  //找有HP的父物件
@@ -513,7 +529,7 @@ public class ExplosionLift : MonoBehaviour
                                             if (actors[i] != zi.gameObject)
                                             {
                                                 zi.gameObject.SendMessage("Damage", power[BulletType]); //傷害
-                                                print("傷害 " + zi.gameObject.name);
+                                                //print("傷害 " + zi.gameObject.name);
                                                 actors[i] = zi.gameObject;
                                             }
                                         }
@@ -551,7 +567,18 @@ public class ExplosionLift : MonoBehaviour
             if (BulletType == 0)
             {
                 forwardFly = false;
-                physicMaterial.bounciness = 0.5f;
+                switch (collisionNub)
+                {
+                    case 0:
+                        physicMaterial.bounciness = 0.5f;
+                        collisionNub = 1;
+                        break;
+                    case 1:
+                        physicMaterial.bounciness = 0.3f;
+                        collisionNub = 2;
+                        break;
+                }
+
                 ////collisionNub++;
                 //print("collisionNub" + collisionNub);
                 if (!ReflectionT)

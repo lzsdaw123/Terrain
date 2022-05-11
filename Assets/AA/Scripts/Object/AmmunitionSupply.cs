@@ -7,8 +7,8 @@ public class AmmunitionSupply : MonoBehaviour
 {
     public GameObject ObjectText;
     public int Type;
-    int[] T_WeapAmm = new int[2] ; //武器總彈藥量
-    public int[] AmmSupply =new int[2];
+    public int[] T_WeapAmm = new int[2] ; //武器總彈藥量
+    public int[] AmmSupply =new int[2];  //存量
     public GameObject[] ASupply;  //彈藥
     public GameObject Cover;  //蓋子
     public bool CoverOn;
@@ -213,6 +213,10 @@ public class AmmunitionSupply : MonoBehaviour
                         {
                             NeedAmm = AmmSupply[0];
                         }
+                        else
+                        {
+
+                        }
                         AmmSupply[0] = AmmSupply[0] - NeedAmm;
                         Shooting.Weapons[0].T_WeapAm += NeedAmm;
                     }
@@ -224,13 +228,13 @@ public class AmmunitionSupply : MonoBehaviour
                         Am_zero_Warn.SetActive(false);
                         AudioManager.PickUp(0);
                         //print("彈藥補給");
-                        int NeedAmm = T_WeapAmm[1] - Shooting.Weapons[1].T_WeapAm;  //需求彈藥數
-                        if (NeedAmm > AmmSupply[1])
+                        int NeedAmm = T_WeapAmm[1] - Shooting.Weapons[1].T_WeapAm;  //需求彈藥數 = 總彈藥 - 當前總彈藥量
+                        if (NeedAmm > AmmSupply[1])  //需求量 > 存量
                         {
                             NeedAmm = AmmSupply[1];
                         }
-                        AmmSupply[1] = AmmSupply[1] - NeedAmm;
-                        Shooting.Weapons[1].T_WeapAm += NeedAmm;
+                        AmmSupply[1] = AmmSupply[1] - NeedAmm;  //存量 = 存量-需求量
+                        Shooting.Weapons[1].T_WeapAm += NeedAmm; 
                     }
                     break;
             }

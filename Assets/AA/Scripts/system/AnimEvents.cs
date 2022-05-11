@@ -39,6 +39,7 @@ public class AnimEvents : MonoBehaviour
     void Start()
     {
         AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();  //聲音控制器
+        Magazine = Shooting.Weapons[WeaponType].Magazine;
     }
     void Update()
     {
@@ -98,7 +99,7 @@ public class AnimEvents : MonoBehaviour
         {
             ammunition = Shooting.Weapons[WeaponType].WeapAm;
             Total_ammunition = Shooting.Weapons[WeaponType].T_WeapAm;
-            Magazine = Shooting.Weapons[WeaponType].Magazine;
+            Magazine = Shooting.Save_Magazine[WeaponType];
             WeaponAmm[WeaponType] = Magazine; //武器可裝填量 = 彈匣容量
             R_ammunition = WeaponAmm[WeaponType] - ammunition;  //裝填量 = 武器可裝填量 - 武器當前子彈數    
             if (Total_ammunition < R_ammunition)  //總數量< 裝填量 {當前數量+總數量}
@@ -203,6 +204,7 @@ public class AnimEvents : MonoBehaviour
         boss01_AI.Scenes_ani.SetBool("Start", true);
         boss01_AI.AttackStatus = true;
         cameraMove.CameraMoveEnd(2);
+        print("0");
     }
     void B1_gEnd()
     {

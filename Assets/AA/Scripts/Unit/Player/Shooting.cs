@@ -13,6 +13,7 @@ public class Shooting : MonoBehaviour
     public ParticleSystem[] MuSmoke;  //槍口煙霧
     public GameObject[] MuFire_Light;  //開火光影
     public GameObject[] muzzle;  //槍口類型
+    public GameObject[] GrenadeMuzzle;  //手雷槍口  
     public GameObject GunAimR_x;  //X軸瞄準晃動  原Camera
     private Vector3 GA_R;  //槍枝Rotation瞄準偏移修正
     public float noise = 1f; //晃動頻率
@@ -56,6 +57,7 @@ public class Shooting : MonoBehaviour
     public static bool Reload;  //換彈藥bool
     [SerializeField] bool SF_Reload;  //換彈藥bool
     public static bool ReReload;  //換彈藥bool
+    [SerializeField] bool SF_ReReload;  //換彈藥bool
     bool AimIng;  //瞄準中bool
     float FieldOfView;  //玩家相機視野
     float gFieldOfView;  //武器相機視野
@@ -94,6 +96,8 @@ public class Shooting : MonoBehaviour
     public static bool UseGrenade;
     public Material[] material;
     public Texture2D[] texture2Ds;
+    public static int[] Save_Magazine=new int[3] {30, 6, 5 };  //保存換過的彈匣
+    [SerializeField] int[] SF_Save_Magazine=new int[3];  //保存換過的彈匣
 
     public static void StartAll()
     {
@@ -106,6 +110,10 @@ public class Shooting : MonoBehaviour
         }
         Weapons[1] = new WeaponValue(1, 1, 200, 6, 30, 6);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
         Weapons[2] = new WeaponValue(0, 1, 100, 5, 30, 5);  //霰彈槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
+        for(int i=0; i< Save_Magazine.Length; i++)
+        {
+            Weapons[0].WeapAm = Save_Magazine[0];
+        }
     }
     public void OnBeforeSerialize()  //序列化
     {
@@ -138,7 +146,7 @@ public class Shooting : MonoBehaviour
         PickUpWeapon = 0;
         SwitchWeapon = false;
         FirstWeapon = new bool[] { false, false, false };
-        Grenade = new GameObject[2];
+        Grenade = new GameObject[3]; //手雷上限
     }
     void Start()
     {
@@ -175,6 +183,8 @@ public class Shooting : MonoBehaviour
         SF_WeaponType = WeaponType;
         SF_GrenadeNub = GrenadeNub;
         SF_Reload = Reload;
+        SF_ReReload = ReReload;
+        SF_Save_Magazine = Save_Magazine;
         if (換部件)
         {
             換部件 = false;
@@ -219,6 +229,10 @@ public class Shooting : MonoBehaviour
                 case 1:
                     Weapons[0].WeapAm = 武器欄位[0].Ammo;
                     Weapons[0].Magazine = 武器欄位[0].Ammo;
+                    for (int i = 0; i < Save_Magazine.Length; i++)
+                    {
+                        Save_Magazine[0] = Weapons[0].Magazine;  //只有步槍
+                    }                 
                     break;
             }
         }
@@ -434,7 +448,7 @@ public class Shooting : MonoBehaviour
                         OriFireRotateX = GunAimR_x.GetComponent<MouseLook>().rotationX;
                     }
                     MuSmoke[WeaponType].Stop();  //關閉槍口煙霧
-                    //--開火後座力--
+                    //--開火後座力-------------------開火後座力--------------------
                     float[] FRxMin = new float[] { 4*2, 14*2, 16*2 };  //最小垂直晃動 x
                     float[] FRxMax = new float[] {8*2, 26*2, 30*2 };  //最大垂直晃動 x
                     float rangeY = Random.Range(-40+20f, 40+20f);  //射擊水平晃動範圍
@@ -442,30 +456,30 @@ public class Shooting : MonoBehaviour
                     FireRotateY = (武器欄位[WeaponType].Recoil * rangeY * Mathf.Sin(Time.time) - FireRotateY) / 100; //水平後座力(槍口部件* rangeX)
                     //FireRotateX = (noise * rangeX * (Mathf.Sin(Time.time)) - FireRotateX);
                     FireRotateX = rangeX * 武器欄位[WeaponType].Recoil;  //垂直後座力(rangeX * 槍口部件)
-                    float rotationY = Random.Range(-5f, 5f);  //開火後相機水平晃動範圍
+                    float rotationY = Random.Range(-1.6f, 1.6f) * 武器欄位[WeaponType].Recoil;  //開火後相機垂直晃動範圍
                     if (FireRotateX <= 0) { FireRotateX *= -1; } //強制往上飄
                     if (AimIng || PlayerMove.Squat)  //瞄準或蹲下
                     {                      
                         FireRotateY /= 2;
-                        FireRotateX /= 5;
-                        rotationY /= 2;
+                        FireRotateX /= 7;
+                        rotationY /= 2f;
                     }
                     if (AimIng && PlayerMove.Squat)  //瞄準並蹲下
                     {
                         FireRotateY /= 4;
-                        FireRotateX /= 10;
-                        rotationY /= 3;
+                        FireRotateX /= 2;
+                        rotationY /= 3.5f;
                     }
                     // Debug.Log("後" + " / " + FireRotateX);
                     //print(FireRotateX + "," + FireRotateY);
                     transform.localEulerAngles += new Vector3(0.0f, FireRotateY, 0.0f) *Time.deltaTime;  //水平晃動
-                    GunAimR_x.GetComponent<MouseLook>().rotationY = rotationY * 2 * Time.deltaTime;  //鏡頭水平晃動
+                    GunAimR_x.GetComponent<MouseLook>().rotationY = rotationY * 2 * Time.deltaTime;  //鏡頭垂直晃動
                     float oriX = GunAimR_x.GetComponent<MouseLook>().rotationX;  //原本位置
                     float newX= GunAimR_x.GetComponent<MouseLook>().rotationX- FireRotateX;  //後座力位置
                     //print("舊的" + oriX + "  / 新的" + newX + " /  X :" + FireRotateX + " / Y :" + FireRotateY);
-                    if(oriX > newX)
+                    if(oriX > newX)//原本位置>後座力位置   垂直晃動
                     {
-                        GunAimR_x.GetComponent<MouseLook>().rotationX -= Random.Range(8f, 14f) * Time.deltaTime;  //垂直晃動
+                        GunAimR_x.GetComponent<MouseLook>().rotationX -= Random.Range(3f, 5f)* 武器欄位[WeaponType].Recoil * Time.deltaTime;  
                     }
                     Weapons[WeaponType].WeapAm--;
                     if (FireButtle==1)
@@ -581,8 +595,8 @@ public class Shooting : MonoBehaviour
         if (UseGrenade)  //使用手榴彈
         {
             UseGrenade = false;
-            Grenade[GrenadeNub].transform.position = Muzzle_vfx[WeaponType +3].transform.position;
-            Grenade[GrenadeNub].transform.rotation = Muzzle_vfx[WeaponType +3].transform.rotation;
+            Grenade[GrenadeNub].transform.position = GrenadeMuzzle[WeaponType].transform.position;
+            Grenade[GrenadeNub].transform.rotation = GrenadeMuzzle[WeaponType].transform.rotation;
             Grenade[GrenadeNub].transform.parent = null;
             Grenade[GrenadeNub].SetActive(true);
             Grenade[GrenadeNub].GetComponent<ExplosionLift>().enabled = true;
@@ -730,10 +744,10 @@ public class Shooting : MonoBehaviour
                         return;
                     }
                     Weapon.SetBool("Reloading", true);
+                    ReReload = true;
                 }
                 FireButtle = 0;
                 Reload = true;
-                ReReload = true;
                 Weapon.SetTrigger("Reload");               
                 ReloadWarn.SetActive(false);
             }
@@ -742,7 +756,7 @@ public class Shooting : MonoBehaviour
         {
             FireButtle = 0;
             Reload = true;
-            ReReload = true;
+            ReReload = false;
             if (WeaponType == 2) Weapon.SetBool("Reloading", true);
             ReloadWarn.SetActive(false);
         }

@@ -68,7 +68,7 @@ public class HeroLife : MonoBehaviour
         BpTime = -1;
         Dead = false;
 
-        for (int i=0; i< Hit_Player.Length; i++)
+        for (int i=0; i< Hit_Player.Length; i++)  //命中玩家特效
         {
             if (Hit_Player[i] != null)
             {
@@ -108,6 +108,17 @@ public class HeroLife : MonoBehaviour
         Hit_Player[HitType].gameObject.SetActive(true);
         Hit_Player[HitType].Play();
         playing = true;
+    }
+    public void closeDamageEffects()  //關閉受傷特效
+    {
+        for (int i = 0; i < Hit_Player.Length; i++)  //受傷特效
+        {
+            if (Hit_Player[i] != null)
+            {
+                Hit_Player[i].Stop();
+                Hit_Player[i].gameObject.SetActive(false);
+            }
+        }
     }
     public void hit_Direction(Transform Hit_transform)  //命中方向
     {
@@ -286,7 +297,7 @@ public class HeroLife : MonoBehaviour
             BloodpackNub++;
             BloodpackUI[BloodpackNub-1].SetActive(true);
         }
-        if (Input.GetKeyDown(KeyCode.Q)) //使用補包
+        if (Input.GetKeyDown(KeyCode.Q) && BloodpackNub>0) //使用補包
         {
             if(hp< fullHp && BpTime==-1)
             {
@@ -294,8 +305,9 @@ public class HeroLife : MonoBehaviour
                 BpTime = 0;
                 LiftTime = 12;
                 hp = fullHp;
-                BloodpackUI[BloodpackNub - 1].SetActive(false);
                 BloodpackNub--;
+                if (BloodpackNub <= 0) BloodpackNub = 0;
+                 BloodpackUI[BloodpackNub].SetActive(false);
                 AudioManager.PickUp(1);
             }
         }

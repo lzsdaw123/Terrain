@@ -104,10 +104,18 @@ public class Level_1 : MonoBehaviour
     void Update()
     {
         int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
-        if (SceneNub == 1)
+        switch (SceneNub)
         {
-            Destroy(gameObject);
+            case 1:
+                Destroy(gameObject);
+                break;
+            case 2:
+                break;
+            case 3:
+                TotalStage = 2;
+                break;
         }
+
         //if (Input.GetKey(KeyCode.F5))
         //{
         //    PlayerView.missionLevel = 2;
@@ -250,6 +258,7 @@ public class Level_1 : MonoBehaviour
                         LevelA_ = 11;
                         DialogueEditor.StartConversation(2, 5, 2, true, 0, false);  //開始對話
                         Objects[5].GetComponent<BoxCollider>().enabled = true; //開放研究室後門
+                        Area_Loading.AreaLoading(1);
                     }
                     break;
                 case 11:
@@ -390,7 +399,7 @@ public class Level_1 : MonoBehaviour
                         {
                             case 7:  //出現水晶Boss
                                 UiOpen = true;  //開啟任務UI與音效
-                                stageTime = 5;  //怪物繼續倒數開始
+                                stageTime = 6;  //怪物繼續倒數開始
                                 PlayerView.missionChange(2, 2);
                                 DialogueEditor.StartConversation(2, 3, 1, false, 0, true);
                                 break;
@@ -436,6 +445,7 @@ public class Level_1 : MonoBehaviour
                             LevelA_ = 9;
                             StopAttack = true;
                             DelayTime = 0;  //延遲倒數
+                            Area_Loading.AreaLoading(0);
                             break;
                     }
                 }

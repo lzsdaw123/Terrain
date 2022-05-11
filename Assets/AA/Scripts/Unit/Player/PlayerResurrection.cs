@@ -154,12 +154,17 @@ public class PlayerResurrection : MonoBehaviour
             Player.GetComponent<Shooting>().enabled = true;
             Player.GetComponent<HeroLife>().enabled = true;
             Player.GetComponent<HeroLife>().無敵 = true;
+            Player.GetComponent<HeroLife>().closeDamageEffects();
             //DeadUI.SetActive(false);
             Dead = true;         
         }
         if (time >= 1.3f)  //復活結束
         {
             RebirthUI.SetActive(false);
+            Shooting.Reload = false;
+            Player.GetComponent<Shooting>().LayDown = false;
+            Player.GetComponent<Shooting>().shooting = true;
+            Player.GetComponent<PlayerMove>().m_Jump = false;
         }
         if (time >= 4.3f)  //無敵時間結束
         {

@@ -68,7 +68,12 @@ public class Boss_Life : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Monster");
         gameObject.tag = "Enemy";
         Weakness_Hp = new float[] { 25, 25, 25, 25,100 };
-        boss02_AI.RangeObject[0].SetActive(true);
+        switch (MonsterType)
+        {
+            case 1:
+                boss02_AI.RangeObject[0].SetActive(true);
+                break;
+        }
         for(int i=0; i< Crystal_Weakness.Length; i++)
         {
             Crystal_Weakness[i].GetComponent<Crystal_Life>().無敵 = true;
@@ -78,12 +83,18 @@ public class Boss_Life : MonoBehaviour
 
     void Update()
     {
-        if (Boss02_AI.StartAttack && !YesStart)
+        switch (MonsterType)
         {
-            YesStart = true;
-            Crystal_Weakness[0].GetComponent<Crystal_Life>().無敵 = false;
-            PlayerView.Crystal_Weakness = 0;
+            case 1:
+                if (Boss02_AI.StartAttack && !YesStart)
+                {
+                    YesStart = true;
+                    Crystal_Weakness[0].GetComponent<Crystal_Life>().無敵 = false;
+                    PlayerView.Crystal_Weakness = 0;
+                }
+                break;
         }
+      
         //if (Input.GetKeyDown(KeyCode.Y)) // 測試用
         //{
         //    monster02.enabled = false; // 關閉控制腳本

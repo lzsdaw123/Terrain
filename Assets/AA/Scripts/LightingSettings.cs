@@ -62,53 +62,53 @@ public class LightingSettings : MonoBehaviour
     }
     void Update()
     {
-        if (Gun_Camera == null) return;
-        Vector2 vec2 = Gun_Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
-        if (camTransform == null || Gun_Camera == null)
-        {
-            Gun_Camera = Save_Across_Scene.Gun_Camera;
-            camTransform = Gun_Camera.transform;
-        }
-        distance = (camTransform.position - transform.position).magnitude;
-        _IsInView = IsInView(transform.position);
+        //if (Gun_Camera == null) return;
+        //Vector2 vec2 = Gun_Camera.WorldToScreenPoint(this.gameObject.transform.position);  //世界座標到螢幕座標
+        //if (camTransform == null || Gun_Camera == null)
+        //{
+        //    Gun_Camera = Save_Across_Scene.Gun_Camera;
+        //    camTransform = Gun_Camera.transform;
+        //}
+        //distance = (camTransform.position - transform.position).magnitude;
+        //_IsInView = IsInView(transform.position);
 
-        if (IsInView(transform.position))  //在視角內
-        {
-            if (distance <= minDistance[Type])  //在範圍內
-            {
-                if (Low)
-                {
-                    HDAdditionalLightData.SetShadowResolution(128);
-                }
-                else
-                {
-                    HDAdditionalLightData.SetShadowResolution(512);
-                }
-                On(LightB, ShadowsB);
-            }
-            else if (distance >= MaxDistance[Type])  //在範圍之外
-            {
-                off(LightB, ShadowsB);
-            }
-        }
-        else if (!IsInView(transform.position))  //不在視角內
-        {
-            if (distance <= minDistance[Type])   //在範圍內
-            {
-                HDAdditionalLightData.SetShadowResolution(128);
-                //Light.enabled = true;
-                On(LightB, ShadowsB);
-            }
-            else if (distance > minDistance[Type] && distance < MaxDistance[Type])  //在範圍緩衝內
-            {
-                //HDAdditionalLightData.SetShadowResolution(128);
-                On(LightB, ShadowsB);
-            }
-            else if (distance >= MaxDistance[Type]) //在範圍之外
-            {
-                off(LightB, ShadowsB);
-            }
-        }
+        //if (IsInView(transform.position))  //在視角內
+        //{
+        //    if (distance <= minDistance[Type])  //在範圍內
+        //    {
+        //        if (Low)
+        //        {
+        //            //HDAdditionalLightData.SetShadowResolution(128);
+        //        }
+        //        else
+        //        {
+        //            //HDAdditionalLightData.SetShadowResolution(512);
+        //        }
+        //        //On(LightB, ShadowsB);
+        //    }
+        //    else if (distance >= MaxDistance[Type])  //在範圍之外
+        //    {
+        //        //off(LightB, ShadowsB);
+        //    }
+        //}
+        //else if (!IsInView(transform.position))  //不在視角內
+        //{
+        //    if (distance <= minDistance[Type])   //在範圍內
+        //    {
+        //        //HDAdditionalLightData.SetShadowResolution(128);
+        //        //Light.enabled = true;
+        //        //On(LightB, ShadowsB);
+        //    }
+        //    else if (distance > minDistance[Type] && distance < MaxDistance[Type])  //在範圍緩衝內
+        //    {
+        //        //HDAdditionalLightData.SetShadowResolution(128);
+        //        //On(LightB, ShadowsB);
+        //    }
+        //    else if (distance >= MaxDistance[Type]) //在範圍之外
+        //    {
+        //        //off(LightB, ShadowsB);
+        //    }
+        //}
     }
 
     void On(bool light, bool shadows)

@@ -68,7 +68,7 @@ public class SpawnRay : MonoBehaviour {
 		EnemyNum = new EnemyWaveNum[3];
         EnemyNum[0] = new EnemyWaveNum(4, 2);
         EnemyNum[1] = new EnemyWaveNum(6, 4);
-        EnemyNum[2] = new EnemyWaveNum(6, 4);
+        EnemyNum[2] = new EnemyWaveNum(8, 6);
         //EnemyNum[3] = new EnemyWaveNum(8, 6);
         //EnemyNum[4] = new EnemyWaveNum(10, 6);
         //EnemyNum[0] = new EnemyWaveNum(0, 1);
@@ -101,8 +101,8 @@ public class SpawnRay : MonoBehaviour {
 					case 5:
 						Level_1.LevelA_ = 6;
 						break;
-                    case 7:
-						StartBorn = true;
+                    case 7: //第三波
+						//StartBorn = true;
 						break;
                 }
 			}
