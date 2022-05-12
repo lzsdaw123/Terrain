@@ -13,7 +13,7 @@ public class MonsterLife : MonoBehaviour
     private Collider cld;
     public AnimEvents AnimEvents;
 
-    public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
+    public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹 / 2=雞 / 3=標靶
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
     public float[] hpFull=new float[2]; // 血量上限
     public float hp; // 血量
@@ -37,19 +37,23 @@ public class MonsterLife : MonoBehaviour
     bool Dead;
     public SkinnedMeshRenderer SMeshR;
     public Material[] materials;
+    public float[] harm=new float[18];
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         cld = GetComponent<Collider>();
-        agent = GetComponent<NavMeshAgent>();
+        if (MonsterType != 3)
+        {
+            agent = GetComponent<NavMeshAgent>();
+        }
         monster02 = GetComponent<MonsterAI02>();
         monster03 = GetComponent<MonsterAI03>();
     }
     void Start()
     {
         HitUI = Save_Across_Scene.HitUI;
-        PS_Dead.SetActive(false);
+        if(PS_Dead !=null) PS_Dead.SetActive(false);
         DeadTime = 0;
         DifficultyUp();  //難度調整 設定血量
         RefreshLifebar(); // 更新血條
@@ -85,7 +89,7 @@ public class MonsterLife : MonoBehaviour
                 DeadTime += 1.4f * Time.deltaTime;
                 if (DeadTime >= 1)
                 {
-                    agent.enabled = false; // 立即關閉尋徑功能
+                    if (agent != null) agent.enabled = false; // 立即關閉尋徑功能
 
                     switch (MonsterType)
                     {
@@ -137,8 +141,15 @@ public class MonsterLife : MonoBehaviour
     {
         //print(Power);
         hp -= Power; // 扣血
-        transform.position += new Vector3(0, 0, 0.1f);  //擊退效果
-
+        if (MonsterType == 3)
+        {
+            ObjectPool.harm(Power);
+            hp = hpFull[MonsterType];  //補滿血量
+        }
+        else
+        {
+            transform.position += new Vector3(0, 0, 0.1f);  //擊退效果
+        }
         if (無敵) hp = hpFull[MonsterType];  //補滿血量
         if (hp >0)
         {        
@@ -175,7 +186,7 @@ public class MonsterLife : MonoBehaviour
                 AnimEvents.MonsterAudio(2);  //怪物爆汁音效
             }           
             hp = 0; // 不要扣到負值
-            PS_Dead.SetActive(true);  //死亡爆炸
+            if (PS_Dead != null)  PS_Dead.SetActive(true);  //死亡爆炸
             if (Model !=null) Model.SetActive(false);
             switch (MonsterType)  //關閉怪物AI 腳本
             {
@@ -211,7 +222,7 @@ public class MonsterLife : MonoBehaviour
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
 
-        hpFull = new float[] { 16, 28 };  // 血量上限
+        hpFull = new float[] { 16, 28, 16, 999 };  // 血量上限
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
@@ -219,7 +230,7 @@ public class MonsterLife : MonoBehaviour
         Scoreboard.AddScore(true);  //怪物擊殺
         Shop.AddKillScore();  //怪物擊殺分數
         DifficultyUp();
-        PS_Dead.SetActive(false);
+        if (PS_Dead != null)  PS_Dead.SetActive(false);
         DeadTime = 0;
         switch (MonsterType)  //開啟怪物AI 腳本
         {
@@ -234,7 +245,7 @@ public class MonsterLife : MonoBehaviour
                 monster03.ani.SetInteger("Level", 0);
                 break;
         }
-        agent.enabled = true; // 開啟尋徑功能
+        if(agent !=null) agent.enabled = true; // 開啟尋徑功能
         if (Model != null) Model.SetActive(true);
     }
 }

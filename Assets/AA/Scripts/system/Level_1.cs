@@ -416,6 +416,9 @@ public class Level_1 : MonoBehaviour
                                 PlayerView.missionChange(2, 3);
                                 DialogueEditor.StartConversation(2, 4, 0, false, 0, true);
                                 Objects[4].GetComponent<BoxCollider>().enabled = true; //開放研究室
+                                MissionTarget.SetActive(false);
+                                MissionUI[0].SetActive(false);
+                                MissionUI[1].SetActive(false);
                                 break;
                         }
                     }
@@ -451,9 +454,7 @@ public class Level_1 : MonoBehaviour
                 }
                 break;
             case 2:  //第二關  TotalStage
-                MissionTarget.SetActive(false);
-                MissionUI[0].SetActive(false);
-                MissionUI[1].SetActive(false);
+
                 break;
         }
         switch (Settings.Level)  //難度圖示

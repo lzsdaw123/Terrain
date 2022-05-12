@@ -716,7 +716,6 @@ public class Shooting : MonoBehaviour
                 //GunCamera.GetComponent<Camera>().fieldOfView = FieldOfView;
             }
         }
-        TargetWall = ShootingRange.TargetWall;
         if (MuFire_Light[WeaponType].activeSelf && WeaponType !=0)
         {
             ////print(MuFire_Light[WeaponType].name);
@@ -846,8 +845,9 @@ public class Shooting : MonoBehaviour
                         //AudioManager.Hit(2);  //擊中音效
                                               //Debug.DrawLine(ray.origin, hit.point, Color.red, 0.7f, false);
 
-                        if (hit[n].collider.tag == "Enemy")
+                        if (hit[n].collider.tag == "Enemy" || hit[n].collider.tag == "Target") 
                         {
+
                             hitDamage = true;
                             int MonsterType = 0;
                             bool isBoss=false;
@@ -904,6 +904,10 @@ public class Shooting : MonoBehaviour
                                         HitType = 6;  //紫血
                                         break;
                                 }
+                            }
+                            if (hit[n].collider.tag == "Target")
+                            {
+                                TargetWall = true;
                             }
                         }                                                
                         if (hit[n].collider.tag == "Carapace")  //甲殼
@@ -965,7 +969,11 @@ public class Shooting : MonoBehaviour
                     rot = Quaternion.FromToRotation(Vector3.up, hit[0].normal);
                     pos = hit[n].point;
                     HitType = 5;
-                    if (TargetWall) HitType = 7;  //靶場彈孔;
+                    if (TargetWall)
+                    {
+                        TargetWall = false;
+                        HitType = 7;  //靶場彈孔;
+                    }
                     if (!Fire1st)
                     {
                         pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
@@ -974,7 +982,11 @@ public class Shooting : MonoBehaviour
                 }
                 else
                 {
-                    if (TargetWall) HitType = 7;  //靶場彈孔;
+                    if (TargetWall)
+                    {
+                        TargetWall = false;
+                        HitType = 7;  //靶場彈孔;
+                    }
                     pool_Hit.ReUseHit(pos, rot, HitType);  //從彈孔池取出彈孔
                 }            
             }

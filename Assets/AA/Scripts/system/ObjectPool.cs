@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
@@ -37,6 +38,7 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> B1_Hit_pool = new Queue<GameObject>();
     private Queue<GameObject> B2_Hit_pool = new Queue<GameObject>();
 
+    public static float Harm;
 
     void Awake()
     {
@@ -141,7 +143,10 @@ public class ObjectPool : MonoBehaviour
         _pool.Enqueue(recovery);
         recovery.SetActive(false);
     }
-
+    public static void harm(float power)
+    {
+        Harm = power;
+    }
     //彈孔
     public void ReUseHit(Vector3 positon, Quaternion rotation,int HitType)  //取出存放在物件池中的物件
     {
@@ -152,6 +157,8 @@ public class ObjectPool : MonoBehaviour
             reuse.transform.rotation = rotation;
             GameObject reHit;
             reHit = reuse.transform.GetChild(HitType).gameObject;
+            reuse.GetComponent<BulletHole>().HoleType = HitType;
+            reuse.GetComponent<BulletHole>().power = Harm;
             reHit.SetActive(true);
             reuse.SetActive(true);
         }
@@ -162,6 +169,8 @@ public class ObjectPool : MonoBehaviour
             go2.transform.rotation = rotation;
             GameObject reHit;
             reHit = go2.transform.GetChild(HitType).gameObject;
+            go2.GetComponent<BulletHole>().HoleType = HitType;
+            go2.GetComponent<BulletHole>().power = Harm;
             reHit.SetActive(true);
         }
     }
