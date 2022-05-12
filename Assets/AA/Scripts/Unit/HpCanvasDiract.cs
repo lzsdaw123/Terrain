@@ -15,6 +15,9 @@ public class HpCanvasDiract : MonoBehaviour
 
     void Update()
     {
-        transform.rotation = camTrans.rotation;
+        if (Camera != null)
+        {
+            transform.rotation = camTrans.rotation;
+        }
     }
 }

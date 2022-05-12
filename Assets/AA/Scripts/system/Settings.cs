@@ -243,6 +243,7 @@ public class Settings : MonoBehaviour
         PlayerResurrection PlayerR = GameObject.Find("BirthPoint").gameObject.GetComponent<PlayerResurrection>();
         PlayerR.Player = null;
         GameObject.Find("BirthPoint").gameObject.SetActive(false);
+        Destroy(Save_Across_Scene.Play);
         SceneManager.UnloadSceneAsync(SceneNub);
         //Settings.LoadScene("Start");
     }

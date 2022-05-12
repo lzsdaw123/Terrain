@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Save_Across_Scene : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class Save_Across_Scene : MonoBehaviour
 
     void Update()
     {
-        
+        float SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        if (SceneNub == 1)
+        {
+            Destroy(gameObject);
+        }
     }
 }

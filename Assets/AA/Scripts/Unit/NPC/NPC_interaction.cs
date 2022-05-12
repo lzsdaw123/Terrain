@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NPC_interaction : MonoBehaviour  //NPC互動
 {
@@ -49,16 +50,13 @@ public class NPC_interaction : MonoBehaviour  //NPC互動
         TextG = GameObject.Find("ObjectText");
         Take = GameObject.Find("Take");
         Name = new string[] { "武器庫管理員", "核電廠工程師", "探勘地主管", "守衛", "研究室主管", "研究人員" };
+        Camera = Save_Across_Scene.Gun_Camera;
     }
     void Update()
     {
         st_NpcName = NpcName;
         st_RaDialogue = RaDialogue;
-
-        if (Camera == null)
-        {
-            Camera = GameObject.Find("Gun_Camera").gameObject.GetComponent<Camera>();
-        }
+        if (Camera == null) return;
         camTransform = Camera.transform;  //相機座標
         distance = (camTransform.position - this.transform.position).magnitude / 3.5f;
         st_distance = distance;

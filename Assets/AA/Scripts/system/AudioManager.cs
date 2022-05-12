@@ -98,16 +98,29 @@ public class AudioManager : MonoBehaviour
             OriSceneNub = SceneNub;
             StartLevelAudio(SceneNub);
         }
+        if (SceneNub == 1)
+        {
+            風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
+            風聲.enabled = true;
+            if (!風聲.isPlaying)
+            {
+                風聲.Play();
+            }
+        }
         if (SceneNub == 2)
         {
             if (!AmbientSource.isPlaying || AmbientSource.clip==null)
             {
-                StartLevelAudio(2);
+                //StartLevelAudio(2);
             }
             雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
+            雨聲.enabled = true;
+            if (!雨聲.isPlaying)
+            {
+                雨聲.Play();
+            }
         }
         
-        風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
 
         SF_SceneNub = SceneNub;
         if (Re)
