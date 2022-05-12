@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class QH_interactive : MonoBehaviour
 {
     Ray ray; //射線
-    float raylength = 3f; //射線最大長度
+    float raylength = 3.5f; //射線最大長度
     RaycastHit hit; //被射線打到的物件
     RaycastHit oldhit; //被射線打到的物件
 
     public LayerMask layerMask;
+    public LayerMask Prop_layerMask;
     public GameObject ObjectText;
     public static GameObject Take;  //互動UI
     public static GameObject Aim;  //白色準心
@@ -32,8 +33,8 @@ public class QH_interactive : MonoBehaviour
         ray = gameObject.GetComponent<Camera>().ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         ObjectText.GetComponent<Text>().text = "";
 
-        int maskActor = 1 << LayerMask.NameToLayer("Actor");
-        if(Physics.Raycast(ray, out hit, raylength, maskActor))  //NPC互動
+        //int maskActor = 1 << LayerMask.NameToLayer("Actor");
+        if(Physics.Raycast(ray, out hit, raylength, layerMask))  //NPC互動
         {
             if (hit.collider.tag == "NPC")
             {
@@ -56,7 +57,7 @@ public class QH_interactive : MonoBehaviour
         }
 
         // (射線,out 被射線打到的物件,射線長度)，out hit 意思是：把"被射線打到的物件"帶給hit
-        if (Physics.Raycast(ray, out hit, raylength, layerMask))
+        if (Physics.Raycast(ray, out hit, raylength, Prop_layerMask))
         {           
             hit.transform.SendMessage("HitByRaycast", gameObject, SendMessageOptions.DontRequireReceiver);
             //向被射線打到的物件呼叫名為"HitByRaycast"的方法，不需要傳回覆

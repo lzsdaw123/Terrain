@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HeroLife : MonoBehaviour
 {
     public Camera Camera;
-    public static int HpLv;
+    public static int HpLv=1;
     [SerializeField] int SF_HpLv;
     public static float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
     [SerializeField] float SF_fullHp, SF_hp;  //滿血時數值, 實際, 紅血
@@ -62,7 +62,6 @@ public class HeroLife : MonoBehaviour
         LiftTime = 0;
         InfectionValueUp = new int[] { 1, 2, 3, 3 };
         Crystal_Infection = InfectionSW = false;
-        HpLv = 1;
         hp = hp_R = fullHp = 20 * HpLv; //遊戲一開始時先填滿血
         GetBP = false;
         BpTime = -1;

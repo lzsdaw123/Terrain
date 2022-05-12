@@ -174,13 +174,17 @@ public class PlayerResurrection : MonoBehaviour
         }
         if (GameOver)  //顯示遊戲失敗UI
         {
-            GameOver = false;
+            //GameOver = false;
+            Cursor.lockState = CursorLockMode.None; //游標無狀態模式
             FailUI.SetActive(true);
         }
     }
     public static void PlayerBirth() //生成玩家
     {
-        PlayerBirthT = true;
+        if (!GameOver)
+        {
+            PlayerBirthT = true;
+        }
     }
     public void Birth()
     {

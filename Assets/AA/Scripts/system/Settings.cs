@@ -38,6 +38,7 @@ public class Settings : MonoBehaviour
     public int 關卡選擇;
 
     public static float smoothSpeed;  //滑鼠速度
+    [SerializeField] float SF_smoothSpeed;  //滑鼠速度
     public Slider mouse_Slider;  //滑鼠靈敏度
     public Text mouse_Nub;
     public static int Level;
@@ -108,6 +109,7 @@ public class Settings : MonoBehaviour
     }
     void Update()
     {
+        SF_smoothSpeed = smoothSpeed;
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         SF_SceneNub = SceneNub;
 
@@ -124,27 +126,30 @@ public class Settings : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))  //按下Esc
             {
-                if (deSetUI.activeSelf)
+                if (!PlayerResurrection.GameOver)
                 {
-                    No();
-                }
-                else
-                {
-                    if (!SettingsUI.activeSelf)
+                    if (deSetUI.activeSelf)
                     {
-                        //print("暫停");
-                        SettingsUI.SetActive(true);
-                        pause();
+                        No();
                     }
                     else
                     {
-                        SettingsUI.SetActive(false);
-                        if (!DialogueOptions.Do_UI)
+                        if (!SettingsUI.activeSelf)
                         {
-                            con();
+                            //print("暫停");
+                            SettingsUI.SetActive(true);
+                            pause();
+                        }
+                        else
+                        {
+                            SettingsUI.SetActive(false);
+                            if (!DialogueOptions.Do_UI)
+                            {
+                                con();
+                            }
                         }
                     }
-                }
+                }            
             }
         }
         else

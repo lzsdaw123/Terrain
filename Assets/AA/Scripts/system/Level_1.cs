@@ -58,8 +58,7 @@ public class Level_1 : MonoBehaviour
     [SerializeField] bool SF_StopAttack; //暫停怪物進攻
     public GameObject[] Objects;  //開放使用物件
     public float DelayTime;  //延遲倒數
-    public GameObject[] Rain;  //下雨
-    public float[] RainV;
+    public static bool minRain;  //降低下雨
     public GameObject[] M_Trigger;
 
     void Awake()
@@ -298,15 +297,7 @@ public class Level_1 : MonoBehaviour
                 SpawnRay.SetActive(true);
                 Lv1 = true;
                 PlayAu = true;
-                for (int i = 0; i < Rain.Length; i++)  //降低下雨量
-                {
-                    ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
-                    var emission = ps.emission;
-                    float hSliderValue = emission.rateOverTime.constant;
-                    RainV[i] = hSliderValue;
-                    hSliderValue /= 5;
-                    emission.rateOverTime = hSliderValue;
-                }
+                minRain = true;  //降低下雨量
             }
         }
         if (Lv1)  //開始第一關
@@ -404,14 +395,7 @@ public class Level_1 : MonoBehaviour
                                 DialogueEditor.StartConversation(2, 3, 1, false, 0, true);
                                 break;
                             case 9:  //前往研究室
-                                for (int i = 0; i < Rain.Length; i++)  //調回下雨量
-                                {
-                                    ParticleSystem ps = Rain[i].GetComponent<ParticleSystem>();
-                                    var emission = ps.emission;
-                                    float hSliderValue = emission.rateOverTime.constant;
-                                    hSliderValue = RainV[i] / 3;
-                                    emission.rateOverTime = hSliderValue;
-                                }
+                                minRain = true;  //調回下雨量
                                 UiOpen = true;
                                 PlayerView.missionChange(2, 3);
                                 DialogueEditor.StartConversation(2, 4, 0, false, 0, true);

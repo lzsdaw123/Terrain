@@ -15,6 +15,7 @@ public class MissionTarget_Life : MonoBehaviour
     //public GameObject FailUI;  //任務失敗UI
     float DeadTime;
     bool WarnT=true;
+    bool Dialogue;
 
     void Awake()
     {
@@ -25,7 +26,7 @@ public class MissionTarget_Life : MonoBehaviour
     void Start()
     {
         hp = fullHp= hp_R = 50; //遊戲一開始時先填滿血
-        Dead = false;
+        Dead = Dialogue = false;
         warnUI.SetActive(false);
         SeriousWarnUI.SetActive(false);
         UItime = 0;
@@ -39,7 +40,7 @@ public class MissionTarget_Life : MonoBehaviour
         warnUI.gameObject.transform.GetChild(0).GetComponent<Animator>().SetInteger("Type", 0);
         warnUI.gameObject.transform.GetChild(0).GetComponent<Animator>().speed = 3f;
         //AudioManager.Warn(0);
-        if (hp <= 0)
+        if (hp <= 0)  //第一關失敗
         {
             hp = 0; // 不要扣到負值
             //gameObject.SetActive(false);
@@ -105,8 +106,9 @@ public class MissionTarget_Life : MonoBehaviour
             DeadTime += Time.deltaTime;
             AudioManager.Warn(-1);
         }
-        if (DeadTime >= 3)
+        if (DeadTime >= 3 && !Dialogue)
         {
+            Dialogue = true;
             DialogueEditor.StartConversation(3, 2, 0, false, 0, true);
             BigExp.SetActive(false);
         }

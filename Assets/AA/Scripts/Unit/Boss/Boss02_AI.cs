@@ -588,6 +588,9 @@ public class Boss02_AI : MonoBehaviour
                     BulletType = 1;
                     break;
                 case 3:  //射黑火+不限制火炮 打左胸弱點
+                    MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
+                    MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
                     break;
                 case 4:  //散發出黑火形成巨大黑火球 全身水晶炸掉露出最後弱點 爆炸前打死Boss2
                     break;

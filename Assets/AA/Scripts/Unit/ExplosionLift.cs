@@ -90,7 +90,7 @@ public class ExplosionLift : MonoBehaviour
                 liftTime = 1;
                 collisionNub = 0;
                 ReflectTime = -1;
-                physicMaterial.bounciness = 0.8f;  //反彈強度
+                physicMaterial.bounciness = 0.7f;  //反彈強度
                 Object[1].SetActive(false);
                 Object[0].GetComponent<MeshRenderer>().material = Material[1];
                 AudioManager =Save_Across_Scene.AudioManager;  //聲音控制器

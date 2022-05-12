@@ -166,7 +166,7 @@ public class Boss_Life : MonoBehaviour
                 hp -= Power; // 扣血
                 if (hp <= hpFull[MonsterType] / 2)  //怪物血量低於一半
                 {
-
+                    ani.SetBool("Move", true);
                 }
                 break;
             case 1:  //機械Boss
@@ -279,6 +279,9 @@ public class Boss_Life : MonoBehaviour
                     break;
                 case 1:
                     boss02_AI.enabled = false;
+                    boss02_AI.MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
+                    boss02_AI.MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
+                    boss02_AI.MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
                     break;
             }           
             //ani.SetTrigger("Die");           
