@@ -186,7 +186,7 @@ public class PlayerResurrection : MonoBehaviour
             PlayerBirthT = true;
         }
     }
-    public void Birth()
+    public void Birth()  //轉場誕生
     {
         AudioManager.Button();
         Player.SetActive(false);
@@ -201,8 +201,16 @@ public class PlayerResurrection : MonoBehaviour
                 HeroLife.HpLv = 1;
                 break;
             case 3:  //第二關
-                Player.transform.position = RebirthPonit[1].position;
-                Player.transform.rotation = RebirthPonit[1].localRotation;
+                if (Boss02_AI.StartAttack)
+                {
+                    Player.transform.position = RebirthPonit[2].position;
+                    Player.transform.rotation = RebirthPonit[2].localRotation;
+                }
+                else
+                {
+                    Player.transform.position = RebirthPonit[1].position;
+                    Player.transform.rotation = RebirthPonit[1].localRotation;
+                }
                 HeroLife.HpLv = 2;
                 HeroLife.hp = HeroLife.fullHp = 20 * HeroLife.HpLv;
                 break;
@@ -229,8 +237,16 @@ public class PlayerResurrection : MonoBehaviour
                     Player.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
                     break;
                 case 3:  //第二關
-                    Player.transform.position = RebirthPonit[1].position;
-                    Player.transform.rotation = RebirthPonit[1].localRotation;
+                    if (Boss02_AI.StartAttack)
+                    {
+                        Player.transform.position = RebirthPonit[2].position;
+                        Player.transform.rotation = RebirthPonit[2].localRotation;
+                    }
+                    else
+                    {
+                        Player.transform.position = RebirthPonit[1].position;
+                        Player.transform.rotation = RebirthPonit[1].localRotation;
+                    }
                     break;
             }
         }

@@ -8,7 +8,7 @@ public class MouseLook : MonoBehaviour
 {
     public float mouseSpeed = 100f;
     public float smoothSpeed;   //滑鼠靈敏度
-    public Transform playerBody, m_transform,Gun;
+    public Transform playerBody, m_transform,Gun;  //相機
     public float rotationX, rotationY = 0f;
     float camY = 2.865f;
     float camZ = 0.089f;
@@ -63,9 +63,9 @@ public class MouseLook : MonoBehaviour
             //rotationY = Random.Range(-8f, 8f) * Time.deltaTime;  //開火後鏡頭水平晃動範圍
         }
 
-    }
-    void LateUpdate()
-    {
+        //}
+        //void LateUpdate()
+        //{
         // 獲得鼠標當前位置的X和Y                                
         mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.smoothDeltaTime;
         mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.smoothDeltaTime;
@@ -75,7 +75,7 @@ public class MouseLook : MonoBehaviour
         {
             if (GRy > 0.5f) //槍枝向右歸位
             {
-                GRy -= 20 * Time.smoothDeltaTime;         
+                GRy -= 20 * Time.smoothDeltaTime;
                 if (GRy < 0)
                 {
                     GRy = 0;
@@ -132,7 +132,7 @@ public class MouseLook : MonoBehaviour
             newRTPos = oriRTPos;
         }
         oriTransform.transform.position = newRTPos;
-        //GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);  //武器左右晃
+        ////GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);  //武器左右晃
         GunObject.transform.localRotation = Quaternion.Euler(0, 0, -GRy);  //武器左右晃
 
         smoothSpeed = Settings.smoothSpeed;
