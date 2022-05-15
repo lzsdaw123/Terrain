@@ -9,12 +9,12 @@ public class SpawnRay : MonoBehaviour {
 
 	[SerializeField] bool DisplayField = true;
 	public GameObject[] monsters = new GameObject[1];	// 可生的怪種類
-	public int[] maxNumber = new int[] {7, 5 };							// 生怪上限
+	public int[] maxNumber = new int[] {7, 5 ,2};							// 生怪上限
 	[SerializeField] private float bornTimespanMin = 3f;	// 下次生怪時間間隔
 	[SerializeField] private float bornTimespanMax = 10f;
-	private float[] nextBornTime = new float[] { 0, 0 };
-	private float[] timer =new float[] {0, 0 };                         // 計數器
-	public int[] counter { get; set; } = new int[] { 0, 0 };		// 目前場上怪物數量
+	private float[] nextBornTime = new float[] { 0, 0 ,0};
+	private float[] timer =new float[] {0, 0 ,0};                         // 計數器
+	public int[] counter { get; set; } = new int[] { 0, 0, 0 };		// 目前場上怪物數量
     [SerializeField] int[] SF_counter;		// 目前場上怪物數量
 	private int uid = 0;                                // 怪物編號
 
@@ -39,8 +39,8 @@ public class SpawnRay : MonoBehaviour {
 	public ObjectPool _ObjectPool;
 	public bool StartBorn;  //開始生成
 	public int EnemyWave;  //敵人波數
-	public EnemyWaveNum[] EnemyNum;   //敵人每波數量
-	public bool[] StartBool=new bool[2];
+	public EnemyWaveNum[] EnemyNum =new EnemyWaveNum[3];   //敵人每波數量
+	public bool[] StartBool=new bool[3];
 	public float BornTime;
 
 	void OnDrawGizmos(){
@@ -62,13 +62,13 @@ public class SpawnRay : MonoBehaviour {
 	}
 
 	void Start(){
-		counter = new int[] { 0, 0 };
+		counter = new int[] { 0, 0 ,0};
 		uid = 0;
 		StartBorn = true;
 		EnemyNum = new EnemyWaveNum[3];
-        EnemyNum[0] = new EnemyWaveNum(4, 2);
-        EnemyNum[1] = new EnemyWaveNum(6, 4);
-        EnemyNum[2] = new EnemyWaveNum(8, 6);
+        EnemyNum[0] = new EnemyWaveNum(4, 2, 4);
+        EnemyNum[1] = new EnemyWaveNum(6, 4, 4);
+        EnemyNum[2] = new EnemyWaveNum(8, 6, 4);
         //EnemyNum[3] = new EnemyWaveNum(8, 6);
         //EnemyNum[4] = new EnemyWaveNum(10, 6);
         //EnemyNum[0] = new EnemyWaveNum(0, 1);
@@ -81,11 +81,12 @@ public class SpawnRay : MonoBehaviour {
 	}
 	void Update()
 	{
-		maxNumber[0] = EnemyNum[EnemyWave].EnemyNumA;
-		maxNumber[1] = EnemyNum[EnemyWave].EnemyNumB;
+		maxNumber[0] = EnemyNum[EnemyWave].EnemyNum_A;
+		maxNumber[1] = EnemyNum[EnemyWave].EnemyNum_B;
+		maxNumber[2] = EnemyNum[EnemyWave].EnemyNum_C;
 		SF_counter = counter;
 
-		if (StartBool[0] || StartBool[1] && StartBorn)  //復活生成
+		if (StartBool[0] || StartBool[1] || StartBool[2] && StartBorn)  //復活生成
         {
 			if (BornTime >= 20)  //停止復活生成  
 			{
@@ -93,6 +94,7 @@ public class SpawnRay : MonoBehaviour {
 				StartBorn = false;
 				StartBool[0] = false;
 				StartBool[1] = false;
+				StartBool[2] = false;
 				switch (Level_1.LevelA_)
                 {
 					//case 4:
@@ -114,7 +116,7 @@ public class SpawnRay : MonoBehaviour {
 
 
 		if (!StartBorn) return;
-		if (counter[0] < EnemyNum[EnemyWave].EnemyNumA)    // 若已達生怪上限，返回
+		if (counter[0] < EnemyNum[EnemyWave].EnemyNum_A)    // 若已達生怪上限，返回
 		{
 			timer[0] += Time.deltaTime;
 			StartBool[0] = false;
@@ -150,7 +152,7 @@ public class SpawnRay : MonoBehaviour {
 			}
 		}else StartBool[0] = true;
 
-		if (counter[1] < EnemyNum[EnemyWave].EnemyNumB)    // 若已達生怪上限，返回
+		if (counter[1] < EnemyNum[EnemyWave].EnemyNum_B)    // 若已達生怪上限，返回
 		{
 			timer[1] += Time.deltaTime;
 			StartBool[1] = false;
@@ -186,6 +188,42 @@ public class SpawnRay : MonoBehaviour {
 			}
 		}else StartBool[1] = true;
 
+		if (counter[2] < EnemyNum[EnemyWave].EnemyNum_C)    // 若已達生怪上限，返回
+		{
+			timer[2] += Time.deltaTime;
+			StartBool[2] = false;
+			if (timer[2] > nextBornTime[2])
+			{   // 若已達生怪時間間隔
+
+				// 計算生怪亂數位置
+				Vector3 bornPos = transform.position;
+				if (type == Type.Circle)
+					bornPos = navUtility.RandomCirclePos(transform.position, bornRadius);
+				else
+					bornPos = navUtility.RandomRectanglePos(transform.position, bornWidth, bornDepth);
+
+				RaycastHit hit;
+				if (navUtility.TryHitNav(bornPos, out hit, Mathf.Infinity, rayHitLayer))
+				{ // 判斷位置是否可生怪
+
+					//int monsterNum = (int)(Random.value * monsters.Length);	// 亂數取得一隻怪
+					//GameObject monster = (GameObject)Instantiate (monsters [monsterNum], hit.point, Quaternion.identity);   // 生怪
+					_ObjectPool.ReUseMonster03(hit.point, Quaternion.identity);  //呼叫物件池
+					uid++;                                      // 編號加1
+					counter[2]++;
+
+					//if (!monster.GetComponent<SpawnRayReg> ())	// 怪物一定要有這個腳本
+					//	monster.AddComponent<SpawnRayReg> ();
+
+					//monster.SendMessage ("Init", new MonterInfo(uid, this));
+				}
+
+				timer[2] = 0;
+				nextBornTime[2] = Random.Range(bornTimespanMin, bornTimespanMax);   // 亂數取得下次生怪時間
+
+			}
+		}
+		else StartBool[2] = true;
 	}
 
 

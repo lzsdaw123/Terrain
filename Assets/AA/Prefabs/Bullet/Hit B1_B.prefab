@@ -14501,6 +14501,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -14631,13 +14632,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  MonsterType: 0
+  BossType: 0
   SF_ammunition: 0
   SF_Total_ammunition: 0
+  SF_Magazine: 0
   WeaponAmm: 1e0000000600000005000000
   R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
+  MonsterAI04: {fileID: 0}
   boss01_AI: {fileID: 0}
   boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
@@ -14651,6 +14656,7 @@ MonoBehaviour:
   AudioManager: {fileID: 0}
   NPC_Clip: []
   MonsterClip: []
+  SaveVolume: 0
   NPC_Source: {fileID: 0}
   MonsterSource: {fileID: 0}
 --- !u!1 &562605746219160167
@@ -24343,6 +24349,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -24532,6 +24539,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -29771,6 +29779,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -39780,6 +39789,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -40067,6 +40077,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -49964,6 +49975,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -54769,6 +54781,7 @@ GameObject:
   - component: {fileID: 5399001178172646011}
   - component: {fileID: 7949264771696272008}
   - component: {fileID: 5880031646917405791}
+  - component: {fileID: 1960241652764380050}
   m_Layer: 0
   m_Name: ExpD
   m_TagString: Untagged
@@ -54855,6 +54868,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Muzzle_vfx: {fileID: 0}
   ani: {fileID: 0}
+  AudioSource: {fileID: 1960241652764380050}
+  AudioClip:
+  - {fileID: 8300000, guid: bbeb4ea5c93f24a488f7edf181c62de6, type: 3}
+  AudioManager: {fileID: 0}
   Hit_vfx: []
   Pro: []
   BulletType: 2
@@ -54880,6 +54897,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -54912,6 +54930,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   Material: []
+  accelerate: 0
+  ParticleSystem: {fileID: 0}
 --- !u!135 &5880031646917405791
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -54925,6 +54945,102 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!82 &1960241652764380050
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761180893634909735}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 20
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5973461857735658069
 GameObject:
   m_ObjectHideFlags: 0
@@ -59800,6 +59916,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -64745,6 +64862,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -65130,6 +65248,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:
@@ -70075,6 +70194,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
   Ground:

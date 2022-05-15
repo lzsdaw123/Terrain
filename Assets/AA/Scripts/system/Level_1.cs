@@ -407,7 +407,8 @@ public class Level_1 : MonoBehaviour
                         }
                     }
                 }
-                if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0)  //當前波數結束
+                //當前波數結束
+                if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0 && _SpawnRay.counter[2] == 0)
                 {
                     switch (LevelA_)
                     {
@@ -509,34 +510,35 @@ public class Level_1 : MonoBehaviour
 [Serializable]
 public class EnemyWaveNum  //敵人每波數量
 {
-    public int EnemyNumA;  //怪物1波數
-    public int EnemyNumB;  //怪物2波數
-    public int EnemyNumC;  //怪物3波數
+    public int EnemyNum_A;  //怪物1波數
+    public int EnemyNum_B;  //怪物2波數
+    public int EnemyNum_C;  //怪物3波數
 
     /// <summary>
     /// 怪物進攻波次
     /// </summary>
-    /// <param name="enemyNumA">怪物1波數</param>
-    /// <param name="enemyNumB">怪物2波數</param>
+    /// <param name="EnemyNum_A">怪物1波數</param>
+    /// <param name="EnemyNum_B">怪物2波數</param>
+    /// <param name="EnemyNum_C">怪物2波數</param>
     /// <returns></returns>
-    public EnemyWaveNum(int enemyNumA, int enemyNumB)
+    public EnemyWaveNum(int enemyNumA, int enemyNumB, int enemyNumC)
     {
-        EnemyNumA = enemyNumA;
-        EnemyNumB = enemyNumB;
+        EnemyNum_A = enemyNumA;
+        EnemyNum_B = enemyNumB;
+        EnemyNum_C = enemyNumC;
     }
 }
 [Serializable]
 public class MonsterAttributes  //怪物屬性
 {
-    public float MinSize;  //怪物1波數
-    public float MaxSize;  //怪物2波數
-                           //public int EnemyNumC;  //怪物3波數
+    public float MinSize;  //怪物最小尺寸
+    public float MaxSize;  //怪物最大尺寸
 
     /// <summary>
     /// 怪物屬性
     /// </summary>
-    /// <param name="minSize">怪物1波數</param>
-    /// <param name="maxSize">怪物2波數</param>
+    /// <param name="minSize">怪物最小尺寸</param>
+    /// <param name="maxSize">怪物最大尺寸</param>
     /// <returns></returns>
     public MonsterAttributes(float minSize, float maxSize)
     {

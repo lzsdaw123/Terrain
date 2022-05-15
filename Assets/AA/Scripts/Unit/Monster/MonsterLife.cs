@@ -29,6 +29,7 @@ public class MonsterLife : MonoBehaviour
 
     public GameObject PS_Dead;
     public GameObject Model;  //模型
+    public GameObject[] c_Model;  //模型
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
@@ -99,7 +100,9 @@ public class MonsterLife : MonoBehaviour
                         case 1:
                             GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster02(gameObject);
                             break;
-
+                        case 2:
+                            GameObject.Find("ObjectPool").GetComponent<ObjectPool>().RecoveryMonster03(gameObject);
+                            break;
                     }
                 }
             }
@@ -186,11 +189,21 @@ public class MonsterLife : MonoBehaviour
                     //AudioManager.Hit(4);  //玩家擊殺音效
                 }
                 Dead = true;
-                AnimEvents.MonsterAudio(2);  //怪物爆汁音效
+                switch (MonsterType)  //關閉怪物AI 腳本
+                {
+                    case 0:
+                    case 1:
+                        AnimEvents.MonsterAudio(2);  //怪物爆汁音效
+                        break;
+                }
             }           
             hp = 0; // 不要扣到負值
             if (PS_Dead != null)  PS_Dead.SetActive(true);  //死亡爆炸
             if (Model !=null) Model.SetActive(false);
+            for(int i=0; i< c_Model.Length; i++)
+            {
+                c_Model[i].SetActive(false);
+            }
             switch (MonsterType)  //關閉怪物AI 腳本
             {
                 case 0:
@@ -228,7 +241,7 @@ public class MonsterLife : MonoBehaviour
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
 
-        hpFull = new float[] { 16, 28, 12, 999 };  // 血量上限
+        hpFull = new float[] { 16, 28, 6, 999 };  // 血量上限
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
@@ -252,10 +265,14 @@ public class MonsterLife : MonoBehaviour
                 break;
             case 2:
                 monster04.enabled = true;
-                monster04.ani.SetBool("Attack", true);
+                //monster04.ani.SetBool("Attack", false);
                 break;
         }
         if(agent !=null) agent.enabled = true; // 開啟尋徑功能
         if (Model != null) Model.SetActive(true);
+        for (int i = 0; i < c_Model.Length; i++)
+        {
+            c_Model[i].SetActive(true);
+        }
     }
 }

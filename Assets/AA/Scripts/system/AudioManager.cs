@@ -80,7 +80,7 @@ public class AudioManager : MonoBehaviour
         AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         OriSceneNub = SceneNub;
-        StartLevelAudio(SceneNub);
+        //StartLevelAudio(SceneNub);
         for (int i = 0; i < SaveVolume.Length; i++)
         {
             SaveVolume[i] = 0;
@@ -88,7 +88,8 @@ public class AudioManager : MonoBehaviour
     }
     void Start()
     {
-        Slider[1].value = 0.8f;
+        Slider[1].value = 0.6f;  //預設音量
+        Slider[2].value = 0.75f;  //預設音量
     }
     void Update()
     {
@@ -96,31 +97,31 @@ public class AudioManager : MonoBehaviour
         if (SceneNub != OriSceneNub)
         {
             OriSceneNub = SceneNub;
-            StartLevelAudio(SceneNub);
+            //StartLevelAudio(SceneNub);
         }
-        if (SceneNub == 1)
+        if (!AmbientSource.isPlaying)
         {
-            風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
-            風聲.enabled = true;
-            if (!風聲.isPlaying)
+            if (SceneNub == 1)
             {
-                風聲.Play();
+                StartLevelAudio(1);
+                //風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
+                //風聲.enabled = true;
+                //if (!風聲.isPlaying)
+                //{
+                //    風聲.Play();
+                //}
             }
-        }
-        if (SceneNub == 2)
-        {
-            if (!AmbientSource.isPlaying || AmbientSource.clip==null)
+            if (SceneNub == 2)
             {
-                //StartLevelAudio(2);
+                StartLevelAudio(2);
+                //雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
+                //雨聲.enabled = true;
+                //if (!雨聲.isPlaying)
+                //{
+                //    雨聲.Play();
+                //}
             }
-            雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
-            雨聲.enabled = true;
-            if (!雨聲.isPlaying)
-            {
-                雨聲.Play();
-            }
-        }
-        
+        }          
 
         SF_SceneNub = SceneNub;
         if (Re)

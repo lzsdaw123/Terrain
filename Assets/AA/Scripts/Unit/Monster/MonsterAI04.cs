@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class MonsterAI04 : MonoBehaviour
 {
+    public MonsterLife monsterLife;
     public NavMeshAgent agent;  //尋徑代理人
     private SpawnRayReg reg;    //生怪註冊器
     private SpawnRay spawnRay;  //生怪后蟲
@@ -100,7 +101,7 @@ public class MonsterAI04 : MonoBehaviour
         //ani = GetComponent<Animator>();       
         agent.enabled = true;
         attacking = false;
-        bulletAttack = 1;
+        bulletAttack = 0;
         locking = false;
         reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體  //暫時關閉
@@ -420,6 +421,7 @@ public class MonsterAI04 : MonoBehaviour
         {
             attacking = false;
             bulletAttack = 0;
+            monsterLife.Damage(60);
         }
     }
     private void TrackingPlayer()
@@ -470,6 +472,6 @@ public class MonsterAI04 : MonoBehaviour
         attacking = false;
         agent.enabled = true;
         locking = false;
-        bulletAttack = 1;
+        bulletAttack = 0;
     }
 }

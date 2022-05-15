@@ -9,10 +9,10 @@ public class ObjectPool : MonoBehaviour
 {
     public  GameObject Bullet, Hit;
     //物件池集中位置
-    public GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B,
+    public GameObject BulletPool, HitPool, MBulletPool, MonsterPool_A, MonsterPool_B, MonsterPool_C,
         B1_BulletPool, B1_HitPool, B2_BulletPool, B2_HitPool; 
     public GameObject[] Monster;    // 可生的怪種類
-    public MonsterAttributes[] MonsterAttributes = new MonsterAttributes[3];
+    public MonsterAttributes[] MonsterAttributes = new MonsterAttributes[3];  //怪物尺寸
     public GameObject MBullet ;	// 怪物子彈
     public GameObject B1_Bullet ;	// 水晶BOSS子彈
     public GameObject B2_Bullet ;	// 機械BOSS子彈
@@ -24,7 +24,7 @@ public class ObjectPool : MonoBehaviour
     public int[] inttailSizeMS;  //怪物預置物件數量
     Vector3 muzzlePOS;
 
-    private int[] uid =new int[] { 0, 0};								// 怪物編號
+    private int[] uid =new int[] { 0, 0, 0 };								// 怪物編號
 
 
     private Queue<GameObject> _pool = new Queue<GameObject>();
@@ -32,6 +32,7 @@ public class ObjectPool : MonoBehaviour
 
     private Queue<GameObject> Monster_poolA = new Queue<GameObject>();
     private Queue<GameObject> Monster_poolB = new Queue<GameObject>();
+    private Queue<GameObject> Monster_poolC = new Queue<GameObject>();
     private Queue<GameObject> M_Bullet_pool = new Queue<GameObject>();
     private Queue<GameObject> B1_Bullet_pool = new Queue<GameObject>();
     private Queue<GameObject> B2_Bullet_pool = new Queue<GameObject>();
@@ -49,10 +50,10 @@ public class ObjectPool : MonoBehaviour
         DontDestroyOnLoad(gameObject);  //切換場景時保留
 
         inttailSize = 8;  //物件池大小
-        inttailSizeMS[0] = 16;  //物件池大小
-        inttailSizeMS[1] = 12;  //物件池大小
+        inttailSizeMS = new int[] { 16, 12, 8 };  //怪物物件池大小
         MonsterAttributes[0] = new MonsterAttributes(0.6f, 1.1f);
         MonsterAttributes[1] = new MonsterAttributes(1, 1.5f);
+        MonsterAttributes[2] = new MonsterAttributes(0.2f, 0.6f);
 
         for (int cut =0;cut< inttailSize; cut++)
         {
@@ -96,7 +97,7 @@ public class ObjectPool : MonoBehaviour
 
             Mo1.SetActive(false);
         }
-        for (int cut = 0; cut < inttailSizeMS[1]; cut++)
+        for (int cut = 0; cut < inttailSizeMS[1]; cut++)  // 02
         {
             GameObject Mo2 = Instantiate(Monster[1], MonsterPool_B.transform) as GameObject;   //生成怪物於怪物池
             uid[1]++;                                      // 編號加1
@@ -109,9 +110,26 @@ public class ObjectPool : MonoBehaviour
 
             Mo2.SetActive(false);
         }
+        for (int cut = 0; cut < inttailSizeMS[2]; cut++)  // 03
+        {
+            GameObject Mo3 = Instantiate(Monster[2], MonsterPool_C.transform) as GameObject;   //生成怪物於怪物池
+            uid[2]++;                                      // 編號加1
+
+            if (!Mo3.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
+                Mo3.AddComponent<SpawnRayReg>();
+            Mo3.SendMessage("Init", new MonterInfo(uid[2], _SpawnRay, 2));
+
+            Monster_poolC.Enqueue(Mo3);  //Queue.Enqueue() 將怪物3放入結構中
+
+            Mo3.SetActive(false);
+        }
     }
     void Start()
     {
+        MBulletPool.SetActive(true);
+        MonsterPool_A.SetActive(true);
+        MonsterPool_B.SetActive(true);
+        MonsterPool_C.SetActive(true);
     }
     void Update()
     {
@@ -119,6 +137,13 @@ public class ObjectPool : MonoBehaviour
         if (SceneNub == 1)
         {
             Destroy(gameObject);
+        }
+        if (SceneNub == 3)
+        {
+            MBulletPool.SetActive(false);
+            MonsterPool_A.SetActive(false);
+            MonsterPool_B.SetActive(false);
+            MonsterPool_C.SetActive(false);
         }
     }
     //子彈
@@ -250,6 +275,39 @@ public class ObjectPool : MonoBehaviour
     public void RecoveryMonster02(GameObject recovery)  //用來回收物件
     {
         Monster_poolB.Enqueue(recovery);
+        recovery.SetActive(false);
+    }
+    //怪物3
+    public void ReUseMonster03(Vector3 positon, Quaternion rotation)  //取出存放在怪物池03中的怪物03
+    {
+        float Size = Random.Range(MonsterAttributes[2].MinSize, MonsterAttributes[2].MaxSize);  //怪物03大小1~ 1.5
+
+        if (Monster_poolC.Count > 0)
+        {
+            GameObject reuse = Monster_poolC.Dequeue();  //Queue.Dequeue() 將最先進入的物件取出
+            reuse.transform.position = positon;
+            reuse.transform.rotation = rotation;
+            reuse.transform.localScale = new Vector3(Size, Size, Size + 0.1f);  //怪物隨機大小
+            reuse.SetActive(true);
+        }
+        else
+        {
+            //int monsterNum = (int)(Random.value * Monster.Length);	// 亂數取得一隻怪
+            GameObject Mo3 = Instantiate(Monster[2], MonsterPool_C.transform) as GameObject;  //生成怪物於怪物池
+            uid[2]++;                                      // 編號加1
+
+            if (!Mo3.GetComponent<SpawnRayReg>())   // 怪物一定要有這個腳本
+                Mo3.AddComponent<SpawnRayReg>();
+            Mo3.SendMessage("Init", new MonterInfo(uid[2], _SpawnRay, 2));
+            Mo3.transform.position = positon;
+            Mo3.transform.rotation = rotation;
+            Mo3.transform.localScale = new Vector3(Size, Size, Size + 0.1f);  //怪物隨機大小
+            Monster_poolC.Enqueue(Mo3);  //Queue.Enqueue() 將怪物3放入結構中
+        }
+    }
+    public void RecoveryMonster03(GameObject recovery)  //用來回收物件
+    {
+        Monster_poolC.Enqueue(recovery);
         recovery.SetActive(false);
     }
 

@@ -48,6 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ff9ce4719f5e841908a8b4af0c5a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BulletType: 0
+  Bullet: []
   Muzzle_vfx: {fileID: 7867440506293988447, guid: 9c4f392630f8fc0418e588f4078f8aee,
     type: 3}
   Hit_vfx: []
@@ -70,10 +72,9 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags: []
-  rayLength: 0.5
-  rayLength2: 1
   Ground:
   - serializedVersion: 2
     m_Bits: 8192
@@ -82,6 +83,10 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 31233
+  pool_Hit: {fileID: 0}
+  ReSave: 0
+  Move: 0
+  MoveTime: 0
 --- !u!136 &9204926344011936254
 CapsuleCollider:
   m_ObjectHideFlags: 0

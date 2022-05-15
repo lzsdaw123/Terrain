@@ -16,6 +16,7 @@ public class AnimEvents : MonoBehaviour
 
     public MonsterAI02 MonsterAI02;
     public MonsterAI03 MonsterAI03;
+    public MonsterAI04 MonsterAI04;
     public Boss01_AI boss01_AI;
     public Boss02_AI boss02_AI;
     public B1_BulletLife b1_BulletLife;
@@ -198,6 +199,10 @@ public class AnimEvents : MonoBehaviour
     {
         MonsterAI03.AttackAning(true, 1);
     }
+    void M3_Attack()
+    {
+        MonsterAI04.AttackAning(true, 1);
+    }
     void Boss1_Exp()  //水晶Boss出場
     {
         boss01_AI.ani.SetBool("Start", true);
@@ -300,7 +305,7 @@ public class AnimEvents : MonoBehaviour
         MonsterSource.clip = MonsterClip[Nub];
         MonsterSource.volume = AudioManager.Slider[2].value;
         MonsterSource.mute = AudioManager.muteState[2];
-        MonsterSource.Play();   
+        MonsterSource.Play();
     }
     public void BossAudio(int Nub)  //怪物音效
     {

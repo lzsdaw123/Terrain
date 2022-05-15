@@ -72,12 +72,13 @@ public class ExplosionLift : MonoBehaviour
     }
     void Start()
     {
-        speed = new float[] {26,80,40 }; //飛行速度
-        power =new float[] {30,3,10 };
+        speed = new float[] {26,40,40 }; //飛行速度
+        power =new float[] {30,7,10 };
         AttackLv = 0;
-        bornTime = new float[] {150,1, 150f};  //生成速度{快, 慢, 中}
+        bornTime = new float[] {150,150, 150f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;
         Attacking = false;
+        AudioManager = Save_Across_Scene.AudioManager;  //聲音控制器
         //Pro[0].gameObject.SetActive(false);
         //Pro[1].gameObject.SetActive(false);
         //Pro[2].gameObject.SetActive(false);
@@ -93,7 +94,6 @@ public class ExplosionLift : MonoBehaviour
                 physicMaterial.bounciness = 0.7f;  //反彈強度
                 Object[1].SetActive(false);
                 Object[0].GetComponent<MeshRenderer>().material = Material[1];
-                AudioManager =Save_Across_Scene.AudioManager;  //聲音控制器
                 ExpAudio(1);
                 accelerate = false;
                 ParticleSystem.Stop();
@@ -104,9 +104,15 @@ public class ExplosionLift : MonoBehaviour
                 //Pro[0].gameObject.SetActive(true);
                 //bornSize = Vector3.zero;
                 break;
-            case 1:  //長方 傳送
-                //Pro[1].gameObject.SetActive(true);
-                //bornSize = new Vector3(0, 0, 0.4f);
+            case 1:  //雞爆炸
+                Damage = true;
+                forwardFly = false;
+                AttackCTime = 2;
+                StartAttack = true;
+                liftTime = 1;
+                Get_ATarget = false;
+                OriSize = new Vector3(2.4f, 2.4f, 2.4f);
+                bornSize = Vector3.zero;
                 break;
             case 2:  //多邊 爆炸
                 Damage = true;
@@ -175,7 +181,10 @@ public class ExplosionLift : MonoBehaviour
     {
         //DifficultyUp();
         Start();
-        Object[0].GetComponent<MeshRenderer>().material = Material[0];
+        if (BulletType == 0)
+        {
+            Object[0].GetComponent<MeshRenderer>().material = Material[0];
+        }
     }
     void Update()
     {
@@ -236,8 +245,7 @@ public class ExplosionLift : MonoBehaviour
                     }
                 }
                 break;
-            case 1:  //長方 傳送
-                break;
+            case 1:  //雞 爆炸
             case 2:  //多邊 爆炸
                 if (bornSize.z >= OriSize.z)
                 {
@@ -280,41 +288,6 @@ public class ExplosionLift : MonoBehaviour
                     Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz) ;  //旋轉
                     transform.Rotate(new Vector3(0, 0, -3f), Space.Self);  //自體旋轉
                 }
-                //if (ReflectTime >= 0)
-                //{
-                //    ReflectTime += Time.deltaTime;
-                //    //transform.Translate(Reflection * 0.025f / ReflectNub * Time.deltaTime); //往前反射
-                //    switch (ReflectNub)
-                //    {
-                //        case 1:
-                //            transform.Translate(Reflection * 35 * Time.deltaTime); //往前反射
-                //            break;
-                //        case 2:
-                //            transform.Translate(Reflection * 25 * Time.deltaTime); //往前反射
-                //            break;
-                //        case 3:
-                //            transform.Translate(Reflection * 15 * Time.deltaTime); //往前反射
-                //            break;
-                //        case 4:
-                //            transform.Translate(Reflection * 7 * Time.deltaTime); //往前反射
-                //            break;
-                //    }
-                //    //transform.position -= Reflection;
-                //    Rz -= 360 * Time.deltaTime;
-                //    Object[0].transform.localRotation = Quaternion.Euler(-89.98f, 0, Rz);  //旋轉
-                //}
-                //if (ReflectNub >= 4)
-                //{
-                //    ReflectTime = -1;
-                //    ReflectionT = true;
-                //}
-                //else
-                //{
-                //    if (ReflectTime >= 0.05f)
-                //    {
-                //        ReflectionT = false;
-                //    }
-                //}
                 break;
             case 2:
                 if (Get_ATarget)
@@ -543,21 +516,38 @@ public class ExplosionLift : MonoBehaviour
                                 }
                             }
                             break;
+                        case 1:
                         case 2:
-                            if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
+                            if (Damage)
                             {
-                                if (Damage)
+                                FindUpParent(collision.transform);  //找有HP的父物件
+                                Transform FindUpParent(Transform zi)  //找最大父物件
                                 {
-                                    collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
-                                    if (collision.GetComponent<HeroLife>())
+                                    if (zi.GetComponent<HeroLife>() || zi.GetComponent<NPC_Life>() || zi.GetComponent<building_Life>() || zi.GetComponent<MissionTarget_Life>())
                                     {
-                                        collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
-                                        collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
+                                        for (int i = 0; i < actors.Length; i++)
+                                        {
+                                            if (actors[i] != zi.gameObject)
+                                            {
+                                                collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
+                                                if (collision.GetComponent<HeroLife>())
+                                                {
+                                                    collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
+                                                    collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
+                                                }
+                                                actors[i] = zi.gameObject;
+                                            }
+                                        }
+                                        return zi;
+                                    }
+                                    else
+                                    {
+                                        if (zi.parent == null) return zi;
+                                        else return FindUpParent(zi.parent);
                                     }
                                 }
-                                break; //結束迴圈
                             }
-                            break;
+                            break; //結束迴圈
                     }                  
                 }
             }

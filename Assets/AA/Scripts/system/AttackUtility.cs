@@ -37,6 +37,10 @@ public class AttackUtility
                             if (actors[i].GetComponent<HeroLife>() || actors[i].GetComponent<NPC_Life>() || actors[i].GetComponent<building_Life>() || actors[i].GetComponent<MissionTarget_Life>())
                             {
                                 actors[i].transform.SendMessage("Damage", AttackLv.power); // 進行傷害
+                                if (actors[i].GetComponent<HeroLife>())
+                                {
+                                    actors[i].transform.SendMessage("hit_Direction", Attacker); //命中方位
+                                }
                             }
                         }
                     }

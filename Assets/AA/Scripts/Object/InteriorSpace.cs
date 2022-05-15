@@ -21,7 +21,6 @@ public class InteriorSpace : MonoBehaviour
     [SerializeField] float SF_Pitch;
     [SerializeField] float OirPitch;
     public AudioSource AmbientSource;
-    public AudioSource AS;
 
     void Awake()
     {
@@ -43,9 +42,6 @@ public class InteriorSpace : MonoBehaviour
         深處 = Deep;
         SF_Pitch = Pitch;
         CloseDoor = _ElectricDoor.close;
-        AmbientSource = Elevator.PS_雨聲;
-        AS = Elevator.PS_風聲;
-        AmbientSource.pitch = Pitch;
 
         if (Interior)  //在室內
         {

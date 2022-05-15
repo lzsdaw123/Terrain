@@ -28,10 +28,6 @@ public class Elevator : MonoBehaviour
     [SerializeField] bool end;
 
     public bool 遊戲開始;
-    public AudioSource 雨聲;
-    public AudioSource 風聲;
-    public static AudioSource PS_雨聲;
-    public static AudioSource PS_風聲;
 
     void Awake()
     {
@@ -43,13 +39,7 @@ public class Elevator : MonoBehaviour
         boxCollider.enabled = true;
         running = false;
         end = false;
-        遊戲開始 = true;
-        雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
-        雨聲.enabled = true;
-        風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
-        風聲.enabled = false;
-        PS_雨聲 = 雨聲;
-        PS_風聲 = 風聲;
+        遊戲開始 = true;;
     }
 
     void Update()
@@ -190,12 +180,6 @@ public class Elevator : MonoBehaviour
         //running = true;
         if (遊戲開始)
         {
-            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));
-            //AudioManager.StartLevelAudio(2);
-            //雨聲 = GameObject.Find("下雨聲").GetComponent<AudioSource>();
-            //雨聲.enabled = true;
-            //風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
-            //風聲.enabled = false;
             遊戲開始 = false;
             print("遊戲開始 ");
         }

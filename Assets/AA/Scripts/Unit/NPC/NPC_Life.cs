@@ -30,7 +30,7 @@ public class NPC_Life : MonoBehaviour
     }
     void Start()
     {
-        hp = fullHp= hp_R = 18; //遊戲一開始時先填滿血
+        hp = fullHp= hp_R = 22; //遊戲一開始時先填滿血
         Dead = Explode = false;
         UItime = 0;
         if (Exp != null) Exp.SetActive(false);

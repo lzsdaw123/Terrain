@@ -61,7 +61,7 @@ MonoBehaviour:
   - {fileID: 3075118363054588477}
   - {fileID: 6325949424684057386}
   - {fileID: 8206136152109720478}
-  ButtleType: 0
+  BulletType: 0
   target: {fileID: 0}
   OriTarger: {fileID: 0}
   aTN: 0
@@ -83,6 +83,7 @@ MonoBehaviour:
   damageTags:
   - Player
   - NPC
+  - Building
   - MissionTarget
   ignoreTags:
   - Enemy
@@ -164,24 +165,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  MonsterType: 0
+  BossType: 0
   SF_ammunition: 0
   SF_Total_ammunition: 0
+  SF_Magazine: 0
   WeaponAmm: 1e0000000600000005000000
   R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
   boss01_AI: {fileID: 0}
+  boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 3054314581686142875}
   b1_BulletHole: {fileID: 0}
   NPC_Life: {fileID: 0}
   heroLife: {fileID: 0}
+  mg_Turret_AI: {fileID: 0}
   cameraMove: {fileID: 0}
   h: 0
   v: 0
   AudioManager: {fileID: 0}
   NPC_Clip: []
   MonsterClip: []
+  SaveVolume: 0
   NPC_Source: {fileID: 0}
   MonsterSource: {fileID: 0}
 --- !u!1 &709529547476113798
