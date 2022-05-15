@@ -1,23 +1,23 @@
 Using pre-set license
 Built from '2021.2/staging' branch; Version is '2021.2.8f1 (d0e5f0a7b06a) revision 13690352'; Using compiler version '192829333'; Build Type 'Release'
-OS: 'Windows 10  (10.0.19044) 64bit Professional' Language: 'zh' Physical Memory: 16300 MB
+OS: 'Windows 10  (10.0.19044) 64bit Core' Language: 'zh' Physical Memory: 8103 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
 COMMAND LINE ARGUMENTS:
-D:\Unity\2021.2.8f1\Editor\Unity.exe
+C:\Program Files\Unity\Hub\Editor\2021.2.8f1\Editor\Unity.exe
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-C:/Users/GOD/Desktop/Terrain
+J:/QWQ
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-54807
-Successfully changed project path to: C:/Users/GOD/Desktop/Terrain
-C:/Users/GOD/Desktop/Terrain
+60789
+Successfully changed project path to: J:/QWQ
+J:/QWQ
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-bucket-allocator-granularity=16"
     "memorysetup-bucket-allocator-bucket-count=8"
@@ -47,303 +47,58 @@ C:/Users/GOD/Desktop/Terrain
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Refreshing native plugins compatible for Editor in 105.33 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 4053.67 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2021.2.8f1 (d0e5f0a7b06a)
-[Subsystems] Discovering subsystems at path D:/Unity/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path C:/Users/GOD/Desktop/Terrain/Assets
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path J:/QWQ/Assets
 GfxDevice: creating device client; threaded=0; jobified=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: NVIDIA GeForce RTX 2060 SUPER (ID=0x1f06)
-    Vendor:   NVIDIA
-    VRAM:     8031 MB
-    Driver:   30.0.15.1215
+    Renderer: AMD Radeon (TM) R9 380 Series (ID=0x6939)
+    Vendor:   ATI
+    VRAM:     2022 MB
+    Driver:   27.20.20903.8001
 Initialize mono
-Mono path[0] = 'D:/Unity/2021.2.8f1/Editor/Data/Managed'
-Mono path[1] = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
-Mono config path = 'D:/Unity/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56956
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56412
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
-Register platform support module: D:/Unity/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.003669 seconds.
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2021.2.8f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.011767 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 104.65 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 678.66 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.683 seconds
+- Completed reload, in  1.638 seconds
 Domain Reload Profiling:
-	ReloadAssembly (683ms)
-		BeginReloadAssembly (92ms)
+	ReloadAssembly (1641ms)
+		BeginReloadAssembly (104ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (508ms)
-			LoadAssemblies (91ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (128ms)
+			CreateAndSetChildDomain (4ms)
+		EndReloadAssembly (1415ms)
+			LoadAssemblies (97ms)
+			RebuildTransferFunctionScriptingTraits (2ms)
+			SetupTypeCache (195ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (30ms)
-			SetupLoadedEditorAssemblies (294ms)
+			RebuildScriptCaches (42ms)
+			SetupLoadedEditorAssemblies (1077ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (15ms)
-				SetLoadedEditorAssemblies (1ms)
-				RefreshPlugins (105ms)
-				BeforeProcessingInitializeOnLoad (1ms)
-				ProcessInitializeOnLoadAttributes (126ms)
-				ProcessInitializeOnLoadMethodAttributes (46ms)
+				InitializePlatformSupportModulesInManaged (54ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (679ms)
+				BeforeProcessingInitializeOnLoad (2ms)
+				ProcessInitializeOnLoadAttributes (220ms)
+				ProcessInitializeOnLoadMethodAttributes (121ms)
 				AfterProcessingInitializeOnLoad (0ms)
-				EditorAssembliesLoaded (0ms)
+				EditorAssembliesLoaded (1ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.006825 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 125.26 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  2.273 seconds
-Domain Reload Profiling:
-	ReloadAssembly (2274ms)
-		BeginReloadAssembly (173ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (8ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (29ms)
-		EndReloadAssembly (1937ms)
-			LoadAssemblies (143ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (338ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (99ms)
-			SetupLoadedEditorAssemblies (1347ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (11ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (125ms)
-				BeforeProcessingInitializeOnLoad (112ms)
-				ProcessInitializeOnLoadAttributes (1015ms)
-				ProcessInitializeOnLoadMethodAttributes (79ms)
-				AfterProcessingInitializeOnLoad (4ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (9ms)
-Platform modules already initialized, skipping
-========================================================================
-Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 1.27 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4921 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 80 unused Assets / (6.1 MB). Loaded Objects now: 5394.
-Memory consumption went from 354.2 MB to 348.0 MB.
-Total: 5.928000 ms (FindLiveObjects: 0.798100 ms CreateObjectMapping: 0.589800 ms MarkObjects: 3.298000 ms  DeleteObjects: 1.240100 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Import Request.
-  Time since last request: 26287.470286 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/corrider1/Lv2.fbx
-  artifactKey: Guid(0e82d373fb5427147a352ea1eefbf27a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/corrider1/Lv2.fbx using Guid(0e82d373fb5427147a352ea1eefbf27a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c146b5aea1a032fdc9d70452cf2141f7') in 2.803719 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 70.677981 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair
-  artifactKey: Guid(752f3609f9b1488459c3ae5dc86809b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair using Guid(752f3609f9b1488459c3ae5dc86809b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6cdb714aaa2f9c917f07ec7aa861fb2a') in 0.006185 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.416314 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair.fbx
-  artifactKey: Guid(ee9febf184112934f91f9f2fae56b81e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair.fbx using Guid(ee9febf184112934f91f9f2fae56b81e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c02daa78fc17540795e7bb5df1f21f7f') in 0.042997 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000031 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_MaskMap.png
-  artifactKey: Guid(a525d23fb6bac9e4e8354267a67e143e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_MaskMap.png using Guid(a525d23fb6bac9e4e8354267a67e143e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '61afee93da017da3b7cefe5107c0684e') in 0.035231 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000031 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_BaseMap.png
-  artifactKey: Guid(9d7f89c6114bc844aabd12b0a3ddf152) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_BaseMap.png using Guid(9d7f89c6114bc844aabd12b0a3ddf152) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '79d20323944876e0c30d98b288db1752') in 0.016751 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000047 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_Normal.png
-  artifactKey: Guid(213b7d607068eeb41b130df564a5427d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_Normal.png using Guid(213b7d607068eeb41b130df564a5427d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '45dc2d66b8a2453854b5541d1c9dbb49') in 0.017351 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 4.723669 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_Normal.png
-  artifactKey: Guid(213b7d607068eeb41b130df564a5427d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/LongStair_TT_checker_2048x2048_UV_GRID.001_Normal.png using Guid(213b7d607068eeb41b130df564a5427d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c0913969ed5156504e5ef6ddb0266eb2') in 0.021574 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 3.910149 seconds.
-  path: Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/New Material.mat
-  artifactKey: Guid(9a6969e118267ad49a7dbd6f17999ffa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Level2/FBX AND TEXTURE/LongRoom/LongStair/New Material.mat using Guid(9a6969e118267ad49a7dbd6f17999ffa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '40e838edccedf8d0a5637606a93845e2') in 0.023604 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 80.252673 seconds.
-  path: Assets/AA/Player/步槍/部件
-  artifactKey: Guid(403c73bce517268479127da8554dfa69) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件 using Guid(403c73bce517268479127da8554dfa69) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1c0ea0c6ec5c25768d4e9df491c001f') in 0.005712 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.039413 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG-ExAmmo.fbx
-  artifactKey: Guid(133d26e2703ef504b9e360ae2fa7a6c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG-ExAmmo.fbx using Guid(133d26e2703ef504b9e360ae2fa7a6c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3138e58383534edcbe08d4f9c9bc738e') in 0.034686 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG-TOP.fbx
-  artifactKey: Guid(bf1c2469d042bab4895d0a0664eb785a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG-TOP.fbx using Guid(bf1c2469d042bab4895d0a0664eb785a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '610656b13f3f28413a0d0b1a1e79e6bf') in 0.032967 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000034 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG-TOP 1.fbx
-  artifactKey: Guid(d1bc66707bbf9194b81261141df77563) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG-TOP 1.fbx using Guid(d1bc66707bbf9194b81261141df77563) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '88778ec4afccf3865e17ebbd192338fe') in 0.050570 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 28.229179 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo
-  artifactKey: Guid(3fe8d8041a4ae8f46b0d54730c0164d6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo using Guid(3fe8d8041a4ae8f46b0d54730c0164d6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '168a0662158c6e66a2a7f05ec41c87d2') in 0.006199 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.030820 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG ExAmmo.fbx
-  artifactKey: Guid(a7751874b0470cf47ae322a5694bcfd4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG ExAmmo.fbx using Guid(a7751874b0470cf47ae322a5694bcfd4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c12d0c8b38af9cf71338e3c03b6c7f8a') in 0.034345 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000044 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_BaseMap.png
-  artifactKey: Guid(99e4198530758f245bf042e92d124dc9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_BaseMap.png using Guid(99e4198530758f245bf042e92d124dc9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd321de2a79f7b6c7e30f13b847871246') in 0.034167 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000046 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(6dd9ca4e8d708fb4bbaab4529b997a51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(6dd9ca4e8d708fb4bbaab4529b997a51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c10ae242826e4241006edd62f196474a') in 0.019881 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000039 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_Emissive.png
-  artifactKey: Guid(7f2bde87fef3b4b4e90294023964a24e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_Emissive.png using Guid(7f2bde87fef3b4b4e90294023964a24e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '87ea100c6d986324c084a2b1e4888bba') in 0.018816 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000037 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_MaskMap.png
-  artifactKey: Guid(b094c1ccd74174a42985185cbdb50f04) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_MaskMap.png using Guid(b094c1ccd74174a42985185cbdb50f04) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b803eeb1de62f9b7aeae5cc970893037') in 0.027064 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 5.906759 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(6dd9ca4e8d708fb4bbaab4529b997a51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/MSG_ExAmmo_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(6dd9ca4e8d708fb4bbaab4529b997a51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '55a64534d3f5349b26ce22bb4fba047a') in 0.021636 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 5.223731 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/New Material.mat
-  artifactKey: Guid(1fc85870d44d69c4097172c749a1d237) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/New Material.mat using Guid(1fc85870d44d69c4097172c749a1d237) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '68abbcdf5fdc9f7bd27e874a57f6c275') in 0.020236 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 38.679481 seconds.
-  path: Assets/AA/Player/步槍/部件/MSG_ExAmmo/New Material.mat
-  artifactKey: Guid(1fc85870d44d69c4097172c749a1d237) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/AA/Player/步槍/部件/MSG_ExAmmo/New Material.mat using Guid(1fc85870d44d69c4097172c749a1d237) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96aaed12fa62639305e7d6ea092efa4f') in 0.043719 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 51.033713 seconds.
-  path: Assets/Scenes/SampleScene.unity
-  artifactKey: Guid(cbfe36cfddfde964d9dfce63a355d5dd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scenes/SampleScene.unity using Guid(cbfe36cfddfde964d9dfce63a355d5dd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ffc349a3511b4c723d23566d66cf50a4') in 0.006496 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 91.806011 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/New Material.mat
-  artifactKey: Guid(57bc94ace77720f4a92698fc3343b31c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/New Material.mat using Guid(57bc94ace77720f4a92698fc3343b31c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e50d8f9c268b57b51a2096b813767a65') in 0.033225 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 10.404881 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool
-  artifactKey: Guid(6e2938af4bc76bf419c504faae682e4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool using Guid(6e2938af4bc76bf419c504faae682e4b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ab676c43d36e614f13972b3c34a196e9') in 0.006177 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.056666 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_BaseMap.png
-  artifactKey: Guid(ff61a8cf6392bf24ea3ca1e5631fe60e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_BaseMap.png using Guid(ff61a8cf6392bf24ea3ca1e5631fe60e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '43676050be2404341c8cbbf2ea2eee57') in 0.031494 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000044 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_MaskMap.png
-  artifactKey: Guid(af544bc389c2c5c488adea7820e1f107) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_MaskMap.png using Guid(af544bc389c2c5c488adea7820e1f107) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a532ce5c5367decfda414dfd9aae5c9f') in 0.017646 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000036 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool.fbx
-  artifactKey: Guid(4eac385c1b724a148b2b4df81f3c8876) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool.fbx using Guid(4eac385c1b724a148b2b4df81f3c8876) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9089082ef2e32b3aba634603437ffcfb') in 0.082215 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(302975cacd56f0e41a138628fb7e0ba4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(302975cacd56f0e41a138628fb7e0ba4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '63bbf70a50007f4ae707626395e7b2d7') in 0.016399 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 0.000030 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_Emissive.png
-  artifactKey: Guid(727e264cd57ff4e4b91ebb4d81022177) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_Emissive.png using Guid(727e264cd57ff4e4b91ebb4d81022177) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e371bcb6acb8494c4f18ca8a747b8a12') in 0.018084 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 70.777367 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_Normal.png
-  artifactKey: Guid(302975cacd56f0e41a138628fb7e0ba4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/Tool (1)_TT_checker_2048x2048_UV_GRID_Normal.png using Guid(302975cacd56f0e41a138628fb7e0ba4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2490aca8f0714b60ea8ec638960723ff') in 0.014860 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 3.927151 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/New Material.mat
-  artifactKey: Guid(ea63f2a339c57a843817159519e0250c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/New Material.mat using Guid(ea63f2a339c57a843817159519e0250c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b819c4ee139ea88c8d6249430f0c1245') in 0.017004 seconds 
-========================================================================
-Received Import Request.
-  Time since last request: 101.400019 seconds.
-  path: Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/New Material.mat
-  artifactKey: Guid(ea63f2a339c57a843817159519e0250c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/FBX AND TEXTURE/WorkRoom/Worktable/Tool/New Material.mat using Guid(ea63f2a339c57a843817159519e0250c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '52ff3fc28fb4ea78b3013074dff973e4') in 0.042021 seconds 
+Registered in 0.007408 seconds.
