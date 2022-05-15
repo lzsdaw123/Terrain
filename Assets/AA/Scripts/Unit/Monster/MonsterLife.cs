@@ -15,7 +15,7 @@ public class MonsterLife : MonoBehaviour
 
     public int MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹 / 2=雞 / 3=標靶
     public static int PS_MonsterType;  //怪物類型 0=蠍子 / 1= 螃蟹
-    public float[] hpFull=new float[2]; // 血量上限
+    public float[] hpFull=new float[4]; // 血量上限
     public float hp; // 血量
     public bool 無敵=false;
     int HpLv;  //生命等級
@@ -25,6 +25,7 @@ public class MonsterLife : MonoBehaviour
     private NavMeshAgent agent;
     public MonsterAI02 monster02;
     public MonsterAI03 monster03;
+    public MonsterAI04 monster04;
 
     public GameObject PS_Dead;
     public GameObject Model;  //模型
@@ -37,7 +38,6 @@ public class MonsterLife : MonoBehaviour
     bool Dead;
     public SkinnedMeshRenderer SMeshR;
     public Material[] materials;
-    public float[] harm=new float[18];
 
     void Awake()
     {
@@ -170,6 +170,9 @@ public class MonsterLife : MonoBehaviour
                 case 1:
                     monster03.ani.SetInteger("Level", 1);
                     break;
+                case 2:
+                    //monster04.enabled = false;
+                    break;
             }            
         }
         if (hp <= 0)
@@ -195,6 +198,9 @@ public class MonsterLife : MonoBehaviour
                     break;
                 case 1:
                     monster03.enabled = false;
+                    break;
+                case 2:
+                    monster04.enabled = false;
                     break;
             }           
             //ani.SetTrigger("Die");           
@@ -222,7 +228,7 @@ public class MonsterLife : MonoBehaviour
         }
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
 
-        hpFull = new float[] { 16, 28, 16, 999 };  // 血量上限
+        hpFull = new float[] { 16, 28, 12, 999 };  // 血量上限
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
@@ -243,6 +249,10 @@ public class MonsterLife : MonoBehaviour
                 monster03.enabled = true;
                 monster03.ani.SetBool("Attack", true);
                 monster03.ani.SetInteger("Level", 0);
+                break;
+            case 2:
+                monster04.enabled = true;
+                monster04.ani.SetBool("Attack", true);
                 break;
         }
         if(agent !=null) agent.enabled = true; // 開啟尋徑功能
