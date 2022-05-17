@@ -744,6 +744,7 @@ public class Shooting : MonoBehaviour
         {
             if (Reload == false)
             {
+                Reload = true;
                 if (WeaponType == 2)
                 {
                     if (Weapons[2].WeapAm >= 5)
@@ -754,7 +755,6 @@ public class Shooting : MonoBehaviour
                     ReReload = true;
                 }
                 FireButtle = 0;
-                Reload = true;
                 Weapon.SetTrigger("Reload");               
                 ReloadWarn.SetActive(false);
             }
