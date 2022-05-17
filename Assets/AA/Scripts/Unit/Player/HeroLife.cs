@@ -81,6 +81,7 @@ public class HeroLife : MonoBehaviour
     }
     public void Damage(float Power) // 接受傷害
     {
+        //print("接受傷害 " + Power);
         if (BpTime == -1)
         {
             hp -= Power; // 扣血

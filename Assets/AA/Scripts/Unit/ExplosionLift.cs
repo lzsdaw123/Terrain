@@ -56,7 +56,7 @@ public class ExplosionLift : MonoBehaviour
     public float ReflectTime;
     public  Vector3 Reflection;
     public PhysicMaterial physicMaterial;
-    public GameObject[] actors=new GameObject[6];
+    public GameObject[] actors=new GameObject[10];
     public Material[] Material;
     public bool accelerate;  //聲音加速
     public ParticleSystem ParticleSystem;
@@ -73,9 +73,9 @@ public class ExplosionLift : MonoBehaviour
     void Start()
     {
         speed = new float[] {26,40,40 }; //飛行速度
-        power =new float[] {30,7,10 };
+        power =new float[] {30,6.5f,10 };
         AttackLv = 0;
-        bornTime = new float[] {150,150, 150f};  //生成速度{快, 慢, 中}
+        bornTime = new float[] {150,170, 150f};  //生成速度{快, 慢, 中}
         Atarget = Vector3.zero;
         Attacking = false;
         AudioManager = Save_Across_Scene.AudioManager;  //聲音控制器
@@ -113,6 +113,7 @@ public class ExplosionLift : MonoBehaviour
                 Get_ATarget = false;
                 OriSize = new Vector3(2.4f, 2.4f, 2.4f);
                 bornSize = Vector3.zero;
+                transform.localScale = bornSize;
                 break;
             case 2:  //多邊 爆炸
                 Damage = true;
@@ -123,9 +124,13 @@ public class ExplosionLift : MonoBehaviour
                 Get_ATarget = false;
                 OriSize = new Vector3(2.4f, 2.4f, 2.4f);
                 bornSize = Vector3.one;
+                transform.localScale = bornSize;
                 break;
         }
-
+        for (int i = 0; i < actors.Length; i++)
+        {
+            actors[i] = null;
+        }
         ////射線初始位置,射線方向
         //Ray ray = new Ray(transform.position, transform.forward); 
         //RaycastHit hit; //射線擊中資訊
@@ -504,6 +509,7 @@ public class ExplosionLift : MonoBehaviour
                                                 zi.gameObject.SendMessage("Damage", power[BulletType]); //傷害
                                                 //print("傷害 " + zi.gameObject.name);
                                                 actors[i] = zi.gameObject;
+                                                break;
                                             }
                                         }
                                         return zi;
@@ -529,13 +535,15 @@ public class ExplosionLift : MonoBehaviour
                                         {
                                             if (actors[i] != zi.gameObject)
                                             {
+                                                //print(actors[i] + "   //  "+ zi.gameObject);
                                                 collision.gameObject.SendMessage("Damage", power[BulletType]); //傷害
                                                 if (collision.GetComponent<HeroLife>())
                                                 {
-                                                    collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害
+                                                    collision.gameObject.SendMessage("DamageEffects", BulletType); //傷害特效
                                                     collision.gameObject.SendMessage("hit_Direction", transform); //命中方位
                                                 }
                                                 actors[i] = zi.gameObject;
+                                                break;
                                             }
                                         }
                                         return zi;

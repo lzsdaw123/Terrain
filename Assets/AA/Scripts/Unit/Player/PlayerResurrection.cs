@@ -277,7 +277,7 @@ public class PlayerResurrection : MonoBehaviour
         HeroLife.PlayerRe();  //血量回復
         Shooting.PlayerRe();  //彈藥回復
         Player.SetActive(false);
-        if (StartGame)  //如果遊戲開始
+        if (StartGame || RespawnPoint || SF_Mission_L1)  //如果遊戲開始
         {
             SceneNub = Settings.SceneNub; //取得當前場景編號
             switch (SceneNub)
