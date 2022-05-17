@@ -37,7 +37,8 @@ public class UpgradeWorkbench : MonoBehaviour
     public string 部件名稱;
     public Text text;
     public static bool FirstWork;
-    public float[] AddPower=new float[2];
+    public float[] AddPower=new float[2];  //傷害加成
+    public float[] AddRecoil = new float[2];  //後座力加成
 
     private void Awake()
     {
@@ -171,10 +172,10 @@ public class UpgradeWorkbench : MonoBehaviour
                         text.text = "[" + 部件名稱 + "]\n步槍用制式彈匣，30發裝彈量\n一般的制式彈匣";
                         break;
                     case 1:
-                        text.text = "[" + 部件名稱 + "]\n步槍用擴充彈匣，70發裝彈量\n提高裝填量";
+                        text.text = "[" + 部件名稱 + "]\n步槍用擴充彈匣，70發裝彈量\n提高裝填量，稍微增加後座力";
                         break;
                     case 2:
-                        text.text = "[" + 部件名稱 + "]\n步槍用穿甲彈匣，20發裝彈量\n有較強的穿透效果";
+                        text.text = "[" + 部件名稱 + "]\n步槍用穿甲彈匣，20發裝彈量\n有較強的穿透效果，後座力較大";
                         break;
                 }
                 break;
@@ -222,27 +223,30 @@ public class UpgradeWorkbench : MonoBehaviour
                     {
                         case 0:  //槍口
                             武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);   //打開當前零件
-                            AddPower[0] = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //武器傷害
-                            武器欄位[FieldType].Recoil = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  //武器後座力
+                            AddPower[0] = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //傷害加成
+                            AddRecoil[0] = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  ///後座力加成
                             break;
                         case 1:  //彈匣
                             武器欄位[FieldType].部位[PartType].Part[dropdown.value].SetActive(true);   //打開當前零件
-                            AddPower[1] = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //武器傷害
+                            AddPower[1] = 武器欄位[FieldType].部位[PartType].Power[dropdown.value];  //傷害加成
+                            AddRecoil[1] = 武器欄位[FieldType].部位[PartType].Recoil[dropdown.value];  ///後座力加成
                             武器欄位[FieldType].Ammo = 武器欄位[FieldType].部位[PartType].Ammo[dropdown.value];  //武器彈匣容量
                             break;
                     }
-                    武器欄位[FieldType].Power = AddPower[0] * AddPower[1];
+                    武器欄位[FieldType].Power = AddPower[0] * AddPower[1];  //傷害 = 基礎 *槍口 * 彈匣
+                    武器欄位[FieldType].Recoil = AddRecoil[0] + AddRecoil[1];  //後座力 = 基礎 *槍口 + 彈匣
                     部位ID = PartType;
                     零件ID = 武器欄位[FieldType].部位[PartType].ID[dropdown.value];
                     部件名稱 = 武器欄位[FieldType].部位[PartType].PartName[dropdown.value];
+                    play.GetComponent<Shooting>().enabled = true;
                     Shooting.換部件 = true;
+                    //print(" "+Shooting.換部件);
                 }
                 break;
         }   
     }
-    public void UseButton(int Type)
+    public void UseButton()  //使用按鈕
     {
-
     }
 
     public void Exit( )  //離開
@@ -252,6 +256,7 @@ public class UpgradeWorkbench : MonoBehaviour
         time = 0;
         CamMove = true;
         Move = false;
+        Shooting.UseWork(武器欄位);
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
     }
     void HitByRaycast() //被射線打到時會進入此方法

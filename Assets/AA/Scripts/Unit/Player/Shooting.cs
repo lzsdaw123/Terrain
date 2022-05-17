@@ -192,6 +192,7 @@ public class Shooting : MonoBehaviour
         SF_武器欄位 = 武器欄位;
         if (換部件)
         {
+            //print("換部件");
             換部件 = false;
             部位ID = UpgradeWorkbench.部位ID;
             零件ID = UpgradeWorkbench.零件ID;
@@ -240,9 +241,10 @@ public class Shooting : MonoBehaviour
                     }                 
                     break;
             }
+            GetComponent<Shooting>().enabled = false;
         }
-       
-      
+
+
 
         if (Time.timeScale == 0) {return;}
         FieldOfView = PlayCamera.GetComponent<Camera>().fieldOfView;

@@ -1319,6 +1319,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5405461867736989661}
+        m_TargetAssemblyTypeName: UpgradeWorkbench, Assembly-CSharp
+        m_MethodName: UseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 7657063100984480169}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!1 &2761051109648068959
 GameObject:
@@ -2751,6 +2763,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 2013767178406616346}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Dropdown, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5405461867736989661}
+        m_TargetAssemblyTypeName: UpgradeWorkbench, Assembly-CSharp
+        m_MethodName: UseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2013767178406616346}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4572,11 +4596,11 @@ MonoBehaviour:
       Power:
       - 1
       - 1
-      - 1.5
+      - 1.35
       Recoil:
-      - 3
-      - 2.5
-      - 2.5
+      - 0
+      - 0.1
+      - 0.4
       Ammo: 1e0000004600000014000000
       Price:
       - 0
@@ -4609,6 +4633,9 @@ MonoBehaviour:
   "\u90E8\u4EF6\u540D\u7A31": 
   text: {fileID: 657512090505311699}
   AddPower:
+  - 0
+  - 0
+  AddRecoil:
   - 0
   - 0
 --- !u!1 &5654755743031508339
