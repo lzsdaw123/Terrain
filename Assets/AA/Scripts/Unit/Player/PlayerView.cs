@@ -23,6 +23,7 @@ public class PlayerView : MonoBehaviour
     public  GameObject[] MissionTaget_L3;  //L2任務目標物件
     public  GameObject[] MissionTaget;  //任務目標物件
     public static int missionLevel;  //任務關卡
+    [SerializeField] int SF_missionLevel;  //任務關卡
     public int missionNumb;  //任務數量
     public static int missionStage;  //任務階段
     [SerializeField] private int st_missionStage;  //任務階段
@@ -50,6 +51,8 @@ public class PlayerView : MonoBehaviour
     public static bool MissionEnd;
     public static int Crystal_Weakness;
     public static bool Stop;
+    public static bool UI_Stop;
+    [SerializeField] bool SF_UI_Stop;
 
     void OnWillRenderObject()
     {
@@ -115,16 +118,24 @@ public class PlayerView : MonoBehaviour
             Boss2_targetUI[i].gameObject.SetActive(false);
         }
         missionStage = 0;
-        Stop = false;
+        Stop = UI_Stop = false;
         DontDestroyOnLoad(gameObject);  //切換場景時保留
         //DontDestroyOnLoad(targetUI.gameObject);  //切換場景時保留
     }
     void Update()
     {
         int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
-        if (SceneNub == 1)
+        switch (SceneNub)
         {
-            Destroy(gameObject);
+            case 1:
+                Destroy(gameObject);
+                break;
+            case 2:
+                missionLevel = 0;
+                break;
+            case 3:
+                missionLevel = 4;
+                break;
         }
         switch (missionLevel)
         {
@@ -144,7 +155,10 @@ public class PlayerView : MonoBehaviour
                 MissionTaget = MissionTaget_L3;
                 break;
         }
+        SF_missionLevel = missionLevel;
         st_missionStage = missionStage;
+        SF_UI_Stop = UI_Stop;
+
         if (MissionEnd)  //任務目標結束
         {
             targetUI.color = new Color(1, 1, 1, 0);
@@ -185,25 +199,30 @@ public class PlayerView : MonoBehaviour
                 Boss2_targetUI[2].gameObject.SetActive(true);
                 break;
             case 2:  //腹部上弱點擊破
+                Boss2_targetUI[0].gameObject.SetActive(false);
                 Boss2_targetUI[1].gameObject.SetActive(false);
                 break;
             case 3:  //腹部下弱點擊破
+                Boss2_targetUI[0].gameObject.SetActive(false);
                 Boss2_targetUI[2].gameObject.SetActive(false);
                 break;
             case 4:  //左胸弱點
+                Boss2_targetUI[0].gameObject.SetActive(false);
                 Boss2_targetUI[1].gameObject.SetActive(false);
                 Boss2_targetUI[2].gameObject.SetActive(false);
                 Boss2_targetUI[3].gameObject.SetActive(true);
                 break;
-            case 5:  //頭部弱點
+            case 5:  //左胸弱點擊破
                 Boss2_targetUI[3].gameObject.SetActive(false);
+                break;
+            case 6:  //頭部弱點
                 Boss2_targetUI[4].gameObject.SetActive(true);
                 break;
-            case 6:
+            case 7:
                 Boss2_targetUI[4].gameObject.SetActive(false);
                 break;
         }
-
+        if (UI_Stop) return;
         if (IsInView(MissionTaget[missionStage].transform.position))
         {
             //Debug.Log("目前本物體在攝像機範圍內");

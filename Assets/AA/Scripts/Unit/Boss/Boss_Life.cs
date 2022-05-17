@@ -37,13 +37,15 @@ public class Boss_Life : MonoBehaviour
     float HitUITime;
     bool Player;
     Color UIcolor;
-    bool Dead;
+    public bool Dead;
     public GameObject HitObject;
     public GameObject[] Crystal_Weakness;  //水晶弱點
     public GameObject[] WeaknessObject;
     public GameObject[] WeaknessObjectPS;
     public float[] Weakness_Hp;  //弱點血量
     bool YesStart;
+    public float cTime;
+    public int D_Level;
 
     void Awake()
     {
@@ -61,7 +63,9 @@ public class Boss_Life : MonoBehaviour
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
         HitUITime = 0;
-        Dead = false;
+        cTime = -1;
+        D_Level = 0;
+        Dead  = false;
         //ani = GetComponent<Animator>();
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
@@ -90,7 +94,7 @@ public class Boss_Life : MonoBehaviour
                 {
                     YesStart = true;
                     Crystal_Weakness[0].GetComponent<Crystal_Life>().無敵 = false;
-                    PlayerView.Crystal_Weakness = 0;
+                    cTime = 0;
                 }
                 break;
         }
@@ -112,7 +116,34 @@ public class Boss_Life : MonoBehaviour
                 }
             }
         }
-      
+        if (cTime>=0)
+        {
+            cTime += Time.deltaTime;
+            switch (D_Level)
+            {
+                case 0:  //弱點提示
+                    if(cTime >= 2.5f)
+                    {
+                        cTime = -1;
+                        PlayerView.Crystal_Weakness = 0;
+                        PlayerView.missionChange(4, 1);  //改變關卡
+                        DialogueEditor.StartConversation(4, 1, 2, false, 0, true);  //開始對話
+                        Boss02_AI.D_level = 2;
+                        Level_1.UiOpen = true;
+                    }
+                    break;
+                case 1:  //第四階段
+                    if (cTime >= 14 && !DialogueEditor.Talking)
+                    {
+                        cTime = -1;
+                        PlayerView.Crystal_Weakness = 6;
+                        PlayerView.missionChange(4, 3);  //改變關卡
+                        DialogueEditor.StartConversation(4, 3, 2, false, 0, true);  //開始對話
+                        Level_1.UiOpen = true;
+                    }
+                    break;
+            }
+        }
     }
     // 開啟或關閉物理娃娃系統
     void RagdollActive(bool active)
@@ -224,14 +255,16 @@ public class Boss_Life : MonoBehaviour
                 if (Weakness_Hp[3] <= 0)  //左胸弱點擊破
                 {
                     Weakness_Hp[3] = 60;
-                    Weakness_Hp[4] = 200;
+                    Weakness_Hp[4] = 100;
                     WeaknessObjectPS[3].SetActive(true);
                     boss02_AI.Level = 4;
                     boss02_AI.ani.SetInteger("Level", 4);
                     boss02_AI.ani.SetTrigger("LevelUp");
                     boss02_AI.ani.SetBool("Attack1", false);  //第一階攻擊模式
                     boss02_AI.ani.SetBool("Attack2", false);  //第二階攻擊模式
+                    cTime = 0;
                     PlayerView.Crystal_Weakness = 5;
+                    D_Level = 1;
                 }
                 if (Weakness_Hp[4] <= 0)  //頭部弱點擊破
                 {
@@ -239,7 +272,11 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.ani.SetTrigger("Dead");
                     boss02_AI.ani.SetBool("Attack1", false);  //第一階攻擊模式
                     boss02_AI.ani.SetBool("Attack2", false);  //第二階攻擊模式
-                    PlayerView.Crystal_Weakness = 6;
+                    PlayerView.missionChange(4, 4);  //改變關卡
+                    DialogueEditor.StartConversation(4, 4, 2, false, 0, true);  //開始對話
+                    Level_1.UiOpen = true;
+                    PlayerView.Crystal_Weakness = 7; //關弱點
+                    Dead = true;
                 }
                 break;
         }
@@ -254,7 +291,6 @@ public class Boss_Life : MonoBehaviour
                     HitUI.GetComponent<Image>().color = Color.red;  //紅色擊殺UI
                     //AudioManager.Hit(4);  //玩家擊殺音效
                 }
-                Dead = true;
                 switch (MonsterType)
                 {
                     case 0:
@@ -268,7 +304,8 @@ public class Boss_Life : MonoBehaviour
                         boss02_AI.ani.SetTrigger("Dead");
                         break;
                 }
-            }           
+                Dead = true;
+            }
             hp = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸
             if (Model !=null) Model.SetActive(false);
@@ -282,6 +319,8 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                     boss02_AI.MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
                     boss02_AI.MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
+                    PlayerResurrection.Fail = true;
+                    print("T");
                     break;
             }           
             //ani.SetTrigger("Die");           
@@ -326,6 +365,7 @@ public class Boss_Life : MonoBehaviour
                 break;
             case 1:
                 boss02_AI.enabled = true;
+                Weakness_Hp = new float[] { 25, 25, 25, 25, 100 };
                 break;
         }
         agent.enabled = true; // 開啟尋徑功能

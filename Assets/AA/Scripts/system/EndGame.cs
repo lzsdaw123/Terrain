@@ -40,7 +40,9 @@ public class EndGame : MonoBehaviour
                         Settings.Enter_Scene2();
                         PlayerView.missionLevel = 4;
                         PlayerView.missionStage = 0;
+                        PlayerView.UI_Stop = true;
                         HeroLife.HpLv = 2;
+                        Level_1.StartTime = -1;
                         break;
                     case 1:
                         ExitGame();

@@ -77,6 +77,7 @@ public class NPC_AI : MonoBehaviour
     public float MonTime;
     public bool 有怪;
     int HitNub=0;
+    public bool Neutral=false;  //中立
 
     public AttackLevel attackLv1 = new AttackLevel(false, 2f, 3f, 80f, 1f); //第一段攻擊力 (威力,距離,角度,高度)
 
@@ -351,7 +352,7 @@ public class NPC_AI : MonoBehaviour
 
     void Update()
     {
-        if (_NPC_Life.P_Dead) return;
+        if (_NPC_Life.P_Dead || Neutral) return;
         if (MonTime >= 5f)
         {
             有怪 = false;

@@ -14,7 +14,7 @@ public class HeroLife : MonoBehaviour
     public GameObject[] Hit_Direction_UI;
     public GameObject[] BloodpackUI=new GameObject[3];  //補包UI
     public static int BloodpackNub; //補包數量
-    public int SaveBpN;  //保存補包數量
+    public static int SaveBpN;  //保存補包數量
     public static bool GetBP;  //取得補包
     public float BpTime;  //補包使用冷卻
     public static bool Dead;
@@ -35,7 +35,8 @@ public class HeroLife : MonoBehaviour
     public int[] InfectionValueUp=new int[4];  //感染次數
     public float DeadTime;
     public static bool PlayerRebirth;  //玩家重生
-    public float LiftTime; //解除倒數
+    public static float LiftTime; //解除倒數
+    [SerializeField] float SF_LiftTime; //解除倒數
     public GameObject InfectionUI;
     public Image Infection_Image;
     public bool InfectionSW;
@@ -168,6 +169,7 @@ public class HeroLife : MonoBehaviour
 
     void Update()
     {
+        SF_LiftTime = LiftTime;
         SF_HpLv = HpLv;
         SF_fullHp = fullHp;
         SF_hp = hp;
@@ -346,7 +348,16 @@ public class HeroLife : MonoBehaviour
     public static void PlayerRe()  //重生
     {
         hp = hp_R = fullHp = 20 * HpLv; //遊戲一開始時先填滿血
+        LiftTime = 12;
         Dead = false;
+        PlayerRebirth = true;
+    }
+    public static void GameRe()  //重新遊戲
+    {
+        hp = hp_R = fullHp = 20 * HpLv; //遊戲一開始時先填滿血
+        LiftTime = 12;
+        Dead = false;
+        SaveBpN = 0;
         PlayerRebirth = true;
     }
     public static void AddHp()

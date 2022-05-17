@@ -160,7 +160,7 @@ public class S_BulletLife : MonoBehaviour
         if (MoveTime >= 0)
         {
             MoveTime += Time.deltaTime;
-            if (MoveTime >= 0.16f)
+            if (MoveTime >= 0.18f)
             {
                 MoveTime = -1;
                 Move = false;
@@ -456,7 +456,13 @@ public class S_BulletLife : MonoBehaviour
                 {
                     if (collision.GetComponent<HeroLife>() || collision.GetComponent<NPC_Life>() || collision.GetComponent<building_Life>() || collision.GetComponent<MissionTarget_Life>())
                     {
-                        collision.gameObject.SendMessage("Damage", power); //傷害
+                        switch (BulletType)
+                        {
+                            case 2:
+                            case 3:
+                                collision.gameObject.SendMessage("Damage", power); //傷害
+                                break;
+                        }
                         if (collision.GetComponent<HeroLife>())
                         {
                             switch (BulletType)
@@ -479,11 +485,22 @@ public class S_BulletLife : MonoBehaviour
         {
             switch (BulletType)
             {
-                case 3:
-                    liftTime = -1;
+                case 1:
+                    liftTime = 0;
                     if (collision.GetComponent<Crystal_Life>())  //如果水晶可破壞
                     {
                         collision.gameObject.SendMessage("Damage", power); //傷害
+                        if (collision.GetComponent<Crystal_Life>().hp <= 0)
+                        {
+                            return;
+                        }
+                    }
+                    break;
+                case 2:
+                case 3:
+                    if (collision.GetComponent<Crystal_Life>())  //如果水晶可破壞
+                    {
+                        collision.gameObject.SendMessage("Damage", power/4); //傷害
                         if (collision.GetComponent<Crystal_Life>().hp <= 0)
                         {
                             return;

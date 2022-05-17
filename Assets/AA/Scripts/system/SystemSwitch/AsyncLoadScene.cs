@@ -46,6 +46,9 @@ public class AsyncLoadScene : MonoBehaviour
 	void Update()
 	{
 		targetValue = operation.progress;
+        //Level_1.MissionTime = -1;
+        //Level_1.UiOpen = false;
+        PlayerView.UI_Stop = true;
 
 		if (operation.progress >= 0.9f)
 		{
@@ -86,9 +89,15 @@ public class AsyncLoadScene : MonoBehaviour
 				AnyKey.SetActive(false);
 				//允許非同步載入完畢後自動切換場景
 				operation.allowSceneActivation = true;
+				PlayerResurrection.ReO = true;
 				PlayerResurrection.PlayerBirth();  //讓玩家生成
+				Level_1.MissionTime = 0;
+                Level_1.UiOpen = false;
+                Level_1.LevelB_ = 1;
+                PlayerView.Stop = true;  //UI隱藏
+				PlayerView.UI_Stop = false;
 				//SceneManager.SetActiveScene(SceneManager.GetSceneByName(Globe.nextSceneName));
-			}			
+			}
 		}
 	}
 }

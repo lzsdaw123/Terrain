@@ -7,6 +7,8 @@ public class MG_Turret_AI : MonoBehaviour
 {
     public ObjectPool pool;
     [SerializeField] private AnimEvents AnimEvents;
+    public Crystal_Life crystal_Life;
+    public Boss_Life boss_Life;
     public Animator ani; //動畫控制器
     public GameObject Player;  //玩家
     public GameObject bullet;
@@ -22,6 +24,7 @@ public class MG_Turret_AI : MonoBehaviour
     public float MA_weight;  //Rig連結權重
     public bool StartAttack;  //進入攻擊狀態
     public int AttackRange;  //攻擊範圍
+    public bool[] InAttackRange;
     public float LockTime;  //鎖定時間
     public bool Reload;
     public float ReloadTime;
@@ -36,6 +39,7 @@ public class MG_Turret_AI : MonoBehaviour
     public Vector3 NO_targetPos;
     public float[] ETA;  //預計抵達時間
     public bool[] HitTarget;  //命中玩家
+    public bool Dead;
 
     void Start()
     {
@@ -48,15 +52,20 @@ public class MG_Turret_AI : MonoBehaviour
         BulletNub = 30;  //子彈數
         power = 0.5f;
         StartAttack = false;
+        Dead = false;
         ReloadTime = 0;
         SureHit = new bool[] { false, false };
         FlyStart = new bool[] { false, false };
         HitTarget = new bool[] { false, false };
+        InAttackRange = new bool[] { true, false };
     }
 
     void Update()
     {
-        if (StartAttack)
+        Dead = crystal_Life.Dead;
+        if (boss_Life.Dead || !boss_Life.gameObject.GetComponent<Boss02_AI>().enabled) StartAttack = false;
+
+        if (StartAttack && !Dead)
         {
             SF_BulletNub = BulletNub;
 
@@ -119,7 +128,11 @@ public class MG_Turret_AI : MonoBehaviour
                         }
                     }
                 }
-            }           
+            }
+            if (InAttackRange[0] && InAttackRange[1]) AttackRange = 0;  //在死角外&房間內 =0
+            if (!InAttackRange[0] && InAttackRange[1]) AttackRange = 1;  //在死角內&房間內 =1
+            if (InAttackRange[0] && !InAttackRange[1]) AttackRange = 1;  //在死角外&房間外 =1
+
             switch (AttackRange)
             {
                 case 0:  //範圍內
@@ -150,6 +163,7 @@ public class MG_Turret_AI : MonoBehaviour
                     if (MA_weight <= 0) MA_weight = 0f;
                     break;
             }
+
             MA_Rig[0].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
             MA_Rig[1].GetComponent<MultiAimConstraint>().weight = MA_weight;  //槍口連結
             //ani.SetInteger("AttackMode", AttackMode);

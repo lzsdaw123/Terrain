@@ -29851,6 +29851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pool: {fileID: 0}
   AnimEvents: {fileID: 6631315772650907747}
+  crystal_Life: {fileID: 4036901330602881989}
   ani: {fileID: 6631315772650907774}
   Player: {fileID: 0}
   bullet: {fileID: 0}
@@ -29893,6 +29894,7 @@ MonoBehaviour:
   - 0
   - 0
   HitTarget: 0000
+  Dead: 0
 --- !u!114 &6631315772650907747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29906,13 +29908,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitType: 0
+  MonsterType: 0
+  BossType: 0
   SF_ammunition: 0
   SF_Total_ammunition: 0
+  SF_Magazine: 0
   WeaponAmm: 1e0000000600000005000000
   R_ammunition: 0
   WeaponType: 0
   MonsterAI02: {fileID: 0}
   MonsterAI03: {fileID: 0}
+  MonsterAI04: {fileID: 0}
   boss01_AI: {fileID: 0}
   boss02_AI: {fileID: 0}
   b1_BulletLife: {fileID: 0}
@@ -29926,6 +29932,7 @@ MonoBehaviour:
   AudioManager: {fileID: 0}
   NPC_Clip: []
   MonsterClip: []
+  SaveVolume: 0
   NPC_Source: {fileID: 0}
   MonsterSource: {fileID: 0}
 --- !u!95 &6631315772650907774
@@ -39943,6 +39950,7 @@ MonoBehaviour:
   boss02_AI: {fileID: 0}
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 6631315772650907744}
+  mg_Turret_AI_S: []
 --- !u!1 &6631315773506434443
 GameObject:
   m_ObjectHideFlags: 0
@@ -55423,6 +55431,7 @@ MonoBehaviour:
   Decal: {fileID: 0}
   DeadTime: 0
   HitUI: {fileID: 0}
+  Dead: 0
 --- !u!64 &8757237272991881942
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class Trigger : MonoBehaviour
     public Boss02_AI boss02_AI;
     public Level_1 level_1;
     public MG_Turret_AI mg_Turret_AI;
+    public MG_Turret_AI[] mg_Turret_AI_S;
     //public Level_1 level_1;
 
     void Start()
@@ -73,7 +74,13 @@ public class Trigger : MonoBehaviour
                         boss02_AI.AttackRange = 3;
                         break;
                     case 4:  //Boss2§ðÀ»2 ¾÷ºj½d³ò¦º¨¤
-                        mg_Turret_AI.AttackRange = 1;
+                        mg_Turret_AI.InAttackRange[0] = false;
+                        break;
+                    case 5:  //Boss2§ðÀ»2 ¾÷ºj½d³ò¤º
+                        for(int i=0; i< mg_Turret_AI_S.Length; i++)
+                        {
+                            mg_Turret_AI_S[i].InAttackRange[1] = true;
+                        }
                         break;
                 }
             }
@@ -87,8 +94,8 @@ public class Trigger : MonoBehaviour
             {
                 switch (Features)
                 {
-                    case 4:  //Boss2§ðÀ»2 ¾÷ºj½d³ò¦º¨¤
-                        mg_Turret_AI.AttackRange = 0;
+                    case 4:  //Boss2§ðÀ»2 ¾÷ºj½d³ò¤º
+                        mg_Turret_AI.InAttackRange[0] = true;
                         break;
                 }
             }

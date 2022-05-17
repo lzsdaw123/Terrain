@@ -31,6 +31,7 @@ public class DialogueEditor : MonoBehaviour
     static int ChangeTextLine;  //第幾句改變
     static int NewName;  //新的對話者
     public static bool UI;  //是否出現任務訊息UI
+    public static bool Talking;  //正在對話
 
     void Start()
     {
@@ -39,6 +40,7 @@ public class DialogueEditor : MonoBehaviour
         StartDialogue = EndDialogue = false;
         dialogueText.text = "";
         TextLine = 0;
+        Talking = false;
         if (DialogueOptionsUI == null)
         {
             DialogueOptionsUI = GameObject.Find("DialogueOptionsUI").gameObject;
@@ -57,6 +59,7 @@ public class DialogueEditor : MonoBehaviour
         }
         if (StartDialogue)  //開始對話
         {
+            Talking = true;
             if (coolDownTimer >= coolDown) //對話冷卻時間，coolDown 越小越快
             {
                 if (StartTrach)  //是否跳過開場教學
@@ -127,6 +130,7 @@ public class DialogueEditor : MonoBehaviour
             Delay = 0;
             TextLine = 0;
             EndDialogue = false;
+            Talking = false;
             if (Auto)  //自動切換
             {
                 PlayerView.TagetChange(0, UI);  //切換任務目標
@@ -270,6 +274,41 @@ public class DialogueEditor : MonoBehaviour
                         Dialogue = new string[2];
                         Dialogue[0] = "發電廠被摧毀了。";
                         Dialogue[1] = "撤退。";
+                        break;
+                }
+                break;
+            case 4:  //第二關
+                switch (missionStage)
+                {
+                    case 0:
+                        Dialogue = new string[4];
+                        Dialogue[0] = "真是寬敞的地方。";
+                        Dialogue[1] = "先來探索遺跡。";
+                        Dialogue[2] = "對了，我剛剛幫你升級過裝甲。";
+                        Dialogue[3] = "這樣應該就能抵擋比較多的傷害了。";
+                        break;
+                    case 1:
+                        Dialogue = new string[4];
+                        Dialogue[0] = "普通的攻擊無法對機械體造成傷害。";
+                        Dialogue[1] = "水晶看起來有辦法擊穿外殼。";
+                        Dialogue[2] = "先擊破水晶在攻擊底下的傷口。";
+                        Dialogue[3] = "我會把傷口位置用標示出來的。";
+                        break;
+                    case 2:
+                        Dialogue = new string[2];
+                        Dialogue[0] = "機械體正在操控機槍砲塔。";
+                        Dialogue[1] = "擊毀他或躲避攻擊。";
+                        break;
+                    case 3:
+                        Dialogue = new string[2];
+                        Dialogue[0] = "機械體似乎正在釋放巨大能量。";
+                        Dialogue[1] = "請盡快阻止。";
+                        break;
+                    case 4:
+                        Dialogue = new string[3];
+                        Dialogue[0] = "雖然擊倒機械體，但黑球還在膨脹。";
+                        Dialogue[1] = "回去的入口已經被擋住了。";
+                        Dialogue[2] = "進入機械體後面的門。";
                         break;
                 }
                 break;

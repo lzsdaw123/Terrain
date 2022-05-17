@@ -264,7 +264,11 @@ public class AnimEvents : MonoBehaviour
                 break;
         }
     }
-
+    //遊戲失敗
+    public void GameFail()
+    {
+        PlayerResurrection.Fail = true;
+    }
     //音效用
     public void WalkAudio(int Type)
     {

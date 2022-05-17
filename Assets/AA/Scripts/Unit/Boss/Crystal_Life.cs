@@ -42,7 +42,7 @@ public class Crystal_Life : MonoBehaviour
     float HitUITime;
     bool Player;
     Color UIcolor;
-    bool Dead;
+    public bool Dead;
 
     void Awake()
     {
@@ -54,7 +54,6 @@ public class Crystal_Life : MonoBehaviour
     {
         HitUI = Save_Across_Scene.HitUI;
         if (PS_Dead!=null) PS_Dead.SetActive(false);
-        if (MR != null) MR.enabled = true;
         if (cld != null) cld.enabled = true;
         DeadTime = 0;
         DifficultyUp();  //難度調整
@@ -68,6 +67,7 @@ public class Crystal_Life : MonoBehaviour
         switch (MonsterType)
         {
             case 0:
+                MR = GetComponent<MeshRenderer>();
                 gameObject.layer = LayerMask.NameToLayer("Wall");
                 gameObject.tag = "Crystal";
                 break;
@@ -80,8 +80,10 @@ public class Crystal_Life : MonoBehaviour
             case 2:
                 gameObject.layer = LayerMask.NameToLayer("Monster");
                 gameObject.tag = "Enemy";
+                mg_Turret_AI.enabled = true;
                 break;
         }
+        if (MR != null) MR.enabled = true;
     }
 
     void Update()

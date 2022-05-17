@@ -131,6 +131,7 @@ public class MissionTarget_Life : MonoBehaviour
         if (!Dead)
         {
             Dead = true;
+            PlayerResurrection.Fail = true;
             //print("發電站已被摧毀");
             Exp.SetActive(true);
             AudioManager.explode();          

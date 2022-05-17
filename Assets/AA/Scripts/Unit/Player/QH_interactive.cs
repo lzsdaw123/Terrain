@@ -36,7 +36,7 @@ public class QH_interactive : MonoBehaviour
         //int maskActor = 1 << LayerMask.NameToLayer("Actor");
         if(Physics.Raycast(ray, out hit, raylength, layerMask))  //NPC互動
         {
-            if (hit.collider.tag == "NPC")
+            if (hit.collider.tag == "NPC" || hit.collider.tag == "Neutral")
             {
                 hit.transform.SendMessage("HitByRaycast", gameObject, SendMessageOptions.DontRequireReceiver);
                 if (hit.collider == null)

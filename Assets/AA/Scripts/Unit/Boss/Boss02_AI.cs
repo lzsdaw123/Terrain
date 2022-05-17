@@ -7,6 +7,7 @@ using UnityEngine.Animations.Rigging;
 
 public class Boss02_AI : MonoBehaviour
 {
+    public Boss_Life boss_Life;
     public NavMeshAgent agent;  //尋徑代理人
     private SpawnRayReg reg;    //生怪註冊器
     private SpawnRay spawnRay;  //生怪后蟲
@@ -97,6 +98,8 @@ public class Boss02_AI : MonoBehaviour
     public GameObject[] RangeObject;  //攻擊範圍
     public GameObject[] MA_Rig;  //Rig連結
     public float MA_weight;  //Rig連結權重
+    public bool StartDialogue;
+    public static float D_level;
 
     private AttackUtility attackUtility = new AttackUtility();
     public float coolDown;
@@ -143,6 +146,7 @@ public class Boss02_AI : MonoBehaviour
         Level = 1;
         overheatTime = new float[2] { 0, 0 };
         BulletType = 1;
+        D_level = 1;
         //reg = GetComponent<SpawnRayReg>();
         //spawnRay = reg.mother;  //取得怪物的母體
 
@@ -345,7 +349,6 @@ public class Boss02_AI : MonoBehaviour
                 MG_Turret[1].GetComponent<MG_Turret_AI>().Player = Player;
                 MG_Turret[2].GetComponent<MG_Turret_AI>().Player = Player;
                 defenseOb[0].GetComponent<ElectricDoor>().Animator.SetBool("Open", true);
-                PlayerView.Stop = true;
             }
         }
         if (StartAttack)
@@ -413,67 +416,107 @@ public class Boss02_AI : MonoBehaviour
                     }
                 }
             }
-            switch (AttackRange)
+            switch (Level)  //Boss2戰鬥階段
             {
-                case 1:  //攻擊1 範圍
-                    if (Reload[0] && overheatLock)  //處於冷卻狀態 並過熱鎖定
+                case 1:  //限制火炮+機槍塔1護盾 打左手弱點
+                case 2:  //限制火炮+機槍塔2.3護盾  打腹部兩個弱點
+                case 3:  //射黑火+不限制火炮 打左胸弱點
+                    switch (AttackRange)
                     {
-                        AttackMode = 2;
-                        //print("過熱中");
+                        case 1:  //攻擊1 範圍
+                            if (Reload[0] && overheatLock)  //處於冷卻狀態 並過熱鎖定
+                            {
+                                AttackMode = 2;
+                                //print("過熱中");
+                            }
+                            if (Reload[0] && !overheatLock)  //處於冷卻狀態 並 非過熱鎖定
+                            {
+                                Reload[0] = false;
+                                AttackMode = 1;  //攻擊模式1
+                                MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
+                                MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
+                                MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
+                                AttackModePS[0].SetActive(false);
+                                AttackModePS[1].SetActive(false);
+                                AttackModePS[2].SetActive(false);
+                                //print("過熱但開火");
+                            }
+                            else if (!Reload[0])  //處於非冷卻狀態
+                            {
+                                AttackMode = 1;  //攻擊模式1
+                                MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
+                                MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
+                                MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
+                                AttackModePS[0].SetActive(false);
+                                AttackModePS[1].SetActive(false);
+                                AttackModePS[2].SetActive(false);
+                                //print("開火");
+                            }
+                            MA_weight += 1.5f * Time.deltaTime;
+                            if (MA_weight >= 1) MA_weight = 1;
+                            break;
+                        case 2:  //攻擊1 右邊死角範圍
+                            Reload[0] = true;
+                            overheatLock = false;
+                            ReLoad(0);
+                            AttackMode = 2;  //攻擊模式2
+                            MA_weight -= 0.5f * Time.deltaTime;
+                            if (MA_weight <= 0.4) MA_weight = 0.4f;
+                            MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
+                            MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
+                            AttackModePS[0].SetActive(false);
+                            if (MG_Turret[1].GetComponent<MG_Turret_AI>().enabled) AttackModePS[1].SetActive(true);
+                            if (MG_Turret[2].GetComponent<MG_Turret_AI>().enabled) AttackModePS[2].SetActive(true);
+                            break;
+                        case 3:  //攻擊1 左邊死角範圍
+                            Reload[0] = true;
+                            overheatLock = false;
+                            ReLoad(0);
+                            AttackMode = 2;  //攻擊模式2
+                            MA_weight -= 0.5f * Time.deltaTime;
+                            if (MA_weight <= 0.5) MA_weight = 0.5f;
+                            for(int i=0; i< MG_Turret.Length; i++)
+                            {
+                                if (!MG_Turret[i].GetComponent<MG_Turret_AI>().Dead)
+                                {
+                                    MG_Turret[i].GetComponent<MG_Turret_AI>().StartAttack = true;
+                                    if (MG_Turret[i].GetComponent<MG_Turret_AI>().enabled) AttackModePS[i].SetActive(true);
+                                }
+                            }
+                            break;
                     }
-                    if(Reload[0] && !overheatLock)  //處於冷卻狀態 並 非過熱鎖定
+                    break;
+                case 4:  //散發出黑火形成巨大黑火球 全身水晶炸掉露出最後弱點 爆炸前打死Boss2
+                    if(boss_Life.Weakness_Hp[4]<=50)
                     {
-                        Reload[0] = false;
-                        AttackMode = 1;  //攻擊模式1
-                        MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
-                        MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
-                        MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
-                        AttackModePS[0].SetActive(false);
-                        AttackModePS[1].SetActive(false);
-                        AttackModePS[2].SetActive(false);
-                        //print("過熱但開火");
+                        for (int i = 0; i < MG_Turret.Length; i++)
+                        {
+                            if (!MG_Turret[i].GetComponent<MG_Turret_AI>().Dead)
+                            {
+                                MG_Turret[i].GetComponent<MG_Turret_AI>().StartAttack = true;
+                                if (MG_Turret[i].GetComponent<MG_Turret_AI>().enabled) AttackModePS[i].SetActive(true);
+                            }
+                        }
                     }
-                    else if(!Reload[0])  //處於非冷卻狀態
+                    else
                     {
-                        AttackMode = 1;  //攻擊模式1
-                        MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
-                        MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
-                        MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
-                        AttackModePS[0].SetActive(false);
-                        AttackModePS[1].SetActive(false);
-                        AttackModePS[2].SetActive(false);
-                        //print("開火");
+                        for (int i = 0; i < MG_Turret.Length; i++)
+                        {
+                            if (MG_Turret[i].GetComponent<MG_Turret_AI>().Dead)
+                            {
+                                MG_Turret[i].GetComponent<MG_Turret_AI>().StartAttack = false;
+                            }
+                        }
                     }
-                    MA_weight += 1.5f * Time.deltaTime;
-                    if (MA_weight >= 1) MA_weight = 1;
                     break;
-                case 2:  //攻擊1 右邊死角範圍
-                    Reload[0] = true;
-                    overheatLock = false;
-                    ReLoad(0);
-                    AttackMode = 2;  //攻擊模式2
-                    MA_weight -= 0.5f * Time.deltaTime;
-                    if (MA_weight <= 0.4) MA_weight = 0.4f;
-                    MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    AttackModePS[0].SetActive(false);
-                    if (MG_Turret[1].GetComponent<MG_Turret_AI>().enabled)  AttackModePS[1].SetActive(true);
-                    if (MG_Turret[2].GetComponent<MG_Turret_AI>().enabled)  AttackModePS[2].SetActive(true);
-                    break;
-                case 3:  //攻擊1 左邊死角範圍
-                    Reload[0] = true;
-                    overheatLock = false;
-                    ReLoad(0);
-                    AttackMode = 2;  //攻擊模式2
-                    MA_weight -= 0.5f * Time.deltaTime;
-                    if (MA_weight <= 0.5) MA_weight = 0.5f;
-                    MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    if (MG_Turret[0].GetComponent<MG_Turret_AI>().enabled) AttackModePS[0].SetActive(true);
-                    if (MG_Turret[1].GetComponent<MG_Turret_AI>().enabled) AttackModePS[1].SetActive(true);
-                    if (MG_Turret[2].GetComponent<MG_Turret_AI>().enabled) AttackModePS[2].SetActive(true);
-                    break;
+            }
+
+            if (AttackMode == 2 && D_level==2 && !DialogueEditor.Talking)
+            {
+                D_level = 3;
+                PlayerView.missionChange(4, 2);  //改變關卡
+                DialogueEditor.StartConversation(4, 2, 2, false, 0, true);  //開始對話
+                Level_1.UiOpen = true;
             }
             if (!MG_Turret[0].GetComponent<MG_Turret_AI>().enabled &&!MG_Turret[1].GetComponent<MG_Turret_AI>().enabled 
                 && !MG_Turret[2].GetComponent<MG_Turret_AI>().enabled && AttackRange!=1)
@@ -588,9 +631,6 @@ public class Boss02_AI : MonoBehaviour
                     BulletType = 1;
                     break;
                 case 3:  //射黑火+不限制火炮 打左胸弱點
-                    MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = true;
-                    MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = true;
                     break;
                 case 4:  //散發出黑火形成巨大黑火球 全身水晶炸掉露出最後弱點 爆炸前打死Boss2
                     break;

@@ -170,6 +170,7 @@ public class Shooting : MonoBehaviour
 
         Muzzle_vfx[WeaponType].SetActive(false);
         MuSmoke[WeaponType].Stop();
+        MuSmoke[WeaponType].gameObject.SetActive(false);
         for (int i = 0; i < GunFlashlight.Length; i++)  //預設關手電筒
         {
             GunFlashlight[i].SetActive(true);
@@ -293,7 +294,7 @@ public class Shooting : MonoBehaviour
                         DialogueEditor.StartConversation(0, 2, 0, true, 0, true);  //開始對話
                         StartAll();
                     }
-                    if (FirstWeapon[1])  //第一次取得左輪
+                    if (FirstWeapon[1] && Level_1.TotalStage==1)  //第一次取得左輪
                     {
                         Level_1.UiOpen = true;  //開啟任務UI與音效
                         Level_1.StopAttack = false;  //怪物繼續進攻
@@ -334,6 +335,7 @@ public class Shooting : MonoBehaviour
             }
             _Animator[WeaponType].SetActive(true);
             MuSmoke[WeaponType].Stop();
+            MuSmoke[WeaponType].gameObject.SetActive(false);
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
             if (Weapons[WeaponType].WeapAm != 0)  //當前武器彈藥大於0
             {
@@ -1006,6 +1008,7 @@ public class Shooting : MonoBehaviour
                     GunshotsAudio(1);
                     break;
             }
+            MuSmoke[WeaponType].gameObject.SetActive(true);
             MuSmoke[WeaponType].transform.position = muzzlePOS;
             MuSmoke[WeaponType].Play();
             BFire = false;
