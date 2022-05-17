@@ -120,10 +120,7 @@ public class PlayerView : MonoBehaviour
         missionStage = 0;
         Stop = UI_Stop = false;
         DontDestroyOnLoad(gameObject);  //切換場景時保留
-        //DontDestroyOnLoad(targetUI.gameObject);  //切換場景時保留
-    }
-    void Update()
-    {
+                                        //DontDestroyOnLoad(targetUI.gameObject);  //切換場景時保留
         int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         switch (SceneNub)
         {
@@ -137,6 +134,9 @@ public class PlayerView : MonoBehaviour
                 missionLevel = 4;
                 break;
         }
+    }
+    void Update()
+    {
         switch (missionLevel)
         {
             case 0:
@@ -155,6 +155,7 @@ public class PlayerView : MonoBehaviour
                 MissionTaget = MissionTaget_L3;
                 break;
         }
+
         SF_missionLevel = missionLevel;
         st_missionStage = missionStage;
         SF_UI_Stop = UI_Stop;

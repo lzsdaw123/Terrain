@@ -121,6 +121,10 @@ public class AudioManager : MonoBehaviour
                 //    雨聲.Play();
                 //}
             }
+            if (SceneNub == 3)
+            {
+                AmbientSource.Stop();
+            }
         }          
 
         SF_SceneNub = SceneNub;

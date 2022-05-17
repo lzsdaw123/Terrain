@@ -430,35 +430,38 @@ public class Level_1 : MonoBehaviour
                     }
                 }
                 //當前波數結束
-                if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0 && _SpawnRay.counter[2] == 0)
+                if (SceneNub == 2)
                 {
-                    switch (LevelA_)
+                    if (!_SpawnRay.StartBorn && _SpawnRay.counter[0] == 0 && _SpawnRay.counter[1] == 0 && _SpawnRay.counter[2] == 0)
                     {
-                        case 4:  //第一波結束
-                            MissionUI[0].SetActive(true);
-                            LevelA_ = 5;
-                            StopAttack = true;
-                            UiOpen = true;
-                            PlayerView.missionChange(2, 1);  //改變關卡
-                            DialogueEditor.StartConversation(2, 1, 0, false, 0, true);  //開放左輪使用
-                            Objects[2].GetComponent<BoxCollider>().enabled = true;
-                            break;
-                        case 6:  //第二波結束
-                            print("6");
-                            LevelA_ = 7;
-                            StopAttack = true;
-                            cameraMove.CameraMovement(0, 6, 3, true);  //(哪台, 速度, 延遲, 二次)
-                            DelayTime = 0;  //延遲倒數
-                            break;
-                        case 8: //擊敗水晶Boss並打光怪物
-                            print("8");
-                            LevelA_ = 9;
-                            StopAttack = true;
-                            DelayTime = 0;  //延遲倒數
-                            Area_Loading.AreaLoading(0);
-                            break;
+                        switch (LevelA_)
+                        {
+                            case 4:  //第一波結束
+                                MissionUI[0].SetActive(true);
+                                LevelA_ = 5;
+                                StopAttack = true;
+                                UiOpen = true;
+                                PlayerView.missionChange(2, 1);  //改變關卡
+                                DialogueEditor.StartConversation(2, 1, 0, false, 0, true);  //開放左輪使用
+                                Objects[2].GetComponent<BoxCollider>().enabled = true;
+                                break;
+                            case 6:  //第二波結束
+                                print("6");
+                                LevelA_ = 7;
+                                StopAttack = true;
+                                cameraMove.CameraMovement(0, 6, 3, true);  //(哪台, 速度, 延遲, 二次)
+                                DelayTime = 0;  //延遲倒數
+                                break;
+                            case 8: //擊敗水晶Boss並打光怪物
+                                print("8");
+                                LevelA_ = 9;
+                                StopAttack = true;
+                                DelayTime = 0;  //延遲倒數
+                                Area_Loading.AreaLoading(0);
+                                break;
+                        }
                     }
-                }
+                }              
                 break;
             case 2:  //第二關  TotalStage
                 switch (missionStage)

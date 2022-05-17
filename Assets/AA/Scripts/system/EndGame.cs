@@ -43,6 +43,7 @@ public class EndGame : MonoBehaviour
                         PlayerView.UI_Stop = true;
                         HeroLife.HpLv = 2;
                         Level_1.StartTime = -1;
+                        ObjectPool.color = true;
                         break;
                     case 1:
                         ExitGame();

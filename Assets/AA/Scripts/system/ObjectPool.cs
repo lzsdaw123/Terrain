@@ -40,6 +40,8 @@ public class ObjectPool : MonoBehaviour
     private Queue<GameObject> B2_Hit_pool = new Queue<GameObject>();
 
     public static float Harm;
+    public static int SceneNub;
+    public static bool color;
 
     void Awake()
     {
@@ -126,6 +128,7 @@ public class ObjectPool : MonoBehaviour
     }
     void Start()
     {
+        color = false;
         MBulletPool.SetActive(true);
         MonsterPool_A.SetActive(true);
         MonsterPool_B.SetActive(true);
@@ -133,13 +136,14 @@ public class ObjectPool : MonoBehaviour
     }
     void Update()
     {
-        int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
+        SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         if (SceneNub == 1)
         {
             Destroy(gameObject);
         }
-        if (SceneNub == 3)
+        if (SceneNub == 3 || color)
         {
+            color = false;
             MBulletPool.SetActive(false);
             MonsterPool_A.SetActive(false);
             MonsterPool_B.SetActive(false);
