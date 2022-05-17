@@ -91,6 +91,7 @@ public class AsyncLoadScene : MonoBehaviour
 				operation.allowSceneActivation = true;
 				PlayerResurrection.ReO = true;
 				PlayerResurrection.PlayerBirth();  //讓玩家生成
+				PlayerResurrection.ReDelete = false;  //重新開始 刪除
 				Level_1.MissionTime = 0;
                 Level_1.UiOpen = false;
                 Level_1.LevelB_ = 1;

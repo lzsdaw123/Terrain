@@ -81,9 +81,12 @@ public class Shooting : MonoBehaviour
     public static bool SkipTeach;
     Image Aim;
     static UpgradeValue[] 武器欄位;
+    [SerializeField] UpgradeValue[] SF_武器欄位;
     public 部位[] 部位;
     [SerializeField] int 部位ID, 零件ID;
     public static bool 換部件;
+    public float PowerAdd;
+    public float 輸出傷害;
     static bool Bomb=true;
     public bool hitDamage;
     public static int GrenadeNub; //手榴彈數量
@@ -186,6 +189,7 @@ public class Shooting : MonoBehaviour
         SF_Reload = Reload;
         SF_ReReload = ReReload;
         SF_Save_Magazine = Save_Magazine;
+        SF_武器欄位 = 武器欄位;
         if (換部件)
         {
             換部件 = false;
@@ -813,11 +817,12 @@ public class Shooting : MonoBehaviour
                 if (Physics.Raycast(ray[n], out hit[n], distance, layerMask))  //擊中圖層
                 {
                     hitDamage = false;
-                    float PowerAdd = 武器欄位[WeaponType].Power;
+                    PowerAdd = 武器欄位[WeaponType].Power;
                     //print(PowerAdd);
                     if (hit[n].collider.tag == "NPC")
                     {
                         hit[n].transform.SendMessage("TeamDamage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
+                        輸出傷害 = Weapons[WeaponType].power * PowerAdd;
                     }
                     //Debug.DrawLine(ray[n].origin, hit[n].point, Color.green, 1f, false);
                     if (hit[n].collider.gameObject.layer == LayerMask.NameToLayer("Default"))  //彈孔噴黑煙
@@ -921,11 +926,11 @@ public class Shooting : MonoBehaviour
                                 hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
                                 if (n == 0)
                                 {
-                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power *2 * PowerAdd);  //造成一半傷害
+                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power *3 * PowerAdd);  //造成一半傷害
                                 }
                                 else
                                 {
-                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power *0.6f * PowerAdd);  //造成一半範圍傷害
+                                    hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power *0.8f * PowerAdd);  //造成一半範圍傷害
                                 }
                             }
                         }
@@ -935,6 +940,7 @@ public class Shooting : MonoBehaviour
                         if(hit[n].collider.GetComponent<Crystal_Life>())  //如果水晶可破壞
                         {
                             hit[n].collider.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
+                            輸出傷害 = Weapons[WeaponType].power * PowerAdd;
                         }
                         AudioManager.Hit(5);  //擊中水晶音效
                         HitType = 8;
@@ -948,16 +954,17 @@ public class Shooting : MonoBehaviour
                         {
                             if (n == 0)
                             {
-                                hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power * 5 * PowerAdd);  //造成中心傷害
+                                hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power * 7 * PowerAdd);  //造成中心傷害
                             }
                             else
                             {
-                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * 1.2f * PowerAdd);  //造成範圍傷害
+                                hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * 1.6f * PowerAdd);  //造成範圍傷害
                             }
                         }
                         else
                         {
                             hit[n].transform.SendMessage("Damage", Weapons[WeaponType].power * PowerAdd);  //造成傷害
+                            輸出傷害 = Weapons[WeaponType].power * PowerAdd;
                         }
                         //Debug.DrawLine(ray.origin, hit.point, Color.blue, 0.3f, false);
                     }
@@ -1090,10 +1097,10 @@ public class Shooting : MonoBehaviour
         switch (T)
         {
             case 0:
-                FirstAmm = true;
                 Ammunition.showUI();
-                if (FirstAmm && !SkipTeach)  //第一次取得彈藥並且沒跳教學
+                if (!FirstAmm && !SkipTeach)  //第一次取得彈藥並且沒跳教學
                 {
+                    FirstAmm = true;
                     DialogueEditor.StartConversation(0, 3, 0, true, 0, true);  //開始對話
                 }
                 st_Weapon.SetTrigger("Reload");
@@ -1103,7 +1110,10 @@ public class Shooting : MonoBehaviour
                 StartAll();
                 break;
             case 1:
-                FirstAmm = true;
+                if(!FirstAmm && !SkipTeach)
+                {
+                    FirstAmm = true;
+                }
                 Ammunition.showUI();
                 FireButtle = 0;
                 StartAll();

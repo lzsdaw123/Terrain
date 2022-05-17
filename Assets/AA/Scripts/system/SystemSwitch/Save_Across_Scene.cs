@@ -35,7 +35,7 @@ public class Save_Across_Scene : MonoBehaviour
     void Update()
     {
         float SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
-        if (SceneNub == 1)
+        if (SceneNub == 1 || PlayerResurrection.ReDelete)
         {
             Destroy(gameObject);
         }

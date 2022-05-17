@@ -111,7 +111,7 @@ public class Level_1 : MonoBehaviour
         switch (SceneNub)
         {
             case 1:
-                Destroy(gameObject);
+                Destroy(gameObject);               
                 break;
             case 2:
                 TotalStage = 1;
@@ -122,7 +122,10 @@ public class Level_1 : MonoBehaviour
                 Shooting.SkipTeach = true;
                 break;
         }
-
+        if (PlayerResurrection.ReDelete)
+        {
+             Destroy(gameObject);
+        }
         //if (Input.GetKey(KeyCode.F5))
         //{
         //    PlayerView.missionLevel = 2;

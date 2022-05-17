@@ -53,7 +53,7 @@ public class DialogueEditor : MonoBehaviour
         SF_Delay = Delay;
         SF_TextLine = TextLine;
         int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
-        if (SceneNub == 1)
+        if (SceneNub == 1 || PlayerResurrection.ReDelete)
         {
             Destroy(gameObject);
         }

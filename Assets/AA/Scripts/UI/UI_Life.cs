@@ -28,7 +28,7 @@ public class UI_Life : MonoBehaviour
             case 1:
                 DontDestroyOnLoad(gameObject);  //切換場景時保留
                 int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
-                if (SceneNub == 1)
+                if (SceneNub == 1 || PlayerResurrection.ReDelete)
                 {
                     Destroy(gameObject);
                 }

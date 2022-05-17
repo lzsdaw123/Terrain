@@ -18,6 +18,7 @@ public class NPC_Life : MonoBehaviour
     public Animator ani; //動畫控制器
     public GameObject Exp, BigExp;  //爆炸,大爆炸
     public bool 無敵;
+    public bool Neutral=false;
 
     void OnDisable()
     {
@@ -38,8 +39,17 @@ public class NPC_Life : MonoBehaviour
         GetComponent<CapsuleCollider>().enabled = true;
         GetComponent<NavMeshAgent>().enabled = true;
         GetComponent<Rigidbody>().isKinematic = true;
-        gameObject.layer = LayerMask.NameToLayer("Actor");
-        gameObject.tag = "NPC";
+        if (Neutral)
+        {
+            gameObject.layer = LayerMask.NameToLayer("Neutral");
+            gameObject.tag = "Neutral";
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("Actor");
+            gameObject.tag = "NPC";
+        }
+
     }
 
     public void Damage(float Power) // 接受傷害

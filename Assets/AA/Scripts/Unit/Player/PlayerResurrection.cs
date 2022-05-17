@@ -39,6 +39,8 @@ public class PlayerResurrection : MonoBehaviour
     public GameObject[] ReObjects;
     public static bool ReO;
     public static bool GameRe;
+    public static bool ReDelete;  //重新刪除
+    [SerializeField] bool SF_ReDelete;  //重新刪除
 
     void Awake()
     {
@@ -116,6 +118,7 @@ public class PlayerResurrection : MonoBehaviour
 
     void Update()
     {
+        SF_ReDelete = ReDelete;
         if (ReO && SceneNub==3)
         {
             ReObjects[0] = GameObject.Find("BOSS 2").gameObject;
@@ -315,6 +318,7 @@ public class PlayerResurrection : MonoBehaviour
     {
         GameOver = true;
     }
+    //會繼承的物件 Dialogue Editor,  MissionTaget_PlayerView,  Level_1,  Canvas,  ObjectPool,  CameraMove,  POPP
     public void SceneRe()  //重新關卡
     {
         GameRe = true;
@@ -326,6 +330,8 @@ public class PlayerResurrection : MonoBehaviour
         {
             case 2:  //第一關
                 RebirthPonitNub = 0;
+                ReDelete = true;  //重新開始 刪除
+                Destroy(Player);  //刪除玩家
                 SceneManager.UnloadSceneAsync("SampleScene");
                 Settings.LoadNewScene("SampleScene");
                 break;

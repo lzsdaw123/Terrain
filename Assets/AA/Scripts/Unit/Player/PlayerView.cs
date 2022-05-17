@@ -137,6 +137,10 @@ public class PlayerView : MonoBehaviour
     }
     void Update()
     {
+        if (PlayerResurrection.ReDelete)
+        {
+            Destroy(gameObject);
+        }
         switch (missionLevel)
         {
             case 0:
