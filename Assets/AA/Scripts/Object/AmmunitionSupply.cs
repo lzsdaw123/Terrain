@@ -203,7 +203,7 @@ public class AmmunitionSupply : MonoBehaviour
                         Am_zero_Warn.SetActive(false);
                         AudioManager.PickUp(0);
                         FirstAmm = Shooting.FirstAmm;
-                        if (!FirstAmm  && WeaponType==0)
+                        if (!FirstAmm  && WeaponType==0 && !Shooting.SkipTeach)
                         {
                             FirstAmm = true;
                             Shooting.PickUpAmm(0);

@@ -39,6 +39,7 @@ public class MonsterLife : MonoBehaviour
     bool Dead;
     public SkinnedMeshRenderer SMeshR;
     public Material[] materials;
+    public bool MonsterDead;
 
     void Awake()
     {
@@ -60,7 +61,7 @@ public class MonsterLife : MonoBehaviour
         RefreshLifebar(); // 更新血條
         HitUI.SetActive(false);
         HitUITime = 0;
-        Dead = false;
+        Dead = MonsterDead = false;
         //ani = GetComponent<Animator>();
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
@@ -85,7 +86,12 @@ public class MonsterLife : MonoBehaviour
         //}
         if (Level_1.MonsterDead)  //自爆
         {
-            Damage(hpFull[MonsterType]);
+            if (!MonsterDead)
+            {
+                MonsterDead = true;
+                Player = false;
+                Damage(hpFull[MonsterType]);
+            }
         }
         if (PS_Dead != null)
         {

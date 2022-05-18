@@ -182,7 +182,6 @@ public class Shooting : MonoBehaviour
         }
         Aim =  GameObject.Find("Aim").gameObject.GetComponent<Image>();
         Weapon.SetBool("LayDown", true);
-        武器欄位 = UpgradeWorkbench.PS_武器欄位;
     }
     void Update()
     {
@@ -824,7 +823,6 @@ public class Shooting : MonoBehaviour
                     PowerAdd = 武器欄位[WeaponType].Power;
                     if (PowerAdd <= 0)
                     {
-                        武器欄位 = UpgradeWorkbench.PS_武器欄位;
                         PowerAdd = 武器欄位[WeaponType].Power;
                         if (PowerAdd <= 0) PowerAdd = 1;
                     }

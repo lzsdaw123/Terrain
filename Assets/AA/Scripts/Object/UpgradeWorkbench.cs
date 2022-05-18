@@ -30,7 +30,6 @@ public class UpgradeWorkbench : MonoBehaviour
     public GameObject AllObject;  //全物件
     public GameObject[] 升級UI;
     public UpgradeValue[] 武器欄位;  //(武器類型, 編號, 名稱, 圖片, 等級, 威力)
-    public static UpgradeValue[] PS_武器欄位;  //(武器類型, 編號, 名稱, 圖片, 等級, 威力)
     public int DropdownType;
     public int FieldType;
     public int Save_PartObject;
@@ -71,7 +70,6 @@ public class UpgradeWorkbench : MonoBehaviour
 
     void Update()
     {
-        PS_武器欄位 = 武器欄位;
         if (CamMove)
         {
             if (Move)  //拉近
