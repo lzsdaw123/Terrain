@@ -473,7 +473,7 @@ public class Level_1 : MonoBehaviour
                 if (LevelA_ == 8)
                 {
                     BossDeadTime += Time.deltaTime;
-                    if (BossDeadTime >=16)
+                    if (BossDeadTime >=30)
                     {
                         MonsterDead = true;
                         BossDeadTime = 0;

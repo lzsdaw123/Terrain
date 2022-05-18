@@ -150,6 +150,7 @@ public class Shooting : MonoBehaviour
         SwitchWeapon = false;
         FirstWeapon = new bool[] { false, false, false };
         Grenade = new GameObject[3]; //手雷上限
+        PowerAdd = 1;
     }
     void Start()
     {
@@ -181,6 +182,7 @@ public class Shooting : MonoBehaviour
         }
         Aim =  GameObject.Find("Aim").gameObject.GetComponent<Image>();
         Weapon.SetBool("LayDown", true);
+        武器欄位 = UpgradeWorkbench.PS_武器欄位;
     }
     void Update()
     {
@@ -820,6 +822,12 @@ public class Shooting : MonoBehaviour
                 {
                     hitDamage = false;
                     PowerAdd = 武器欄位[WeaponType].Power;
+                    if (PowerAdd <= 0)
+                    {
+                        武器欄位 = UpgradeWorkbench.PS_武器欄位;
+                        PowerAdd = 武器欄位[WeaponType].Power;
+                        if (PowerAdd <= 0) PowerAdd = 1;
+                    }
                     //print(PowerAdd);
                     if (hit[n].collider.tag == "NPC")
                     {
@@ -1060,7 +1068,7 @@ public class Shooting : MonoBehaviour
     }
     public static void DpsUp()
     {
-        Weapons[WeaponType].power = 1 + Shop.DpsLv;
+        //Weapons[WeaponType].power = 1 + Shop.DpsLv;
     }
     public static void Loaded()  //武器上膛
     {

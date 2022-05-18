@@ -30,8 +30,10 @@ public class UpgradeWorkbench : MonoBehaviour
     public GameObject AllObject;  //全物件
     public GameObject[] 升級UI;
     public UpgradeValue[] 武器欄位;  //(武器類型, 編號, 名稱, 圖片, 等級, 威力)
+    public static UpgradeValue[] PS_武器欄位;  //(武器類型, 編號, 名稱, 圖片, 等級, 威力)
     public int DropdownType;
     public int FieldType;
+    public int Save_PartObject;
     public int PartType;
     public static int 部位ID,零件ID;
     public string 部件名稱;
@@ -42,6 +44,9 @@ public class UpgradeWorkbench : MonoBehaviour
 
     private void Awake()
     {
+        AddPower = new float[] {1,1 };
+        AddRecoil = new float[] {3.5f,0 };
+        Save_PartObject = 0;
     }
     void Start()
     {
@@ -59,12 +64,14 @@ public class UpgradeWorkbench : MonoBehaviour
         部件名稱 = "不使用";
         time = -1;
         FirstWork = false;
+        武器欄位[0].Power = AddPower[0] * AddPower[1];  //傷害 = 基礎 *槍口 * 彈匣
+        武器欄位[0].Recoil = AddRecoil[0] + AddRecoil[1];  //後座力 = 基礎 *槍口 + 彈匣
         Shooting.UseWork(武器欄位);
     }
 
     void Update()
     {
-
+        PS_武器欄位 = 武器欄位;
         if (CamMove)
         {
             if (Move)  //拉近
@@ -211,6 +218,7 @@ public class UpgradeWorkbench : MonoBehaviour
                         武器欄位[dropdown.value].部位[n].PartObject[1].SetActive(true);   //打開當前武器
                     }
                 }
+                Save_PartObject = dropdown.value;
                 break;
             case 1:  //換部件
                 for (int i = 0; i < 武器欄位[FieldType].部位[PartType].Part.Length; i++)
@@ -256,6 +264,10 @@ public class UpgradeWorkbench : MonoBehaviour
         time = 0;
         CamMove = true;
         Move = false;
+        for (int i = 0; i < 武器欄位.Length; i++)
+        {
+            武器欄位[i].Object.SetActive(false);
+        }
         Shooting.UseWork(武器欄位);
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
     }
@@ -288,7 +300,7 @@ public class UpgradeWorkbench : MonoBehaviour
             CamMove = true;
             Move = true;
             time = 0;
-            武器欄位[0].Object.SetActive(true);
+            武器欄位[Save_PartObject].Object.SetActive(true);
             升級UI[0].SetActive(true);
             if (!FirstWork)
             {
