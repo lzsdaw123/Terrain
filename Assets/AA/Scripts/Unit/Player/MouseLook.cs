@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class MouseLook : MonoBehaviour
 {
     public float mouseSpeed = 100f;
-    public float smoothSpeed;   //滑鼠靈敏度
+    public float smoothSpeed = 16;   //滑鼠靈敏度
     public Transform playerBody, m_transform,Gun;  //相機
     public float rotationX, rotationY = 0f;
     float camY = 2.865f;
@@ -32,8 +32,6 @@ public class MouseLook : MonoBehaviour
     static bool shake;
     public float mouseX, mouseY;
 
-    public float smooth = 3;          // 相機移動的平穩程度
-
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
@@ -47,6 +45,12 @@ public class MouseLook : MonoBehaviour
     }
     void Update()
     {
+        smoothSpeed = Settings.smoothSpeed;
+        if(smoothSpeed  != Settings.Save_mouse_Slider)
+        {
+            smoothSpeed = Settings.Save_mouse_Slider;
+        }
+
         if (shake)
         {
             shake = false;
@@ -135,7 +139,6 @@ public class MouseLook : MonoBehaviour
         ////GunCamera.transform.localRotation = Quaternion.Euler(0, 0, GRy);  //武器左右晃
         GunObject.transform.localRotation = Quaternion.Euler(0, 0, -GRy);  //武器左右晃
 
-        smoothSpeed = Settings.smoothSpeed;
         //print(smoothSpeed);
         rotationX -= mouseY * smoothSpeed * Time.smoothDeltaTime;  //滑鼠控制鏡頭上下
         rotationX = Mathf.Clamp(rotationX, -85f, 80f);

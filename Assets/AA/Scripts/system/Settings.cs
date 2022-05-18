@@ -37,10 +37,11 @@ public class Settings : MonoBehaviour
     public bool EnterStart;  //起始場景切換開關
     public int 關卡選擇;
 
-    public static float smoothSpeed;  //滑鼠速度
+    public static float smoothSpeed=16;  //滑鼠速度
     [SerializeField] float SF_smoothSpeed;  //滑鼠速度
     public Slider mouse_Slider;  //滑鼠靈敏度
     public Text mouse_Nub;
+    public static float Save_mouse_Slider;
     public static int Level;
 
     [SerializeField] GameObject Player;
@@ -97,8 +98,10 @@ public class Settings : MonoBehaviour
 
         mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
         mouse_Slider.value = 16;  //滑鼠預設靈敏度
+        Save_mouse_Slider = mouse_Slider.value;
 
         BirthPoint = GameObject.Find("BirthPoint").gameObject;
+        PsI.color = new Color(0.37f, 0.55f, 0.67f, 1f);
     }
     void Start()
     {
@@ -117,10 +120,15 @@ public class Settings : MonoBehaviour
         {
             START_bool = false;
         }
-        else if (SceneNub == 2 || SceneNub == 3)
+        if (SceneNub == 2 || SceneNub == 3)
         {
             START_bool = true;
         }
+        smoothSpeed = mouse_Slider.value;  //滑鼠靈敏度
+        float ScrN = mouse_Slider.value / mouse_Slider.maxValue * 100;
+        int _Nub = (int)ScrN;
+        mouse_Nub.text = _Nub + " %";
+        Save_mouse_Slider = mouse_Slider.value;
 
         if (START_bool)
         {
@@ -184,10 +192,7 @@ public class Settings : MonoBehaviour
         //    Cursor.lockState = CursorLockMode.None; //游標無狀態模式
         //    Settings.LoadScene("Start");
         //}
-        smoothSpeed = mouse_Slider.value;
-        float ScrN = mouse_Slider.value / mouse_Slider.maxValue *100;
-        int _Nub = (int)ScrN;
-        mouse_Nub.text = _Nub + " %";
+
     }
     public static void pause()  //開啟設定介面
     {
@@ -269,8 +274,8 @@ public class Settings : MonoBehaviour
     {
         ButtonAudio();
         PictureSetUI.SetActive(true);
-        AsI.color = new Color(0.643f, 0.643f, 0.643f, 1f);
-        PsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
+        PsI.color = new Color(0.55f, 0.82f, 1, 1f);
+        AsI.color = new Color(0.37f, 0.55f, 0.67f, 1f);
         AudioManager.AudioSourceUI.SetActive(false);
     }
 

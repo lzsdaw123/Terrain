@@ -77,7 +77,7 @@ public class AudioManager : MonoBehaviour
 
         muteState[1] = AmbientSource.mute;
         muteState[2] = PlayerSource.mute;
-        AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
+        AsI.color = new Color(0.55f, 0.82f, 1, 1f);
         SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         OriSceneNub = SceneNub;
         //StartLevelAudio(SceneNub);
@@ -197,8 +197,8 @@ public class AudioManager : MonoBehaviour
     public void AudioSetUI()  //點開聲音設定UI
     {
         AudioManager.Button();
-        AsI.color = new Color(0.298f, 0.298f, 0.298f, 1f);
-        PsI.color = new Color(0.643f, 0.643f, 0.643f, 1f);
+        AsI.color = new Color(0.55f, 0.82f, 1, 1f);
+        PsI.color = new Color(0.37f, 0.55f, 0.67f, 1f);
         AudioSourceUI.SetActive(true);
         SettingsCanvas.PictureSetUI.SetActive(false);
     }
