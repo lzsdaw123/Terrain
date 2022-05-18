@@ -83,6 +83,10 @@ public class MonsterLife : MonoBehaviour
         //    agent.enabled = false;  //立即關閉尋徑功能
         //    ani.SetTrigger("Die");
         //}
+        if (Level_1.MonsterDead)  //自爆
+        {
+            Damage(hpFull[MonsterType]);
+        }
         if (PS_Dead != null)
         {
             if (PS_Dead.activeSelf)

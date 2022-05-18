@@ -64,6 +64,8 @@ public class Level_1 : MonoBehaviour
     public float DelayTime;  //延遲倒數
     public static bool minRain;  //降低下雨
     public GameObject[] M_Trigger;
+    public static float BossDeadTime;
+    public static bool MonsterDead;
 
     void Awake()
     {
@@ -90,7 +92,9 @@ public class Level_1 : MonoBehaviour
         MissionUI[0].SetActive(false);
         tagetUI.SetActive(false);
         //DialogBox.SetActive(false);
-        DelayTime = -1;
+        DelayTime  = -1;
+        BossDeadTime = 0;
+        MonsterDead = false;
         MissionWarn.SetActive(false);
         MissonStringL1 = new string[] { "管理與監控", "物資儲存", "取得武器", "補充彈藥", "修理與升級", "電力供應",  "到工作崗位"};
         MissonStringL1_2 = new string[] { "到工作崗位"};
@@ -457,6 +461,7 @@ public class Level_1 : MonoBehaviour
                                 break;
                             case 8: //擊敗水晶Boss並打光怪物
                                 print("8");
+                                BossDeadTime = 0;
                                 LevelA_ = 9;
                                 StopAttack = true;
                                 DelayTime = 0;  //延遲倒數
@@ -464,7 +469,20 @@ public class Level_1 : MonoBehaviour
                                 break;
                         }
                     }
-                }              
+                }
+                if (LevelA_ == 8)
+                {
+                    BossDeadTime += Time.deltaTime;
+                    if (BossDeadTime >=16)
+                    {
+                        MonsterDead = true;
+                        BossDeadTime = 0;
+                        LevelA_ = 9;
+                        StopAttack = true;
+                        DelayTime = 0;  //延遲倒數
+                        Area_Loading.AreaLoading(0);
+                    }
+                }
                 break;
             case 2:  //第二關  TotalStage
                 switch (missionStage)
