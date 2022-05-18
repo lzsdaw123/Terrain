@@ -36,6 +36,8 @@ public class Crystal_Life : MonoBehaviour
     public GameObject Model;  //模型
     public MeshRenderer MR;  //模型
     public DecalProjector Decal;  //貼花
+    public MeshCollider meshCollider;
+    public Collider Collider;
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
@@ -84,6 +86,8 @@ public class Crystal_Life : MonoBehaviour
                 break;
         }
         if (MR != null) MR.enabled = true;
+        if (meshCollider != null) meshCollider.enabled = true;
+        if (Collider != null) Collider.enabled = true;
     }
 
     void Update()
@@ -197,6 +201,8 @@ public class Crystal_Life : MonoBehaviour
             if (Model !=null) Model.SetActive(false);
             if (MR != null) MR.enabled = false;
             if (cld != null) cld.enabled = false;
+            if (meshCollider != null) meshCollider.enabled = false;
+            if (Collider != null) Collider.enabled = false;
             switch (MonsterType)  //關閉怪物AI 腳本
             {
                 case 0:
