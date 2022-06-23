@@ -128,6 +128,10 @@ public class Elevator : MonoBehaviour
                         //    Animator.SetTrigger("Up");
                         //    AudioManager.MechanicalAudio(gameObject, 0);
                         //}
+                        if (Level_1.LevelA_>1)
+                        {
+                            Shooting.JumpDown = 1;
+                        }
                         EnterEV();
                     }
                     break;
@@ -196,6 +200,10 @@ public class Elevator : MonoBehaviour
         play.GetComponent<PlayerMove>().enabled = true;
         //play.GetComponent<PlayerMove>().isVehicle = false;
         //running = false;
+        if (Level_1.LevelA_ > 7)
+        {
+            Shooting.JumpDown = 6;
+        }
     }
     void middle()
     {

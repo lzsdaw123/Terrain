@@ -43,6 +43,7 @@ public class Settings : MonoBehaviour
     public Text mouse_Nub;
     public static float Save_mouse_Slider;
     public static int Level;
+    public static int GameLevel=0;
 
     [SerializeField] GameObject Player;
     public GameObject ExitUI;  //勝利UI
@@ -284,6 +285,8 @@ public class Settings : MonoBehaviour
     {
         ButtonAudio();
         START_bool = true;
+        GameLevel = 1;
+        AudioManager.AudioStop = true;
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式        
         LoadNewScene("SampleScene");
         //SceneManager.SetActiveScene(SceneManager.GetSceneByName("SampleScene"));

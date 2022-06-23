@@ -16,12 +16,12 @@ public class DialogueOptions : MonoBehaviour
     public static int Task=0;
     public static int Name;
     public static bool StartOp;
-    public GameObject Weap;
+    public GameObject[] Weap;
 
     void Start()
     {
         OptionA = new string[2] { "當然", "說來聽聽" };
-        OptionB = new string[1] { "下次一定" };
+        OptionB = new string[1] { "下次一定 (跳過教學)" };
         Do_UI = false;
     }
 
@@ -60,6 +60,9 @@ public class DialogueOptions : MonoBehaviour
         {
             Shooting.SkipTeach = false;
             DialogueEditor.coolDownTimer = DialogueEditor.coolDown;
+            //試玩
+            //PlayerView.missionChange(2, 0);  //改變關卡
+            //DialogueEditor.StartConversation(1, 0, 0, false, 0, true);  //跳到對應的對話階段
         }
         if (Task == 1) //Yes
         {
@@ -72,11 +75,15 @@ public class DialogueOptions : MonoBehaviour
         Settings.con();
         if (Task == 0)   //下次一定 (跳過教學)
         {
-            Shooting.PickUpWeapons(0, 0, Weap);
-            Weap.SetActive(false);
+            Shooting.PickUpWeapons(1, 1, Weap[1]);
+            Shooting.PickUpWeapons(0, 0, Weap[0]);
+            Weap[0].SetActive(false);
+            Weap[1].SetActive(false);
             GameObject play = GameObject.Find("POPP").gameObject;
-            Weap.transform.parent = play.gameObject.transform;  //變為子物件到玩家身上
-            Weap.transform.position = play.gameObject.transform.position;  //位置歸零
+            Weap[0].transform.parent = play.gameObject.transform;  //變為子物件到玩家身上
+            Weap[0].transform.parent = play.gameObject.transform;  //變為子物件到玩家身上
+            Weap[1].transform.position = play.gameObject.transform.position;  //位置歸零
+            Weap[1].transform.position = play.gameObject.transform.position;  //位置歸零
             AudioManager.PickUp(2);
             Shooting.PickUpAmm(1);
             Shooting.FirstAmm = true;

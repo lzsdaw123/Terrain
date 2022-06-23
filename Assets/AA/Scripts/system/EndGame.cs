@@ -37,11 +37,16 @@ public class EndGame : MonoBehaviour
                     case 0:
                         DontDestroyOnLoad(other.gameObject);  //切換場景時保留
                         other.gameObject.SetActive(false);
+                        Level_1.BG_Level = 2;
+                        Settings.GameLevel = 2;
+                        AudioManager.AudioStop = true;
                         Settings.Enter_Scene2();
                         PlayerView.missionLevel = 4;
                         PlayerView.missionStage = 0;
                         PlayerView.UI_Stop = true;
                         HeroLife.HpLv = 2;
+                        Save_Across_Scene.heroLife.closeDamageEffects(); //關閉受傷特效
+                        Save_Across_Scene.Shooting.closeFireEffects(); //關閉攻擊特效
                         Level_1.StartTime = -1;
                         Level_1.MonsterDead = false;
                         ObjectPool.color = true;

@@ -123,7 +123,7 @@ public class MissionTarget_Life : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            Destroyed();
+            //Destroyed();
         }
     }
     void Destroyed()

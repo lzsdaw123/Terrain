@@ -12,6 +12,7 @@ public class MG_Turret_AI : MonoBehaviour
     public Animator ani; //動畫控制器
     public GameObject Player;  //玩家
     public GameObject bullet;
+    public GameObject Shield;  //護盾
     public LayerMask layerMask;  //圖層
     [SerializeField] private bool attacking;
     private int bulletAttack;
@@ -68,7 +69,6 @@ public class MG_Turret_AI : MonoBehaviour
         if (StartAttack && !Dead)
         {
             SF_BulletNub = BulletNub;
-
             ani.SetBool("Start", true);  //進入攻擊模式
             Vector3 origin = muzzle[0].transform.position;
             Vector3 targetPos = Player.transform.position + new Vector3(0, 2, 0);

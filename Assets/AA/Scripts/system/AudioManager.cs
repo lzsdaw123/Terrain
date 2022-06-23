@@ -56,6 +56,7 @@ public class AudioManager : MonoBehaviour
     public static int SceneNub;  //當前場景編號
     [SerializeField]int SF_SceneNub;  //當前場景編號
     int OriSceneNub;  //當前場景編號
+    public static bool AudioStop;
 
     private void Awake()
     {
@@ -88,8 +89,9 @@ public class AudioManager : MonoBehaviour
     }
     void Start()
     {
-        Slider[1].value = 0.6f;  //預設音量
-        Slider[2].value = 0.75f;  //預設音量
+        Slider[1].value = 0.8f;  //預設音量
+        Slider[2].value = 0.45f;  //預設音量
+        AudioStop = false;
     }
     void Update()
     {
@@ -99,10 +101,15 @@ public class AudioManager : MonoBehaviour
             OriSceneNub = SceneNub;
             //StartLevelAudio(SceneNub);
         }
-        if (!AmbientSource.isPlaying)
+        if (AudioStop)
+        {
+            AmbientSource.Stop();
+        }
+        if (!AmbientSource.isPlaying && !AudioStop)
         {
             if (SceneNub == 1)
             {
+                //SaveVolume[0] = 0.7f;
                 StartLevelAudio(1);
                 //風聲 = GameObject.Find("風聲").GetComponent<AudioSource>();
                 //風聲.enabled = true;
@@ -113,6 +120,7 @@ public class AudioManager : MonoBehaviour
             }
             if (SceneNub == 2)
             {
+                //SaveVolume[0] = 1f;
                 StartLevelAudio(2);
                 //雨聲 = GameObject.Find("雨聲").GetComponent<AudioSource>();
                 //雨聲.enabled = true;
@@ -125,15 +133,18 @@ public class AudioManager : MonoBehaviour
             {
                 AmbientSource.Stop();
             }
-        }          
-
+        }
+        if (SceneNub == 3 && AmbientSource.isPlaying)
+        {
+            AmbientSource.Stop();
+        }
         SF_SceneNub = SceneNub;
         if (Re)
         {
             Re = false;
             if(雨聲!=null) 雨聲.volume = Slider[1].value;
             if (風聲 != null) 風聲.volume = Slider[1].value;
-            AmbientSource.volume = Slider[1].value;
+            AmbientSource.volume = SaveVolume[0]* Slider[1].value;
             PlayerSource.volume = SaveVolume[1] * Slider[2].value;
             GunSource.volume = SaveVolume[2] * Slider[2].value;
             Gun2_Source.volume = SaveVolume[3] * Slider[2].value;
@@ -144,7 +155,7 @@ public class AudioManager : MonoBehaviour
             WarnSource.volume = Slider[2].value;
             if (ElevatorSource != null)
             {
-                ElevatorSource.volume = Slider[2].value;
+                ElevatorSource.volume = 0.9f* Slider[2].value;
             }
         }
 
@@ -241,18 +252,20 @@ public class AudioManager : MonoBehaviour
         if (Type == 1)
         {
             current.AmbientSource.clip = current.BgsCilp[0];
-            current.AmbientSource.volume = 0.8f;
+            current.AmbientSource.volume = 0.2f;
             current.AmbientSource.pitch = 1;
         }
-        if(Type == 2)
+        if (Type == 2)
         {
             current.AmbientSource.clip = current.BgsCilp[1];
+            current.AmbientSource.volume = 0.77f;
             current.AmbientSource.pitch = InteriorSpace.Pitch;
         }
         else
         {
-            current.AmbientSource.clip = null;
+            //current.AmbientSource.clip = null;
         }
+        SaveVolume[0] = current.AmbientSource.volume;
         current.AmbientSource.loop = true;
         current.AmbientSource.Play();
         OnClick();
@@ -263,7 +276,6 @@ public class AudioManager : MonoBehaviour
         {       
             ElevatorSource = gameObject.AddComponent<AudioSource>();
             ElevatorSource.clip = current.MechanicalCilp[0];
-            ElevatorSource.volume = 2f;         
         }
     }
     public static void PlayFootstepAudio(int Type)  //走路
@@ -284,7 +296,7 @@ public class AudioManager : MonoBehaviour
                 else  //走在金屬上
                 {
                     current.PlayerSource.clip = current.JumpClip[1];
-                    current.PlayerSource.volume = 0.7f;
+                    current.PlayerSource.volume = 0.42f;
                     current.PlayerSource.pitch = 0.75f;
                     if (PlayerMove.Speed <= 4)
                     {

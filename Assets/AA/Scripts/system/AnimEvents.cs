@@ -23,6 +23,8 @@ public class AnimEvents : MonoBehaviour
     public B1_BulletHole b1_BulletHole;
     public NPC_Life NPC_Life;
     public HeroLife heroLife;
+    public PlayerMove playerMove;
+    public Boss_Life boss_Life;
     public MG_Turret_AI mg_Turret_AI;
     public CameraMove cameraMove;
     public float h, v;
@@ -177,6 +179,18 @@ public class AnimEvents : MonoBehaviour
                 break;
         }
     }
+    void JumpDown(int Type)
+    {
+        switch (Shooting.JumpDown)
+        {
+            case 1:
+                Shooting.JumpDown = 2;
+                break;
+            case 4:
+                Shooting.JumpDown = 5;
+                break;
+        }
+    }
     void NPC_Dead(int N)
     {
         NPC_Life.DeadExp(N);
@@ -208,6 +222,7 @@ public class AnimEvents : MonoBehaviour
         boss01_AI.ani.SetBool("Start", true);
         boss01_AI.Scenes_ani.SetBool("Start", true);
         boss01_AI.AttackStatus = true;
+        boss_Life.Boss1HpUI.SetActive(true);
         cameraMove.CameraMoveEnd(2);
         print("0");
     }
@@ -276,7 +291,10 @@ public class AnimEvents : MonoBehaviour
         {
             if (h != 0 || v != 0)
             {
-                AudioManager.PlayFootstepAudio(0);
+                if (playerMove.isGrounded)
+                {
+                    AudioManager.PlayFootstepAudio(0);
+                }
             }
         }
     }

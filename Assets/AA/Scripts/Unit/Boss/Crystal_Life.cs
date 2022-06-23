@@ -63,7 +63,6 @@ public class Crystal_Life : MonoBehaviour
         HitUITime = 0;
         Dead = false;
         //ani = GetComponent<Animator>();
-
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
         switch (MonsterType)
@@ -238,7 +237,7 @@ public class Crystal_Life : MonoBehaviour
         //    }
         //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 50, 25, 25};
+        hpFull = new float[] { 50, 16, 16};  //水晶類型 0=場景水晶, 1= 目標水晶, 2=機槍塔
         hp = hpFull[MonsterType];  //補滿血量
     }
     void OnDisable()
