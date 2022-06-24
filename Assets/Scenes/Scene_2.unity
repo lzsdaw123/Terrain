@@ -2277,6 +2277,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &38977832
@@ -2954,6 +2955,8 @@ MonoBehaviour:
   reciever: {fileID: 452356551}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 1943368843}
   Type: 0
@@ -15249,6 +15252,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &350300633
@@ -20105,6 +20109,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &441946184
@@ -20730,6 +20735,8 @@ MonoBehaviour:
   reciever: {fileID: 1927361143}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 588866564}
   LightB: {fileID: 1943368843}
   Type: 1
@@ -21058,6 +21065,8 @@ MonoBehaviour:
   reciever: {fileID: 489378809}
   Portal: []
   dotProduct: -7.531786
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -22970,6 +22979,8 @@ MonoBehaviour:
   reciever: {fileID: 1250454988}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -24805,6 +24816,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &523764627
@@ -25312,6 +25324,8 @@ MonoBehaviour:
   reciever: {fileID: 2120646330}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -29097,6 +29111,8 @@ MonoBehaviour:
   reciever: {fileID: 456817834}
   Portal: []
   dotProduct: -7.531786
+  coolDown: 1
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -30387,6 +30403,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &628899426
@@ -31473,6 +31490,7 @@ MonoBehaviour:
   - {fileID: 1700111727}
   - {fileID: 314545241}
   - {fileID: 1783862740}
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!23 &650721542
@@ -33556,6 +33574,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &697974181
@@ -35107,6 +35126,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &741804580
@@ -36019,6 +36039,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &756813165
@@ -40108,6 +40129,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &896992411
@@ -41948,6 +41970,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &933099153
@@ -42381,6 +42404,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &936931779
@@ -42543,6 +42567,128 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938502901}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &939055733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 939055738}
+  - component: {fileID: 939055737}
+  - component: {fileID: 939055736}
+  - component: {fileID: 939055735}
+  - component: {fileID: 939055734}
+  m_Layer: 0
+  m_Name: KillBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &939055734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939055733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e367cb29b41a9e4e90f652507f919d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Level: -1
+  Type: -1
+  Features: -1
+  Objects: []
+  boss02_AI: {fileID: 0}
+  level_1: {fileID: 0}
+  mg_Turret_AI: {fileID: 0}
+  mg_Turret_AI_S: []
+  KillBox: 1
+  time: 0
+  StartTime: 0
+--- !u!65 &939055735
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939055733}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &939055736
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939055733}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 257
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &939055737
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939055733}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &939055738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939055733}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 509.3801, y: -448, z: 194.3077}
+  m_LocalScale: {x: 1651.8308, y: 61.694893, z: 1165.2787}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2061494930}
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &939134642
 GameObject:
   m_ObjectHideFlags: 0
@@ -45627,6 +45773,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &1027250590
@@ -46400,6 +46547,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &1036947639
@@ -59642,6 +59790,8 @@ MonoBehaviour:
   - {fileID: 1250454987}
   - {fileID: 1266366450}
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -60628,6 +60778,8 @@ MonoBehaviour:
   - {fileID: 1266366450}
   - {fileID: 1250454987}
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -69403,6 +69555,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &1338800764
@@ -70097,6 +70250,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &1358013392
@@ -74939,6 +75093,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &1472139229
@@ -87477,6 +87632,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!65 &1752862540
@@ -90552,6 +90708,7 @@ MonoBehaviour:
   level_1: {fileID: 0}
   mg_Turret_AI: {fileID: 0}
   mg_Turret_AI_S: []
+  KillBox: 0
   time: 0
   StartTime: 0
 --- !u!1 &1822870449
@@ -95421,6 +95578,8 @@ MonoBehaviour:
   reciever: {fileID: 452356551}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 588866564}
   LightB: {fileID: 1943368843}
   Type: 0
@@ -101362,6 +101521,103 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4679390504295679099, guid: 0e82d373fb5427147a352ea1eefbf27a, type: 3}
+--- !u!1 &2061494929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2061494930}
+  - component: {fileID: 2061494933}
+  - component: {fileID: 2061494932}
+  - component: {fileID: 2061494931}
+  m_Layer: 0
+  m_Name: KillBox (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2061494930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061494929}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 939055738}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2061494931
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061494929}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &2061494932
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061494929}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 257
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &2061494933
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061494929}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2065961378
 GameObject:
   m_ObjectHideFlags: 0
@@ -102249,6 +102505,8 @@ MonoBehaviour:
   reciever: {fileID: 452356551}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 1943368843}
   Type: 0
@@ -103141,6 +103399,8 @@ MonoBehaviour:
   reciever: {fileID: 1250454988}
   Portal: []
   dotProduct: 0
+  coolDown: 0
+  cTime: 0
   LightA: {fileID: 0}
   LightB: {fileID: 0}
   Type: 0
@@ -107464,6 +107724,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5721429130935392501, guid: 6086a931cbd9dd14b8b4508806d493ea,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10.236389
+      objectReference: {fileID: 0}
+    - target: {fileID: 5721429130935392501, guid: 6086a931cbd9dd14b8b4508806d493ea,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10.236389
+      objectReference: {fileID: 0}
+    - target: {fileID: 5721429130935392501, guid: 6086a931cbd9dd14b8b4508806d493ea,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10.236389
       objectReference: {fileID: 0}
     - target: {fileID: 6631315772288880387, guid: 6086a931cbd9dd14b8b4508806d493ea,
         type: 3}

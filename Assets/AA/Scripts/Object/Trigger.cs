@@ -13,6 +13,7 @@ public class Trigger : MonoBehaviour
     public MG_Turret_AI mg_Turret_AI;
     public MG_Turret_AI[] mg_Turret_AI_S;
     //public Level_1 level_1;
+    public bool KillBox = false;
 
     public float time;
     public bool StartTime;
@@ -54,6 +55,10 @@ public class Trigger : MonoBehaviour
         {
             if (other.tag == "Player")
             {
+                if (KillBox)
+                {
+                    HeroLife.PlayerRe();
+                }
                 switch (Features)
                 {
                     case 0:

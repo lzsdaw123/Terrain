@@ -10,7 +10,8 @@ public class PortalTeleporter : MonoBehaviour {
 
 	private bool playerIsOverlapping = false;
 	public float dotProduct;
-
+	public bool coolDown;
+	public float cTime;
 	
 	public Light LightA;
 	public Light LightB;
@@ -18,6 +19,7 @@ public class PortalTeleporter : MonoBehaviour {
 
 	void Start()
     {
+		cTime = -1;
 		if (player == null)
 		{
 			player = Save_Across_Scene.Play.transform;
@@ -63,6 +65,15 @@ public class PortalTeleporter : MonoBehaviour {
 				playerIsOverlapping = false;
             }			
 		}
+		if (cTime >= 0)
+		{
+			cTime += Time.deltaTime;
+		}
+		if (cTime >= 20)
+		{
+			cTime = -1;
+			gameObject.SetActive(false);
+		}
 	}
 
 	void OnTriggerEnter (Collider other)
@@ -70,6 +81,11 @@ public class PortalTeleporter : MonoBehaviour {
 		if (other.tag == "Player")
 		{
 			playerIsOverlapping = true;
+            if (coolDown)
+            {
+				coolDown = false;
+				cTime = 0;
+			}
 			//reciever.gameObject.GetComponent<BoxCollider>().enabled = false;
 			//Portal[0].GetComponent<BoxCollider>().enabled = false;
 			//Portal[1].GetComponent<BoxCollider>().enabled = true;
