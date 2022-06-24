@@ -83,6 +83,10 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
+        if (play == null)
+        {
+            play = Save_Across_Scene.Play;
+        }
         int SceneNub = SceneManager.GetActiveScene().buildIndex; //取得當前場景編號
         if (SceneNub == 1 || PlayerResurrection.ReDelete)
         {

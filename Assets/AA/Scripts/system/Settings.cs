@@ -41,6 +41,7 @@ public class Settings : MonoBehaviour
     [SerializeField] float SF_smoothSpeed;  //滑鼠速度
     public Slider mouse_Slider;  //滑鼠靈敏度
     public Text mouse_Nub;
+    public static float SF_mouse_Slider_Max;
     public static float Save_mouse_Slider;
     public static int Level;
     public static int GameLevel=0;
@@ -100,6 +101,7 @@ public class Settings : MonoBehaviour
         mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
         mouse_Slider.value = 16;  //滑鼠預設靈敏度
         Save_mouse_Slider = mouse_Slider.value;
+        SF_mouse_Slider_Max = mouse_Slider.maxValue;
 
         BirthPoint = GameObject.Find("BirthPoint").gameObject;
         PsI.color = new Color(0.37f, 0.55f, 0.67f, 1f);

@@ -8,6 +8,7 @@ public class Shooting : MonoBehaviour
     public Camera PlayCamera, GunCamera;
 
     public ObjectPool pool;
+    public MouseLook mouseLook;
     public GameObject bullet;  //子彈  
     public GameObject[] Muzzle_vfx;  //槍口火光  
     public ParticleSystem[] MuSmoke;  //槍口煙霧
@@ -104,6 +105,7 @@ public class Shooting : MonoBehaviour
     public static int JumpDown;
     [SerializeField] int SF_JumpDown;
     public float NoM_T;
+    public bool F_W;
 
     public static void StartAll()
     {
@@ -152,6 +154,7 @@ public class Shooting : MonoBehaviour
         PickUpWeapon = 0;
         SwitchWeapon = false;
         FirstWeapon = new bool[] { false, false, false };
+        F_W = false;
         Grenade = new GameObject[3]; //手雷上限
         PowerAdd = 1;
     }
@@ -299,8 +302,9 @@ public class Shooting : MonoBehaviour
                 if (!FirstWeapon[NextWeaponType] )
                 {
                     FirstWeapon[NextWeaponType] = true;
-                    if (FirstWeapon[0] && !SkipTeach)  //第一次取得步槍和沒跳教學
+                    if (FirstWeapon[0] && !SkipTeach && !F_W)  //第一次取得步槍和沒跳教學
                     {
+                        F_W = true;
                         Ammunition.showUI();
                         DialogueEditor.StartConversation(0, 2, 0, true, 0, true);  //開始對話
                         StartAll();
@@ -419,6 +423,11 @@ public class Shooting : MonoBehaviour
             Weapon.SetBool("AimFire", false);
         }
         _Animator[WeaponType].transform.localRotation = Quaternion.Euler(0.01f, GA_R.y, GA_R.z);  //槍枝Rotation瞄準偏移修正
+        mouseLook.Logstr[3] = "\n 武器 position : " + _Animator[WeaponType].transform.position;
+        mouseLook.Logstr[4] = "\n 武器 GA_R : " + GA_R;
+        mouseLook.Logstr[5] = "\n 武器 localEulerAngles : " + _Animator[WeaponType].transform.localEulerAngles;
+        mouseLook.Logstr[6] = "\n 武器 eulerAngles : " + _Animator[WeaponType].transform.eulerAngles;
+        mouseLook.Logstr[7] = "\n 武器 rotation : " + _Animator[WeaponType].transform.rotation;
         if (coolDownTimer > coolDown) //若冷卻時間已到 可以發射子彈
         {
             Muzzle_vfx[WeaponType].SetActive(false); //關閉火光

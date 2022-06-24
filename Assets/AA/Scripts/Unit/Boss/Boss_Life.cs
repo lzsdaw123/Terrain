@@ -368,6 +368,10 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.MG_Turret[0].GetComponent<MG_Turret_AI>().StartAttack = false;
                     boss02_AI.MG_Turret[1].GetComponent<MG_Turret_AI>().StartAttack = false;
                     boss02_AI.MG_Turret[2].GetComponent<MG_Turret_AI>().StartAttack = false;
+                    for(int i=0; i < Boss2HpUI.Length; i++)
+                    {
+                        Boss2HpUI[i].SetActive(false);
+                    }
                     PlayerResurrection.Fail = true;
                     print("T");
                     break;

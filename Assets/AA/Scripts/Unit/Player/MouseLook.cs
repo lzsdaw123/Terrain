@@ -31,8 +31,11 @@ public class MouseLook : MonoBehaviour
     Vector3 oriRTPos,newRTPos;
     static bool shake;
     public float mouseX, mouseY;
+    public GameObject Log;
+    public Text LogText;
+    public string[] Logstr;
 
-    void Start()
+    void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked; //游標鎖定模式
 
@@ -41,16 +44,44 @@ public class MouseLook : MonoBehaviour
         oldPos = CameraPos.rotation.eulerAngles; //上一幀攝影機的歐拉角
 
         oriTransform = UI.GetComponent<RectTransform>();
-        newRTPos=oriRTPos = oriTransform.transform.position;
+        newRTPos = oriRTPos = oriTransform.transform.position;
+    }
+    void Start()
+    {
+        
+        Logstr = new string[14];
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (!Log.activeSelf)
+            {
+                Log.SetActive(true);
+            }
+            else
+            {
+                Log.SetActive(false);
+            }
+        }
+        if (Log.activeSelf)
+        {
+            //for (int i = 0; i < Logstr.Length; i++)
+            //{
+            //    LogText.text += Logstr[i];
+            //}
+            LogText.text = Logstr[0] + Logstr[1] + Logstr[2] + Logstr[3] + Logstr[4] + Logstr[5] + Logstr[6] + Logstr[7]+ 
+                Logstr[8]+ Logstr[9]+ Logstr[10]+ Logstr[11] + Logstr[12];
+        }
         //smoothSpeed = Settings.smoothSpeed;
         //if(smoothSpeed  != Settings.Save_mouse_Slider)
         //{
             
         //}
         smoothSpeed = Settings.Save_mouse_Slider;
+        Logstr[0] = "\n靈敏度 : " + smoothSpeed;
+        Logstr[1] = "\n設定靈敏度 : " + Settings.Save_mouse_Slider ;
+        Logstr[2] = "\n設定最大靈敏度 : " + Settings.SF_mouse_Slider_Max;
         if (shake)
         {
             shake = false;
@@ -142,16 +173,17 @@ public class MouseLook : MonoBehaviour
         //print(smoothSpeed);
         rotationX -= mouseY * smoothSpeed * Time.smoothDeltaTime;  //滑鼠控制鏡頭上下
         rotationX = Mathf.Clamp(rotationX, -85f, 80f);
-
         Gun.transform.localRotation = Quaternion.Euler(rotationX, rotationY, 0f);  //相機位移
         playerBody.Rotate(Vector3.up * mouseX * smoothSpeed * Time.smoothDeltaTime);  //滑鼠控制鏡頭左右
         rotationY = 0;  //相機Y軸歸零
         Vector3 playerBodyP = new Vector3(Gun.position.x, Gun.position.y, Gun.position.z);
-
+        Logstr[8] = "\n Gun.Lr " + Gun.transform.localRotation;
+        Logstr[9] = "\n playerBody.R " + playerBody.rotation;
         // 設置攝像機的旋轉方向與主角一致
         m_transform.rotation = Gun.rotation; //rotation為物體在世界坐標中的旋轉角度，用Quaternion賦值
         m_transform.position = playerBodyP; //rotation為物體在世界坐標中的旋轉角度，用Quaternion賦值
-
+        Logstr[10] = "\n transform.R " + Gun.rotation;
+        Logstr[11] = "\n transform.P " + playerBodyP;
         //m_camRot.x = rotationX;
         //m_camRot.y = mouseY;
         //m_transform.transform.eulerAngles = m_camRot; //通過改變XYZ軸的旋轉改變歐拉角
