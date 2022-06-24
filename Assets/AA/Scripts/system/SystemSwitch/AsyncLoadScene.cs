@@ -105,10 +105,10 @@ public class AsyncLoadScene : MonoBehaviour
 					Save_Across_Scene.heroLife.closeDamageEffects(); //關閉受傷特效				
 					Save_Across_Scene.Shooting.closeFireEffects(); //關閉攻擊特效
 				}
-                if (Settings.GameLevel == 1)
-                {
-					Settings.GameLevel = 2;
-				}
+    //            if (Settings.GameLevel == 1)
+    //            {
+				//	Settings.GameLevel = 2;
+				//}
 
 				//SceneManager.SetActiveScene(SceneManager.GetSceneByName(Globe.nextSceneName));
 			}
