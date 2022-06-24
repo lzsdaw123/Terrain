@@ -380,14 +380,16 @@ public class Shooting : MonoBehaviour
             //槍枝準心偏移修正
             if (WeaponType == 0)
             {
-                GA_R.z += 0.6f;
+                GA_R.x =  0.01f;
                 GA_R.y = -89.66f;
+                GA_R.z += 16f * Time.smoothDeltaTime;
                 if (GA_R.z >= 2.76f) { GA_R.z = 2.76f; }
             }
             if (WeaponType == 1)
             {
+                GA_R.x = 0.012f;
                 GA_R.y = -90.2f;
-                GA_R.z -= 15f * Time.smoothDeltaTime;
+                GA_R.z -= 16f * Time.smoothDeltaTime;
                 if (GA_R.z <= -1.6f) { GA_R.z = -1.6f; }
             }
 
@@ -398,14 +400,16 @@ public class Shooting : MonoBehaviour
         {          
             if (WeaponType == 0)
             {
-                GA_R.z -= 0.4f;
+                GA_R.x = 0.01f;
                 GA_R.y = -89.66f;
+                GA_R.z -= 13f * Time.smoothDeltaTime;
                 if (GA_R.z <= 1) { GA_R.z = 1; }
             }
             if (WeaponType == 1)
             {
+                GA_R.x = 0.012f;
                 GA_R.y = -90.2f;
-                GA_R.z += 9f*Time.smoothDeltaTime;
+                GA_R.z += 10f*Time.smoothDeltaTime;
                 if (GA_R.z >= 0.5) { GA_R.z = 0.5f; }
             }
         }

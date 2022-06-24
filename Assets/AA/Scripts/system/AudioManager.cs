@@ -89,8 +89,8 @@ public class AudioManager : MonoBehaviour
     }
     void Start()
     {
-        Slider[1].value = 0.8f;  //預設音量
-        Slider[2].value = 0.45f;  //預設音量
+        Slider[1].value = 0.6f;  //預設音量
+        Slider[2].value = 0.4f;  //預設音量
         AudioStop = false;
     }
     void Update()
@@ -155,7 +155,7 @@ public class AudioManager : MonoBehaviour
             WarnSource.volume = Slider[2].value;
             if (ElevatorSource != null)
             {
-                ElevatorSource.volume = 0.9f* Slider[2].value;
+                ElevatorSource.volume = 0.5f* Slider[2].value;
             }
         }
 

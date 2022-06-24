@@ -45,12 +45,12 @@ public class MouseLook : MonoBehaviour
     }
     void Update()
     {
-        smoothSpeed = Settings.smoothSpeed;
-        if(smoothSpeed  != Settings.Save_mouse_Slider)
-        {
-            smoothSpeed = Settings.Save_mouse_Slider;
-        }
-
+        //smoothSpeed = Settings.smoothSpeed;
+        //if(smoothSpeed  != Settings.Save_mouse_Slider)
+        //{
+            
+        //}
+        smoothSpeed = Settings.Save_mouse_Slider;
         if (shake)
         {
             shake = false;
