@@ -17,6 +17,7 @@ public class Shop : MonoBehaviour
     public int DpsPoints;  //傷害點數
     public static int KillPoints;  //擊殺點數
 
+    public GameObject Tab_Text;
     bool OpenT;
 
     void Awake()
@@ -34,23 +35,24 @@ public class Shop : MonoBehaviour
         Lv[1].text = "Lv." + DpsLv;
         Points[0].text = HpPoints + " 擊殺數";
         Points[1].text = DpsPoints + " 擊殺數";
+        Tab_Text.SetActive(true);
     }
 
     void Update()
     {
         KillPointsT.text = "怪物擊殺點數 : " + (KillPoints);
-
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    if (OpenT)
-        //    {                
-        //        OpenUI();
-        //    }
-        //    else
-        //    {                
-        //        closeUI();
-        //    }
-        //}
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (OpenT)
+            {
+                OpenUI();
+                Tab_Text.SetActive(false);
+            }
+            else
+            {
+                closeUI();
+            }
+        }
         //if (Input.GetKeyDown(KeyCode.J))  //開發者模式
         //{
         //    KillPoints += 10;

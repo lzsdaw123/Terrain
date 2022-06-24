@@ -46,6 +46,8 @@ public class PlayerMove : MonoBehaviour
     public bool isGrounded;  //在地面上
     public bool isSquat; //正在蹲下
     public bool UpSquat;
+    public bool NoMove;
+    public Vector3 NoM_V3;
 
     void Start()
     {
@@ -68,9 +70,17 @@ public class PlayerMove : MonoBehaviour
             WeaponType = Shooting.WeaponType;
             Weapon = _Animator[WeaponType].GetComponent<Animator>();
 
-
-            Player_h = Input.GetAxis("Horizontal");  //取得輸入橫軸
-            Player_v = Input.GetAxis("Vertical");    //取得輸入縱軸            
+            if (!NoMove)
+            {
+                Player_h = Input.GetAxis("Horizontal");  //取得輸入橫軸
+                Player_v = Input.GetAxis("Vertical");    //取得輸入縱軸      
+            }
+            else
+            {
+                Player_h = 0;
+                Player_v = 0;
+                transform.position = new Vector3(NoM_V3.x, transform.position.y, NoM_V3.z);
+            }
 
             //if (Input.GetButtonDown("Jump") && !m_Jump && Shooting.Reload==false && !m_Jumping)   //按下跳躍
             //{
@@ -162,9 +172,9 @@ public class PlayerMove : MonoBehaviour
        
             if (_Shooting.LayDown)
             {
-                if (Speed >= 12.5f)
+                if (Speed >= 13f)
                 {
-                    Speed = 12.5f;
+                    Speed = 13f;
                 }
                 else if (Speed <= 6.5f && !Squat)
                 {
@@ -173,9 +183,9 @@ public class PlayerMove : MonoBehaviour
             }
             else
             {
-                if (Speed >= 10.5f )
+                if (Speed >= 11f )
                 {
-                    Speed = 10.5f;
+                    Speed = 11f;
                 }
                 else if (Speed <= 6.5f && !Squat)
                 {
@@ -298,8 +308,11 @@ public class PlayerMove : MonoBehaviour
             velocity.y = -2f;
         }
         if (inside == false)  //是否接觸梯子
-        {           
-            move = transform.right * Player_h + transform.forward * Player_v * MoveSpeed * Time.deltaTime;  //按照面對方向移動       
+        {
+            if (!NoMove)
+            {
+                move = transform.right * Player_h + transform.forward * Player_v * MoveSpeed * Time.deltaTime;  //按照面對方向移動       
+            }
             controller.Move(velocity * Time.deltaTime); //執行跳躍            
         }
         else

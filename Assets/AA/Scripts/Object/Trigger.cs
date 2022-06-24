@@ -14,13 +14,39 @@ public class Trigger : MonoBehaviour
     public MG_Turret_AI[] mg_Turret_AI_S;
     //public Level_1 level_1;
 
+    public float time;
+    public bool StartTime;
+
     void Start()
     {
+        StartTime = false;
+        time = 0;
     }
 
     void Update()
     {
-        
+        if (StartTime)
+        {
+            time += Time.deltaTime;
+            if (time>2)
+            {
+                time = 0;
+                StartTime = false;
+                switch (Features)
+                {
+                    case 6:
+                        Level_1.LevelB_ = 2;
+                        PlayerView.Stop = false;  //UI隱藏
+                        PlayerView.UI_Stop = false;
+                        PlayerView.missionChange(4, 0);  //改變關卡
+                        DialogueEditor.StartConversation(4, 0, 2, false, 0, true);  //開始對話
+                        Level_1.UiOpen = true;
+                        gameObject.SetActive(false);
+                        break;
+                }
+            }
+        }
+
     }
     public void OnTriggerEnter(Collider other)  //觸發關卡
     {
@@ -51,8 +77,39 @@ public class Trigger : MonoBehaviour
                     case 3:  //Boss2攻擊1範圍左邊死角
                         boss02_AI.AttackRange = 3;
                         break;
+                    case 6:
+                        StartTime = true;
+                        break;
+                    case 7:
+                        Objects[0].GetComponent<ElectricDoor>().Animator.SetBool("Open", true);
+                        switch (Type)
+                        {
+                            case 0:
+                                PlayerView.missionChange(4, 5);  //改變關卡
+                                Level_1.UiOpen = true;
+                                break;
+                        }
+                        break;
+                    case 8:
+                        Shooting.JumpDown=1;
+                        gameObject.SetActive(false);
+                        break;
+                    case 9:  //跳下去
+                        Shooting.JumpDown = 3;
+                        Objects[0].GetComponent<MeshCollider>().enabled = false;
+                        Objects[1].GetComponent<MeshCollider>().enabled = false;
+                        Objects[2].SetActive(false);
+                        Objects[3].SetActive(false);
+                        Objects[4].SetActive(true);
+                        gameObject.SetActive(false);
+                        break;
+                    case 10:
+                        Shooting.JumpDown = 4;
+                        Save_Across_Scene.heroLife.closeDamageEffects();
+                        Save_Across_Scene.Shooting.closeFireEffects();
+                        gameObject.SetActive(false);
+                        break;
                 }
-
             }
         }
     }
@@ -96,6 +153,9 @@ public class Trigger : MonoBehaviour
                 {
                     case 4:  //Boss2攻擊2 機槍範圍內
                         mg_Turret_AI.InAttackRange[0] = true;
+                        break;
+                    case 7:
+                        Objects[0].GetComponent<ElectricDoor>().Animator.SetBool("Open", false);
                         break;
                 }
             }

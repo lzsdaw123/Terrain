@@ -122,7 +122,7 @@ public class DialogueEditor : MonoBehaviour
             }
             else
             {
-                coolDownTimer += Time.deltaTime;
+                coolDownTimer +=1f* Time.deltaTime;
             }
         }
         if (EndDialogue)  //結束對話
@@ -174,7 +174,7 @@ public class DialogueEditor : MonoBehaviour
                         Dialogue[0] = "歡迎來到「遺蹟4號探勘地」，我是這裡的主管。";
                         Dialogue[1] = "負責在此監控各地的情況。";
                         Dialogue[2] = "而你的任務是保護這區域不受到任何威脅。";
-                        Dialogue[3] = "要進行區域導覽嗎?";
+                        Dialogue[3] = "要進行區域導覽嗎? (新手教學)";
                         Dialogue[4] = "很好，先從門外右方的倉庫介紹。";
                         break;
                     case 1:
@@ -215,8 +215,9 @@ public class DialogueEditor : MonoBehaviour
                 switch (missionStage)
                 {
                     case 0:
-                        Dialogue = new string[1];
+                        Dialogue = new string[2];
                         Dialogue[0] = "既然不需要就直接到你的工作崗位。";
+                        Dialogue[1] = "對了，武器庫裡面有工作台能換配件，記得使用。";
                         break;           
                 }
                 break;

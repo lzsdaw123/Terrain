@@ -40,6 +40,7 @@ public class SpawnRay : MonoBehaviour {
 	public bool StartBorn;  //開始生成
 	public int EnemyWave;  //敵人波數
 	public EnemyWaveNum[] EnemyNum =new EnemyWaveNum[3];   //敵人每波數量
+	public EnemyWaveNum[] EnemyNumMax =new EnemyWaveNum[3];   //敵人每波數量
 	public bool[] StartBool=new bool[3];
 	public float BornTime;
 
@@ -69,12 +70,13 @@ public class SpawnRay : MonoBehaviour {
         EnemyNum[0] = new EnemyWaveNum(4, 2, 2);
         EnemyNum[1] = new EnemyWaveNum(6, 4, 3);
         EnemyNum[2] = new EnemyWaveNum(8, 6, 4);
-        //EnemyNum[3] = new EnemyWaveNum(8, 6);
-        //EnemyNum[4] = new EnemyWaveNum(10, 6);
-        //EnemyNum[0] = new EnemyWaveNum(0, 1);
-        //EnemyNum[1] = new EnemyWaveNum(0, 1);
-        //EnemyNum[2] = new EnemyWaveNum(0, 1);
-    }
+		//EnemyNumMax[0] = new EnemyWaveNum(8, 5, 6);
+		//EnemyNumMax[1] = new EnemyWaveNum(12, 8, 6);
+		//EnemyNumMax[2] = new EnemyWaveNum(16, 12, 8);
+		//EnemyNum[0] = new EnemyWaveNum(0, 1);
+		//EnemyNum[1] = new EnemyWaveNum(0, 1);
+		//EnemyNum[2] = new EnemyWaveNum(0, 1);
+	}
 	public void EnemyWaveNum(int enemyWave)
     {
 		EnemyWave = enemyWave;

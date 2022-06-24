@@ -87,6 +87,7 @@ public class Boss02_AI : MonoBehaviour
     [SerializeField] private Vector3 muzzlePOS;  //槍口座標
     public GameObject[] RigTarget;  //槍口瞄準目標
     public static bool StartAttack;  //進入攻擊狀態
+    [SerializeField] bool SF_StartAttack;  //進入攻擊狀態
     public float StartTime; ///進入攻擊前的等待時間
     public float LockTime;  //鎖定時間
     public float[] overheatTime;  //過熱冷卻時間
@@ -334,6 +335,7 @@ public class Boss02_AI : MonoBehaviour
         SF_muzzleGrid = muzzleGrid;
         PS_muzzle = muzzle;
         SF_BulletType = BulletType;
+        SF_StartAttack = StartAttack;
         if (attackTarget != null)
         {
             目前攻擊目標 = attackTarget.gameObject;
@@ -345,6 +347,8 @@ public class Boss02_AI : MonoBehaviour
             {
                 StartTime = -1;
                 StartAttack = true;
+                Save_Across_Scene.ps_Boss2HpUI[0].SetActive(true);
+                Save_Across_Scene.ps_Boss2HpUI[1].SetActive(true);
                 MG_Turret[0].GetComponent<MG_Turret_AI>().Player = Player;
                 MG_Turret[1].GetComponent<MG_Turret_AI>().Player = Player;
                 MG_Turret[2].GetComponent<MG_Turret_AI>().Player = Player;
@@ -415,6 +419,16 @@ public class Boss02_AI : MonoBehaviour
                         }
                     }
                 }
+            }
+            switch (Level)
+            {
+                case 1: //護盾1
+                    MG_Turret[0].GetComponent<MG_Turret_AI>().Shield.GetComponent<Animator>().SetTrigger("close");
+                    break;
+                case 2: //護盾2,3
+                    MG_Turret[1].GetComponent<MG_Turret_AI>().Shield.GetComponent<Animator>().SetTrigger("close");
+                    MG_Turret[2].GetComponent<MG_Turret_AI>().Shield.GetComponent<Animator>().SetTrigger("close");
+                    break;
             }
             switch (Level)  //Boss2戰鬥階段
             {

@@ -51,6 +51,7 @@ public class PlayerView : MonoBehaviour
     public static bool MissionEnd;
     public static int Crystal_Weakness;
     public static bool Stop;
+    [SerializeField] bool SF_Stop;
     public static bool UI_Stop;
     [SerializeField] bool SF_UI_Stop;
 
@@ -162,6 +163,7 @@ public class PlayerView : MonoBehaviour
 
         SF_missionLevel = missionLevel;
         st_missionStage = missionStage;
+        SF_Stop = Stop;
         SF_UI_Stop = UI_Stop;
 
         if (MissionEnd)  //任務目標結束
@@ -190,7 +192,7 @@ public class PlayerView : MonoBehaviour
         {
             UIcolor.a = 0.7058824f;
         }
-        if (Stop) UIcolor.a = 0;
+        if (Stop) UIcolor.a = 0; else UIcolor.a = 1;
         targetUI.color = UIcolor;
         text.color = new Color(1, 1, 1, UIcolor.a);
         switch (Crystal_Weakness)  //弱點UI

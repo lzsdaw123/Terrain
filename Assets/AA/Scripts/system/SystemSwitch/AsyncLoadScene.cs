@@ -19,6 +19,9 @@ public class AsyncLoadScene : MonoBehaviour
 	public GameObject AnyKey;
 	float time;
 	bool AnyKetB;
+	public HeroLife heroLife;
+	public Shooting shooting;
+
 	void Start()
 	{
 		loadingScrollbar.size = 0.0f;
@@ -95,8 +98,18 @@ public class AsyncLoadScene : MonoBehaviour
 				Level_1.MissionTime = 0;
                 Level_1.UiOpen = false;
                 Level_1.LevelB_ = 1;
-                PlayerView.Stop = true;  //UI隱藏
-				PlayerView.UI_Stop = false;
+				PlayerView.Stop = true;  //UI隱藏
+				AudioManager.AudioStop = false;
+                if (Settings.GameLevel >= 2)
+                {
+					Save_Across_Scene.heroLife.closeDamageEffects(); //關閉受傷特效				
+					Save_Across_Scene.Shooting.closeFireEffects(); //關閉攻擊特效
+				}
+                if (Settings.GameLevel == 1)
+                {
+					Settings.GameLevel = 2;
+				}
+
 				//SceneManager.SetActiveScene(SceneManager.GetSceneByName(Globe.nextSceneName));
 			}
 		}

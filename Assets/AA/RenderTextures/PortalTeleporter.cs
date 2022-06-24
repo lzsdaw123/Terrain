@@ -6,6 +6,7 @@ public class PortalTeleporter : MonoBehaviour {
 
 	public Transform player;
 	public Transform reciever;
+	public GameObject[] Portal;
 
 	private bool playerIsOverlapping = false;
 	public float dotProduct;
@@ -35,26 +36,30 @@ public class PortalTeleporter : MonoBehaviour {
                 float rotationDiff = -Quaternion.Angle(transform.rotation, reciever.rotation);
                 rotationDiff += 180;
                 player.Rotate(Vector3.up, rotationDiff);
-				switch (Type)
+				if(LightA !=null && LightB != null)
 				{
-					case 0:  //­°B¿O
-                        LightB.intensity = 4320000;
-						LightA.intensity = 3.072e+07f;
-                        break;
-					case 1:  //­°A¿O
-                        LightA.intensity = 4320000;
-                        LightB.intensity = 3.072e+07f;
-                        break;
+					switch (Type)
+					{
+						case 0:  //­°B¿O
+							LightB.intensity = 4320000;
+							LightA.intensity = 3.072e+07f;
+							break;
+						case 1:  //­°A¿O
+							LightA.intensity = 4320000;
+							LightB.intensity = 3.072e+07f;
+							break;
+					}
 				}
+
 				Vector3 positionOffset = Quaternion.Euler(0f, rotationDiff, 0f) * portalToPlayer;
 				player.gameObject.GetComponent<PlayerMove>().enabled = false;
 				player.gameObject.GetComponent<Shooting>().enabled = false;
                 player.gameObject.SetActive(false);
                 player.position = reciever.position + positionOffset;
-                player.gameObject.SetActive(true);
-                player.gameObject.GetComponent<PlayerMove>().enabled = true;
+				//reciever.gameObject.GetComponent<BoxCollider>().enabled = true;
+				player.gameObject.GetComponent<PlayerMove>().enabled = true;
 				player.gameObject.GetComponent<Shooting>().enabled = true;
-				reciever.gameObject.GetComponent<BoxCollider>().enabled = true;
+                player.gameObject.SetActive(true);
 				playerIsOverlapping = false;
             }			
 		}
@@ -65,8 +70,10 @@ public class PortalTeleporter : MonoBehaviour {
 		if (other.tag == "Player")
 		{
 			playerIsOverlapping = true;
-			reciever.gameObject.GetComponent<BoxCollider>().enabled = false;
-		}
+			//reciever.gameObject.GetComponent<BoxCollider>().enabled = false;
+			//Portal[0].GetComponent<BoxCollider>().enabled = false;
+			//Portal[1].GetComponent<BoxCollider>().enabled = true;
+        }
 	}
 
 	void OnTriggerExit (Collider other)
@@ -74,7 +81,7 @@ public class PortalTeleporter : MonoBehaviour {
 		if (other.tag == "Player")
 		{
 			playerIsOverlapping = false;
-			reciever.gameObject.GetComponent<BoxCollider>().enabled = true;
-		}
+			//reciever.gameObject.GetComponent<BoxCollider>().enabled = true;
+        }
 	}
 }

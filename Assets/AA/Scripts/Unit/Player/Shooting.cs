@@ -101,6 +101,9 @@ public class Shooting : MonoBehaviour
     public Texture2D[] texture2Ds;
     public static int[] Save_Magazine=new int[3] {30, 6, 5 };  //保存換過的彈匣
     [SerializeField] int[] SF_Save_Magazine=new int[3];  //保存換過的彈匣
+    public static int JumpDown;
+    [SerializeField] int SF_JumpDown;
+    public float NoM_T;
 
     public static void StartAll()
     {
@@ -111,7 +114,7 @@ public class Shooting : MonoBehaviour
         {
             Weapons[0] = new WeaponValue(0, 2, 400, 30, 300, 30);  //步槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)           
         }
-        Weapons[1] = new WeaponValue(1, 1, 200, 6, 30, 6);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
+        Weapons[1] = new WeaponValue(1, 1f, 200, 6, 30, 6);  //電磁手槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
         Weapons[2] = new WeaponValue(0, 1, 100, 5, 30, 5);  //霰彈槍(武器位置,威力,射程,彈藥量,總彈藥量,彈匣容量)
         for(int i=0; i< Save_Magazine.Length; i++)
         {
@@ -180,7 +183,7 @@ public class Shooting : MonoBehaviour
             GunFlashlight[i].SetActive(true);
             MuFire_Light[i].SetActive(false);
         }
-        Aim =  GameObject.Find("Aim").gameObject.GetComponent<Image>();
+        Aim =  Save_Across_Scene.Aim.GetComponent<Image>();
         Weapon.SetBool("LayDown", true);
     }
     void Update()
@@ -191,6 +194,7 @@ public class Shooting : MonoBehaviour
         SF_ReReload = ReReload;
         SF_Save_Magazine = Save_Magazine;
         SF_武器欄位 = 武器欄位;
+        SF_JumpDown = JumpDown;
         if (換部件)
         {
             //print("換部件");
@@ -301,14 +305,14 @@ public class Shooting : MonoBehaviour
                         DialogueEditor.StartConversation(0, 2, 0, true, 0, true);  //開始對話
                         StartAll();
                     }
-                    if (FirstWeapon[1] && Level_1.TotalStage==1)  //第一次取得左輪
-                    {
-                        Level_1.UiOpen = true;  //開啟任務UI與音效
-                        Level_1.StopAttack = false;  //怪物繼續進攻
-                        Level_1.stageTime = 25;  //怪物繼續倒數開始
-                        PlayerView.missionChange(Defense.s_Level, Defense.s_Stage);  //改變關卡
-                        DialogueEditor.StartConversation(2, 2, 0, false, 0, true);  //開始對話
-                    }
+                    //if (FirstWeapon[1] && Level_1.TotalStage==1)  //第一次取得左輪
+                    //{
+                    //    Level_1.UiOpen = true;  //開啟任務UI與音效
+                    //    Level_1.StopAttack = false;  //怪物繼續進攻
+                    //    Level_1.stageTime = 25;  //怪物繼續倒數開始
+                    //    PlayerView.missionChange(Defense.s_Level, Defense.s_Stage);  //改變關卡
+                    //    DialogueEditor.StartConversation(2, 2, 0, false, 0, true);  //開始對話
+                    //}
                     LayDown = false;
                 }
                 else
@@ -470,7 +474,7 @@ public class Shooting : MonoBehaviour
                     if (AimIng || PlayerMove.Squat)  //瞄準或蹲下
                     {                      
                         FireRotateY /= 2;
-                        FireRotateX /= 7;
+                        FireRotateX /= 8;
                         rotationY /= 2f;
                     }
                     if (AimIng && PlayerMove.Squat)  //瞄準並蹲下
@@ -624,7 +628,46 @@ public class Shooting : MonoBehaviour
             Bomb = false;
             Weapon.SetTrigger("Bomb");
         }
-        if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0])       //收槍
+        switch (JumpDown)  //降落-------------
+        {
+            case 1:  //進區域
+                LayDown = true;
+                Weapon.SetTrigger("LayDownT");
+                Weapon.SetBool("LayDown", true);
+                break;
+            case 2:
+                _Animator[WeaponType].SetActive(false);
+                break;
+            case 3:   //進入掉落 鎖控制   
+                PlayerView.Stop = true;  //UI隱藏
+                NoM_T += Time.deltaTime;
+                if (NoM_T >= 1)
+                {
+                    NoM_T = 1;
+                    playerMove.NoMove = true;
+                    playerMove.NoM_V3 = transform.position;
+                }
+                break;
+            case 4:  //到底部
+                NoM_T = 0;
+                _Animator[WeaponType].SetActive(true);
+                Save_Across_Scene.Shooting.closeFireEffects(); //關閉攻擊特效
+                LayDown = false;
+                playerMove.NoMove = false;
+                PlayerView.Stop = false;  //UI隱藏
+                PlayerView.missionChange(4, 6);  //改變關卡
+                break;
+            case 5:
+                //JumpDown = 0;
+                break;
+            case 6:
+                _Animator[WeaponType].SetActive(true);
+                Save_Across_Scene.Shooting.closeFireEffects(); //關閉攻擊特效
+                LayDown = false;
+                JumpDown = 0;
+                break;
+        }
+        if (Input.GetKeyDown(KeyCode.T) && FirstWeapon[0] && (JumpDown==0 || JumpDown == 5))       //收槍
         {
             Reload = false;
             if (LayDown == false)
@@ -934,7 +977,7 @@ public class Shooting : MonoBehaviour
                                 hit[n].transform.SendMessage("Unit", true);  //攻擊者為玩家?
                                 if (n == 0)
                                 {
-                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power *3 * PowerAdd);  //造成一半傷害
+                                    hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power *3.2f * PowerAdd);  //造成一半傷害
                                 }
                                 else
                                 {
@@ -962,7 +1005,7 @@ public class Shooting : MonoBehaviour
                         {
                             if (n == 0)
                             {
-                                hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power * 7 * PowerAdd);  //造成中心傷害
+                                hit[0].transform.SendMessage("Damage", Weapons[WeaponType].power * 7.2f * PowerAdd);  //造成中心傷害
                             }
                             else
                             {
@@ -1144,5 +1187,14 @@ public class Shooting : MonoBehaviour
     {
         GetGrenadeObj = grenade;     
         GetGrenade = true;
+    }
+    public void closeFireEffects()  //關閉攻擊特效
+    {
+        for (int i = 0; i < Muzzle_vfx.Length; i++)  //受傷特效
+        {
+            Muzzle_vfx[i].gameObject.SetActive(false);
+            MuSmoke[i].Stop();
+            MuSmoke[WeaponType].gameObject.SetActive(false);
+        }
     }
 }

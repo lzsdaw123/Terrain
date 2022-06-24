@@ -17,11 +17,11 @@ public class Boss_Life : MonoBehaviour
     public int MonsterType;  //Boss類型 0=水晶 / 1= 機械
     public static int PS_MonsterType;  //Boss類型 0=水晶 / 1= 機械
     public float[] hpFull; // 血量上限
-    public float hp; // 血量
+    public float[] hp_W, hp_R; // 血量
+    public float[] UiTime;
     public bool 無敵=false;
     int HpLv;  //生命等級
     int Level;  //難度等級
-    //public Image hpImage;
 
     private NavMeshAgent agent;
     public Boss01_AI boss01_AI;
@@ -29,23 +29,29 @@ public class Boss_Life : MonoBehaviour
     public Level_1 level_1;
     //public Level_2 level_2;
 
+    public GameObject[] ChildGameObject;  //子物件
     public GameObject PS_Dead;  //死亡特效
     public GameObject Model;  //模型
     [SerializeField] float DeadTime;
 
     public GameObject HitUI;  //命中UI
-    float HitUITime;
+    public GameObject Boss1HpUI;
+    public GameObject[] Boss2HpUI;
+    public Image[] i_HP_W, i_HP_R;
     bool Player;
-    Color UIcolor;
     public bool Dead;
     public GameObject HitObject;
     public GameObject[] Crystal_Weakness;  //水晶弱點
     public GameObject[] WeaknessObject;
     public GameObject[] WeaknessObjectPS;
     public float[] Weakness_Hp;  //弱點血量
+    public float[] Weakness_Hp_R;  //弱點血量
+    public float[] Weakness_Hp_Max;  //弱點血量
+    public int Hp_Type;
     bool YesStart;
     public float cTime;
     public int D_Level;
+    public bool ReHpUI;  //更新血量UI
 
     void Awake()
     {
@@ -62,7 +68,6 @@ public class Boss_Life : MonoBehaviour
         DeadTime = 0;
         DifficultyUp();  //難度調整
         RefreshLifebar(); // 更新血條
-        HitUITime = 0;
         cTime = -1;
         D_Level = 0;
         Dead  = false;
@@ -70,12 +75,25 @@ public class Boss_Life : MonoBehaviour
         PS_MonsterType = MonsterType;
         //RagdollActive(false); // 先關閉物理娃娃
         gameObject.layer = LayerMask.NameToLayer("Monster");
-        gameObject.tag = "Enemy";
-        Weakness_Hp = new float[] { 25, 25, 25, 25,100 };
+        gameObject.tag = "Enemy";   
         switch (MonsterType)
         {
+            case 0:
+                Boss1HpUI.SetActive(false);
+                for (int i = 0; i < ChildGameObject.Length; i++)
+                {
+                    ChildGameObject[i].layer = LayerMask.NameToLayer("Monster");                    
+                }
+                UiTime = new float[1];
+                break;
             case 1:
+                Boss2HpUI = Save_Across_Scene.ps_Boss2HpUI;
+                for (int i = 0; i < Boss2HpUI.Length; i++)
+                {
+                    Boss2HpUI[i].SetActive(false);
+                }
                 boss02_AI.RangeObject[0].SetActive(true);
+                UiTime = new float[6];
                 break;
         }
         for(int i=0; i< Crystal_Weakness.Length; i++)
@@ -137,6 +155,7 @@ public class Boss_Life : MonoBehaviour
                     {
                         cTime = -1;
                         PlayerView.Crystal_Weakness = 6;
+                        Boss2HpUI[5].SetActive(true);
                         PlayerView.missionChange(4, 3);  //改變關卡
                         DialogueEditor.StartConversation(4, 3, 2, false, 0, true);  //開始對話
                         Level_1.UiOpen = true;
@@ -144,6 +163,11 @@ public class Boss_Life : MonoBehaviour
                     break;
             }
         }
+        //if (ReHpUI)
+        //{
+        //    RefreshLifebar();
+        //}
+        RefreshLifebar();
     }
     // 開啟或關閉物理娃娃系統
     void RagdollActive(bool active)
@@ -182,7 +206,7 @@ public class Boss_Life : MonoBehaviour
     }
     public void Damage(float Power)  //-----受到傷害----//
     {
-        if (hp > 0)
+        if (hp_W[MonsterType] > 0)
         {
             if (Player)
             {
@@ -190,15 +214,15 @@ public class Boss_Life : MonoBehaviour
                 HitUI.GetComponent<Image>().color = Color.white;
             }
         }
-        //print(Power);
         switch (MonsterType)
         {
             case 0:  //水晶Boss
-                hp -= Power; // 扣血
-                if (hp <= hpFull[MonsterType] / 2)  //怪物血量低於一半
+                hp_W[0] -= Power; // 扣血
+                if (hp_W[0] <= hpFull[MonsterType] / 2)  //怪物血量低於一半
                 {
-                    ani.SetBool("Move", true);
+                    //ani.SetBool("Move", true);
                 }
+                
                 break;
             case 1:  //機械Boss
                 for (int i = 0; i < WeaknessObject.Length; i++)
@@ -206,7 +230,8 @@ public class Boss_Life : MonoBehaviour
                     if (WeaknessObject[i] == HitObject)
                     {
                         Weakness_Hp[i] -= Power;
-                        hp -= Power;
+                        Hp_Type = i;
+                        //hp -= Power;                      
                     }
                     if (Weakness_Hp[i] <= 0)
                     {
@@ -215,8 +240,10 @@ public class Boss_Life : MonoBehaviour
                         HitUI.GetComponent<Image>().color = Color.red;  //紅色擊殺UI
                     }
                 }
-                if (Weakness_Hp[0] <= 0)  //左手臂弱點
+                if (Weakness_Hp[0] <= 0)  //左手臂弱點擊破
                 {
+                    hp_W[1] -= Weakness_Hp_Max[0];
+                    i_HP_W[0].fillAmount = hp_W[1] / hpFull[1]; //顯示血球
                     Weakness_Hp[0] = 60;
                     WeaknessObjectPS[0].SetActive(true);
                     boss02_AI.Level = 2;
@@ -224,22 +251,29 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.ani.SetTrigger("LevelUp");
                     Crystal_Weakness[1].GetComponent<Crystal_Life>().無敵 = false;
                     Crystal_Weakness[2].GetComponent<Crystal_Life>().無敵 = false;
+                    Boss2HpUI[1].SetActive(false);
+                    Boss2HpUI[2].SetActive(true);
+                    Boss2HpUI[3].SetActive(true);
                     PlayerView.Crystal_Weakness = 1;
                 }
-                if(Weakness_Hp[1] <= 0)  //腹部上弱點擊破
+                if(Weakness_Hp[1] <= 0 && Weakness_Hp[1] > -99)  //腹部上弱點擊破
                 {
+                    hp_W[1] -= Weakness_Hp_Max[1];
+                    i_HP_W[0].fillAmount = hp_W[1] / hpFull[1]; //顯示血球
                     WeaknessObjectPS[1].SetActive(true);
-                    Weakness_Hp[1] = 0;
+                    Weakness_Hp[1] = -99;
                     PlayerView.Crystal_Weakness = 2;
                 }
-                if (Weakness_Hp[2] <= 0)  //腹部下弱點擊破
+                if (Weakness_Hp[2] <= 0 && Weakness_Hp[2] >-99)  //腹部下弱點擊破
                 {
+                    hp_W[1] -= Weakness_Hp_Max[2];
+                    i_HP_W[0].fillAmount = hp_W[1] / hpFull[1]; //顯示血球
                     WeaknessObjectPS[2].SetActive(true);
-                    Weakness_Hp[2] = 0;
+                    Weakness_Hp[2] = -99;
                     PlayerView.Crystal_Weakness = 3;
 
                 }
-                if (Weakness_Hp[1] == 0 && Weakness_Hp[2] == 0)  //腹部兩個弱點
+                if (Weakness_Hp[1] <= 0 && Weakness_Hp[2] <= 0)  //腹部兩個弱點
                 {
                     Weakness_Hp[1] = 60;
                     Weakness_Hp[2] = 60;
@@ -250,10 +284,15 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.RangeObject[1].SetActive(true);
                     Crystal_Weakness[3].GetComponent<Crystal_Life>().無敵 = false;
                     Boss02_AI.BulletType = 2;
+                    Boss2HpUI[2].SetActive(false);
+                    Boss2HpUI[3].SetActive(false);
+                    Boss2HpUI[4].SetActive(true);
                     PlayerView.Crystal_Weakness = 4;
                 }
                 if (Weakness_Hp[3] <= 0)  //左胸弱點擊破
                 {
+                    hp_W[1] -= Weakness_Hp_Max[3];
+                    i_HP_W[0].fillAmount = hp_W[1] / hpFull[1]; //顯示血球
                     Weakness_Hp[3] = 60;
                     Weakness_Hp[4] = 100;
                     WeaknessObjectPS[3].SetActive(true);
@@ -263,11 +302,14 @@ public class Boss_Life : MonoBehaviour
                     boss02_AI.ani.SetBool("Attack1", false);  //第一階攻擊模式
                     boss02_AI.ani.SetBool("Attack2", false);  //第二階攻擊模式
                     cTime = 0;
+                    Boss2HpUI[4].SetActive(false);
                     PlayerView.Crystal_Weakness = 5;
                     D_Level = 1;
                 }
                 if (Weakness_Hp[4] <= 0)  //頭部弱點擊破
                 {
+                    hp_W[1] -= Weakness_Hp_Max[4];
+                    i_HP_W[0].fillAmount = hp_W[1] / hpFull[1]; //顯示血球
                     Weakness_Hp[4] = 600;
                     boss02_AI.ani.SetTrigger("Dead");
                     boss02_AI.ani.SetBool("Attack1", false);  //第一階攻擊模式
@@ -275,13 +317,15 @@ public class Boss_Life : MonoBehaviour
                     PlayerView.missionChange(4, 4);  //改變關卡
                     DialogueEditor.StartConversation(4, 4, 2, false, 0, true);  //開始對話
                     Level_1.UiOpen = true;
+                    Boss2HpUI[0].SetActive(false);
+                    Boss2HpUI[5].SetActive(false);
                     PlayerView.Crystal_Weakness = 7; //關弱點
                     Dead = true;
                 }
                 break;
         }
-        if (無敵) hp = hpFull[MonsterType];  //補滿血量
-        if (hp <= 0)  //死亡
+        if (無敵) hp_W[MonsterType] = hpFull[MonsterType];  //補滿血量
+        if (hp_W[MonsterType] <= 0)  //死亡
         {
             if (!Dead)
             {
@@ -298,7 +342,12 @@ public class Boss_Life : MonoBehaviour
                         if (CrystalAni != null) CrystalAni.SetTrigger("Dead");
                         gameObject.layer = LayerMask.NameToLayer("Default");
                         gameObject.tag = "Untagged";
+                        for (int i = 0; i < ChildGameObject.Length; i++)
+                        {
+                            ChildGameObject[i].layer = LayerMask.NameToLayer("Default");
+                        }
                         Level_1.LevelA_ = 8;  //關卡8
+                        Boss1HpUI.SetActive(false);
                         break;
                     case 1:
                         boss02_AI.ani.SetTrigger("Dead");
@@ -306,7 +355,7 @@ public class Boss_Life : MonoBehaviour
                 }
                 Dead = true;
             }
-            hp = 0; // 不要扣到負值
+            hp_W[MonsterType] = 0; // 不要扣到負值
             if (PS_Dead != null) PS_Dead.SetActive(true);  //死亡爆炸
             if (Model !=null) Model.SetActive(false);
             switch (MonsterType)  //關閉怪物AI 腳本
@@ -325,12 +374,70 @@ public class Boss_Life : MonoBehaviour
             }           
             //ani.SetTrigger("Die");           
         }
-
+        //ReHpUI = true;
         RefreshLifebar(); // 更新血條
     }
 
-    void RefreshLifebar() // 更新血條 UI
+    public void RefreshLifebar() // 更新血條 UI
     {
+        switch (MonsterType)
+        {
+            case 0:
+                i_HP_W[0].fillAmount = hp_W[0] / hpFull[0]; //顯示血球
+                i_HP_R[0].fillAmount = hp_R[0] / hpFull[0]; //顯示血球
+                if (hp_R[0] != hp_W[0])
+                {
+                    UiTime[0] += 2 * Time.deltaTime;
+                    if (UiTime[0] >= 2f)
+                    {
+                        UiTime[0] = 2;
+                        hp_R[0] -= 20f * Time.deltaTime;
+                    }
+                }
+                if (hp_R[0] <= hp_W[0])
+                {
+                    hp_R[0] = hp_W[0];
+                    UiTime[0] = 0;
+                }
+                break;
+            case 1:
+                i_HP_W = Save_Across_Scene.ps_HP_W;
+                i_HP_R = Save_Across_Scene.ps_HP_R;
+                i_HP_W[Hp_Type + 1].fillAmount = Weakness_Hp[Hp_Type] / Weakness_Hp_Max[Hp_Type]; //顯示血球
+                i_HP_R[Hp_Type + 1].fillAmount = Weakness_Hp_R[Hp_Type] / Weakness_Hp_Max[Hp_Type]; //顯示血球
+                i_HP_W[0].fillAmount = hp_W[1] / hpFull[1]; //顯示血球
+                i_HP_R[0].fillAmount = hp_R[1] / hpFull[1]; //顯示血球
+                if (Weakness_Hp_R[Hp_Type] != Weakness_Hp[Hp_Type])
+                {
+                    UiTime[Hp_Type+1] += 8 * Time.deltaTime;
+                    if (UiTime[Hp_Type+1] >= 2f)
+                    {
+                        UiTime[Hp_Type+1] = 2;
+                        Weakness_Hp_R[Hp_Type] -= 4f * Time.deltaTime;
+                    }
+                }
+                if (Weakness_Hp_R[Hp_Type] <= Weakness_Hp[Hp_Type])
+                {
+                    Weakness_Hp_R[Hp_Type] = Weakness_Hp[Hp_Type];
+                    UiTime[Hp_Type+1] = 0;
+                    //ReHpUI = false;
+                }
+                if (hp_R[1] != hp_W[1])
+                {
+                    UiTime[0] += 2 * Time.deltaTime;
+                    if (UiTime[0] >= 2f)
+                    {
+                        UiTime[0] = 2;
+                        hp_R[1] -= 20f * Time.deltaTime;
+                    }
+                }
+                if (hp_R[1] <= hp_W[1])
+                {
+                    hp_R[1] = hp_W[1];
+                    UiTime[0] = 0;
+                }
+                break;
+        }
         //hpImage.fillAmount = hp / hpFull; //顯示血球
     }
     void DifficultyUp()  //難度設定
@@ -347,8 +454,12 @@ public class Boss_Life : MonoBehaviour
         //    }
         //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 310, 400 };
-        hp = hpFull[MonsterType];  //補滿血量
+        hpFull = new float[] { 300, 250 };
+        hp_W = new float[] { 230, 164 }; //補滿血量
+        hp_R = new float[] { 230, 164 }; //補滿血量
+        Weakness_Hp_Max = new float[] { 20, 20, 20, 24, 80 };
+        Weakness_Hp_R = new float[] { 20, 20, 20, 24, 80 };
+        Weakness_Hp = new float[] { 20, 20, 20, 24, 80 };
     }
     void OnDisable()
     {
@@ -365,7 +476,6 @@ public class Boss_Life : MonoBehaviour
                 break;
             case 1:
                 boss02_AI.enabled = true;
-                Weakness_Hp = new float[] { 25, 25, 25, 25, 100 };
                 break;
         }
         agent.enabled = true; // 開啟尋徑功能

@@ -68,10 +68,10 @@ public class ExplosionLift : MonoBehaviour
     }
     private void Awake()
     {
-        pool_Hit = GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
     }
     void Start()
     {
+        pool_Hit = Save_Across_Scene.pool_Hit;
         speed = new float[] {26,40,40 }; //飛行速度
         power =new float[] {30,6.5f,10 };
         AttackLv = 0;
@@ -215,7 +215,7 @@ public class ExplosionLift : MonoBehaviour
                     //Material[0].SetColor("_EmissiveColor", color* 512);
                     Object[2].SetActive(true);
                     AttackCTime += Time.deltaTime;
-                    if (AttackCTime >= 2 && !accelerate)
+                    if (AttackCTime >= 1.3f && !accelerate)
                     {
                         accelerate = true;
                         ExpAudio(2);
@@ -225,7 +225,7 @@ public class ExplosionLift : MonoBehaviour
                         psmain.startLifetime = 0.125f;
                         ParticleSystem.Play();
                     }
-                    if (AttackCTime >= 4)  //發射前等待
+                    if (AttackCTime >= 2.6f)  //爆炸前等待
                     {
                         StartAttack = false;
                         Attacking = true;

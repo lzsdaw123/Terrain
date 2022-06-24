@@ -9,7 +9,7 @@ public class HeroLife : MonoBehaviour
     public static int HpLv=1;
     [SerializeField] int SF_HpLv;
     public static float fullHp, hp, hp_R;  //滿血時數值, 實際, 紅血
-    [SerializeField] float SF_fullHp, SF_hp;  //滿血時數值, 實際, 紅血
+    [SerializeField] float SF_fullHp, SF_hp, SF_hp_R;  //滿血時數值, 實際, 紅血
     public Image HP_W, HP_R; //血球的UI物件
     public GameObject[] Hit_Direction_UI;
     public GameObject[] BloodpackUI=new GameObject[3];  //補包UI
@@ -19,7 +19,6 @@ public class HeroLife : MonoBehaviour
     public float BpTime;  //補包使用冷卻
     public static bool Dead;
     public float UiTime=0;
-    bool Invincible=false;
     GameObject DeBugT;
     public int WeaponType; //武器類型
     public int HitType;
@@ -70,11 +69,8 @@ public class HeroLife : MonoBehaviour
 
         for (int i=0; i< Hit_Player.Length; i++)  //命中玩家特效
         {
-            if (Hit_Player[i] != null)
-            {
-                Hit_Player[i].Stop();
-                Hit_Player[i].gameObject.SetActive(false);
-            }
+            Hit_Player[i].Stop();
+            Hit_Player[i].gameObject.SetActive(false);
         }
         InfectionUI.SetActive(false);
         DeBugT.SetActive(false);
@@ -165,7 +161,10 @@ public class HeroLife : MonoBehaviour
     }
     public static void DownDamage(int Dps)  //摔落傷害
     {
-        hp -= Dps;
+        if(Shooting.JumpDown == 0)
+        {
+            hp -= Dps;
+        }
     }
 
     void Update()
@@ -174,6 +173,7 @@ public class HeroLife : MonoBehaviour
         SF_HpLv = HpLv;
         SF_fullHp = fullHp;
         SF_hp = hp;
+        SF_hp_R = hp_R;
         if (PlayerRebirth)  //玩家重生
         {
             BloodpackNub = SaveBpN;  //回復補包數量
@@ -208,7 +208,7 @@ public class HeroLife : MonoBehaviour
         {
             Infection_Image.fillAmount = LiftTime / 12; //顯示血球
             InfectionUI.SetActive(true);
-            LiftTime += Time.deltaTime;
+            LiftTime +=2 * Time.deltaTime;
             if (LiftTime >= 12)  //感染解除時間
             {
                 LiftTime = 0;
@@ -249,10 +249,10 @@ public class HeroLife : MonoBehaviour
                 DeadTime = 2;
                 hp -= 1 *HpLv;
             }
-        }
+        }      
         if (無敵)
         {
-            hp = fullHp;  //補滿血量
+            hp = 9999;  //補滿血量
             HP_W.color = new Color(0, 0.85f, 0.70f, 1);
         }
         if(!無敵 && BpTime ==-1)
@@ -269,13 +269,10 @@ public class HeroLife : MonoBehaviour
             HP_W.color = new Color(0, 0.57f, 0.85f, 1);
             Dead = true;
         }
-        if (Hit_Player[HitType] != null)
+        if (Hit_Player[HitType].isPaused || Hit_Player[HitType].isStopped)  //粒子結束時關掉
         {
-            if (Hit_Player[HitType].isStopped && playing)  //粒子結束時關掉
-            {
-                playing = false;
-                Hit_Player[HitType].gameObject.SetActive(false);
-            }
+            playing = false;
+            Hit_Player[HitType].gameObject.SetActive(false);
         }
         HP_W.fillAmount = hp / fullHp; //顯示血球
         HP_R.fillAmount = hp_R / fullHp; //顯示血球
@@ -301,7 +298,7 @@ public class HeroLife : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Q) && BloodpackNub>0) //使用補包
         {
-            if(hp< fullHp && BpTime==-1)
+            if(hp< fullHp || Level >0 && BpTime==-1)
             {
                 HP_W.color = new Color(0, 0.85f, 0.70f, 1);
                 BpTime = 0;
@@ -333,18 +330,18 @@ public class HeroLife : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))  //開發者模式
         {         
-            if (Invincible)
+            if (無敵)
             {
                 DeBugT.SetActive(false);
-                Invincible = false;
+                hp =hp_R = fullHp;
+                無敵 = false;
             }
             else
             {
                 DeBugT.SetActive(true);
-                Invincible = true;                
+                無敵 = true;                
             }
         }
-        if(Invincible) hp = fullHp;
     }
     public static void PlayerRe()  //重生
     {

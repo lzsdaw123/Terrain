@@ -96,8 +96,11 @@ public class Force : MonoBehaviour
     }
     void OnDisable()
     {
-        OriTrans[0].position = pos;
-        OriTrans[0].rotation = rot;
+        if (OriTrans[0] != null)
+        {
+            OriTrans[0].position = pos;
+            OriTrans[0].rotation = rot;
+        }
         foreach (var r in rigidbodies)
         {
             r.isKinematic = true;
