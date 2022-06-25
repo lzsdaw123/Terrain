@@ -458,12 +458,12 @@ public class Boss_Life : MonoBehaviour
         //    }
         //}
         //print("怪物血量:" + hpFull);  //最終血量 12 / 17 / 22 
-        hpFull = new float[] { 300, 250 };
-        hp_W = new float[] { 230, 164 }; //補滿血量
-        hp_R = new float[] { 230, 164 }; //補滿血量
-        Weakness_Hp_Max = new float[] { 20, 20, 20, 24, 80 };
-        Weakness_Hp_R = new float[] { 20, 20, 20, 24, 80 };
-        Weakness_Hp = new float[] { 20, 20, 20, 24, 80 };
+        hpFull = new float[] { 300, 300 };
+        hp_W = new float[] { 230, 180 }; //補滿血量
+        hp_R = new float[] { 230, 180 }; //補滿血量
+        Weakness_Hp_Max = new float[] { 20, 20, 20, 40, 80 };
+        Weakness_Hp_R = new float[] { 20, 20, 20, 40, 80 };
+        Weakness_Hp = new float[] { 20, 20, 20, 40, 80 };
     }
     void OnDisable()
     {

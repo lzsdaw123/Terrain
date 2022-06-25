@@ -211,6 +211,7 @@ public class Crystal_Life : MonoBehaviour
                 case 2:
                     ani.SetTrigger("Dead");
                     mg_Turret_AI.enabled = false;
+                    PlayerView.Stop = true;
                     break;
             }           
             //ani.SetTrigger("Die");           

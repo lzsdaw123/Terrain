@@ -69,7 +69,7 @@ public class PortalTeleporter : MonoBehaviour {
 		{
 			cTime += Time.deltaTime;
 		}
-		if (cTime >= 30)
+		if (cTime >= 22)
 		{
 			cTime = -1;
 			gameObject.SetActive(false);

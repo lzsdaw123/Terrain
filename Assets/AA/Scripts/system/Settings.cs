@@ -99,7 +99,7 @@ public class Settings : MonoBehaviour
         instance = this;
 
         mouse_Slider.maxValue = 100;  //滑鼠最大靈敏度
-        mouse_Slider.value = 16;  //滑鼠預設靈敏度
+        mouse_Slider.value = 20;  //滑鼠預設靈敏度
         Save_mouse_Slider = mouse_Slider.value;
         SF_mouse_Slider_Max = mouse_Slider.maxValue;
 

@@ -426,8 +426,6 @@ public class Shooting : MonoBehaviour
         mouseLook.Logstr[3] = "\n 武器 position : " + _Animator[WeaponType].transform.position;
         mouseLook.Logstr[4] = "\n 武器 GA_R : " + GA_R;
         mouseLook.Logstr[5] = "\n 武器 localEulerAngles : " + _Animator[WeaponType].transform.localEulerAngles;
-        mouseLook.Logstr[6] = "\n 武器 eulerAngles : " + _Animator[WeaponType].transform.eulerAngles;
-        mouseLook.Logstr[7] = "\n 武器 rotation : " + _Animator[WeaponType].transform.rotation;
         if (coolDownTimer > coolDown) //若冷卻時間已到 可以發射子彈
         {
             Muzzle_vfx[WeaponType].SetActive(false); //關閉火光

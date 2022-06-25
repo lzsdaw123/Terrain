@@ -49,7 +49,7 @@ public class MouseLook : MonoBehaviour
     void Start()
     {
         
-        Logstr = new string[14];
+        Logstr = new string[20];
     }
     void Update()
     {
@@ -71,7 +71,7 @@ public class MouseLook : MonoBehaviour
             //    LogText.text += Logstr[i];
             //}
             LogText.text = Logstr[0] + Logstr[1] + Logstr[2] + Logstr[3] + Logstr[4] + Logstr[5] + Logstr[6] + Logstr[7]+ 
-                Logstr[8]+ Logstr[9]+ Logstr[10]+ Logstr[11] + Logstr[12];
+                Logstr[8]+ Logstr[9]+ Logstr[10]+ Logstr[11] + Logstr[12] + Logstr[13] + Logstr[14] + Logstr[15] + Logstr[16];
         }
         //smoothSpeed = Settings.smoothSpeed;
         //if(smoothSpeed  != Settings.Save_mouse_Slider)
@@ -102,10 +102,14 @@ public class MouseLook : MonoBehaviour
         //void LateUpdate()
         //{
         // 獲得鼠標當前位置的X和Y                                
-        mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.smoothDeltaTime;
-        mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * Time.smoothDeltaTime;
+        mouseX = Input.GetAxis("Mouse X") * mouseSpeed * 0.05f;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSpeed * 0.05f;
         newPos = CameraPos.rotation.eulerAngles; //當前幀攝影機的歐拉角
+        Logstr[13] = "\n mouseX  " + mouseX;
+        Logstr[14] = "\n mouseSpeed  " + mouseSpeed;
+        Logstr[15] = "\n  Mouse X " + Input.GetAxis("Mouse X");
 
+        //print(mouseX + "  =  " + Input.GetAxis("Mouse X") + " * " + mouseSpeed +" * "+ Time.smoothDeltaTime);
         if (newPos == oldPos)  //攝影機是否轉動
         {
             if (GRy > 0.5f) //槍枝向右歸位
@@ -177,13 +181,9 @@ public class MouseLook : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseX * smoothSpeed * Time.smoothDeltaTime);  //滑鼠控制鏡頭左右
         rotationY = 0;  //相機Y軸歸零
         Vector3 playerBodyP = new Vector3(Gun.position.x, Gun.position.y, Gun.position.z);
-        Logstr[8] = "\n Gun.Lr " + Gun.transform.localRotation;
-        Logstr[9] = "\n playerBody.R " + playerBody.rotation;
         // 設置攝像機的旋轉方向與主角一致
         m_transform.rotation = Gun.rotation; //rotation為物體在世界坐標中的旋轉角度，用Quaternion賦值
         m_transform.position = playerBodyP; //rotation為物體在世界坐標中的旋轉角度，用Quaternion賦值
-        Logstr[10] = "\n transform.R " + Gun.rotation;
-        Logstr[11] = "\n transform.P " + playerBodyP;
         //m_camRot.x = rotationX;
         //m_camRot.y = mouseY;
         //m_transform.transform.eulerAngles = m_camRot; //通過改變XYZ軸的旋轉改變歐拉角

@@ -525,7 +525,7 @@ public class Boss02_AI : MonoBehaviour
                     break;
             }
 
-            if (AttackMode == 2 && D_level==2 && !DialogueEditor.Talking)
+            if (AttackMode == 2 && D_level==2 && !DialogueEditor.Talking)  //操控砲塔
             {
                 D_level = 3;
                 PlayerView.missionChange(4, 2);  //改變關卡
