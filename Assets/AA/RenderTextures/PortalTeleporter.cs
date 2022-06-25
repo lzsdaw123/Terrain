@@ -84,6 +84,7 @@ public class PortalTeleporter : MonoBehaviour {
             if (coolDown)
             {
 				coolDown = false;
+				Save_Across_Scene.heroLife.closeDamageEffects();
 				cTime = 0;
 			}
 			//reciever.gameObject.GetComponent<BoxCollider>().enabled = false;
