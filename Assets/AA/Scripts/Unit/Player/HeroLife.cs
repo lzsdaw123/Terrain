@@ -24,6 +24,7 @@ public class HeroLife : MonoBehaviour
     public int HitType;
     public Animator[] PlayerAni;
     public Animator BossHit_Ani;
+    public GameObject Hit_Player_G;  //玩家受傷
     public ParticleSystem[] Hit_Player;  //玩家受傷特效
     public float HP_R_speed =0.8f;
     bool playing ;
@@ -53,6 +54,7 @@ public class HeroLife : MonoBehaviour
             BloodpackUI[Bp].SetActive(false);
         }
         BloodpackNub = 0;
+        Hit_Player_G.SetActive(true);
     }
 
     void Start()

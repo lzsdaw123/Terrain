@@ -98,6 +98,8 @@ public class Trigger : MonoBehaviour
                     case 8:
                         Shooting.JumpDown=1;
                         gameObject.SetActive(false);
+                        Save_Across_Scene.heroLife.closeDamageEffects();
+                        Save_Across_Scene.heroLife.Hit_Player_G.SetActive(false);
                         break;
                     case 9:  //¸õ¤U¥h
                         Shooting.JumpDown = 3;
