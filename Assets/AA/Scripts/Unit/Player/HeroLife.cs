@@ -43,6 +43,7 @@ public class HeroLife : MonoBehaviour
     public float Fdot;
     public float Rdot;
     public bool 無敵;
+    public bool 無敵結束;
 
     void Awake()
     {
@@ -57,6 +58,7 @@ public class HeroLife : MonoBehaviour
     void Start()
     {
         無敵 = false;
+        無敵結束 = true;
         Level = InfectionValue = 0;
         DeadTime = 0;
         LiftTime = 0;
@@ -252,11 +254,17 @@ public class HeroLife : MonoBehaviour
         }      
         if (無敵)
         {
+            無敵結束 = false;
             hp = 9999;  //補滿血量
             HP_W.color = new Color(0, 0.85f, 0.70f, 1);
         }
         if(!無敵 && BpTime ==-1)
         {
+            if (!無敵結束)
+            {
+                hp_R = 20 * HpLv;
+                無敵結束 = true;
+            }
             HP_W.color = new Color(0, 0.57f, 0.85f, 1);
         }
         if (hp <= 0)  //玩家死亡
@@ -265,7 +273,7 @@ public class HeroLife : MonoBehaviour
             Hit_Player[HitType].Stop();
             Hit_Player[HitType].gameObject.SetActive(false);
             DeadTime=0;
-            SaveBpN = BloodpackNub;         
+            SaveBpN = BloodpackNub;
             HP_W.color = new Color(0, 0.57f, 0.85f, 1);
             Dead = true;
         }
@@ -316,7 +324,7 @@ public class HeroLife : MonoBehaviour
             if (BpTime >= 2.866f)
             {
                 BpTime = -1;
-                HP_W.color = new Color(0, 0.57f, 0.85f, 1);
+                HP_W.color = new Color(0, 0.57f, 0.85f, 1);  //藍
             }
         }
         if (Input.GetKeyDown(KeyCode.L)) //開發者模式
