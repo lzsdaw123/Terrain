@@ -133,6 +133,14 @@ public class Settings : MonoBehaviour
         mouse_Nub.text = _Nub + " %";
         Save_mouse_Slider = mouse_Slider.value;
 
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            //pause();
+        }
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            //con();
+        }
         if (START_bool)
         {
             if (Input.GetKeyDown(KeyCode.Escape))  //按下Esc
