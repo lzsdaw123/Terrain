@@ -7,8 +7,8 @@ public class AmmunitionSupply : MonoBehaviour
 {
     public GameObject ObjectText;
     public int Type;
-    public int[] T_WeapAmm = new int[2] ; //武器總彈藥量
-    public int[] AmmSupply =new int[2];  //存量
+    public int[] T_WeapAmm = new int[3] ; //武器總彈藥量
+    public int[] AmmSupply =new int[3];  //存量
     public GameObject[] ASupply;  //彈藥
     public GameObject Cover;  //蓋子
     public bool CoverOn;
@@ -21,17 +21,21 @@ public class AmmunitionSupply : MonoBehaviour
     public Material material;
     public Shader shader;
     public float intensity;
+    public string[] WeapT;
 
     void Awake()
     {
-
+        T_WeapAmm = new int[3]; //武器總彈藥量
+        AmmSupply = new int[3];  //存量
+        WeapT = new string[3];
     }
     void Start()
     {
         Am_zero_Warn = Save_Across_Scene.Am_zero_Warn;
         ObjectText = Save_Across_Scene.ObjectText;
-        AmmSupply = new int[] { 480, 6 };
-        T_WeapAmm = new int[] { 300, 30 };
+        AmmSupply = new int[] { 480, 6 ,24 };
+        T_WeapAmm = new int[] { 300, 30, 30};
+        WeapT = new string[] { "步槍", "左輪", "霰彈槍" };
 
 
         switch (Type)
@@ -110,6 +114,13 @@ public class AmmunitionSupply : MonoBehaviour
                     }
                 }
                 break;
+            case 2:
+                if (AmmSupply[2] <= 0)
+                {
+                    AmmSupply[2] = 0;
+                    ASupply[0].SetActive(false);
+                }
+                break;
         }
 
         if (interactive)
@@ -166,7 +177,7 @@ public class AmmunitionSupply : MonoBehaviour
     {
         if (interactive || CoverOn)
         {
-            ObjectText.GetComponent<Text>().text = "拾取彈藥\n" + "彈藥量 " + AmmSupply[Type];
+            ObjectText.GetComponent<Text>().text = "拾取"+ WeapT[Type] + "彈藥\n" + "彈藥量 " + AmmSupply[Type];
         }
         else
         {
@@ -236,6 +247,23 @@ public class AmmunitionSupply : MonoBehaviour
                         }
                         AmmSupply[1] = AmmSupply[1] - NeedAmm;  //存量 = 存量-需求量
                         Shooting.Weapons[1].T_WeapAm += NeedAmm; 
+                    }
+                    break;
+                case 2:
+                    if (AmmSupply[2] <= 0) return;
+                    if (Shooting.Weapons[2].T_WeapAm < T_WeapAmm[2] && CoverOn)  //玩家總彈藥量是否滿的
+                    {
+                        Am_zero_Warn.SetActive(false);
+                        AudioManager.PickUp(0);
+                        FirstAmm = Shooting.FirstAmm;
+                        //print("彈藥補給");
+                        int NeedAmm = T_WeapAmm[2] - Shooting.Weapons[2].T_WeapAm;  //需求彈藥數
+                        if (NeedAmm > AmmSupply[2])
+                        {
+                            NeedAmm = AmmSupply[2];
+                        }
+                        AmmSupply[2] = AmmSupply[2] - NeedAmm;
+                        Shooting.Weapons[2].T_WeapAm += NeedAmm;
                     }
                     break;
             }

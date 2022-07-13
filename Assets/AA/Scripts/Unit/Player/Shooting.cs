@@ -16,6 +16,7 @@ public class Shooting : MonoBehaviour
     public GameObject[] muzzle;  //槍口類型
     public GameObject[] GrenadeMuzzle;  //手雷槍口  
     public GameObject GunAimR_x;  //X軸瞄準晃動  原Camera
+    private Vector3 GA_P;  //槍枝Rotation瞄準偏移修正
     private Vector3 GA_R;  //槍枝Rotation瞄準偏移修正
     public float noise = 1f; //晃動頻率
     public float noiseRotateX;  //X軸晃動偏移量
@@ -388,6 +389,7 @@ public class Shooting : MonoBehaviour
                 GA_R.y = -89.66f;
                 GA_R.z += 16f * Time.smoothDeltaTime;
                 if (GA_R.z >= 2.76f) { GA_R.z = 2.76f; }
+                GA_R.z = 2.76f;
             }
             if (WeaponType == 1)
             {
@@ -395,6 +397,16 @@ public class Shooting : MonoBehaviour
                 GA_R.y = -90.2f;
                 GA_R.z -= 16f * Time.smoothDeltaTime;
                 if (GA_R.z <= -1.6f) { GA_R.z = -1.6f; }
+                GA_R.z = -1.6f;
+            }
+            if (WeaponType == 2)
+            {
+                GA_P.x = 0.03f;
+                GA_R.x = -180.01f;
+                GA_R.y = 91f;
+                GA_R.z = 183.7f;
+                //GA_R.z -= 16f * Time.smoothDeltaTime;
+                if (GA_R.z <= 183.7) { GA_R.z = 183.7f; }
             }
 
             //range = Random.Range(-0.05f, 0.05f);  //晃動範圍
@@ -404,17 +416,31 @@ public class Shooting : MonoBehaviour
         {          
             if (WeaponType == 0)
             {
+                GA_P.x = 0.01f;
+
                 GA_R.x = 0.01f;
                 GA_R.y = -89.66f;
                 GA_R.z -= 13f * Time.smoothDeltaTime;
                 if (GA_R.z <= 1) { GA_R.z = 1; }
+                GA_R.z = 1;
             }
             if (WeaponType == 1)
             {
+                GA_P.x = -0.027f;
                 GA_R.x = 0.012f;
                 GA_R.y = -90.2f;
                 GA_R.z += 10f*Time.smoothDeltaTime;
                 if (GA_R.z >= 0.5) { GA_R.z = 0.5f; }
+                GA_R.z = 0.5f;
+            }
+            if (WeaponType == 2)
+            {
+                GA_P.x = 0.23f;
+                GA_R.x = -179.6f;
+                GA_R.y = 85.9f;
+                //GA_R.z += 16f * Time.smoothDeltaTime;
+                GA_R.z = 184.7f;
+                if (GA_R.z >= 184.7) { GA_R.z = 184.7f; }
             }
         }
         if (FireButtle == 1)
@@ -422,7 +448,9 @@ public class Shooting : MonoBehaviour
             Weapon.SetBool("Fire", false);
             Weapon.SetBool("AimFire", false);
         }
-        _Animator[WeaponType].transform.localRotation = Quaternion.Euler(0.01f, GA_R.y, GA_R.z);  //槍枝Rotation瞄準偏移修正
+        Vector3 oriV3 = _Animator[WeaponType].transform.localPosition;
+        _Animator[WeaponType].transform.localPosition = new Vector3(GA_P.x, oriV3.y, oriV3.z);  //槍枝Rotation瞄準偏移修正
+        _Animator[WeaponType].transform.localRotation = Quaternion.Euler(GA_R.x, GA_R.y, GA_R.z);  //槍枝Rotation瞄準偏移修正
         mouseLook.Logstr[3] = "\n 武器 position : " + _Animator[WeaponType].transform.position;
         mouseLook.Logstr[4] = "\n 武器 GA_R : " + GA_R;
         mouseLook.Logstr[5] = "\n 武器 localEulerAngles : " + _Animator[WeaponType].transform.localEulerAngles;
@@ -818,9 +846,9 @@ public class Shooting : MonoBehaviour
         {
             FireButtle = 0;
             Reload = true;
-            ReReload = false;
             if (WeaponType == 2) Weapon.SetBool("Reloading", true);
             ReloadWarn.SetActive(false);
+            //ReReload = false;
         }
         else
         {
